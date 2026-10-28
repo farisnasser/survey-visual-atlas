@@ -1,0 +1,8 @@
+{
+  "result": "A two-layer linear network on <b>one example</b> already shows sharpness reduction, progressive sharpening and the <b>edge of stability</b>. EoS needs η above <b>η_c = √n_eff /(‖x‖y)</b>; beyond it sharpness period-doubles into chaos.",
+  "result_plain": "UV model explains sharpness trends; EoS needs η > √n_eff/(‖x‖y), then period doubling to chaos.",
+  "tags": ["edge of stability", "sharpness", "step size", "chaos", "fixed-point analysis"],
+  "tag_tabs": { "edge of stability": "bounce", "sharpness": "bounce", "step size": "bounce", "chaos": "chaos", "fixed-point analysis": "flow" },
+  "tabs": [["bounce", "Edge of stability"], ["flow", "Function-space map"], ["chaos", "Route to chaos"]],
+  "thumb": "bounce"
+}

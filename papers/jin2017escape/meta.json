@@ -1,0 +1,8 @@
+{
+  "result": "Gradient descent plus an occasional <b>small random kick</b> reaches an approximate <b>second-order</b> stationary point in about the same number of iterations GD needs for a small gradient — with only a <b>polylog(d)</b> dimension cost.",
+  "result_plain": "Perturbed GD finds ε-second-order stationary points in nearly dimension-free time.",
+  "tags": ["strict saddle", "saddle escape", "perturbation", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "strict saddle": "kick", "saddle escape": "kick", "perturbation": "pancake", "second-order stationarity": "kick", "convergence rate": "dimension" },
+  "tabs": [["kick", "Kick"], ["pancake", "Thin pancake"], ["band", "Narrow band"], ["dimension", "Dimension"]],
+  "thumb": "kick"
+}

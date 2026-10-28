@@ -1,0 +1,9 @@
+{
+  "result": "For deep <b>ReLU</b> networks wide enough (polynomial in samples and depth) and data with separated inputs, GD and SGD reach <b>arbitrarily small training loss</b> in polynomial time: near initialization, positive loss always comes with a large gradient.",
+  "result_plain": "Wide deep ReLU nets: GD/SGD reach small training loss in polynomial time (no bad critical points near init).",
+  "tags": ["overparameterization", "global convergence", "lazy training", "nonsmooth activation", "data separation"],
+  "tag_tabs": { "overparameterization": "width", "global convergence": "width", "lazy training": "width", "nonsmooth activation": "slice", "data separation": "separation" },
+  "tabs": [["slice", "Gradient vs curvature"], ["width", "Width"], ["separation", "Data separation δ"]],
+  "thumb": "slice",
+  "data": true
+}

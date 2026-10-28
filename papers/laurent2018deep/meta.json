@@ -1,0 +1,8 @@
+{
+  "result": "In deep linear networks with <b>any convex differentiable loss</b>, every local minimum is global as long as no hidden layer is a bottleneck — and the result fails for a convex loss that is <b>not differentiable</b>.",
+  "result_plain": "Deep linear nets, any convex differentiable loss: all local minima global; nondifferentiable losses break it.",
+  "tags": ["no spurious minima", "deep linear network", "spurious local minimum", "nonsmooth loss"],
+  "tag_tabs": { "no spurious minima": "convex", "deep linear network": "convex", "spurious local minimum": "kink", "nonsmooth loss": "kink" },
+  "tabs": [["convex", "Any convex loss"], ["kink", "Kinked loss"]],
+  "thumb": "convex"
+}

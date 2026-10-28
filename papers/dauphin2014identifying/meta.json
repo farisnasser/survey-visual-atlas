@@ -1,0 +1,8 @@
+{
+  "result": "In high dimensions the real obstacle is <b>saddles</b> with weak negative curvature, not bad local minima. Newton is <b>attracted</b> to saddles; <b>saddle-free Newton</b> (|H|⁻¹∇f) escapes them.",
+  "result_plain": "High-dimensional losses are dominated by saddles; saddle-free Newton escapes where Newton is attracted.",
+  "tags": ["strict saddle", "degenerate saddle", "second-order method", "Hessian spectrum", "plateau"],
+  "tag_tabs": { "strict saddle": "saddle", "degenerate saddle": "monkey", "second-order method": "saddle", "Hessian spectrum": "index", "plateau": "weak" },
+  "tabs": [["saddle", "Three optimizers"], ["weak", "Weak curvature"], ["monkey", "Monkey saddle"], ["index", "Why saddles dominate"]],
+  "thumb": "saddle"
+}

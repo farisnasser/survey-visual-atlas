@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Survey Visual Atlas</title>
+<meta name="description" content="Every paper in the MLR570 survey on non-convex optimization in neural networks, each with an interactive 3D visual of its core ideas, the math behind it, and study notes.">
+<link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/theme.css">
+<link rel="stylesheet" href="src/hub/hub.css">
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <div class="kicker mono">MLR570 · Non-Convex Optimization in Neural Networks</div>
+    <h1>Survey Visual Atlas</h1>
+    <p class="lede">Every paper in our survey, each with an interactive visual of its core result, the math behind it, and our study notes. Every surface is a real loss function. Every ball runs a real optimizer.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+<main>
+  <div class="toolbar" id="toolbar">
+    <label class="search"><span class="sr-only">Search papers</span>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="Search title, author, concept…" autocomplete="off">
+    </label>
+    <div class="seg" role="group" aria-label="View" id="views">
+      <button type="button" data-view="themes" aria-pressed="true">Themes</button>
+      <button type="button" data-view="timeline" aria-pressed="false">Timeline</button>
+      <button type="button" data-view="concepts" aria-pressed="false">Concepts</button>
+    </div>
+    <button type="button" class="cmpbtn" id="cmpBtn">Compare two</button>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div id="view" aria-live="polite"></div>
+</main>
+<div class="cmpbar" id="cmpBar" hidden>
+  <span id="cmpMsg">Pick two papers with visuals</span>
+  <a class="act" id="cmpGo" href="#" aria-disabled="true">Open side by side</a>
+  <button type="button" class="x" id="cmpX" aria-label="Cancel compare">×</button>
+</div>
+<footer class="foot" id="foot"></footer>
+<script type="module" src="src/hub/hub.js"></script>
+</body>
+</html>

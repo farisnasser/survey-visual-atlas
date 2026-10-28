@@ -1,0 +1,8 @@
+{
+  "result": "A <b>nonmonotone equality line search</b> finds very large GD steps that run at the <b>edge of stability</b> yet still converge to stationarity. But the flattest region is not the goal: in MSE classification sharpness bottoms out at <b>2/K</b> on dead-end saddles.",
+  "result_plain": "Nonmonotone line search: large EoS steps that converge; the 2/K sharpness floor marks flat dead-end saddles.",
+  "tags": ["edge of stability", "step size", "line search", "sharpness", "degenerate saddle"],
+  "tag_tabs": { "edge of stability": "linesearch", "step size": "linesearch", "line search": "linesearch", "sharpness": "flatland", "degenerate saddle": "flatland" },
+  "tabs": [["linesearch", "Large steps"], ["flatland", "Flatland"]],
+  "thumb": "linesearch"
+}

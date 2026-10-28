@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paper · Survey Visual Atlas</title>
+<meta name="description" content="Interactive visual, math and study notes for one paper in the MLR570 non-convex optimization survey.">
+<link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link rel="stylesheet" href="src/theme.css">
+<link rel="stylesheet" href="src/paper/paper.css">
+</head>
+<body>
+<a class="sr-only" href="#viz">Skip to visual</a>
+<header class="topbar">
+  <a class="brand" href="./">← Survey Visual Atlas</a>
+  <nav class="pn" id="pn"></nav>
+</header>
+<main>
+  <section class="ph" id="ph" aria-live="polite"></section>
+  <section class="viz" id="viz">
+    <div class="stage-box" id="stageBox">
+      <div class="canvas-area" id="canvasArea">
+        <div id="gl" class="gl"></div>
+        <canvas id="plot2d" class="plot2d" hidden></canvas>
+        <div id="labels" class="labels"></div>
+        <div class="tabs" role="tablist" id="tabs"></div>
+        <button class="mathbtn" id="mathBtn" type="button" aria-expanded="false" aria-controls="mathDrawer"><span>∑</span> Math</button>
+        <aside class="mathdrawer" id="mathDrawer" aria-label="Math behind this tab" hidden>
+          <div class="md-head"><b id="mdTitle">Math</b><button type="button" class="md-close" id="mdClose" aria-label="Close math panel">×</button></div>
+          <div class="md-body" id="mdBody"></div>
+        </aside>
+        <div class="empty" id="emptyViz" hidden></div>
+      </div>
+      <div class="hud" id="hud">
+        <div class="cap" id="cap"><b id="capT"></b><p id="capP"></p><p class="note" id="capNote"></p><div class="stat" id="capStat"></div><div class="legend" id="legend"></div></div>
+        <div class="ctrl" id="ctrl"><div class="sliders" id="sliders"></div><div class="acts" id="acts"></div><span class="hint" id="hint">drag to orbit · pinch / scroll to zoom</span></div>
+      </div>
+    </div>
+    <div class="side" id="side" hidden></div>
+  </section>
+  <section class="notes" id="notes"></section>
+  <section class="tracker" id="tracker"></section>
+</main>
+<footer class="foot" id="foot"></footer>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script type="module" src="src/paper/paper.js"></script>
+</body>
+</html>

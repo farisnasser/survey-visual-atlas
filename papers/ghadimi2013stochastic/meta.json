@@ -1,0 +1,9 @@
+{
+  "result": "SGD on a smooth <b>non-convex</b> objective, stopped at a <b>random iterate</b>, reaches E‖∇f‖² = O(1/√N) — a guarantee of a small gradient, <b>not</b> of a minimum.",
+  "result_plain": "Randomized SGD: E‖∇f‖² = O(1/√N) on smooth non-convex losses; first-order stationarity only.",
+  "tags": ["SGD", "first-order stationarity", "convergence rate", "zeroth-order"],
+  "tag_tabs": { "SGD": "rsg", "first-order stationarity": "smallgrad", "convergence rate": "rate", "zeroth-order": "zeroth" },
+  "tabs": [["rsg", "RSG run"], ["rate", "Rate vs bound"], ["smallgrad", "Small ≠ minimum"], ["zeroth", "Zeroth order"]],
+  "thumb": "rsg",
+  "data": false
+}

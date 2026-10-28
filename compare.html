@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compare · Survey Visual Atlas</title>
+<link rel="icon" href="public/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/theme.css">
+<style>
+  /* Two paper stages side by side (stacked on phones). */
+  body { height: 100vh; display: flex; flex-direction: column; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line-soft); gap: 12px; }
+  header a { font: 600 13px var(--display); color: var(--muted); text-decoration: none; }
+  .wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+  .pane { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line-soft); }
+  .pane h2 { font: 600 13.5px var(--display); padding: 8px 14px; display: flex; justify-content: space-between; gap: 10px; }
+  .pane h2 a { color: var(--ink); text-decoration: none; }
+  .pane h2 span { font: 400 11px var(--mono); color: var(--muted); white-space: nowrap; }
+  iframe { flex: 1; width: 100%; border: 0; background: var(--bg); }
+  @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; } .pane { border-right: 0; border-bottom: 1px solid var(--line-soft); } }
+</style>
+</head>
+<body>
+<header><a href="./">← Survey Visual Atlas</a><span class="mono" style="font-size:12px;color:var(--muted)">compare</span></header>
+<div class="wrap" id="wrap"></div>
+<script type="module">
+  const qs = new URLSearchParams(location.search), keys = [qs.get('a'), qs.get('b')].filter(Boolean);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const db = await fetch('data/papers.json').then(r => r.json());
+  document.getElementById('wrap').innerHTML = keys.map(k => {
+    const p = db.papers.find(x => x.key === k);
+    if (!p) return `<div class="pane"><h2>Unknown paper ${esc(k)}</h2></div>`;
+    return `<div class="pane"><h2><a href="paper.html?id=${esc(k)}">${esc(p.title)}</a><span>${esc(p.short)} · ${esc(p.venue)}</span></h2><iframe src="paper.html?id=${encodeURIComponent(k)}&embed=1" title="${esc(p.title)} visual"></iframe></div>`;
+  }).join('');
+</script>
+</body>
+</html>

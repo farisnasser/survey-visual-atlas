@@ -1,0 +1,9 @@
+{
+  "result": "In deep <b>linear</b> networks with squared loss, every local minimum is global and every other critical point is a saddle — but from two hidden layers on, some saddles are <b>flat</b> (no negative Hessian eigenvalue).",
+  "result_plain": "Deep linear nets: every local minimum is global; deeper nets have flat (bad) saddles.",
+  "tags": ["no spurious minima", "strict saddle", "degenerate saddle", "deep linear network"],
+  "tag_tabs": { "no spurious minima": "valleys", "strict saddle": "good", "degenerate saddle": "bad", "deep linear network": "race" },
+  "tabs": [["valleys", "Valleys"], ["good", "Good saddle"], ["bad", "Bad saddle"], ["race", "Race"]],
+  "toy": "(1 - w1 w2)^2 and (1 - w1 w2^2)^2, the losses of scalar linear chains",
+  "thumb": "valleys"
+}

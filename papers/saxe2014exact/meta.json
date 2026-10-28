@@ -1,0 +1,8 @@
+{
+  "result": "Deep <b>linear</b> nets already learn nonlinearly: each data mode sits on a <b>plateau</b> near a saddle, then jumps in a sigmoid; stronger modes go first, and <b>orthogonal</b> initialization keeps learning time independent of depth.",
+  "result_plain": "Deep linear nets: exact sigmoid learning curves, plateaus from saddles, orthogonal init beats Gaussian with depth.",
+  "tags": ["plateau", "saddle", "initialization", "conserved quantity", "deep linear network"],
+  "tag_tabs": { "plateau": "plateaus", "saddle": "hyperbolas", "initialization": "orthogonal", "conserved quantity": "hyperbolas", "deep linear network": "hyperbolas" },
+  "tabs": [["hyperbolas", "Hyperbolas"], ["plateaus", "Plateaus"], ["orthogonal", "Orthogonal init"]],
+  "thumb": "hyperbolas"
+}

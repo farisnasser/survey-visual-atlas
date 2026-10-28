@@ -1,0 +1,8 @@
+{
+  "result": "Across fully connected, convolutional and attention networks, small-init training hops between <b>nested saddles</b> — fixed points of narrower networks embedded in the wide one — adding one effective unit per stage. That is a <b>simplicity bias</b>: simple functions are learned first.",
+  "result_plain": "Saddle-to-saddle dynamics through embedded narrow-network saddles explain a simplicity bias.",
+  "tags": ["saddle-to-saddle", "plateau", "simplicity bias", "invariant manifold", "initialization"],
+  "tag_tabs": { "saddle-to-saddle": "manifold", "plateau": "manifold", "simplicity bias": "growth", "invariant manifold": "manifold", "initialization": "growth" },
+  "tabs": [["manifold", "Saddle to saddle"], ["growth", "Two mechanisms"]],
+  "thumb": "manifold"
+}

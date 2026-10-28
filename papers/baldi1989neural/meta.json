@@ -1,0 +1,8 @@
+{
+  "result": "For a linear network with one hidden layer and squared error, the only minimum (up to equivalent weights) is <b>projection onto the top principal components</b>; every other critical point is a <b>saddle</b>.",
+  "result_plain": "Linear autoencoder: one minimum (PCA projection), every other critical point a saddle.",
+  "tags": ["no spurious minima", "saddle", "PCA", "weight symmetry", "deep linear network"],
+  "tag_tabs": { "no spurious minima": "pca", "saddle": "pca", "PCA": "angle", "weight symmetry": "equivalent", "deep linear network": "pca" },
+  "tabs": [["pca", "PCA valley"], ["angle", "Projection angle"], ["equivalent", "Many weights, one map"]],
+  "thumb": "pca"
+}

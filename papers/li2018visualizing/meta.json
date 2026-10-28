@@ -1,0 +1,9 @@
+{
+  "result": "Raw loss plots can make <b>the same function</b> look sharp or flat. <b>Filter-normalized</b> slices fix this and show that skip connections and width keep landscapes smooth and trainable (empirically, on CIFAR-10).",
+  "result_plain": "Filter-normalized loss slices; skips and width give smoother, more trainable landscapes (empirical).",
+  "tags": ["loss landscape visualization", "sharp vs flat minima", "architecture", "weight symmetry"],
+  "tag_tabs": { "loss landscape visualization": "scale", "sharp vs flat minima": "scale", "architecture": "evidence", "weight symmetry": "scale" },
+  "tabs": [["scale", "Scale illusion"], ["hidden", "Hidden saddle"], ["evidence", "Paper’s evidence"]],
+  "thumb": "scale",
+  "data": true
+}

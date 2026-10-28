@@ -1,0 +1,9 @@
+{
+  "result": "Even simple two-layer ReLU nets, trained on data the same architecture fits perfectly, have <b>genuine bad local minima</b> — and gradient descent lands in them often. A couple of <b>extra neurons</b> made them disappear in the tested sizes.",
+  "result_plain": "Two-layer ReLU nets have many spurious local minima that GD often finds; mild over-parameterization helps.",
+  "tags": ["spurious local minimum", "ReLU network", "overparameterization", "computer-assisted proof"],
+  "tag_tabs": { "spurious local minimum": "slice", "ReLU network": "slice", "overparameterization": "odds", "computer-assisted proof": "slice" },
+  "tabs": [["slice", "Spurious minimum"], ["odds", "How often"], ["cdf", "Final losses"]],
+  "thumb": "slice",
+  "data": true
+}

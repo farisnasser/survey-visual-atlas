@@ -1,0 +1,9 @@
+{
+  "result": "For shallow ReLU-like nets, a stationary point is a local minimum exactly when it has <b>no escape neuron</b> (scalar output). From tiny initialization, training passes saddle to saddle, and each escape is the <b>growth of a small living neuron</b>.",
+  "result_plain": "Shallow ReLU nets: no escape neuron ⇔ local minimum; saddle escape = growth of small living neurons.",
+  "tags": ["nonsmooth activation", "saddle-to-saddle", "ReLU network", "conserved quantity", "plateau"],
+  "tag_tabs": { "nonsmooth activation": "kink", "saddle-to-saddle": "plateaus", "ReLU network": "neurons", "conserved quantity": "plateaus", "plateau": "plateaus" },
+  "tabs": [["kink", "Kink & escape"], ["plateaus", "Plateaus"], ["neurons", "Neuron directions"]],
+  "thumb": "kink",
+  "data": true
+}

@@ -1,0 +1,46 @@
+/* Shared tokens for the whole Atlas. One dark theme on purpose (matches reference/saddles.html). */
+:root {
+  --bg: #0b0e1a;
+  --bg-2: #0f1324;
+  --panel: rgba(16, 21, 38, .84);
+  --panel-solid: #121830;
+  --line: #2a3352;
+  --line-soft: #1d2440;
+  --ink: #e8ecf8;
+  --muted: #8e99bd;
+  --faint: #5d6890;
+  /* the shared colour language */
+  --ball: #ff7a59;      /* ball + trail (optimizer 1) */
+  --opt2: #b28cff;      /* optimizer 2 */
+  --opt3: #f2f4ff;      /* optimizer 3 */
+  --neg: #ff5d73;       /* negative curvature */
+  --pos: #7cc4ff;       /* positive curvature */
+  --flat: #ffc857;      /* flat / zero curvature */
+  --good: #5fe0b0;      /* global minima */
+  --display: "Sora", "Avenir Next", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r: 14px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--display); line-height: 1.5; }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--flat); outline-offset: 2px; border-radius: 6px; }
+.mono { font-family: var(--mono); }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--mono); letter-spacing: .02em;
+  padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap;
+}
+.chip i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.st-complete { color: var(--good); border-color: rgba(95, 224, 176, .35); }
+.st-complete i { background: var(--good); }
+.st-notes { color: var(--pos); border-color: rgba(124, 196, 255, .35); }
+.st-notes i { background: var(--pos); }
+.st-visual { color: var(--flat); border-color: rgba(255, 200, 87, .35); }
+.st-visual i { background: var(--flat); }
+.st-queued { color: var(--faint); }
+.st-queued i { background: var(--faint); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

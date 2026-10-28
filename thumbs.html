@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thumbnails · Survey Visual Atlas</title>
+<link rel="stylesheet" href="src/theme.css">
+<style>
+  /* Maintenance page: regenerates public/thumbs/<Key>.webp through scripts/serve.py. Only works on localhost. */
+  body { padding: 20px; font-family: var(--mono); font-size: 13px; }
+  iframe { width: 720px; height: 450px; border: 1px solid var(--line); }
+  #log { white-space: pre; margin: 12px 0; color: var(--muted); }
+</style>
+</head>
+<body>
+<b>Thumbnail generator</b> — run with <code>python scripts/serve.py</code>, then open this page. Optional <code>?only=key1,key2</code>.
+<div id="log"></div>
+<iframe id="f" title="render frame"></iframe>
+<script type="module">
+  const log = s => { document.getElementById('log').textContent += s + '\n'; };
+  if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) { log('Open this through scripts/serve.py on localhost.'); throw new Error('not local'); }
+  const only = new URLSearchParams(location.search).get('only')?.split(',');
+  const db = await fetch('data/papers.json').then(r => r.json());
+  const keys = db.papers.filter(p => p.visual && (!only || only.includes(p.key))).map(p => p.key);
+  const f = document.getElementById('f');
+  for (const k of keys) {
+    const done = new Promise(res => { const h = e => { if (e.data?.atlasThumb === k) { removeEventListener('message', h); res(); } }; addEventListener('message', h); setTimeout(res, 20000); });
+    f.src = `paper.html?id=${k}&thumb=1&save=1`;
+    await done; await new Promise(r => setTimeout(r, 400));
+    log(`✓ ${k}`);
+  }
+  log(`done: ${keys.length} thumbnails. Now run: python scripts/sync.py --xlsx .cache/papers_master.xlsx`);
+  window.__thumbsDone = true;
+</script>
+</body>
+</html>

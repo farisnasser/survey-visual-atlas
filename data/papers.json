@@ -1,0 +1,1112 @@
+{
+ "synced": "2026-10-28 14:37",
+ "source": "Google Sheet 'Papers Master' (Drive: MLR570 Project / NonConvex Survey)",
+ "papers": [
+  {
+   "key": "dauphin2014identifying",
+   "title": "Identifying and attacking the saddle point problem in high-dimensional non-convex optimization",
+   "authors": "Y. N. Dauphin et al.",
+   "year": 2014,
+   "venue": "NeurIPS",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "Must read",
+   "link": "https://papers.nips.cc/paper_files/paper/2014/hash/04192426585542c54b96ba14445be996-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2014/file/04192426585542c54b96ba14445be996-Paper.pdf",
+   "summary": "Problem: Neural-network training can stagnate in high-dimensional non-convex landscapes. The authors argue that saddle points and their surrounding plateaus, rather than poor local minima alone, are major obstacles to optimization.\n\nContribution: The authors introduce Saddle-Free Newton (SFN), a curvature-aware optimization method designed to overcome saddle-point plateaus. Their experiments demonstrate improved training optimization compared with conventional methods in the tested settings.\n\nMethod: The authors analyze Hessian eigenvalues and show why gradient descent can progress slowly near flat saddle regions, while ordinary Newton's method may be attracted toward saddles. SFN replaces the inverse Hessian with the inverse of its matrix absolute value, using negative-curvature information to improve optimization.\n\nSurvey relevance: Connects non-convex landscape geometry to optimization dynamics and explicit escape methods. Complements Lee et al. (2016), which establishes almost-sure avoidance of strict-saddle convergence but does not guarantee efficient finite-time escape.",
+   "assumptions": "Important assumptions: The method relies on second-order curvature information from the Hessian. The theoretical motivation draws partly on random high-dimensional landscapes, whose properties do not necessarily generalize to every neural network.\n\nLimitations: Computing and approximating Hessian information is computationally expensive, particularly for large networks. The paper does not establish general finite-time saddle-escape guarantees, and a training plateau does not necessarily indicate a saddle point.",
+   "sheet_status": "Read",
+   "short": "Dauphin 2014",
+   "notes": "public/notes/dauphin2014identifying.pdf",
+   "notes_title": "Dauphin_2014_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "strict saddle",
+    "degenerate saddle",
+    "second-order method",
+    "Hessian spectrum",
+    "plateau"
+   ],
+   "result": "High-dimensional losses are dominated by saddles; saddle-free Newton escapes where Newton is attracted.",
+   "tabs": [
+    [
+     "saddle",
+     "Three optimizers"
+    ],
+    [
+     "weak",
+     "Weak curvature"
+    ],
+    [
+     "monkey",
+     "Monkey saddle"
+    ],
+    [
+     "index",
+     "Why saddles dominate"
+    ]
+   ],
+   "tag_tabs": {
+    "strict saddle": "saddle",
+    "degenerate saddle": "monkey",
+    "second-order method": "saddle",
+    "Hessian spectrum": "index",
+    "plateau": "weak"
+   },
+   "thumb": "public/thumbs/dauphin2014identifying.webp"
+  },
+  {
+   "key": "lee2016gradient",
+   "title": "Gradient Descent Only Converges to Minimizers",
+   "authors": "J. D. Lee, M. Simchowitz, M. I. Jordan, B. Recht",
+   "year": 2016,
+   "venue": "COLT",
+   "phase": "1 Foundations",
+   "section": "Dynamics",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v49/lee16.html",
+   "pdf": "https://proceedings.mlr.press/v49/lee16.pdf",
+   "summary": "Problem: Gradient descent might become trapped at saddle points because the gradient vanishes there.\n\nContribution: The authors demonstrate that randomly initialized deterministic gradient descent almost surely avoids convergence to strict saddles under suitable smoothness and learning-rate conditions.\n\nMethod: They use the Stable-Center Manifold Theorem to establish that the initializations converging to a strict saddle form a measure-zero set.\n\nSurvey relevance: Establishes that explicit perturbations aren't necessary for almost-sure strict-saddle avoidance. Later escape-method papers address stronger efficiency guarantees.",
+   "assumptions": "Important assumptions: Twice continuously differentiable objective, Lipschitz gradient, a suitably small fixed step size, and an absolutely continuous initialization distribution.\n\nLimitations: This is an asymptotic guarantee, not a finite-time escape bound. It does not establish global optimality or cover every degenerate saddle.",
+   "sheet_status": "Read",
+   "short": "Lee 2016",
+   "notes": "public/notes/lee2016gradient.pdf",
+   "notes_title": "Lee_2016_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "strict saddle",
+    "saddle avoidance",
+    "stable manifold",
+    "gradient descent"
+   ],
+   "result": "Randomly initialized GD almost surely avoids strict saddles (asymptotic, no escape-time bound).",
+   "tabs": [
+    [
+     "stable",
+     "Stable set"
+    ],
+    [
+     "escape",
+     "Escape time"
+    ],
+    [
+     "map",
+     "GD as a map"
+    ]
+   ],
+   "tag_tabs": {
+    "strict saddle": "stable",
+    "saddle avoidance": "stable",
+    "stable manifold": "map",
+    "gradient descent": "escape"
+   },
+   "thumb": "public/thumbs/lee2016gradient.webp"
+  },
+  {
+   "key": "jin2017escape",
+   "title": "How to Escape Saddle Points Efficiently",
+   "authors": "C. Jin et al.",
+   "year": 2017,
+   "venue": "ICML",
+   "phase": "2 Key Methods",
+   "section": "Escape methods",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v70/jin17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/jin17a/jin17a.pdf",
+   "summary": "Problem: Gradient descent may make extremely slow progress near saddle points in non-convex optimization. Previous results established almost-sure saddle avoidance but lacked efficient, nearly dimension-independent finite-time escape guarantees.\n\nContribution: The authors prove that Perturbed Gradient Descent (PGD) finds an approximate second-order stationary point with high probability in nearly dimension-free iteration complexity, matching ordinary gradient descent's first-order convergence rate up to logarithmic factors.\n\nMethod: PGD performs standard gradient descent but occasionally introduces small random perturbations when the gradient becomes sufficiently small. The proof demonstrates that unsuccessful perturbations occupy a thin, low-volume region near saddles, making efficient escape highly probable.\n\nSurvey relevance: Extends Lee et al. (2016) by establishing quantitative finite-time saddle-escape guarantees rather than only asymptotic avoidance. Provides a foundational theoretical justification for perturbation-based escape methods and illustrates how stochastic intervention can improve deterministic optimization dynamics.",
+   "assumptions": "Important assumptions: The objective must have a Lipschitz-continuous gradient and Hessian, with appropriately chosen learning rate, perturbation parameters, and accuracy thresholds. Guarantees of proximity to local minima additionally require a robust strict-saddle property.\n\nLimitations: The general guarantee establishes approximate second-order stationarity, not global optimality. Stronger convergence results require additional geometric assumptions, and the theoretical bounds do not directly establish practical runtime efficiency for large neural networks or ordinary minibatch SGD.",
+   "sheet_status": "Read",
+   "short": "Jin 2017",
+   "notes": "public/notes/jin2017escape.pdf",
+   "notes_title": "Jin_2017_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "strict saddle",
+    "saddle escape",
+    "perturbation",
+    "second-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Perturbed GD finds ε-second-order stationary points in nearly dimension-free time.",
+   "tabs": [
+    [
+     "kick",
+     "Kick"
+    ],
+    [
+     "pancake",
+     "Thin pancake"
+    ],
+    [
+     "band",
+     "Narrow band"
+    ],
+    [
+     "dimension",
+     "Dimension"
+    ]
+   ],
+   "tag_tabs": {
+    "strict saddle": "kick",
+    "saddle escape": "kick",
+    "perturbation": "pancake",
+    "second-order stationarity": "kick",
+    "convergence rate": "dimension"
+   },
+   "thumb": "public/thumbs/jin2017escape.webp"
+  },
+  {
+   "key": "li2018visualizing",
+   "title": "Visualizing the Loss Landscape of Neural Nets",
+   "authors": "H. Li, Z. Xu, G. Taylor, C. Studer, T. Goldstein",
+   "year": 2018,
+   "venue": "NeurIPS",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "Must read",
+   "link": "https://papers.nips.cc/paper/7875-visualizing-the-loss-l",
+   "pdf": "https://arxiv.org/pdf/1712.09913",
+   "summary": "Problem: Neural-network loss landscapes are highly non-convex and difficult to visualize because of their high dimensionality. Conventional loss-surface plots can produce misleading comparisons of sharpness and flatness due to differences in weight scaling.\n\nContribution: The authors introduce filter-wise normalization to enable more meaningful comparisons of neural-network loss landscapes. Their experiments show that skip connections and increased network width are associated with smoother-looking loss surfaces, improved trainability, and flatter minima in the tested architectures.\n\nMethod: The authors construct 1D and 2D loss-landscape visualizations using random directions normalized to the magnitude of individual weight filters. They compare networks with different depths, widths, skip connections, batch sizes, and weight decay settings. They additionally analyze Hessian eigenvalues to investigate negative curvature beyond the visual projections.\n\nSurvey relevance: Provides empirical evidence connecting neural-network architecture to non-convex loss geometry and optimization difficulty. Complements theoretical work on saddle points and training dynamics by illustrating how architectural choices influence the landscape encountered by gradient-based optimizers.",
+   "assumptions": "Important assumptions: The study primarily relies on empirical observations from neural networks trained on CIFAR-10. Its visualizations use low-dimensional projections of high-dimensional loss functions, and its normalization method addresses specific parameter-scaling effects.\n\nLimitations: Two-dimensional visualizations cannot fully represent high-dimensional optimization landscapes or guarantee convexity. The observed relationships between flatness, generalization, and architecture are empirical rather than universal theoretical guarantees.",
+   "sheet_status": "Read",
+   "short": "Li 2018",
+   "notes": "public/notes/li2018visualizing.pdf",
+   "notes_title": "Li_2018_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "loss landscape visualization",
+    "sharp vs flat minima",
+    "architecture",
+    "weight symmetry"
+   ],
+   "result": "Filter-normalized loss slices; skips and width give smoother, more trainable landscapes (empirical).",
+   "tabs": [
+    [
+     "scale",
+     "Scale illusion"
+    ],
+    [
+     "hidden",
+     "Hidden saddle"
+    ],
+    [
+     "evidence",
+     "Paper’s evidence"
+    ]
+   ],
+   "tag_tabs": {
+    "loss landscape visualization": "scale",
+    "sharp vs flat minima": "scale",
+    "architecture": "evidence",
+    "weight symmetry": "scale"
+   },
+   "thumb": "public/thumbs/li2018visualizing.webp"
+  },
+  {
+   "key": "du2019gradient",
+   "title": "Gradient Descent Finds Global Minima of Deep Neural Networks",
+   "authors": "S. Du, J. Lee, H. Li, L. Wang, X. Zhai",
+   "year": 2019,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Theory vs practice",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v97/du19c.html",
+   "pdf": "https://proceedings.mlr.press/v97/du19c/du19c.pdf",
+   "summary": "Problem: Despite their non-convex training objectives, deep neural networks can often be optimized to achieve zero training loss. The paper investigates under what conditions ordinary gradient descent can provably converge to a global minimum and why residual connections improve trainability.\n\nContribution: The authors prove that randomly initialized gradient descent converges at a linear (geometric) rate toward zero training loss for sufficiently overparameterized deep neural networks. For standard fully connected networks, their sufficient width requirement depends exponentially on depth, whereas for ResNets it depends polynomially on depth. They extend the result to convolutional ResNets.\n\nMethod: The authors analyze the Gram matrix formed from gradients of network predictions with respect to model parameters. They establish that overparameterization keeps the weights close to initialization, preserving a positive-definite Gram matrix throughout training. This stability ensures geometric reduction of training error. Residual connections improve stability by controlling how perturbations propagate through successive layers.\n\nSurvey relevance: Provides a theoretical explanation for how overparameterization and architecture influence non-convex optimization dynamics. Extends beyond saddle-avoidance guarantees by proving convergence to zero training loss for specific neural-network families. Complements Saxe et al. (2014) on depth-dependent dynamics, Lee et al. (2016) on saddle avoidance, and Jin et al. (2017) on finite-time escape methods.",
+   "assumptions": "Important assumptions: The guarantees require sufficiently wide networks, Gaussian random initialization, nondegenerate training inputs, squared-error loss, suitably small learning rates, and smooth, Lipschitz-continuous, analytic nonpolynomial activation functions. The ResNet analysis uses specifically scaled residual connections.\n\nLimitations: The sufficient network widths can be substantially larger than those used in practice. The results concern training loss, not generalization to unseen data. They do not establish convergence for arbitrary architectures, nonsmooth ReLU activations, or ordinary stochastic gradient descent.",
+   "sheet_status": "Read",
+   "short": "Du 2019",
+   "notes": "public/notes/du2019gradient.pdf",
+   "notes_title": "Du_2019_Study_Guide_Fresh.pdf",
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "global convergence",
+    "lazy training",
+    "convergence rate"
+   ],
+   "result": "Wide enough nets: GD reaches zero training loss at a linear rate (Gram matrix stays stable).",
+   "tabs": [
+    [
+     "prediction",
+     "Prediction space"
+    ],
+    [
+     "rate",
+     "Linear rate"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "rate",
+    "global convergence": "rate",
+    "lazy training": "prediction",
+    "convergence rate": "rate"
+   },
+   "thumb": "public/thumbs/du2019gradient.webp"
+  },
+  {
+   "key": "wu2025loss",
+   "title": "Loss Landscape of Shallow ReLU-like Neural Networks: Stationary Points, Saddle Escape, and Network Embedding",
+   "authors": "F. Z. Wu, B. Simsek, F. Ged",
+   "year": 2025,
+   "venue": "ICLR",
+   "phase": "3 Recent Work",
+   "section": "Geometry",
+   "priority": "Must read",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/a86d17b6cd70366d56ab48d2a05a4df1-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/a86d17b6cd70366d56ab48d2a05a4df1-Paper-Conference.pdf",
+   "summary": "Problem: The non-differentiability of ReLU-like activations complicates the identification and classification of stationary points in neural-network loss landscapes. This makes it difficult to distinguish local minima from escapable saddle points and explain training plateaus.\n\nContribution: The authors introduce the concept of escape neurons and prove that a directional stationary point without escape neurons must be a local minimum. For scalar-output networks, this condition is both necessary and sufficient. They also characterize saddle-escape mechanisms under vanishing initialization and establish conditions under which network embedding preserves stationarity and local minimality. \n\nMethod: The authors use one-sided directional derivatives to characterize stationary points at both smooth and non-differentiable locations. They define escape neurons through first-order tangential conditions and analyze higher-order loss changes to identify descending paths. They then investigate small-neuron amplitude growth during saddle escape and determine when neuron replication preserves stationary points.\n\nSurvey relevance: Extends saddle-point geometry to nonsmooth ReLU networks and connects the classification of stationary points to actual training trajectories. Complements Lee et al. (2016) and Jin et al. (2017) by investigating which saddle structures admit escape paths, and Zhang et al. (2026) by providing a specific mechanism underlying saddle-to-saddle dynamics and progressive neuron activation.",
+   "assumptions": "Important assumptions: The analysis considers one-hidden-layer networks with ReLU-like piecewise-linear activations and empirical squared-error loss. The equivalence between escape-neuron absence and local minimality requires scalar outputs. The saddle-to-saddle dynamics results additionally consider gradient flow with vanishing initialization.\n\nLimitations: The main guarantees do not extend directly to arbitrary deep architectures. For multiple outputs, the presence of an escape neuron does not necessarily rule out a local minimum. The paper does not establish general finite-time saddle-escape bounds or global convergence guarantees.",
+   "sheet_status": "Read",
+   "short": "Wu 2025",
+   "notes": "public/notes/wu2025loss.pdf",
+   "notes_title": "Wu_2025_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "nonsmooth activation",
+    "saddle-to-saddle",
+    "ReLU network",
+    "conserved quantity",
+    "plateau"
+   ],
+   "result": "Shallow ReLU nets: no escape neuron ⇔ local minimum; saddle escape = growth of small living neurons.",
+   "tabs": [
+    [
+     "kink",
+     "Kink & escape"
+    ],
+    [
+     "plateaus",
+     "Plateaus"
+    ],
+    [
+     "neurons",
+     "Neuron directions"
+    ]
+   ],
+   "tag_tabs": {
+    "nonsmooth activation": "kink",
+    "saddle-to-saddle": "plateaus",
+    "ReLU network": "neurons",
+    "conserved quantity": "plateaus",
+    "plateau": "plateaus"
+   },
+   "thumb": "public/thumbs/wu2025loss.webp"
+  },
+  {
+   "key": "kalra2025universal",
+   "title": "Universal Sharpness Dynamics in Neural Network Training: Fixed Point Analysis, Edge of Stability, and Route to Chaos",
+   "authors": "D. S. Kalra, T. He, M. Barkeshli",
+   "year": 2025,
+   "venue": "ICLR",
+   "phase": "3 Recent Work",
+   "section": "Dynamics",
+   "priority": "",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/8c8cd1b78cdae751265c88efc136e5bd-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/8c8cd1b78cdae751265c88efc136e5bd-Paper-Conference.pdf",
+   "summary": "Problem: Neural-network training exhibits complex sharpness dynamics, including early sharpness reduction, progressive sharpening, and oscillations at the edge of stability. The mechanisms governing these behaviors, and their dependence on learning rates, initialization, and parameterization, are not fully understood.\n\nContribution: The authors develop a unified explanation of sharpness dynamics using a simplified two-layer linear network. They identify mechanisms behind sharpness reduction and progressive sharpening, derive a necessary learning-rate condition for edge-of-stability behavior, and demonstrate a period-doubling route to chaos as learning rates increase. Several predictions are supported by experiments on larger neural-network architectures.\n\nMethod: The authors transform the gradient-descent updates into a two-dimensional dynamical system involving prediction residuals and a curvature-related variable. They analyze fixed points, their stability, and the resulting training trajectories. On the edge-of-stability manifold, the dynamics reduce to a cubic map exhibiting period-doubling behavior. Experiments investigate how these predictions extend to larger networks.\n\nSurvey relevance: Provides a mechanistic explanation of deterministic training dynamics, initialization-dependent curvature changes, and edge-of-stability behavior. Complements Saxe et al. (2014) on nonlinear weight dynamics in linear networks, Galli et al. (2026) on large learning rates, and Zhang et al. (2026) on the relationship between saddle regions and stage-like training trajectories.",
+   "assumptions": "Important assumptions: The exact theoretical analysis considers a two-layer linear network trained on a single example using squared-error loss and discrete gradient descent. The authors use the Hessian trace as a tractable proxy for sharpness. The critical learning-rate result depends on the model's effective width, target value, and input norm.\n\nLimitations: The simplified model does not reproduce all realistic training behavior, particularly the nonmonotonic decrease in training loss and long-range correlations in sharpness fluctuations at the edge of stability. Clear period-doubling behavior is primarily established in the simplified model and observed in certain synthetic-data experiments, not universally in nonlinear networks trained on real datasets.",
+   "sheet_status": "Read",
+   "short": "Kalra 2025",
+   "notes": "public/notes/kalra2025universal.pdf",
+   "notes_title": "Kalra_2025_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "sharpness",
+    "step size",
+    "chaos",
+    "fixed-point analysis"
+   ],
+   "result": "UV model explains sharpness trends; EoS needs η > √n_eff/(‖x‖y), then period doubling to chaos.",
+   "tabs": [
+    [
+     "bounce",
+     "Edge of stability"
+    ],
+    [
+     "flow",
+     "Function-space map"
+    ],
+    [
+     "chaos",
+     "Route to chaos"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "bounce",
+    "sharpness": "bounce",
+    "step size": "bounce",
+    "chaos": "chaos",
+    "fixed-point analysis": "flow"
+   },
+   "thumb": "public/thumbs/kalra2025universal.webp"
+  },
+  {
+   "key": "zhang2026saddle",
+   "title": "Saddle-to-Saddle Dynamics Explains A Simplicity Bias Across Neural Network Architectures",
+   "authors": "Y. Zhang, A. Saxe, P. Latham",
+   "year": 2026,
+   "venue": "ICLR",
+   "phase": "3 Recent Work",
+   "section": "Dynamics",
+   "priority": "Relevant",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/5e96d63b20f335f57999a1aca7fa0474-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2026/file/5e96d63b20f335f57999a1aca7fa0474-Paper-Conference.pdf",
+   "summary": "Problem: Neural networks frequently learn solutions of increasing complexity through long training plateaus followed by rapid loss reductions. Existing explanations of these saddle-to-saddle dynamics are often architecture-specific, leaving unclear whether a shared mechanism governs this behavior.\n\nContribution: The authors develop a unified framework connecting saddle-to-saddle dynamics with simplicity bias across fully connected, convolutional, and attention-based architectures. They establish hierarchies of embedded stationary points and invariant manifolds corresponding to effectively narrower networks, and explain how different timescale-separation mechanisms lead to low-rank or sparse weight structures.\n\nMethod: The authors first show how stationary points of narrower networks can be embedded into wider networks. They then establish invariant manifolds along which wider networks behave like narrower ones. By analyzing gradient-flow trajectories and timescale separation, they explain how training approaches and escapes successive saddles while progressively increasing effective model complexity.\n\nSurvey relevance: Provides a modern geometric explanation for the stage-like training dynamics studied by Saxe et al. (2014). Complements Lee et al. (2016) and Jin et al. (2017) by examining the structure and functional consequences of saddle transitions rather than solely saddle avoidance or escape efficiency. Particularly relevant to deterministic training dynamics, initialization, saddle-to-saddle trajectories, and architectural effects.",
+   "assumptions": "Important assumptions: The theoretical framework considers networks with additive unit structure and gradient-flow training under suitable differentiability conditions. The detailed dynamical analysis focuses on two-layer networks with linear or quadratic dependence on unit weights, squared-error loss, and small random initialization. Specific invariant-manifold results require properties such as homogeneity or linearity.\n\nLimitations: The detailed saddle-to-saddle dynamics theory does not universally apply to arbitrary deep networks, architectures, initializations, or stochastic optimization methods. Some deep-network extensions remain conjectural, and the identified invariant manifolds are not proven exhaustive. Saddle-to-saddle behavior is conditional rather than inevitable.",
+   "sheet_status": "Read",
+   "short": "Zhang 2026",
+   "notes": "public/notes/zhang2026saddle.pdf",
+   "notes_title": "Zhang_2026_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "saddle-to-saddle",
+    "plateau",
+    "simplicity bias",
+    "invariant manifold",
+    "initialization"
+   ],
+   "result": "Saddle-to-saddle dynamics through embedded narrow-network saddles explain a simplicity bias.",
+   "tabs": [
+    [
+     "manifold",
+     "Saddle to saddle"
+    ],
+    [
+     "growth",
+     "Two mechanisms"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle-to-saddle": "manifold",
+    "plateau": "manifold",
+    "simplicity bias": "growth",
+    "invariant manifold": "manifold",
+    "initialization": "growth"
+   },
+   "thumb": "public/thumbs/zhang2026saddle.webp"
+  },
+  {
+   "key": "galli2026flatland",
+   "title": "Flatland: The Adventures of Gradient Descent with Large Step Sizes",
+   "authors": "L. Galli et al.",
+   "year": 2026,
+   "venue": "ICML",
+   "phase": "3 Recent Work",
+   "section": "Dynamics",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v306/galli26a.html",
+   "pdf": "https://proceedings.mlr.press/v306/galli26a/galli26a.pdf",
+   "summary": "Problem: Traditional gradient descent theory typically requires small learning rates based on global smoothness assumptions, which may not hold for neural networks. The paper investigates how to select large, convergent learning rates and whether extremely flat loss regions are always beneficial for training.\n\nContribution: The authors introduce a definition of large step sizes based on local segment smoothness and develop adaptive first-order methods that can operate at the edge of stability. They also demonstrate that reaching globally least-sharp regions prematurely can cause training to stagnate at saddle points.\n\nMethod: The authors employ nonmonotone equality line searches that combine backtracking and extrapolation to select aggressive learning rates without using Hessian information. They analyze the relationship between step size and Hessian sharpness, investigate globally flat saddle regions, and introduce an upper-bounded variant (NLS-ub) to avoid premature entry into these regions.\n\nSurvey relevance: Connects learning-rate selection, edge-of-stability dynamics, curvature, and saddle-point behavior. Challenges the assumption that minimizing sharpness always improves optimization and provides a recent example of how modified gradient-based updates can influence training trajectories.",
+   "assumptions": "Important assumptions: The convergence theorem requires a continuously differentiable, lower-bounded objective with a compact initial level set and a specified nonmonotone line-search procedure. Stronger step-size guarantees require local segment smoothness or Hölder continuity. The sharpness lower bound of 2/K applies to the stated K-class MSE setting with a linear final layer containing a bias term.\n\nLimitations: Convergence is guaranteed only toward first-order stationarity, not global minima or second-order stationary points. The main experiments use relatively small training subsets, and the theoretical analysis does not establish general convergence guarantees for SGD. The proposed step-size cap is specific to the investigated setting.",
+   "sheet_status": "Read",
+   "short": "Galli 2026",
+   "notes": "public/notes/galli2026flatland.pdf",
+   "notes_title": "Galli_2026_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "step size",
+    "line search",
+    "sharpness",
+    "degenerate saddle"
+   ],
+   "result": "Nonmonotone line search: large EoS steps that converge; the 2/K sharpness floor marks flat dead-end saddles.",
+   "tabs": [
+    [
+     "linesearch",
+     "Large steps"
+    ],
+    [
+     "flatland",
+     "Flatland"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "linesearch",
+    "step size": "linesearch",
+    "line search": "linesearch",
+    "sharpness": "flatland",
+    "degenerate saddle": "flatland"
+   },
+   "thumb": "public/thumbs/galli2026flatland.webp"
+  },
+  {
+   "key": "apidopoulos2026taming",
+   "title": "Taming Stochastic Gradient Descent: Almost Sure Convergence and Saddle-Point Avoidance under (L0,L1)-Smoothness",
+   "authors": "V. Apidopoulos, I. Lytras, P. Mertikopoulos",
+   "year": 2026,
+   "venue": "ICML",
+   "phase": "3 Recent Work",
+   "section": "Escape methods",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v306/apidopoulos26a.html",
+   "pdf": "https://proceedings.mlr.press/v306/apidopoulos26a/apidopoulos26a.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Apidopoulos 2026",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "baldi1989neural",
+   "title": "Neural Networks and Principal Component Analysis: Learning from Examples without Local Minima",
+   "authors": "P. Baldi, K. Hornik",
+   "year": 1989,
+   "venue": "Neural Networks",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "Must read",
+   "link": "https://www.sciencedirect.com/science/article/pii/0893608089900142",
+   "pdf": null,
+   "summary": "Problem: Neural-network loss functions can be non-convex, raising the question of whether training can become trapped in poor local minima.\n\nContribution: The authors characterize the critical points of linear neural networks trained with squared-error loss. Under their stated conditions, the optimal network solution is related to principal component analysis (PCA), and nonoptimal critical points are saddle points rather than poor local minima.\n\nMethod: They analyze a two-layer linear network using matrix factorization, covariance matrices, eigenvalues, and eigenvectors to characterize stationary points and optimal solutions.\n\nSurvey relevance: Provides an early theoretical foundation showing that non-convexity does not necessarily imply bad local minima. Supports RQ1 (loss-landscape geometry) and RQ4 (generality of theoretical results).",
+   "assumptions": "Important assumptions: Linear feed-forward neural networks, quadratic (squared-error) loss, and appropriate rank and covariance conditions. The clean characterization of critical points relies on nondegeneracy conditions such as distinct relevant eigenvalues.\n\nLimitations: The results do not automatically extend to nonlinear or modern deep neural networks. The paper characterizes the loss landscape but does not establish finite-time convergence or saddle-escape guarantees for gradient descent or SGD.",
+   "sheet_status": "Read",
+   "short": "Baldi 1989",
+   "notes": "public/notes/baldi1989neural.pdf",
+   "notes_title": "baldi1989-NOTES.pdf",
+   "visual": true,
+   "tags": [
+    "no spurious minima",
+    "saddle",
+    "PCA",
+    "weight symmetry",
+    "deep linear network"
+   ],
+   "result": "Linear autoencoder: one minimum (PCA projection), every other critical point a saddle.",
+   "tabs": [
+    [
+     "pca",
+     "PCA valley"
+    ],
+    [
+     "angle",
+     "Projection angle"
+    ],
+    [
+     "equivalent",
+     "Many weights, one map"
+    ]
+   ],
+   "tag_tabs": {
+    "no spurious minima": "pca",
+    "saddle": "pca",
+    "PCA": "angle",
+    "weight symmetry": "equivalent",
+    "deep linear network": "pca"
+   },
+   "thumb": "public/thumbs/baldi1989neural.webp"
+  },
+  {
+   "key": "nesterov2006cubic",
+   "title": "Cubic Regularization of Newton Method and Its Global Performance",
+   "authors": "Y. Nesterov, B. T. Polyak",
+   "year": 2006,
+   "venue": "Mathematical Programming",
+   "phase": "1 Foundations",
+   "section": "Escape methods",
+   "priority": "",
+   "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
+   "pdf": null,
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Nesterov 2006",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "martens2010deep",
+   "title": "Deep Learning via Hessian-Free Optimization",
+   "authors": "J. Martens",
+   "year": 2010,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Escape methods",
+   "priority": "",
+   "link": "https://icml.cc/Conferences/2010/papers/458.pdf",
+   "pdf": "https://icml.cc/Conferences/2010/papers/458.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Martens 2010",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "ghadimi2013stochastic",
+   "title": "Stochastic First- and Zeroth-Order Methods for Nonconvex Stochastic Programming",
+   "authors": "S. Ghadimi, G. Lan",
+   "year": 2013,
+   "venue": "SIAM J. Optimization",
+   "phase": "1 Foundations",
+   "section": "Preliminaries",
+   "priority": "Must read",
+   "link": "https://epubs.siam.org/doi/10.1137/120880811",
+   "pdf": "https://arxiv.org/pdf/1309.5549",
+   "summary": "Problem: It is difficult to guarantee convergence to a global minimum when optimizing non-convex functions using noisy gradients.\n\nContribution:The authors introduce Randomized Stochastic Gradient (RSG) and establish convergence guarantees for finding approximate stationary points in smooth non-convex optimization.\n\nMethod: They analyze stochastic gradient updates and randomly select an output iterate to establish convergence bounds. They also consider gradient-free optimization.\n\nSurvey relevance: Provides a foundation for understanding SGD convergence (RQ2) and why reaching a stationary point does not guarantee reaching a minimum (RQ4).",
+   "assumptions": "Assumptions: Smooth objective with Lipschitz-continuous gradients, unbiased stochastic gradient estimates with bounded variance, and suitable step sizes.\n\nLimitations: The guarantees concern approximate first-order stationarity, not convergence to local or global minima. The paper does not guarantee saddle-point avoidance.",
+   "sheet_status": "Read",
+   "short": "Ghadimi 2013",
+   "notes": "public/notes/ghadimi2013stochastic.pdf",
+   "notes_title": "ghadimi2013-NOTES.pdf",
+   "visual": true,
+   "tags": [
+    "SGD",
+    "first-order stationarity",
+    "convergence rate",
+    "zeroth-order"
+   ],
+   "result": "Randomized SGD: E‖∇f‖² = O(1/√N) on smooth non-convex losses; first-order stationarity only.",
+   "tabs": [
+    [
+     "rsg",
+     "RSG run"
+    ],
+    [
+     "rate",
+     "Rate vs bound"
+    ],
+    [
+     "smallgrad",
+     "Small ≠ minimum"
+    ],
+    [
+     "zeroth",
+     "Zeroth order"
+    ]
+   ],
+   "tag_tabs": {
+    "SGD": "rsg",
+    "first-order stationarity": "smallgrad",
+    "convergence rate": "rate",
+    "zeroth-order": "zeroth"
+   },
+   "thumb": "public/thumbs/ghadimi2013stochastic.webp"
+  },
+  {
+   "key": "sutskever2013importance",
+   "title": "On the Importance of Initialization and Momentum in Deep Learning",
+   "authors": "I. Sutskever, J. Martens, G. Dahl, G. Hinton",
+   "year": 2013,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Dynamics",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v28/sutskever13.html",
+   "pdf": "https://proceedings.mlr.press/v28/sutskever13.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Sutskever 2013",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "saxe2014exact",
+   "title": "Exact Solutions to the Nonlinear Dynamics of Learning in Deep Linear Neural Networks",
+   "authors": "A. M. Saxe, J. L. McClelland, S. Ganguli",
+   "year": 2014,
+   "venue": "ICLR",
+   "phase": "1 Foundations",
+   "section": "Dynamics",
+   "priority": "Must read",
+   "link": "https://arxiv.org/abs/1312.6120",
+   "pdf": "https://arxiv.org/pdf/1312.6120",
+   "summary": "Problem: Deep neural networks can experience slow learning and long plateaus, but the mathematical reasons behind these training dynamics are difficult to analyze.\n\nContribution: The authors derive exact learning dynamics for deep linear networks, showing that they can exhibit long plateaus followed by rapid learning. They also show how suitable initialization can greatly improve learning speed, even in very deep networks.\n\nMethod: They analyze gradient-based learning in deep linear networks using differential equations and the singular-value structure of the training data.\n\nSurvey relevance: Provides a theoretical foundation for understanding how network depth and initialization affect optimization trajectories (RQ2), while illustrating the limits of conclusions drawn from simplified models (RQ4).",
+   "assumptions": "Important assumptions: Deep linear networks with squared-error objectives. Exact analytical results rely on specific data structures, network conditions, and initialization assumptions.\n\nLimitations: The full theory does not directly extend to arbitrary nonlinear architectures or SGD with minibatch noise. It mainly explains learning dynamics rather than providing general guarantees for escaping saddle points.",
+   "sheet_status": "Read",
+   "short": "Saxe 2014",
+   "notes": "public/notes/saxe2014exact.pdf",
+   "notes_title": "saxe2014-NOTES.pdf",
+   "visual": true,
+   "tags": [
+    "plateau",
+    "saddle",
+    "initialization",
+    "conserved quantity",
+    "deep linear network"
+   ],
+   "result": "Deep linear nets: exact sigmoid learning curves, plateaus from saddles, orthogonal init beats Gaussian with depth.",
+   "tabs": [
+    [
+     "hyperbolas",
+     "Hyperbolas"
+    ],
+    [
+     "plateaus",
+     "Plateaus"
+    ],
+    [
+     "orthogonal",
+     "Orthogonal init"
+    ]
+   ],
+   "tag_tabs": {
+    "plateau": "plateaus",
+    "saddle": "hyperbolas",
+    "initialization": "orthogonal",
+    "conserved quantity": "hyperbolas",
+    "deep linear network": "hyperbolas"
+   },
+   "thumb": "public/thumbs/saxe2014exact.webp"
+  },
+  {
+   "key": "choromanska2015loss",
+   "title": "The Loss Surfaces of Multilayer Networks",
+   "authors": "A. Choromanska, M. Henaff, M. Mathieu, G. Ben Arous, Y. LeCun",
+   "year": 2015,
+   "venue": "AISTATS",
+   "phase": "1 Foundations",
+   "section": "Theory vs practice",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v38/choromanska15.html",
+   "pdf": "https://proceedings.mlr.press/v38/choromanska15.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Choromanska 2015",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "ge2015escaping",
+   "title": "Escaping From Saddle Points: Online Stochastic Gradient for Tensor Decomposition",
+   "authors": "R. Ge, F. Huang, C. Jin, Y. Yuan",
+   "year": 2015,
+   "venue": "COLT",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v40/Ge15.html",
+   "pdf": "https://proceedings.mlr.press/v40/Ge15.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Ge 2015",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "kawaguchi2016deep",
+   "title": "Deep Learning without Poor Local Minima",
+   "authors": "K. Kawaguchi",
+   "year": 2016,
+   "venue": "NeurIPS",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "",
+   "link": "https://papers.nips.cc/paper_files/paper/2016/hash/f2fc990265c712c49d51a18a32b39f0c-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/f2fc990265c712c49d51a18a32b39f0c-Paper.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Kawaguchi 2016",
+   "notes": null,
+   "notes_title": null,
+   "visual": true,
+   "tags": [
+    "no spurious minima",
+    "strict saddle",
+    "degenerate saddle",
+    "deep linear network"
+   ],
+   "result": "Deep linear nets: every local minimum is global; deeper nets have flat (bad) saddles.",
+   "tabs": [
+    [
+     "valleys",
+     "Valleys"
+    ],
+    [
+     "good",
+     "Good saddle"
+    ],
+    [
+     "bad",
+     "Bad saddle"
+    ],
+    [
+     "race",
+     "Race"
+    ]
+   ],
+   "tag_tabs": {
+    "no spurious minima": "valleys",
+    "strict saddle": "good",
+    "degenerate saddle": "bad",
+    "deep linear network": "race"
+   },
+   "thumb": "public/thumbs/kawaguchi2016deep.webp"
+  },
+  {
+   "key": "bhojanapalli2016global",
+   "title": "Global Optimality of Local Search for Low Rank Matrix Recovery",
+   "authors": "S. Bhojanapalli, B. Neyshabur, N. Srebro",
+   "year": 2016,
+   "venue": "NeurIPS",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "",
+   "link": "https://papers.nips.cc/paper_files/paper/2016/hash/b139e104214a08ae3f2ebcce149cdf6e-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/b139e104214a08ae3f2ebcce149cdf6e-Paper.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Bhojanapalli 2016",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "reddi2016stochastic",
+   "title": "Stochastic Variance Reduction for Nonconvex Optimization",
+   "authors": "S. J. Reddi, A. Hefny, S. Sra, B. Poczos, A. Smola",
+   "year": 2016,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Preliminaries",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v48/reddi16.html",
+   "pdf": "https://proceedings.mlr.press/v48/reddi16.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Reddi 2016",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "nguyen2017loss",
+   "title": "The Loss Surface of Deep and Wide Neural Networks",
+   "authors": "Q. Nguyen, M. Hein",
+   "year": 2017,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v70/nguyen17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/nguyen17a/nguyen17a.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Nguyen 2017",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "ge2017no",
+   "title": "No Spurious Local Minima in Nonconvex Low Rank Problems: A Unified Geometric Analysis",
+   "authors": "R. Ge, C. Jin, Y. Zheng",
+   "year": 2017,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "Skim",
+   "link": "https://proceedings.mlr.press/v70/ge17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/ge17a/ge17a.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Ge 2017",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "haeffele2017global",
+   "title": "Global Optimality in Neural Network Training",
+   "authors": "B. D. Haeffele, R. Vidal",
+   "year": 2017,
+   "venue": "CVPR",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "",
+   "link": "https://openaccess.thecvf.com/content_cvpr_2017/html/Haeffele_Global_Optimality_in_CVPR_2017_paper.html",
+   "pdf": "https://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Haeffele 2017",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "laurent2018deep",
+   "title": "Deep Linear Networks with Arbitrary Loss: All Local Minima Are Global",
+   "authors": "T. Laurent, J. von Brecht",
+   "year": 2018,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Geometry",
+   "priority": "Skim",
+   "link": "https://proceedings.mlr.press/v80/laurent18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/laurent18a/laurent18a.pdf",
+   "summary": "Problem: Deep linear networks have non-convex loss landscapes because their weight matrices are multiplied together, raising the question of whether depth introduces bad local minima.\n\nContribution: The authors prove that every local minimum is global when the underlying loss is convex and differentiable and the hidden layers satisfy suitable width conditions.\n\nMethod: They use matrix-factorization analysis to show that a local minimum in the network weights corresponds to a stationary point of the underlying convex loss.\n\nSurvey relevance: Supports RQ1 by showing that non-convexity does not necessarily create bad local minima, and RQ4 by identifying the assumptions needed for this result.",
+   "assumptions": "Assumptions: Deep linear network, convex and differentiable loss, and hidden layers at least as wide as the smaller of the input and output dimensions.\n\nLimitations: The result does not automatically extend to nonlinear networks or non-convex losses. The authors also show that nondifferentiable convex losses can introduce bad local minima. The theorem does not guarantee fast convergence or saddle-point avoidance.",
+   "sheet_status": "Read",
+   "short": "Laurent 2018",
+   "notes": "public/notes/laurent2018deep.pdf",
+   "notes_title": "Laurent2018-NOTES.pdf",
+   "visual": true,
+   "tags": [
+    "no spurious minima",
+    "deep linear network",
+    "spurious local minimum",
+    "nonsmooth loss"
+   ],
+   "result": "Deep linear nets, any convex differentiable loss: all local minima global; nondifferentiable losses break it.",
+   "tabs": [
+    [
+     "convex",
+     "Any convex loss"
+    ],
+    [
+     "kink",
+     "Kinked loss"
+    ]
+   ],
+   "tag_tabs": {
+    "no spurious minima": "convex",
+    "deep linear network": "convex",
+    "spurious local minimum": "kink",
+    "nonsmooth loss": "kink"
+   },
+   "thumb": "public/thumbs/laurent2018deep.webp"
+  },
+  {
+   "key": "safran2018spurious",
+   "title": "Spurious Local Minima Are Common in Two-Layer ReLU Neural Networks",
+   "authors": "I. Safran, O. Shamir",
+   "year": 2018,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Theory vs practice",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v80/safran18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/safran18a/safran18a.pdf",
+   "summary": "Problem: Neural-network optimization is often believed to be hindered primarily by saddle points rather than poor local minima. The paper investigates whether spurious local minima can exist even in simple two-layer ReLU networks under favorable data-distribution and realizability assumptions.\n\nContribution: The authors rigorously establish the existence of spurious local minima in two-layer ReLU networks with 6–20 hidden neurons under specified configurations, even with Gaussian inputs and orthonormal teacher weights. Experiments show that gradient descent frequently converges near these minima, while modest student overparameterization substantially reduces their observed frequency.\n\nMethod: The authors use gradient descent to identify candidate non-global stationary points, then rigorously verify their proximity to actual spurious local minima. They establish bounds on gradient magnitude, positive Hessian curvature, and higher-order Taylor remainders using guaranteed-precision computation. Additional experiments examine how network width and student overparameterization affect convergence to these minima.\n\nSurvey relevance: Demonstrates that saddle-point avoidance alone does not guarantee global optimization because genuine non-global local minima can exist. Qualifies the saddle-focused perspectives of Dauphin et al. (2014), Lee et al. (2016), and Jin et al. (2017). It also motivates the overparameterization assumptions underlying the positive convergence guarantees of Du et al. (2019) and Allen-Zhu et al. (2019).",
+   "assumptions": "Important assumptions: The analysis considers two-layer ReLU networks with fixed unit output weights, Gaussian input distributions, and population squared-error loss. Target outputs are generated by a teacher network with orthonormal or approximately orthogonal hidden weights. The rigorous existence results cover specific teacher/student width combinations.\n\nLimitations: The findings do not establish that spurious local minima are common in arbitrary deep networks. The computer-assisted existence proof covers selected network sizes, while the reported convergence frequencies depend on the experimental initialization and optimization procedure. The apparent elimination of bad minima through additional student neurons is empirical, not a general theorem.",
+   "sheet_status": "Read",
+   "short": "Safran 2018",
+   "notes": "public/notes/safran2018spurious.pdf",
+   "notes_title": "Safran_Shamir_2018_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "spurious local minimum",
+    "ReLU network",
+    "overparameterization",
+    "computer-assisted proof"
+   ],
+   "result": "Two-layer ReLU nets have many spurious local minima that GD often finds; mild over-parameterization helps.",
+   "tabs": [
+    [
+     "slice",
+     "Spurious minimum"
+    ],
+    [
+     "odds",
+     "How often"
+    ],
+    [
+     "cdf",
+     "Final losses"
+    ]
+   ],
+   "tag_tabs": {
+    "spurious local minimum": "slice",
+    "ReLU network": "slice",
+    "overparameterization": "odds",
+    "computer-assisted proof": "slice"
+   },
+   "thumb": "public/thumbs/safran2018spurious.webp"
+  },
+  {
+   "key": "daneshmand2018escaping",
+   "title": "Escaping Saddles with Stochastic Gradients",
+   "authors": "H. Daneshmand, J. Kohler, A. Lucchi, T. Hofmann",
+   "year": 2018,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Dynamics",
+   "priority": "",
+   "link": "https://proceedings.mlr.press/v80/daneshmand18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/daneshmand18a/daneshmand18a.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Daneshmand 2018",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "carmon2018accelerated",
+   "title": "Accelerated Methods for NonConvex Optimization",
+   "authors": "Y. Carmon, J. C. Duchi, O. Hinder, A. Sidford",
+   "year": 2018,
+   "venue": "SIAM J. Optimization",
+   "phase": "1 Foundations",
+   "section": "Escape methods",
+   "priority": "",
+   "link": "https://epubs.siam.org/doi/10.1137/17M1114296",
+   "pdf": "https://arxiv.org/pdf/1611.00756",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Carmon 2018",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "jacot2018neural",
+   "title": "Neural Tangent Kernel: Convergence and Generalization in Neural Networks",
+   "authors": "A. Jacot, F. Gabriel, C. Hongler",
+   "year": 2018,
+   "venue": "NeurIPS",
+   "phase": "1 Foundations",
+   "section": "Theory vs practice",
+   "priority": "",
+   "link": "https://papers.nips.cc/paper_files/paper/2018/hash/5a4be1fa34e62bb8a6ec6b91d2462f5a-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf",
+   "summary": "",
+   "assumptions": "",
+   "sheet_status": "To check",
+   "short": "Jacot 2018",
+   "notes": null,
+   "notes_title": null,
+   "visual": false,
+   "tags": [],
+   "result": "",
+   "tabs": [],
+   "tag_tabs": {},
+   "thumb": null
+  },
+  {
+   "key": "allenzhu2019convergence",
+   "title": "A Convergence Theory for Deep Learning via Over-Parameterization",
+   "authors": "Z. Allen-Zhu, Y. Li, Z. Song",
+   "year": 2019,
+   "venue": "ICML",
+   "phase": "1 Foundations",
+   "section": "Theory vs practice",
+   "priority": "Must read",
+   "link": "https://proceedings.mlr.press/v97/allen-zhu19a.html",
+   "pdf": "https://proceedings.mlr.press/v97/allen-zhu19a/allen-zhu19a.pdf",
+   "summary": "Problem: Despite their non-convex and nonsmooth training objectives, deep ReLU networks can often be optimized successfully using simple first-order methods. The paper investigates why GD and SGD can achieve near-zero training error efficiently and whether convergence complexity can depend polynomially on network depth.\n\nContribution: The authors establish polynomial-time convergence guarantees for GD and minibatch SGD in sufficiently overparameterized deep ReLU networks. They prove geometric convergence toward zero squared training loss and extend their framework to selected CNNs, ResNets, and additional loss functions.\n\nMethod: The authors prove two properties near random initialization. First, a gradient lower bound ensures that nonzero training loss implies a sufficiently large gradient, ruling out nonoptimal critical points in that neighborhood. Second, a semi-smoothness inequality controls how the loss changes under gradient updates despite ReLU non-differentiability. Together, these properties establish sufficient loss reduction while keeping training trajectories inside the controlled region.\n\nSurvey relevance: Provides a theoretical explanation for why overparameterization can make non-convex optimization tractable without explicit saddle-escape methods. Complements Du et al. (2019) by establishing convergence results for nonsmooth ReLU networks and SGD. It also offers a different perspective from Lee et al. (2016) and Jin et al. (2017): rather than focusing on avoiding or escaping saddles, sufficiently wide architectures can exhibit favorable local optimization geometry along training trajectories.",
+   "assumptions": "Important assumptions: The guarantees require sufficiently separated training inputs, large network width polynomial in the dataset size and depth, Gaussian random initialization, carefully selected learning rates, and parameter trajectories remaining near initialization. The main analysis uses squared-error regression and a specific fully connected architecture.\n\nLimitations: The theoretical width requirements may be considerably larger than practical network sizes. The results concern training optimization rather than generalization. Guarantees are established locally around random initialization and do not describe the entire non-convex landscape. Extensions to other architectures and losses require additional conditions.",
+   "sheet_status": "Read",
+   "short": "Allen-Zhu 2019",
+   "notes": "public/notes/allenzhu2019convergence.pdf",
+   "notes_title": "Allen_Zhu_2019_Study_Notes.pdf",
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "global convergence",
+    "lazy training",
+    "nonsmooth activation",
+    "data separation"
+   ],
+   "result": "Wide deep ReLU nets: GD/SGD reach small training loss in polynomial time (no bad critical points near init).",
+   "tabs": [
+    [
+     "slice",
+     "Gradient vs curvature"
+    ],
+    [
+     "width",
+     "Width"
+    ],
+    [
+     "separation",
+     "Data separation δ"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "width",
+    "global convergence": "width",
+    "lazy training": "width",
+    "nonsmooth activation": "slice",
+    "data separation": "separation"
+   },
+   "thumb": "public/thumbs/allenzhu2019convergence.webp"
+  }
+ ]
+}

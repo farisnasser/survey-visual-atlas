@@ -1,0 +1,8 @@
+{
+  "result": "Plain gradient descent from a <b>random start</b> almost surely never converges to a <b>strict saddle</b>: the starts that do form a measure-zero set. The guarantee is asymptotic — escape can still be arbitrarily slow.",
+  "result_plain": "Randomly initialized GD almost surely avoids strict saddles (asymptotic, no escape-time bound).",
+  "tags": ["strict saddle", "saddle avoidance", "stable manifold", "gradient descent"],
+  "tag_tabs": { "strict saddle": "stable", "saddle avoidance": "stable", "stable manifold": "map", "gradient descent": "escape" },
+  "tabs": [["stable", "Stable set"], ["escape", "Escape time"], ["map", "GD as a map"]],
+  "thumb": "stable"
+}

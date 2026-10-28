@@ -1,0 +1,8 @@
+{
+  "result": "If a deep network is <b>wide enough</b>, gradient descent from random init drives the training loss to <b>zero at a linear rate</b>: the weights barely move, so the Gram matrix of prediction gradients stays well conditioned. ResNets need only polynomial width in depth.",
+  "result_plain": "Wide enough nets: GD reaches zero training loss at a linear rate (Gram matrix stays stable).",
+  "tags": ["overparameterization", "global convergence", "lazy training", "convergence rate"],
+  "tag_tabs": { "overparameterization": "rate", "global convergence": "rate", "lazy training": "prediction", "convergence rate": "rate" },
+  "tabs": [["prediction", "Prediction space"], ["rate", "Linear rate"]],
+  "thumb": "prediction"
+}

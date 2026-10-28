@@ -1,0 +1,290 @@
+<title>Saddles Without Poor Minima</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one full-screen 3D stage; title + tabs float top, caption + controls float bottom. Deliberately dark single theme. */
+:root{
+  --bg:#0b0e1a; --panel:rgba(16,21,38,.82); --line:#2a3352; --ink:#e8ecf8; --muted:#8e99bd;
+  --ball:#ff7a59; --neg:#ff5d73; --pos:#7cc4ff; --flat:#ffc857; --good:#5fe0b0;
+  --display:"Sora", "Avenir Next", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow:hidden}
+#stage{position:fixed;inset:0}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.top{position:fixed;top:0;left:0;right:0;padding-top:calc(14px + env(safe-area-inset-top,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;pointer-events:none;z-index:3}
+.top>*{pointer-events:auto}
+h1{font-size:17px;font-weight:700;letter-spacing:-.01em}
+h1 small{display:block;font:400 11px var(--mono);color:var(--muted);letter-spacing:.04em}
+.tabs{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px;flex-wrap:wrap;backdrop-filter:blur(6px)}
+.tabs button{font:500 13px var(--display);color:var(--muted);background:none;border:0;border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tabs button:focus-visible,.act:focus-visible{outline:2px solid var(--flat);outline-offset:2px}
+.bottom{position:fixed;left:0;right:0;bottom:0;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;justify-content:space-between;z-index:3;pointer-events:none}
+.bottom>*{pointer-events:auto}
+.cap{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;max-width:min(460px,100%);backdrop-filter:blur(6px);min-width:0}
+.cap b{font-weight:700}
+.cap p{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.45}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font:400 11px var(--mono);color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.act{font:700 14px var(--display);background:var(--ball);color:#1a0d08;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;box-shadow:0 6px 24px rgba(255,122,89,.35)}
+.act:hover{filter:brightness(1.08)}
+.lbl{position:fixed;transform:translate(-50%,-50%);font:600 11.5px var(--mono);white-space:nowrap;pointer-events:none;z-index:2;text-shadow:0 1px 6px #000,0 0 2px #000}
+.lbl.big{font:700 12.5px var(--display);text-align:center;line-height:1.35}
+.lbl .stat{display:block;font:400 11px var(--mono);color:var(--muted)}
+.hint{font:400 11px var(--mono);color:var(--muted);padding:6px 2px}
+@media (max-width:560px){.lbl.big{font-size:11px}.cap p{font-size:12px}}
+</style>
+
+<div id="stage"></div>
+<div class="top">
+  <h1>Deep Learning without Poor Local Minima<small>Kawaguchi · NIPS 2016</small></h1>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="valleys" aria-selected="true">Valleys</button>
+    <button role="tab" data-tab="good" aria-selected="false">Good saddle</button>
+    <button role="tab" data-tab="bad" aria-selected="false">Bad saddle</button>
+    <button role="tab" data-tab="race" aria-selected="false">Race</button>
+  </div>
+</div>
+<div id="labels"></div>
+<div class="bottom">
+  <div class="cap"><b id="capT"></b><p id="capP"></p><div class="legend" id="legend"></div></div>
+  <div style="display:grid;gap:4px;justify-items:end">
+    <button class="act" id="act" type="button">Drop balls</button>
+    <span class="hint">drag to orbit · pinch / scroll to zoom</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(() => {
+  const D = 1.6, N = 110, REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const logH = L => Math.log1p(L) * 0.7;
+  // Surfaces, written as losses of tiny networks with scalar weights (x, y)
+  const SURF = {
+    // 1 hidden layer linear net: ŷ = w2·w1·x, target 1
+    strict: { L: (x, y) => (1 - x * y) ** 2, g: (x, y) => { const r = 1 - x * y; return [-2 * y * r, -2 * x * r]; }, h: logH },
+    // 2 hidden layers, slice w3 = w2: ŷ = w1·w2², target 1
+    bad: { L: (x, y) => (1 - x * y * y) ** 2, g: (x, y) => { const r = 1 - x * y * y; return [-2 * y * y * r, -4 * x * y * r]; }, h: logH },
+    // the kind of landscape the paper rules out
+    bumpy: { L: (x, y) => .22 * (x * x + y * y) + .3 * (1 - Math.cos(4 * x) * Math.cos(4 * y)),
+             g: (x, y) => [.44 * x + 1.2 * Math.sin(4 * x) * Math.cos(4 * y), .44 * y + 1.2 * Math.cos(4 * x) * Math.sin(4 * y)], h: L => L * .9 }
+  };
+  const C = { ball: 0xff7a59, neg: 0xff5d73, pos: 0x7cc4ff, flat: 0xffc857, good: 0x5fe0b0 };
+  const STOPS = [[0x1b, 0x1f, 0x4b], [0x24, 0x4f, 0x86], [0x2a, 0x9c, 0x96], [0x96, 0xd0, 0x78], [0xf4, 0xe8, 0xa4]];
+  const ramp = t => { t = Math.min(1, Math.max(0, t)) * (STOPS.length - 1); const i = Math.min(STOPS.length - 2, Math.floor(t)), u = t - i, a = STOPS[i], b = STOPS[i + 1]; return [0, 1, 2].map(k => (a[k] + (b[k] - a[k]) * u) / 255); };
+
+  // three.js setup
+  const stage = document.getElementById('stage');
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+  renderer.setClearColor(0x0b0e1a);
+  stage.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0b0e1a, 9, 18);
+  const camera = new THREE.PerspectiveCamera(42, 1, .05, 60);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = .08; controls.enablePan = false;
+  controls.minDistance = 2.5; controls.maxDistance = 14; controls.maxPolarAngle = Math.PI * .49;
+  scene.add(new THREE.HemisphereLight(0xbcd2ff, 0x10122a, .75));
+  const sun = new THREE.DirectionalLight(0xffffff, .75); sun.position.set(3, 6, 4); scene.add(sun);
+  let world = new THREE.Group(); scene.add(world);
+
+  const W = (x, y, h, ox) => new THREE.Vector3(x + ox, h, -y);
+
+  function surface(def, ox) {
+    const pos = [], col = [], idx = [], hs = [];
+    let hmax = 0;
+    for (let j = 0; j <= N; j++) for (let i = 0; i <= N; i++) {
+      const x = -D + 2 * D * i / N, y = -D + 2 * D * j / N, h = def.h(def.L(x, y));
+      hs.push(h); hmax = Math.max(hmax, h); pos.push(x + ox, h, -y);
+    }
+    hs.forEach(h => col.push(...ramp(Math.pow(h / hmax, .6))));
+    for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const a = j * (N + 1) + i, b = a + 1, c = a + N + 1, d = c + 1; idx.push(a, c, b, b, c, d); }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    g.setIndex(idx); g.computeVertexNormals();
+    const mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .65, metalness: .05, side: THREE.DoubleSide }));
+    world.add(mesh);
+    // contour-ish grid lines
+    const lp = [];
+    for (let k = 0; k <= N; k += 10) for (let m = 0; m < N; m++) {
+      const P = (i, j) => pos.slice((j * (N + 1) + i) * 3, (j * (N + 1) + i) * 3 + 3);
+      lp.push(...P(k, m), ...P(k, m + 1), ...P(m, k), ...P(m + 1, k));
+    }
+    const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(lp, 3));
+    world.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .1 })));
+    return hmax;
+  }
+  function curve(def, ox, pts, color, lift = .012, width = 1) {
+    const v = pts.filter(p => Math.abs(p[0]) <= D && Math.abs(p[1]) <= D).map(([x, y]) => W(x, y, def.h(def.L(x, y)) + lift, ox));
+    const geo = new THREE.BufferGeometry().setFromPoints(v);
+    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity: width }));
+    world.add(line); return line;
+  }
+  function tube(def, ox, pts, color) {
+    const v = pts.filter(p => Math.abs(p[0]) <= D && Math.abs(p[1]) <= D).map(([x, y]) => W(x, y, def.h(def.L(x, y)) + .02, ox));
+    if (v.length < 2) return;
+    const path = new THREE.CatmullRomCurve3(v);
+    world.add(new THREE.Mesh(new THREE.TubeGeometry(path, v.length * 2, .018, 8, false), new THREE.MeshBasicMaterial({ color })));
+  }
+  function marker(def, ox, x, y, color) {
+    const m = new THREE.Mesh(new THREE.TorusGeometry(.1, .014, 8, 40), new THREE.MeshBasicMaterial({ color }));
+    m.rotation.x = Math.PI / 2; m.position.copy(W(x, y, def.h(def.L(x, y)) + .02, ox)); world.add(m); return m;
+  }
+
+  // balls running plain gradient descent on the true loss
+  let balls = [];
+  function ball(def, ox, lr, start, tag) {
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(.065, 24, 16), new THREE.MeshStandardMaterial({ color: C.ball, emissive: C.ball, emissiveIntensity: .55, roughness: .3 }));
+    world.add(mesh);
+    const MAX = 4000, tg = new THREE.BufferGeometry();
+    tg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX * 3), 3)); tg.setDrawRange(0, 0);
+    const trail = new THREE.Line(tg, new THREE.LineBasicMaterial({ color: C.ball, transparent: true, opacity: .85 }));
+    world.add(trail);
+    const b = { def, ox, lr, mesh, trail, MAX, n: 0, p: start.slice(), steps: 0, done: false, tag };
+    place(b); return b;
+  }
+  function place(b) {
+    const [x, y] = b.p, v = W(x, y, b.def.h(b.def.L(x, y)) + .06, b.ox);
+    b.mesh.position.copy(v);
+    if (b.n < b.MAX) { b.trail.geometry.attributes.position.setXYZ(b.n++, v.x, v.y - .04, v.z); b.trail.geometry.setDrawRange(0, b.n); b.trail.geometry.attributes.position.needsUpdate = true; }
+  }
+  function stepBalls() {
+    balls.forEach(b => {
+      if (b.done) return;
+      for (let k = 0; k < (b.speed || 1) * (REDUCE ? 40 : 1); k++) {
+        const [gx, gy] = b.def.g(...b.p);
+        b.p[0] = Math.max(-D, Math.min(D, b.p[0] - b.lr * gx));
+        b.p[1] = Math.max(-D, Math.min(D, b.p[1] - b.lr * gy));
+        b.steps++;
+        if (Math.hypot(gx, gy) < 3e-4 || b.def.L(...b.p) < 1e-5 || b.steps > 5000) { b.done = true; break; }
+      }
+      place(b);
+    });
+  }
+
+  // HTML labels pinned to 3D points
+  let labels = [];
+  const labelRoot = document.getElementById('labels');
+  function label(html, v, cls = '', color = '') {
+    const e = document.createElement('div'); e.className = 'lbl ' + cls; e.innerHTML = html; if (color) e.style.color = color;
+    labelRoot.appendChild(e); const L = { e, v }; labels.push(L); return L;
+  }
+  function placeLabels() {
+    const w = innerWidth, h = innerHeight;
+    labels.forEach(L => { const p = L.v.clone().project(camera); L.e.hidden = p.z > 1; L.e.style.left = ((p.x + 1) / 2 * w) + 'px'; L.e.style.top = ((1 - p.y) / 2 * h) + 'px'; });
+  }
+  const stat = b => b ? `step ${b.steps} · loss ${b.def.L(...b.p).toFixed(3)}` : '';
+
+  /* ---------- TABS ---------- */
+  const cap = { T: document.getElementById('capT'), P: document.getElementById('capP'), leg: document.getElementById('legend') };
+  const actBtn = document.getElementById('act');
+  const legend = items => cap.leg.innerHTML = items.map(([c, t]) => `<span><i style="background:${c}"></i>${t}</span>`).join('');
+  let tab, statLabels = [];
+  const hyper = sgn => { const a = []; for (let x = 1 / D; x <= D + 1e-9; x += .01) a.push([sgn * x, sgn / x]); return a; };
+  const line = (dx, dy, r = 1.1) => { const a = []; for (let t = -r; t <= r + 1e-9; t += .02) a.push([t * dx, t * dy]); return a; };
+
+  const TABS = {
+    valleys: {
+      cam: [0, 4.4, 6.2], tgt: [0, .3, 0],
+      T: 'No poor local minima', P: 'Left: a landscape with shallow pits. Right: a linear network’s loss. Every valley on the right sits at the bottom.',
+      leg: [['#ff7a59', 'gradient descent'], ['#5fe0b0', 'global minima']], btn: 'Drop balls',
+      build() {
+        surface(SURF.bumpy, -2); surface(SURF.strict, 2);
+        tube(SURF.strict, 2, hyper(1), C.good); tube(SURF.strict, 2, hyper(-1), C.good);
+        marker(SURF.bumpy, -2, 0, 0, C.good);
+        statLabels = [label('Poor local minima<span class="stat"></span>', W(0, -1.95, 0, -2), 'big'), label('This paper<span class="stat"></span>', W(0, -1.95, 0, 2), 'big')];
+        this.drop();
+      },
+      drop() {
+        clearBalls();
+        const s = [(Math.random() * 2 - 1) * 1.35, (Math.random() * 2 - 1) * 1.35];
+        balls = [ball(SURF.bumpy, -2, .02, s), ball(SURF.strict, 2, .01, s)];
+        balls.forEach(b => b.speed = 2);
+      }
+    },
+    good: {
+      cam: [2.8, 2.7, 3.4], tgt: [0, .45, 0],
+      T: 'Escapable saddle · 1 hidden layer', P: 'The surface curves down along one direction (negative Hessian eigenvalue). A nudge and the ball slides off.',
+      leg: [['#ff5d73', 'curves down · λ = −2'], ['#7cc4ff', 'curves up · λ = +2']], btn: 'Nudge ball',
+      build() {
+        surface(SURF.strict, 0);
+        tube(SURF.strict, 0, line(1, 1), C.neg); tube(SURF.strict, 0, line(1, -1), C.pos);
+        marker(SURF.strict, 0, 0, 0, 0xffffff);
+        label('λ = −2', W(.85, .85, SURF.strict.h(SURF.strict.L(.85, .85)) + .25, 0), '', '#ff5d73');
+        label('λ = +2', W(.85, -.85, SURF.strict.h(SURF.strict.L(.85, -.85)) + .2, 0), '', '#7cc4ff');
+        statLabels = [label('<span class="stat"></span>', W(0, 0, 1.25, 0), 'big')];
+        this.drop();
+      },
+      drop() { clearBalls(); balls = [ball(SURF.strict, 0, .02, [.05, .04])]; }
+    },
+    bad: {
+      cam: [2.8, 2.7, 3.4], tgt: [0, .45, 0],
+      T: 'Bad saddle · 2+ hidden layers', P: 'No direction curves down: the Hessian has no negative eigenvalue. The top is a flat plateau, so the ball creeps before it finds the way out.',
+      leg: [['#ffc857', 'flat · λ = 0'], ['#5fe0b0', 'global minima']], btn: 'Nudge ball',
+      build() {
+        surface(SURF.bad, 0);
+        tube(SURF.bad, 0, line(1, 0, .75), C.flat); tube(SURF.bad, 0, line(0, 1, .75), C.flat);
+        const v1 = [], v2 = []; for (let y = .79; y <= D; y += .01) { v1.push([1 / (y * y), y]); v2.push([1 / (y * y), -y]); }
+        tube(SURF.bad, 0, v1, C.good); tube(SURF.bad, 0, v2, C.good);
+        marker(SURF.bad, 0, 0, 0, 0xffffff);
+        label('λ = 0, 0', W(0, .8, SURF.bad.h(SURF.bad.L(0, .8)) + .25, 0), '', '#ffc857');
+        statLabels = [label('<span class="stat"></span>', W(0, 0, 1.25, 0), 'big')];
+        this.drop();
+      },
+      drop() { clearBalls(); balls = [ball(SURF.bad, 0, .02, [.05, .04])]; }
+    },
+    race: {
+      cam: [0, 4.4, 6.2], tgt: [0, .35, 0],
+      T: 'Same nudge, same step size', P: 'Both balls start the same distance from the saddle. Depth turns a quick slide into a long crawl.',
+      leg: [['#ff5d73', 'escapable'], ['#ffc857', 'bad (flat)']], btn: 'Restart race',
+      build() {
+        surface(SURF.strict, -2); surface(SURF.bad, 2);
+        tube(SURF.strict, -2, line(1, 1, .9), C.neg); tube(SURF.bad, 2, line(1, 0, .7), C.flat); tube(SURF.bad, 2, line(0, 1, .7), C.flat);
+        marker(SURF.strict, -2, 0, 0, 0xffffff); marker(SURF.bad, 2, 0, 0, 0xffffff);
+        statLabels = [label('1 hidden layer<span class="stat"></span>', W(0, -1.95, 0, -2), 'big'), label('2 hidden layers<span class="stat"></span>', W(0, -1.95, 0, 2), 'big')];
+        this.drop();
+      },
+      drop() { clearBalls(); balls = [ball(SURF.strict, -2, .02, [.05, .04]), ball(SURF.bad, 2, .02, [.05, .04])]; }
+    }
+  };
+
+  function clearBalls() { balls.forEach(b => { world.remove(b.mesh); world.remove(b.trail); b.trail.geometry.dispose(); }); balls = []; }
+  function show(name) {
+    tab = TABS[name];
+    scene.remove(world); world.traverse(o => { if (o.geometry) o.geometry.dispose(); }); world = new THREE.Group(); scene.add(world);
+    balls = []; labels.forEach(L => L.e.remove()); labels = []; statLabels = [];
+    tab.build();
+    camera.position.set(...tab.cam); controls.target.set(...tab.tgt); controls.update();
+    cap.T.textContent = tab.T; cap.P.textContent = tab.P; legend(tab.leg); actBtn.textContent = tab.btn;
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === name));
+    resize();
+  }
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => show(b.dataset.tab)));
+  actBtn.addEventListener('click', () => tab.drop());
+
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    // pull the camera back on narrow screens so both surfaces fit
+    camera.fov = w < h ? 58 : 42; camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize);
+
+  function loop() {
+    stepBalls();
+    statLabels.forEach((L, i) => { const s = L.e.querySelector('.stat'); if (s) s.textContent = stat(balls[i]); });
+    controls.update(); renderer.render(scene, camera); placeLabels();
+    requestAnimationFrame(loop);
+  }
+  show('valleys');
+  loop();
+})();
+</script>
