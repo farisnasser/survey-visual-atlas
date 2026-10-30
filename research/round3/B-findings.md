@@ -80,3 +80,18 @@ Format follows `research/findings.md`. Theorem numbers refer to the version name
 - Notes: correct (Theorems 4.1, 5.1; example H = diag(2, 0.2), η = 0.25 → factors 0.5, 0.95, yᵀH⁻¹y = 5.5 verified).
 - Survey reference text: correct.
 - Visuals: (1) real loss on a weight-space slice spanned by the top/bottom kernel directions (elongated valley, GD on the slice); (2) actual vs predicted loss curves for structured/random labels and the label energy per eigenvalue.
+
+## nguyen2021proof [92] — Q. Nguyen, ICML 2021 (arXiv 2101.09612)
+- Theorem 2.2: deep ReLU net (standard parameterization, all layers trained by GD, square loss) with last hidden width n_{L−1} ≥ N. With α₀ = σ_min(F⁰_{L−1}), λ̄_l = ‖W⁰_l‖₂ + C_l: if conditions (7)–(9) hold and η satisfies (10), then Φ(θ_k) ≤ (1 − ηα₀²/8)^k Φ(θ₀) (11). Proof tracks only F_{L−1} via the Lipschitz property of ReLU (no NTK / activation-pattern tracking).
+- Sec. 3.1: W_L = 0 and the other layers scaled by large β satisfy (7)–(9) → width N suffices. Sec. 3.2: LeCun init, two layers, width Ω(N²). Corollary 3.2 (Sec. 3.3): LeCun-type init, one layer of width Ω̃(N³ max(m, n₀)³), others Θ(m). Lemma 3.3: σ_min(F_{L−1})² = Θ(n₀ Π n_l β_l²).
+- Check (L = 3, widths 4→8→3→1, N = 3): smallest β meeting (7)–(9) is ≈ 212, α₀ ≈ 6 685, and (10) then forces η ≈ 1.7·10⁻¹⁶ — guaranteed rate ≈ 10⁻⁹ per step. Eq. (11) and σ_min ≥ α₀/2 hold at all 4 000 steps. An ordinary run (β = 1, step 0.23) reaches 3·10⁻²⁹ with σ_min growing 0.149 → 0.694 (empirical, no guarantee). Worth stating in the survey if it describes the result as practical: it is an existence/width result.
+- Notes: correct (worked example verified). They call the result "Theorem 2.2" correctly.
+- Survey reference text: correct.
+- Visuals: (1) last-layer least-squares slice with features frozen at a chosen training step (strictly convex bowl, GD on it); (2) theorem run vs bound (11) and ordinary run; σ_min/α₀ for both.
+
+## mei2019mean [93] — Mei, Misiakiewicz, Montanari, COLT 2019 (PMLR 99; arXiv 1902.06015)
+- Theorem 1 (A) (noiseless SGD, fixed coefficients): sup_k |R_N(θ^k) − R(ρ_{kε})| ≤ Ke^{KT}(√log N + z)/√N + Ke^{KT}(√(D + log N) + z)√ε (Eq. 9) — the N requirement is dimension-free; D enters only via ε ≪ 1/D. (B): general coefficients, e^{KT³}. Noisy SGD: arXiv Theorem 2 = COLT Theorem 4; part (B) is not dimension-free (arXiv Remark 3.3 = COLT Remark 5). Anisotropic-Gaussian example: arXiv Theorem 3 = COLT Theorem 6 (N = O(1) instead of O(d)). Kernel limit: COLT Theorem 8.
+- **Notes error:** they attribute the noiseless approximation bound to "Theorem 3"; it is Theorem 1 in both versions (their "Theorem 4 … Remark 5" for the noisy case follows the COLT numbering).
+- Our replication of the Sec. 3.2 example (Δ = 0.6, truncated ReLU 0.5/1.5/−2.5/7.5 — constants are ours, ε = 0.05/d): sup-gap to an N = 3 200 proxy 0.240 → 0.106 → 0.115 (N = 50, 200, 800) at d = 20 and 0.202 → 0.065 → 0.038 at d = 80 — no growth with d; the plateau at d = 20 is the √ε term plus proxy noise. Closed-form R∞(r₁, r₂) verified against a 1 500-neuron network at d = 400 and its d → ∞ limit.
+- Survey reference text: correct.
+- Visuals: (1) neuron cloud (‖P_V w‖, ‖P_⊥ w‖) replayed on the R∞ surface (ends near its minimum (1.55, 0.70)); (2) risk curves for N = 50/200/800 vs the proxy and the gap vs N for both d.

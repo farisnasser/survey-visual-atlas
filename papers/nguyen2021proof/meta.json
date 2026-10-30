@@ -1,0 +1,10 @@
+{
+  "result": "If the <b>last hidden layer’s feature matrix</b> starts full-rank (σ_min = α₀ > 0) and three explicit conditions hold, GD on all layers of a deep ReLU net converges geometrically, Φ_k ≤ (1 − ηα₀²/8)^k Φ₀; this needs only <b>one layer of width N</b> (special init), N² or N³ (LeCun-type init), instead of Ω(N⁸) in every layer.",
+  "result_plain": "Deep ReLU GD converges if last-layer features stay full rank; one wide layer of width N, N^2 or N^3 suffices.",
+  "tags": ["overparameterization", "global convergence", "width", "ReLU network", "feature rank"],
+  "tag_tabs": { "overparameterization": "rate", "global convergence": "rate", "width": "rate", "ReLU network": "lastlayer", "feature rank": "lastlayer" },
+  "tabs": [["lastlayer", "Full-rank features"], ["rate", "The guarantee"]],
+  "thumb": "lastlayer",
+  "thumbTicks": 80,
+  "data": true
+}
