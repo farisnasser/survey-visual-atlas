@@ -1,0 +1,10 @@
+{
+  "result": "Large learning rates matter beyond SGD noise: even full-batch GD with a step above 2/λ of a <b>sharp spurious minimum</b> cannot converge there and, on a proven function class, reaches the <b>global minimum</b> that small-step GD can miss.",
+  "result_plain": "A large step makes sharp spurious minima unstable; GD then reaches the global minimum, even without noise.",
+  "tags": ["large learning rate", "spurious local minimum", "sharp vs flat minima", "step size"],
+  "tag_tabs": { "large learning rate": "escape", "spurious local minimum": "escape", "sharp vs flat minima": "escape", "step size": "odds" },
+  "tabs": [["escape", "Large step escapes"], ["odds", "Outcome vs η"]],
+  "thumb": "escape",
+  "thumbTicks": 300,
+  "data": true
+}

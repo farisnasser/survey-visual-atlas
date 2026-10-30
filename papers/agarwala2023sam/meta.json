@@ -1,0 +1,10 @@
+{
+  "result": "SAM's curvature regularization is <b>dynamical</b>: unnormalized SAM is stable only while <b>η(λ_max + ρλ_max²) < 2</b>, an edge below GD's 2/η, and during training the top eigenvalue settles on this SAM edge, far from any minimum.",
+  "result_plain": "SAM has its own edge of stability η(λ + ρλ²) = 2 and pins the top eigenvalue there during training.",
+  "tags": ["sharpness-aware minimization", "edge of stability", "sharpness", "Hessian spectrum"],
+  "tag_tabs": { "sharpness-aware minimization": "uv", "edge of stability": "mlp", "sharpness": "mlp", "Hessian spectrum": "mlp" },
+  "tabs": [["uv", "Flatter landing"], ["mlp", "SAM edge of stability"], ["edge", "Where the edge sits"]],
+  "thumb": "uv",
+  "thumbTicks": 300,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "Adam can fail to converge for a fixed β2 because its second moment contains the current gradient. <b>ADOPT</b> normalizes each fresh gradient by the <b>previous</b> second moment and applies momentum after normalizing, which gives the optimal <b>O(1/√T)</b> rate for any β2, assuming only a bounded second moment of the gradients.",
+  "result_plain": "Normalize by the previous second moment, then momentum: optimal O(1/√T) for any β2.",
+  "tags": ["adaptive methods", "convergence rate", "first-order stationarity", "stochastic gradients"],
+  "tag_tabs": { "adaptive methods": "toy", "convergence rate": "beta2", "first-order stationarity": "beta2", "stochastic gradients": "toy" },
+  "tabs": [["toy", "Where Adam fails"], ["beta2", "Any β2"]],
+  "thumb": "toy",
+  "thumbTicks": 250,
+  "data": true
+}

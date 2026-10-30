@@ -1,0 +1,10 @@
+{
+  "result": "Approximate second-order optimizers tend to land in very <b>sharp minima</b> and generalize worse. SASSHA preconditions a <b>SAM gradient</b> with the <b>square root of |diag H|</b> (lazily updated), which makes sharp minima unstable; it finds flatter solutions with better accuracy than first- and second-order baselines.",
+  "result_plain": "SAM gradient + √|diag H| preconditioning (lazy) avoids sharp minima; better generalization than second-order baselines.",
+  "tags": ["second-order method", "sharpness-aware minimization", "sharp vs flat minima", "adaptive methods"],
+  "tag_tabs": { "second-order method": "wells", "sharpness-aware minimization": "wells", "sharp vs flat minima": "table", "adaptive methods": "wells" },
+  "tabs": [["wells", "Sharp or flat"], ["table", "Reported sharpness"]],
+  "thumb": "wells",
+  "thumbTicks": 400,
+  "data": true
+}
