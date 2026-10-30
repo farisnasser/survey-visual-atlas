@@ -1,0 +1,10 @@
+{
+  "result": "Schedule-Free SGD drops the learning-rate schedule and the stopping time: take SGD steps on z, report the running average x, and evaluate gradients at y = (1 − β)z + βx. It is optimal for convex Lipschitz problems for <b>any β</b> (DG/√T) and matches or beats schedules tuned for a known horizon in practice.",
+  "result_plain": "SGD on z, average x, gradients at y = (1 − β)z + βx: no schedule, no horizon, optimal convex rate.",
+  "tags": ["schedule-free", "weight averaging", "momentum", "convergence rate", "step size"],
+  "tag_tabs": { "schedule-free": "three", "weight averaging": "three", "momentum": "three", "convergence rate": "anytime", "step size": "anytime" },
+  "tabs": [["three", "Three sequences"], ["anytime", "No horizon needed"]],
+  "thumb": "three",
+  "thumbTicks": 400,
+  "data": true
+}
