@@ -7,7 +7,7 @@ function chain(K, res, ox) {
   const f = res ? (a, b) => (1 + a) ** K * (1 + b) ** K : (a, b) => a ** K * b ** K;
   const g = res ? (a, b) => { const r = f(a, b) - Y; return [r * K * (1 + a) ** (K - 1) * (1 + b) ** K, r * K * (1 + a) ** K * (1 + b) ** (K - 1)]; }
     : (a, b) => { const r = f(a, b) - Y; return [r * K * a ** (K - 1) * b ** K, r * K * a ** K * b ** (K - 1)]; };
-  return def({ L: (a, b) => .5 * (f(a, b) - Y) ** 2, g, dom: [-.3, 1.7, -.3, 1.7], h: v => Math.log1p(v), size: 2.9, ox, N: 90, hClip: [0, 3] });
+  return def({ L: (a, b) => .5 * (f(a, b) - Y) ** 2, g, dom: [-.3, 1.7, -.3, 1.7], h: v => Math.log1p(Math.log1p(v)), size: 2.9, ox, N: 90 });   // double log: display only
 }
 
 export default {
@@ -15,9 +15,9 @@ export default {
     {
       id: 'chain', name: 'Plain vs residual', title: 'Shortcuts keep the gradient alive in a deep chain',
       caption: 'The same deep linear chain of 2K scalar layers (weights a and b, alternating), trained by GD to map 1 to 2 from a small initialization. Left, plain layers h → wh: the output is aᴷbᴷ, the loss is flat around the start and the gradient there vanishes like K·aᴷ⁻¹bᴷ, so for 20 layers GD does not move. Right, residual layers h → h + wh: the output is (1 + a)ᴷ(1 + b)ᴷ, the start is already close to the identity map, the gradient is order one, and GD converges.',
-      note: 'A two-parameter toy (tied weights, linear, one example), not a CNN. Step sizes: the best of a small grid for each chain and depth (check script). Height clipped for display.',
+      note: 'A two-parameter toy (tied weights, linear, one example), not a CNN. Step sizes: the best of a small grid for each chain and depth (check script). Display height is log(1 + log(1 + loss)).',
       legend: [[HEX.opt2, 'GD, plain chain'], [HEX.ball, 'GD, residual chain'], [HEX.white, 'start (0.02, 0.03)']],
-      action: 'Restart', cam: [0, 4.6, 4.8], tgt: [0, .2, 0],
+      action: 'Restart', cam: [0, 5.4, 6.4], tgt: [0, .5, 0],
       controls: [{ id: 'K', type: 'seg', label: 'depth 2K', value: 10, options: [[1, '2'], [3, '6'], [10, '20']] }],
       charts: [{ id: 'L', title: 'loss (log)', xlabel: 'step', ylabel: 'loss', logy: true, ylim: [1e-12, 10], xlim: [0, 2000], h: 220, legend: false }],
       build(ctx) {

@@ -21,7 +21,7 @@ export default {
       caption: 'The equal-depth sharp/flat toy from the SAM page. A diagonal-Newton step (violet, like AdaHessian or Sophia-H) rescales each coordinate by its curvature, so a sharp minimum is as stable as a flat one and it stays in the sharp well. SASSHA (coral) divides by √|diag H| at a SAM-perturbed point: near a minimum of curvature a its step multiplies the error by about 1 − η√a, so sharp minima become unstable and it settles in the flat well. Lower η or ρ to see when it stays.',
       note: 'Deterministic toy with exact diagonal Hessians, no moving averages (β1 = β2 = 0), Hessian every step (k = 1), δ = 10⁻³ under the root. The 1 − η√a rule is our 1-D linearization ignoring the SAM term; the paper’s Corollary 4.6 gives the stochastic stability conditions.',
       legend: [[HEX.opt2, 'diagonal Newton (g / |H|)'], [HEX.ball, 'SASSHA (g̃ / √|H̃|)'], [HEX.good, 'flat min'], [HEX.neg, 'sharp min']],
-      action: 'Restart', cam: [0, 5, 4.4], tgt: [0, .2, 0],
+      action: 'Restart', cam: [0, 6.2, 3.6], tgt: [0, .9, -.2],
       controls: [{ id: 'eta', label: 'step η', min: .05, max: .7, step: .01, value: .5 }, { id: 'rho', type: 'seg', label: 'SAM radius ρ', value: .05, options: [[0, '0'], [.02, '0.02'], [.05, '0.05']] }],
       build(ctx) { const s = ctx.stage; s.surface(surf); s.marker(surf, ...ctx.data.flat, C.good, .1); s.marker(surf, ...ctx.data.sharp, C.neg, .07); this.drop(ctx); },
       onControl(ctx) { this.drop(ctx); },

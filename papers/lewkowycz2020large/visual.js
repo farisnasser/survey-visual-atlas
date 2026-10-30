@@ -21,7 +21,7 @@ export default {
       caption: 'Loss ½(uv)² of the smallest two-layer linear model. Both axes are minima (green); the curvature there is λ = u² + v². The ball starts near a sharp point with curvature λ₀. For η between 2/λ₀ and 4/λ₀ the loss first grows, the ball is thrown towards the origin, the curvature falls below 2/η and GD converges on a flatter part of the axes.',
       note: 'Width n = 1 (u, v scalars), one example x = 1 with label 0 (the paper’s Sec. 2.1 model). At n = 1 the lazy phase is not sharp: even below 2/λ₀ the curvature moves.',
       legend: [[HEX.ball, 'gradient descent'], [HEX.good, 'minima (uv = 0)']],
-      action: 'Restart', cam: [3.6, 3.8, 4.2], tgt: [0, .2, 0],
+      action: 'Restart', cam: [2.8, 5.6, 3.4], tgt: [0, .4, 0],
       controls: [{ id: 'c', label: 'η · λ₀', min: 1, max: 4.4, step: .05, value: 3 }],
       charts: [
         { id: 'loss', title: 'loss (log)', xlabel: 'step', ylabel: 'L', logy: true, ylim: [1e-10, 1e3], h: 170, legend: false },

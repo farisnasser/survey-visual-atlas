@@ -14,7 +14,7 @@ export default {
       caption: 'SGD on the smallest linear network (two examples with labels ±0.02) at a target step 6/λ₀, far above the 2/λ₀ the starting point tolerates. Without warmup the first steps throw it off the surface. With a linear warmup, each time η_t·λ crosses 2 a small catapult lowers the sharpness, so λ tracks 2/η_t down and training continues at the full target step.',
       note: 'f = uv on x = 1, labels +0.02 and −0.02 (one per step). Minima: the axes, sharpness λ = u² + v². Label noise keeps the residual from vanishing; without it GD would sit at zero loss and could not catapult.',
       legend: [[HEX.ball, 'SGD with warmup'], [HEX.good, 'minima (uv = 0)']],
-      action: 'Restart', cam: [3.6, 3.8, 4.2], tgt: [0, .2, 0],
+      action: 'Restart', cam: [2.8, 5.6, 3.4], tgt: [0, .4, 0],
       controls: [{ id: 'tw', type: 'seg', label: 'warmup steps', value: 200, options: [[1, 'none'], [20, '20'], [50, '50'], [200, '200'], [400, '400']] }],
       charts: [
         { id: 'lam', title: 'sharpness λ_t and 2/η_t', xlabel: 'step', ylabel: 'λ', ylim: [0, 6], xlim: [0, 600], h: 200, legend: true },

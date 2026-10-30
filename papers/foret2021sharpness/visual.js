@@ -24,7 +24,7 @@ export default {
       caption: 'Left: a loss with a narrow (sharp) and a wide (flat) well of equal depth. Right: the SAM objective, the worst loss inside a ball of radius ρ around each point (Eq. 1). The sharp well rises; the flat one barely moves. From the same start GD (coral) drops into the sharp well, descent on the exact SAM objective (violet) reaches the flat well, and the practical one-step SAM update (white, Eqs. 2–3) stalls between them.',
       note: 'Toy loss on a plane; the ρ-ball maximum uses its centre plus 48 boundary points. Step 0.01 for all three. Not the paper’s networks.',
       legend: [[HEX.ball, 'GD on L'], [HEX.opt3, 'SAM step (Eqs. 2–3) on L'], [HEX.opt2, 'GD on exact SAM objective'], [HEX.good, 'flat min'], [HEX.neg, 'sharp min']],
-      action: 'Restart', cam: [0, 5.2, 4.6], tgt: [0, .2, 0],
+      action: 'Restart', cam: [0, 6.2, 3.6], tgt: [0, .9, -.2],
       controls: [{ id: 'rho', label: 'radius ρ', min: .05, max: .4, step: .01, value: .3, live: false }],
       build(ctx) {
         const s = ctx.stage, rho = ctx.vals.rho;
