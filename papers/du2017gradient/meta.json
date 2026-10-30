@@ -1,0 +1,9 @@
+{
+  "result": "Avoiding saddles is not escaping them quickly: there are smooth functions on which gradient descent from a natural random start needs <b>time exponential in the dimension</b> to pass a <b>chain of saddles</b>, while <b>perturbed GD</b> needs only polynomial time.",
+  "result_plain": "GD can take exponential time to escape a sequence of saddles; perturbed GD escapes in polynomial time.",
+  "tags": ["saddle escape", "perturbation", "lower bound", "strict saddle"],
+  "tag_tabs": { "saddle escape": "chain", "perturbation": "chain", "lower bound": "exp", "strict saddle": "chain" },
+  "tabs": [["chain", "Saddle chain"], ["exp", "Six saddles"]],
+  "thumb": "chain",
+  "data": true
+}

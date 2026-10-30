@@ -1,0 +1,9 @@
+{
+  "result": "Under <b>(L<sub>0</sub>, L<sub>1</sub>)-smoothness</b>, where gradients may grow superlinearly and no global Lipschitz constant exists, <b>tamed SGD</b> (step divided by 1 + λ<sub>t</sub>r(x)) and a dissipative variant <b>converge almost surely</b> to critical points and <b>avoid strict saddle manifolds</b> with probability one.",
+  "result_plain": "Tamed SGD converges a.s. and avoids strict saddles without a global Lipschitz gradient, under (L0,L1)-smoothness.",
+  "tags": ["saddle avoidance", "stochastic gradients", "step size", "generalized smoothness"],
+  "tag_tabs": { "saddle avoidance": "taming", "stochastic gradients": "taming", "step size": "stability", "generalized smoothness": "taming" },
+  "tabs": [["taming", "Tamed vs plain SGD"], ["stability", "Step-size stability"]],
+  "thumb": "taming",
+  "data": true
+}

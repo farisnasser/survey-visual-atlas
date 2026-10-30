@@ -1,0 +1,9 @@
+{
+  "result": "With step sizes γ<sub>n</sub> ∝ 1/n<sup>p</sup>, SGD <b>converges almost surely</b> to a component of the critical set without assuming bounded iterates, and with uniformly exciting noise it <b>avoids strict saddle manifolds</b> (non-isolated saddles included) with probability one; near a regular minimum the error decays like <b>O(1/n<sup>p</sup>)</b>.",
+  "result_plain": "SGD with 1/n^p steps converges a.s. to critical points and a.s. avoids strict saddle manifolds; local rate O(1/n^p).",
+  "tags": ["saddle avoidance", "stochastic gradients", "noise", "strict saddle", "convergence rate"],
+  "tag_tabs": { "saddle avoidance": "ridge", "stochastic gradients": "ridge", "noise": "ridge", "strict saddle": "ridge", "convergence rate": "rate" },
+  "tabs": [["ridge", "Saddle ridge"], ["rate", "Local rate"]],
+  "thumb": "ridge",
+  "data": true
+}

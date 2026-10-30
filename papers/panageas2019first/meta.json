@@ -1,0 +1,9 @@
+{
+  "result": "A <b>stable-manifold theorem for time-varying dynamics</b> shows that gradient descent, mirror descent, proximal point and manifold descent with <b>vanishing steps of order Ω(1/k)</b> avoid strict saddles from <b>almost every start</b>; steps that shrink too fast (summable) can stop at non-critical points.",
+  "result_plain": "GD and relatives with vanishing Omega(1/k) steps avoid strict saddles almost surely; summable steps may stall at non-critical points.",
+  "tags": ["saddle avoidance", "stable manifold", "step size", "strict saddle"],
+  "tag_tabs": { "saddle avoidance": "stable", "stable manifold": "stable", "step size": "schedules", "strict saddle": "schedules" },
+  "tabs": [["schedules", "Step schedules"], ["stable", "Where starts end"]],
+  "thumb": "schedules",
+  "data": true
+}

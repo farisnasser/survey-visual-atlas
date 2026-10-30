@@ -14,5 +14,33 @@
  "61": {
   "link": "https://proceedings.mlr.press/v49/anandkumar16.html",
   "pdf": "https://proceedings.mlr.press/v49/anandkumar16.pdf"
+ },
+ "63": {
+  "link": "https://arxiv.org/abs/1412.6544",
+  "pdf": "https://arxiv.org/pdf/1412.6544"
+ },
+ "43": {
+  "link": "https://proceedings.mlr.press/v306/apidopoulos26a.html",
+  "pdf": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/apidopoulos26a/apidopoulos26a.pdf"
+ },
+ "64": {
+  "link": "https://proceedings.neurips.cc/paper/2019/hash/3fb04953d95a94367bb133f862402bce-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/1906.07772"
+ },
+ "65": {
+  "link": "https://proceedings.neurips.cc/paper/2020/hash/0cb5ebb1b34ec343dfe135db691e4a85-Abstract.html",
+  "pdf": "https://proceedings.neurips.cc/paper/2020/file/0cb5ebb1b34ec343dfe135db691e4a85-Paper.pdf"
+ },
+ "66": {
+  "link": "https://proceedings.mlr.press/v162/antonakopoulos22a.html",
+  "pdf": "https://proceedings.mlr.press/v162/antonakopoulos22a/antonakopoulos22a.pdf"
+ },
+ "67": {
+  "link": "https://link.springer.com/article/10.1007/s10957-024-02513-3",
+  "pdf": "https://arxiv.org/pdf/2208.02083"
+ },
+ "68": {
+  "link": "https://proceedings.neurips.cc/paper/2017/hash/f79921bbae40a577928b76d2fc3edc2a-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/1705.10412"
  }
 }

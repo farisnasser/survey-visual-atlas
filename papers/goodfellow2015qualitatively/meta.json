@@ -1,0 +1,9 @@
+{
+  "result": "Along the <b>straight line from initialization to the SGD solution</b>, the training loss of many practical networks <b>decreases smoothly with no visible barrier</b>, while the line between two different solutions does cross one: an empirical hint that SGD rarely meets serious obstacles.",
+  "result_plain": "Loss along the init-to-solution line usually falls monotonically; lines between two solutions show barriers.",
+  "tags": ["loss landscape visualization", "saddle", "deep linear network"],
+  "tag_tabs": { "loss landscape visualization": "mlp", "saddle": "factored", "deep linear network": "factored" },
+  "tabs": [["factored", "Factored model"], ["mlp", "MLP interpolation"]],
+  "thumb": "factored",
+  "data": true
+}
