@@ -95,3 +95,31 @@ Format follows `research/findings.md`. Theorem numbers refer to the version name
 - Our replication of the Sec. 3.2 example (Δ = 0.6, truncated ReLU 0.5/1.5/−2.5/7.5 — constants are ours, ε = 0.05/d): sup-gap to an N = 3 200 proxy 0.240 → 0.106 → 0.115 (N = 50, 200, 800) at d = 20 and 0.202 → 0.065 → 0.038 at d = 80 — no growth with d; the plateau at d = 20 is the √ε term plus proxy noise. Closed-form R∞(r₁, r₂) verified against a 1 500-neuron network at d = 400 and its d → ∞ limit.
 - Survey reference text: correct.
 - Visuals: (1) neuron cloud (‖P_V w‖, ‖P_⊥ w‖) replayed on the R∞ surface (ends near its minimum (1.55, 0.70)); (2) risk curves for N = 50/200/800 vs the proxy and the gap vs N for both d.
+
+## lu2020mean [94] — Lu, Ma, Lu, Lu, Ying, ICML 2020 (PMLR 119; arXiv 2003.05508)
+- Model (2.1)–(2.2): Ẋ_ρ(x, t) = ∫ f(X_ρ(x, t), θ) ρ(θ, t) dθ, X(0) = w₂x, E(ρ) = E½(⟨w₁, X(1)⟩ − y)². ICML numbering: Theorem 1 (well-posedness, Lipschitz in W₂), Theorem 2 (first variation δE/δρ = E f(X, θ) p(x, t), adjoint p), Lemma 1 (‖p(·, t)‖ ≥ e^{−(C₁+C₂r)}E(ρ)), Theorem 3 (E > 0 ⇒ descent direction ⇒ every local minimizer global), Theorem 4 (informal; positively p-homogeneous blocks, if the Wasserstein flow converges and the support separates two spheres, the limit has E = 0). arXiv numbers: Thm 2.3, 3.1, 3.2, 3.9.
+- Notes: consistent with ICML numbering (Theorems 2–4); Euler example (1 + 1/L)^L verified.
+- Our model: L = 16 layers × M = 32 tanh blocks, 1/(LM) scaling, 1-D input lifted to ℝ², target sin(πx), GD on all blocks: loss 0.107 → 3.1·10⁻⁵; adjoint ratio ‖p(t)‖/‖p(1)‖ ≥ 0.34 over depth and training; L = 4/16/64 give nearly the same loss curves (depth limit).
+- Survey reference text: correct.
+- Visuals: (1) forward flow of the data through depth (3-D curves) at a chosen training step; (2) loss vs depth L and the adjoint profile.
+
+## li2020learning [95] — Li, Ma, Zhang, COLT 2020 (PMLR 125; arXiv 2007.04596)
+- Setup: x ~ N(0, I), f*(x) = Σ aᵢ|w*ᵢᵀx|, orthonormal W*, aᵢ ∈ [1/(κd), κ/d]; student f_W = (1/m)Σ‖wᵢ‖ReLU(wᵢᵀx) (Eq. 1.2); Algorithm 1 = truncated GD in two stages (λ₀, λ₁). Theorem 1.1: L(Ŵ) ≤ O(1/d^{1+Q}) with poly samples/width/time. Theorem 1.2: any poly(d)-size feature map or kernel (NTK included) has L = Ω(1/d). Eq. (2.1): Hermite expansion into tensor-decomposition terms.
+- Notes: correct in substance; they call the lower bound "Theorem 2" (paper: Theorem 1.2). Survey title matches the COLT title ("…Two-Layer Neural Networks beyond NTK"; arXiv adds "ReLU").
+- Our d = 3 replication (exact population loss via the arc-cosine kernel, m = 60, truncated GD): loss 0.234 → 3.4·10⁻⁵, neuron mass within 15° of ±eᵢ 4.4% → 97.0%; best fit on the 60 frozen initial features 1.2·10⁻³ (35× worse; crossed after ≈1 240 steps). At d = 8 and 16 (m = 20d, 3 000 steps) the trained loss sat at the random-feature level — the theorem's second stage needs far longer; the page says the d = 3 run is an illustration, not the asymptotic theorem.
+- Survey reference text: correct.
+- Visuals: (1) neurons in ℝ³ gathering on the six teacher rays; (2) trained loss vs the same-width fixed-feature optimum and the alignment share.
+
+## xu2023over [96] — Xu & Du, COLT 2023 (arXiv 2302.10034)
+- Theorem 1 (informal): n ≥ 2 students, d = Ω(log(n/δ)), small init, suitable η ⇒ GD converges globally with L ≤ poly(n, ‖v‖, η⁻¹)·T⁻³. Theorem 2 (informal): gradient flow L(w(t)) ≥ (Γ₁t + Γ₂)⁻³. n = 1: exp(−Ω(T)) (Yehudai & Shamir 2020). Eq. (3): closed-form gradient (Safran & Shamir) — note the w̄ᵢ (normalized) in the sin term.
+- Fig. 1 setting reproduced (σ = 0.1, η = 0.05, ‖v‖ = 1, d = 10 our choice): n = 1 reaches L < 10⁻²⁸ in 750 steps; fitted slopes −2.99/−2.99/−2.98 for n = 2/3/5; log L/log(ηT) → −2.96/−3.01/−3.10 at T = 6·10⁴. Mechanism checked on a 2-D slice: two students summing to v have loss ∝ |b|^{3.000} across the minimum segment, and GD there decays as t^{−3.00}.
+- Notes: correct (Theorems 1–2, worked example (0.4, 0.6) split verified).
+- Survey reference text: correct.
+- Visuals: (1) side-by-side n = 1 bowl vs n = 2 cubic trough with GD; (2) Fig. 1 replication and the −3 ratio.
+
+## chizat2019lazy [110] — Chizat, Oyallon, Bach, NeurIPS 2019 (arXiv 1812.07956)
+- κ_h(w₀) (Eq. 1) controls laziness; scaling α: κ_{αh} ∝ 1/α; q-homogeneous models: init scale λ acts like α = λ^q. Theorem 2.2 (h(w₀) = 0, horizon T): ‖w_α − w₀‖ = O(1/α), ‖w_α − w̄_α‖ = O(1/α²), outputs O(1/α). Theorem 2.3: square-loss version without exponential T dependence. Theorem 2.4: over-parameterized, linear convergence for all t. Theorem 2.5: under-parameterized, convergence to a local (not necessarily global) minimum. Experiments: lazy regime generalizes worse (two-layer nets, CIFAR-10 CNNs).
+- Check: toy h(w) = w₁ + ½w₂ + w₁w₂: slopes −0.96 and −1.97 for the two Theorem 2.2 quantities over α = 2…64. Fig. 1 setting (n = 15, m = 20, d = 2, symmetrized init; τ values ours): τ = 0.1 fits with relative weight change 3.12, τ = 5 with 0.008; change ∝ τ^{−1.94} for τ ≥ 1. (First attempt used a step too large for large τ and blew up early — fixed with η = 1/λ_max of the tangent kernel.)
+- Notes: correct (Theorem 2.2 statement; example h = w + w², α = 100 verified).
+- Survey reference text: correct.
+- Visuals: (1) model vs linearization surfaces on a 1/α window with GD on each and the gap ×α²; (2) Fig. 1(a)–(b) replication and the τ⁻² scan.

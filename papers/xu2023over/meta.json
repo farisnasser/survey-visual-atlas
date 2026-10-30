@@ -1,0 +1,10 @@
+{
+  "result": "Learning a single ReLU neuron under Gaussian inputs: with one student neuron GD converges exponentially, but with <b>n ≥ 2 student neurons</b> randomly initialized GD converges at rate <b>Θ(T^{−3})</b> (upper bound for GD, matching lower bound for gradient flow) — mild over-parameterization <b>exponentially slows down</b> convergence.",
+  "result_plain": "Over-parameterization slows GD on a single ReLU neuron from exp(−T) to Θ(T^−3).",
+  "tags": ["overparameterization", "convergence rate", "ReLU network", "lower bound", "width"],
+  "tag_tabs": { "overparameterization": "split", "convergence rate": "rates", "ReLU network": "split", "lower bound": "rates", "width": "rates" },
+  "tabs": [["split", "Why it slows down"], ["rates", "T⁻³ vs exp(−T)"]],
+  "thumb": "split",
+  "thumbTicks": 300,
+  "data": true
+}
