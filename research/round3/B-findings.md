@@ -123,3 +123,35 @@ Format follows `research/findings.md`. Theorem numbers refer to the version name
 - Notes: correct (Theorem 2.2 statement; example h = w + w², α = 100 verified).
 - Survey reference text: correct.
 - Visuals: (1) model vs linearization surfaces on a 1/α window with GD on each and the gap ×α²; (2) Fig. 1(a)–(b) replication and the τ⁻² scan.
+
+## nesterov2004introductory [44] — Y. Nesterov, Introductory Lectures on Convex Optimization, Kluwer 2004 (book; not available for a line-by-line check)
+- Used for: L-smoothness, the descent lemma |f(y) − f(x) − ⟨∇f(x), y − x⟩| ≤ (L/2)‖y − x‖², the gradient step decrease h(1 − Lh/2)‖∇f‖² (best h = 1/L), and min_{i≤k}‖∇f(x_i)‖² ≤ 2L(f(x₀) − f*)/(k + 1), i.e. O(ε⁻²) without convexity. Nesterov & Polyak 2006 cite this book's inequality (1.2.13) for the O(k^{−1/2}) gradient rate; we give no other theorem numbers.
+- Notes: correct; they say themselves the book was not available and label the derivations pedagogical. They label it "Ref. [36]" (old numbering) — survey number [44].
+- Survey reference text: correct (Kluwer 2004).
+- Visual (one tab): f = x²/4 − cos(2y)/4 (non-convex, L = 1 exactly): GD with h = 1/L, 1.9/L, 2.2/L; the measured min‖∇f‖² stays under the bound; with 2.2/L f increases.
+
+## carmon2020lower [45] — Carmon, Duchi, Hinder, Sidford, Math. Program. 184 (2020) (arXiv 1710.11606)
+- Hard instance f̄_T (Eq. 10) with Ψ, Φ; zero-chain (Def. 3, Observation 1); Lemma 1 (Ψ(x)Φ′(y) > 1 for x ≥ 1, |y| < 1), Lemma 2 (‖∇f̄_T‖ > 1 unless |x_i| ≥ 1 ∀i), Lemma 3 (gap ≤ 12T, ‖∇f̄_T‖ ≤ 23√T, Lipschitz derivatives). Theorem 1 (deterministic) / Theorem 2 (randomized): c_p Δ L_p^{1/p} ε^{−(p+1)/p} queries, sharp (GD p = 1, cubic Newton p = 2, p-th order regularization).
+- Check: gradient, zero-chain, Lemmas 1–3 verified numerically; GD from 0 needs 15…146 steps for T = 1…20 (≈ 6.4 per coordinate); for T = 2, x₂ first moves at step 8 when x₁ = 0.624 > ½.
+- Notes: correct (exponent table p = 1, 2, 3 verified). They label it "Ref. [37]" (old numbering) — survey number [45].
+- Survey reference text: correct.
+- Visuals: (1) f̄₂ surface with GD's L-shaped path and ‖∇f‖ vs the Lemma 2 threshold; (2) GD steps vs T and the ε^{−(p+1)/p} bounds.
+
+## robbins1951stochastic [46] — Robbins & Monro, Ann. Math. Statist. 22(3) 1951 (JSTOR copy)
+- Rule (7) x_{n+1} − x_n = a_n(α − y_n); b_n = E(x_n − θ)² (9). Conditions: (4) bounded responses, (5) M < α left of θ and > α right, (6) Σa_n² < ∞, (26) (implies (27) Σa_n = ∞); type 1/n (30). Theorem 1 (type 1/n, (4), (5′)) and Theorem 2 (M nondecreasing, M(θ) = α, M′(θ) > 0): b_n → 0, hence x_n → θ in probability (not almost surely — later work).
+- Check (M = tanh, α = ½, U(−1, 1) noise, 200 runs): b_n = 0.0077 → 0.00075 → 2.9·10⁻⁵ at n = 10², 10³, 2·10⁴ for a_n = 2/n; ≈ 0.053 plateau for constant 0.2; ≈ 0.51 for 2/n².
+- Notes: correct and careful (they flag Σa_n = ∞, Σa_n² < ∞ as a later shorthand). Label "Ref. [38]" (old) — survey [46].
+- Survey reference text: correct.
+- Visuals: (1) noisy-gradient descent on a 2-D convex function with three gain sequences; (2) the original 1-D root-finding paths and b_n curves.
+
+## arjevani2023lower [48] — Arjevani, Carmon, Duchi, Foster, Srebro, Woodworth, Math. Program. 199 (2023) (arXiv 1912.02365)
+- Probability-p zero-chain (Def. 2); oracle (17) on the Carmon chain F_T (15): [g_T]_i = ∇_iF_T (1 + 1{i > prog_{1/4}(x)}(z/p − 1)), z ~ Bernoulli(p). Lemma 3: unbiased, variance ≤ 23²(1 − p)/p. Lemma 1: zero-respecting methods need ≳ (T − log(1/δ))/(2p) rounds. Theorem 1: Ω(ΔLσ²ε⁻⁴) (bounded variance; tight, SGD). Theorem 2: Ω(ΔL̄σε⁻³ + σ²ε⁻²) under mean-squared smoothness (tight, SPIDER/SNVRG). Theorem 3: all randomized algorithms, any batch K.
+- Check: unbiasedness, variance bound, zero-chain; SGD (step 0.05) needs 22/44/90 (p = 1), 27/51/98 (p = 0.2), 84/170/336 (p = 0.05) queries for T = 4/8/16.
+- Notes: correct (the SGD ε⁻⁴ upper-bound derivation and both lower bounds match). They label it "Ref. [40]" (old numbering) — survey number [48].
+- Survey reference text: correct (Math. Program. 199, 2023).
+- Visuals: (1) f̄₂ with exact GD vs the probability-p oracle (x₂ stuck until lucky); (2) queries vs T for p ∈ {1, 0.2, 0.05} and the ε⁻⁴ / ε⁻³ bounds.
+
+## Shared changes needed (none made)
+- Thumbnails of every page (old and new) place the surface in the upper half of the 720×450 frame; adjust the thumbnail camera in `src/paper/paper.js` `thumbnail()` if wanted.
+- New concept tags introduced: "adaptive methods", "kernel", "feature learning", "optimal transport", "mean-field" (existed), "feature rank" (existed). The coordinator may want to merge "kernel" with "lazy training" in the hub's Concepts view.
+- Pages for lu2020mean and li2020learning draw 3-D lines/points directly with `window.THREE` (no surface), since their objects are trajectories/neurons rather than functions of two variables.

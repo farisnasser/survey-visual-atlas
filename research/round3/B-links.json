@@ -66,5 +66,22 @@
  "110": {
   "link": "https://papers.nips.cc/paper/2019/hash/ae614c557843b1df326cb29c57225459-Abstract.html",
   "pdf": "https://arxiv.org/pdf/1812.07956"
- }
+ },
+ "44": {
+  "link": "https://link.springer.com/book/10.1007/978-1-4419-8853-9",
+  "pdf": ""
+ },
+ "45": {
+  "link": "https://link.springer.com/article/10.1007/s10107-019-01406-y",
+  "pdf": "https://arxiv.org/pdf/1710.11606"
+ },
+ "46": {
+  "link": "https://doi.org/10.1214/aoms/1177729586",
+  "pdf": ""
+ },
+ "48": {
+  "link": "https://link.springer.com/article/10.1007/s10107-022-01822-7",
+  "pdf": "https://arxiv.org/pdf/1912.02365"
+ },
+ "_note": "46: Project Euclid blocks scripted requests (open access in a browser via the DOI). 44 and 46 have no stable open PDF; 40's PDF is the 2003 CORE preprint."
 }

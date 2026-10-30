@@ -1,0 +1,10 @@
+{
+  "result": "With an unbiased stochastic gradient of bounded variance, <b>any algorithm needs Ω(ε^{−4}) queries</b> in the worst case to find an ε-stationary point — so SGD is minimax optimal — and <b>Ω(ε^{−3})</b> if the stochastic gradients are mean-squared smooth, matching SPIDER-type variance reduction.",
+  "result_plain": "Stochastic lower bounds: ε^-4 (SGD optimal) and ε^-3 under mean-squared smoothness (variance reduction optimal).",
+  "tags": ["lower bound", "stochastic gradients", "variance reduction", "first-order stationarity", "convergence rate"],
+  "tag_tabs": { "lower bound": "bounds", "stochastic gradients": "oracle", "variance reduction": "bounds", "first-order stationarity": "oracle", "convergence rate": "bounds" },
+  "tabs": [["oracle", "Rare progress"], ["bounds", "ε⁻⁴ and ε⁻³"]],
+  "thumb": "oracle",
+  "thumbTicks": 300,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "To find the root θ of an unknown monotone response M(x) = α from noisy measurements, update x_{n+1} = x_n + a_n(α − y_n) with gains satisfying <b>Σa_n² < ∞</b> and (essentially) <b>Σa_n = ∞</b>, e.g. a_n = 1/n: then E(x_n − θ)² → 0 and x_n → θ in probability — the ancestor of stochastic gradient descent.",
+  "result_plain": "Robbins–Monro stochastic approximation: decreasing gains (Σa=∞, Σa²<∞) give convergence to the root; ancestor of SGD.",
+  "tags": ["stochastic gradients", "step size", "noise", "convergence rate"],
+  "tag_tabs": { "stochastic gradients": "gains", "step size": "gains", "noise": "original", "convergence rate": "original" },
+  "tabs": [["gains", "Gain sequences"], ["original", "The 1951 setting"]],
+  "thumb": "gains",
+  "thumbTicks": 300,
+  "data": true
+}
