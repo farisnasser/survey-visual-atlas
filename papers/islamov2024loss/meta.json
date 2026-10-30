@@ -1,0 +1,9 @@
+{
+  "result": "The <b>α-β condition</b> on the individual losses admits <b>saddle points</b> and local minima (PL does not), yet still gives SGD, SPSmax and NGN an <b>O(K<sup>−1/2</sup>) rate up to a ball</b> of size O(βσ²<sub>int</sub>); the authors check it along training runs of real networks.",
+  "result_plain": "A landscape condition that allows saddles and gives SGD-type methods convergence up to a neighbourhood, checked empirically on deep nets.",
+  "tags": ["saddle", "convergence rate", "stochastic gradients", "landscape condition"],
+  "tag_tabs": { "saddle": "saddle", "convergence rate": "condition", "stochastic gradients": "saddle", "landscape condition": "condition" },
+  "tabs": [["saddle", "Saddle allowed"], ["condition", "α needed"]],
+  "thumb": "saddle",
+  "data": true
+}

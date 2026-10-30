@@ -1,0 +1,8 @@
+{
+  "result": "Using <b>third derivatives</b>, an algorithm provably escapes degenerate saddles and converges to a <b>third-order local minimum</b> (approximately, in polynomial time), but finding a <b>fourth-order local minimum is NP-hard</b>.",
+  "result_plain": "Third-order local minima can be found efficiently with third-derivative steps; fourth-order local minima are NP-hard to find.",
+  "tags": ["degenerate saddle", "computational hardness", "higher-order optimality"],
+  "tag_tabs": { "degenerate saddle": "third", "computational hardness": "fourth", "higher-order optimality": "third" },
+  "tabs": [["third", "Third-order saddle"], ["fourth", "Fourth-order saddle"]],
+  "thumb": "third"
+}

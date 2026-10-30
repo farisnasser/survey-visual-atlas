@@ -1,0 +1,8 @@
+{
+  "result": "Gradient descent on the factor U of X = UU<sup>T</sup> (<b>factored gradient descent</b>) with a step that scales like 1/(M‖X‖ + ‖∇f(X)‖) keeps the <b>convex rates</b>: O(1/k) for smooth f and <b>linear</b> for restricted strongly convex f, from a good initialization.",
+  "result_plain": "Factored GD on UU^T keeps convex-like local rates (1/k smooth, linear strongly convex) with a norm-scaled step and a good start.",
+  "tags": ["low-rank recovery", "step size", "convergence rate", "strict saddle"],
+  "tag_tabs": { "low-rank recovery": "step", "step size": "step", "convergence rate": "rate", "strict saddle": "step" },
+  "tabs": [["step", "Step size"], ["rate", "Linear rate"]],
+  "thumb": "step"
+}
