@@ -58,3 +58,25 @@ Format follows `research/findings.md`. Theorem numbers refer to the version name
 - Notes: correct (Definition 4.2, Theorems 4.3–4.4, Corollary 4.2, Õ(ε⁻⁵) all match; whitening example diag(9,1) verified).
 - Survey reference text: correct.
 - Visuals: (1) live replication of the experiment with the check-script medians as dashed curves; (2) covariance ellipses of raw vs preconditioned noise at (0, s) from Eq. (3).
+
+## chizat2018global [32] — Chizat & Bach, NeurIPS 2018 (arXiv 1805.09545)
+- Problem (1): min over signed measures J(µ) = R(∫φ dµ) + G(µ) (convex in µ); particle discretization J_m is non-convex. Gradient descent on particles ↔ Wasserstein gradient flow as m → ∞ (Theorem 2.6). Theorem 3.3 (2-homogeneous φ, e.g. ReLU) / 3.5 (partially 1-homogeneous, e.g. sigmoid): if the initial support separates the inner and outer spheres (resp. {−r₀}×Θ from {r₀}×Θ) and the flow converges, the limit is a global minimizer; lim_{t,m→∞} J(µ_{m,t}) = min J. Qualitative only (no rates). Prop. 4.3: for ReLU the classical parameterization has discontinuous dΦ; the theorem uses a "signed square" reparameterization.
+- Fig. 2: ReLU net, d = 2, Gaussian features, teacher with m₀ = 4 neurons, particles start on a small sphere: failure with 5, success with 10 and 100. Fig. 3: particle complexity only slightly above m₀ vs exponential for convex optimization on a fixed grid.
+- Our replication (fixed teacher, 600 samples, step 0.4m per particle, 5 000 steps): m = 5 and m = 10 stall at loss ≈ 3×10⁻⁵ (a plateau: unchanged after 20 000 steps), m = 20 and m = 100 reach ≤ 10⁻⁶ and keep decreasing. Same phenomenon, different threshold (the paper's 10-particle success is instance-dependent) — stated on the page.
+- Notes: correct and careful (they say the result is qualitative, many-particle). They label the paper "Ref. [29]" (old numbering) — survey number [32].
+- Survey reference text: correct.
+- Visuals: (1) target surface vs the student's output sheet replayed during training, m ∈ {5, 10, 20, 100}; (2) the Fig. 2 view, trajectories of |w_j|θ_j with target directions.
+
+## zou2019improved [90] — Zou & Gu, NeurIPS 2019 (arXiv 1906.04688)
+- Assumptions 3.1 (‖x_i‖ = 1, (x_i)_d = µ > 0) and 3.2 (‖x_i − x_j‖ ≥ φ). Algorithm 1: hidden rows N(0, 2/m I), output rows N(0, I/d). Theorem 3.3 (GD, L hidden layers): m = Ω(kn⁸L¹² log³m/φ⁴), η = O(k/(L²m)) → ε training loss in O(n²L² log(1/ε)/φ) iterations. Remark 3.4: vs Allen-Zhu et al. Ω̃(kn²⁴L¹²/φ⁸), O(n⁶L² log(1/ε)/φ²). Corollary 3.5: two-layer, m = Ω(kn⁸ log³m/φ⁴). Theorem 3.8 (SGD): m = Ω(kn¹⁷L¹² log³m/(B⁴φ⁸)), T = O(n⁵ log m log²(1/ε)/(Bφ²)). Theorem 3.10: two-layer SGD.
+- Proof ingredients: Lemma 4.1 (gradient lower bound ‖∇L‖²_F ≥ Ω(mφL(W)/(kn²)) in a τ-ball), Eq. (4.1)/Lemma 4.2 (telescoping trajectory length, ‖W_t − W_0‖₂ ≤ O(√(kn² log n/(mφ)))), Lemma 4.4 (semi-smoothness, from Allen-Zhu et al.).
+- Notes: correct (n⁸ vs n²⁴ width, Theorems 3.3/3.8/3.10; telescoping example). Minor: notes say "Theorem 3.10 gives tighter special-case bounds for two-layer networks" — for GD the two-layer case is Corollary 3.5.
+- Survey reference text: correct.
+- Visuals (one-hidden-layer net, n = 10, d = 10, η = 1/λ_max(Gram) ∝ 1/m as in the theorem): (1) real loss slice along the GD displacement and a random direction — convex along the training direction at m = 8 192, not at m = 32; (2) linear convergence for widths 32…8 192 and the relative spectral movement 1.83 → 0.10 and activation flips 13.4% → 2.0% (≈ 1/√m); (3) width-condition orders vs n.
+
+## arora2019fine [91] — Arora, Du, Hu, Li, Wang, ICML 2019 (arXiv 1901.08584)
+- Model: f(x) = m^{−1/2} Σ a_r relu(w_rᵀx), w_r ~ N(0, κ²I), a_r = ±1 fixed; H∞_ij = E[x_iᵀx_j 1{wᵀx_i ≥ 0, wᵀx_j ≥ 0}] (closed form x_iᵀx_j(π − arccos x_iᵀx_j)/(2π) for unit x). Theorem 4.1: ‖y − u(k)‖₂ = √(Σ(1 − ηλ_i)^{2k}(v_iᵀy)²) ± ε (small κ, large m, η = O(λ₀/n²)). Theorem 5.1 (informal Thm 3.3): population loss ≤ √(2yᵀ(H∞)⁻¹y/n) + lower-order terms, width-independent. Sec. 6: provably learnable function classes.
+- Check: closed form vs Monte Carlo 3×10⁻³; n = 60, d = 10, m = 8 000, κ = 1 (we keep u(0) in the prediction because κ is not small): GD residual within 0.021√n of the spectral prediction; structured labels sign(x₁) vs random: yᵀ(H∞)⁻¹y 99.1 vs 351.5, top-10 energy 76% vs 12%, loss at k = 100 0.005 vs 0.023.
+- Notes: correct (Theorems 4.1, 5.1; example H = diag(2, 0.2), η = 0.25 → factors 0.5, 0.95, yᵀH⁻¹y = 5.5 verified).
+- Survey reference text: correct.
+- Visuals: (1) real loss on a weight-space slice spanned by the top/bottom kernel directions (elongated valley, GD on the slice); (2) actual vs predicted loss curves for structured/random labels and the label energy per eigenvalue.

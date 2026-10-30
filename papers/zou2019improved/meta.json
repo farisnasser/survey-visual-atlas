@@ -1,0 +1,10 @@
+{
+  "result": "A sharper <b>gradient lower bound</b> and a telescoping bound on the <b>trajectory length</b> show that GD on randomly initialized deep ReLU networks reaches ε training loss once the width is <b>Ω̃(n⁸L¹²/φ⁴)</b> (down from n²⁴L¹²/φ⁸), in O(n²L² log(1/ε)/φ) iterations.",
+  "result_plain": "Improved over-parameterization: GD converges for deep ReLU nets with width Ω̃(n^8 L^12/φ^4) instead of n^24.",
+  "tags": ["overparameterization", "global convergence", "width", "ReLU network", "lazy training"],
+  "tag_tabs": { "overparameterization": "width", "global convergence": "stay", "width": "width", "ReLU network": "slice", "lazy training": "stay" },
+  "tabs": [["slice", "Loss near init"], ["stay", "Wider = closer"], ["width", "Width needed"]],
+  "thumb": "slice",
+  "thumbTicks": 120,
+  "data": true
+}

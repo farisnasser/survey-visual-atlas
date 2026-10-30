@@ -30,5 +30,17 @@
  "89": {
   "link": "https://proceedings.mlr.press/v97/staib19a.html",
   "pdf": "http://proceedings.mlr.press/v97/staib19a/staib19a.pdf"
+ },
+ "32": {
+  "link": "https://papers.nips.cc/paper/2018/hash/a1afc58c6ca9540d057299ec3016d726-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/1805.09545"
+ },
+ "90": {
+  "link": "https://papers.nips.cc/paper/2019/hash/6a61d423d02a1c56250dc23ae7ff12f3-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/1906.04688"
+ },
+ "91": {
+  "link": "https://proceedings.mlr.press/v97/arora19a.html",
+  "pdf": "http://proceedings.mlr.press/v97/arora19a/arora19a.pdf"
  }
 }
