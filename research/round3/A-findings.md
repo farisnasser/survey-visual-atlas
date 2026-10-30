@@ -88,3 +88,76 @@ Same style as `research/findings.md`: what each paper proves (checked against th
 ## wu2025loss [56] — new notes check (49_Wu_Simsek_Ged_ReLU_Stationarity.pdf)
 - The replaced notes agree with the existing page: directional stationarity, escape neurons (no escape neuron ⇒ local minimum; converse for scalar output), embedding by splitting a neuron, saddle-to-saddle from vanishing initialization. No contradiction with `papers/wu2025loss/`.
 - One stale reference only: the page's "Kink & escape" tab note says "Teaching example from our notes (x = (1, 0), y = 1)". The new notes no longer contain that one-neuron example (they use the generic $\sum_j a_j\sigma(w_j^\top x)$ model and the neuron-splitting identity). Suggest rewording the note to "Teaching example (one neuron, one data point)". Not edited (page belongs to an earlier round). Notes header says "Ref. [49]" (older numbering; survey [56]).
+
+## hochreiter1997flat [25] — Hochreiter & Schmidhuber, Neural Computation 9(1) 1997
+- Flat minimum = large connected region in weight space with approximately constant error (tolerable error $E_{\rm tol}$, boxes). MDL / Gibbs-algorithm argument: flat ⇒ low weight precision (few bits) ⇒ less overfitting; prior over input/output functions, no Gaussian weight prior. Flat Minimum Search needs second-order derivatives but keeps backprop's order of complexity; prunes units/weights/inputs; experiments incl. stock-market prediction (reported).
+- Survey text: cited only as part of the flat-vs-sharp debate [25]–[27]; fine.
+- Notes: correct. Visual: two equally deep minima (Hessian 3.3 vs 69.4), ε-regions 20.9× larger for the flat one (≈ 4.4 bits less for 2 weights), robustness to weight noise.
+
+## keskar2017large [26] — Keskar, Mudigere, Nocedal, Smelyanskiy, Tang, ICLR 2017 (arXiv 1609.04836)
+- SB = 256, LB = 10% of data, ADAM; 6 networks (F1 MNIST, F2 TIMIT, C1–C4 CIFAR-10/100). LB generalizes worse (Table 2), LB minimizers sharper by metric (4) (Tables 3–4), parametric plots (Fig. 3), batch-size threshold (Fig. 4); explanation: SB noise pushes out of sharp basins (Sec. 4).
+- Survey text: fine. Notes: correct.
+- Toy (a model of the Sec. 4 explanation, labelled as such): finite sum of linear tilts on the two-basin landscape; sharp-basin share ≈ 2% for B ≤ 2, 19–25% for B ≥ 3 (a threshold, as in their Fig. 4); B = 1 too noisy to settle.
+
+## dinh2017sharp [27] — Dinh, Pascanu, Bengio, Bengio, ICML 2017 (arXiv 1703.04933)
+- Def. 1 volume ε-flatness, Def. 2 ε-sharpness, Def. 5 α-scale transformation. Theorem 2: ε-flat set has infinite volume; Theorem 3: Hessian transforms as $D_\alpha HD_\alpha$; Theorem 4: spectral norm arbitrarily large; Theorem 5: deep ReLU, $r-\min_kn_k$ eigenvalues > M.
+- Survey text ("Sharpness can be changed by reparameterization [27]"): accurate. Notes: correct.
+- Toy: $L=(\theta_2{\rm ReLU}(\theta_1)-1)^2$, minima $(a,1/a)$ all compute the same function; $\lambda_{\max}=2(a^2+a^{-2})$ (32.1 at a = 4), ε-sharpness 0.021 → 0.161.
+
+## bottou2018optimization [19] — Bottou, Curtis, Nocedal, SIAM Review 60(2) 2018 (arXiv 1606.04838)
+- Sec. 4.3 nonconvex SG: Theorem 4.8 (fixed step ᾱ ≤ μ/(LM_G)): $\mathbb E[\frac1K\sum\|\nabla F\|^2]\le\bar\alpha LM/\mu+2(F(w_1)-F_{\inf})/(K\mu\bar\alpha)$; Theorems 4.9/4.10 (diminishing steps) and Cor. 4.12 (lim E‖∇F‖² = 0 with extra smoothness). Secs. 5–6: noise reduction (dynamic sampling, gradient aggregation, iterate averaging) and second-order methods.
+- Survey text: accurate. Notes: correct (and they flag that their derivation uses a simplified variance assumption).
+- Toy: $F=(x^2+y^2)/4+\sin x\sin y$ (L = 1.5) with N(0, I) noise: running averages 0.073/0.237/0.641 for ᾱ = 0.05/0.2/0.5, always under (4.28b); diminishing steps → last iterate 0.0094.
+
+## jain2017non [20] — Jain & Kar, Foundations and Trends in ML 10(3–4) 2017 (arXiv 1712.07897)
+- Ch. 3 gPGD (Algorithm 2), Def. 3.2 RSC/RSS over C, Theorem 3.3 (β/α < 2, η = 1/β ⇒ ε-optimal over C in O(α/(2α−β) log 1/ε)); Theorem 7.4 (IHT with a larger projection sparsity removes the condition-number restriction); Ch. 6 stochastic techniques that escape saddles (noisy GD, Algorithm 6, tensor factorization).
+- Survey text ("centered on problems with known structure such as sparse recovery and low-rank matrix estimation, with a chapter on escaping saddle points"): accurate.
+- Notes: correct.
+- Toy: B₀(1) ⊂ R², quadratic with β/α = 1.86 (gPGD reaches the optimum) vs 19 (stuck at (0, 1.08), f = 0.137).
+
+## jin2021nonconvex [21] — Jin, Netrapalli, Ge, Kakade, Jordan, J. ACM 68(2) 2021 (arXiv 1902.04811)
+- Algorithm 1 (PGD) adds $\xi_t\sim\mathcal N(0,(r^2/d)I)$ at **every** step (the paper notes the 2017 version perturbed only under conditions). Theorem 13: ε-SOSP in Õ(ℓΔ_f/ε²), polylog d. Theorem 16: PSGD. Sec. 3: SOSP = global for many problems.
+- Survey text: accurate.
+- **Notes discrepancy**: section 3 of the notes ("Perturb only when the gradient is small", "x ← x + ξ, ξ ~ Unif(B(0, r))") describes the 2017 (ICML) algorithm, not this JACM paper's Algorithm 1 (Gaussian noise every step). The conclusions are the same in spirit.
+- Toy: escape time from the saddle with N(0, r²/d) noise: median 63 (d = 1) → 113 (d = 16384), slope 5.17 per unit log d vs theory 5.25.
+
+## sun2020optimization [22] — R. Sun, J. Oper. Res. Soc. China 8, 2020 (arXiv 1912.08957)
+- Sec. 4.1: explosion/vanishing, Eq. (13) chain F(w) = (w₁⋯w_L − 1)², example (w⁷ − 1)² (Fig. 2); Secs. 4.2–4.5 initialization, normalization, architecture; Sec. 5 SGD/adaptive/distributed; Sec. 6 landscape theory.
+- Survey text: accurate. Notes: their "teaching example (not a theorem quoted from Sun)" is in fact essentially the paper's own example (2^{L−1}|e| vs 0.5^{L−1}e right after Eq. 13) — harmless.
+- Toy: slice (ab^{L−1} − 1)², GD step 0.02: L = 7 plateau start needs 412 steps (113 at L = 2), cliff start (1.25, 1.25) leaves the box at step 1.
+
+## sun2020global [23] — Sun, Li, Liang, Ding, Srikant, IEEE Signal Processing Magazine 37(5) 2020 (arXiv 2007.01429)
+- Sec. IV-A single neuron: Prop. IV.1 (no sub-optimal local minima iff no zero of φ is a local extremum), Fig. 2 (φ = −(z−1)²/8, (1, 1) a non-strict sub-optimal local min); Theorem IV.1 (no spurious valley for wide nets); empirical landscape and convergence links.
+- Survey text: accurate. Notes: correct (their toy (ab − 1)² is the paper's Fig. 1).
+- Toy: Fig. 2 function; GD from a 41×41 grid: 30.4% stuck at F = 1 (quadratic φ) vs only the saddle (0, 0) for tanh.
+
+## danilova2022recent [24] — Danilova, Dvurechensky, Gasnikov, Gorbunov, Guminov, Kamzolov, Shibaev, 2022 (arXiv 2012.06188)
+- Survey of complexity of ε-stationarity (incl. lower bounds, SPIDER-type variance reduction), PŁ (Sec. 5.1, Eq. 36, linear rate $e^{-\mu k/L}$), star-convexity, higher-order/tensor and zeroth-order methods.
+- Survey text: accurate. Notes: correct.
+- Toy: $x^2+3\sin^2x+y^2$ (nonconvex, PŁ with μ = 0.1755 numerically on [−6, 6], L = 8): all 200 GD runs obey $e^{-\mu k/L}$ and reach the global minimum.
+
+## shub1987global [109] — M. Shub, Global Stability of Dynamical Systems, Springer 1987
+- Book not available online; checked through Lee et al. 2016 (arXiv 1602.04915, Theorem 4.4 = Shub's Theorem III.7, center-stable manifold). The notes cite Theorem 5.20 for the hyperbolic stable manifold — could not be verified directly.
+- Notes were downloaded from Drive (`Ref109_Shub_1987.pdf`, id 1LjCBSKfXTQnHAlgAJr-OKveMW6r0HKMB) into `public/notes/shub1987global.pdf`. Header says "Paper 79" (internal numbering).
+- Survey text ("By the center-stable manifold theorem [109] ... a manifold of dimension strictly less than d"): accurate.
+- Toy: GD map on $x^2/2-u^2/2+u^4/4$, $u=y-0.8x^2$: stable manifold computed by bisection is a curve through the saddle tangent to the contracting eigenvector ($|y^*|\le0.282x^2$ near 0), $y^*(\pm1.2)=0.533$; escape after 40/89/137/185/233 steps from δ = 10⁻²…10⁻¹⁰.
+
+## Summary for the coordinator
+### Survey wording to consider
+- [54] "if the network is large enough, a local minimum in which some subnetwork is identically zero is a global minimum": Theorem 1 has no size condition; size only enters the non-increasing-path result (Theorem 2, r > card(X)). The matched-degree regularizer (λ > 0) is essential and unmentioned.
+- [57] "gradient-based optimizers have convergence guarantees": up to a neighbourhood of size O(βσ²_int), which can be huge (vacuous for the paper's own Example 2).
+- [64] the arXiv v3 (2025) correction: the proof needs an invertible Hessian at the saddle (so non-isolated saddles are not covered by the corrected proof). The survey text itself is fine; consider citing v3.
+- [65] "SGD with Robbins–Monro step sizes": the paper explicitly goes beyond Robbins–Monro ($\gamma_n\propto1/n^p$ with $p\in(2/(q+2),1]$ for convergence, any $p\in(0,1]$ with bounded noise for avoidance).
+- [66] the analysis is for deterministic AdaGrad (full gradients).
+### Notes issues
+- Many notes headers carry older reference numbers (e.g. Haeffele "Ref. [47]", Islamov "[50]", Bhojanapalli "[52]", Anandkumar "[54]", Goodfellow "[56]", Panageas "[57]", Mertikopoulos "[58]", Antonakopoulos "[59]", Cheridito "[60]", Du "[61]", Apidopoulos "[35]", Shub "Paper 79"); content unaffected.
+- jin2021nonconvex notes §3 describe the 2017 perturbation rule, not the JACM Algorithm 1 (Gaussian noise every step).
+- panageas2019first notes say "isolated and non-isolated strict-saddle sets" without the v3 invertible-Hessian caveat.
+- haeffele2017global notes cite "Proposition 2 of the CVPR supplement"; the supplement URL now 404s; the same result is Prop. 19 of arXiv 1506.07540.
+- shub1987global notes cite Theorem 5.20; not verifiable online (Theorem III.7 verified via Lee et al.).
+- wu2025loss: new notes agree with the page; one stale page note ("Teaching example from our notes") — see the wu2025loss section above.
+### Shared changes needed
+- `src/paper/paper.css`: the notes header `.sec-h .sub` shows the notes file name, which has no break opportunities (underscores); on a 375 px screen long names (e.g. `Ref_19_Bottou_Curtis_Nocedal_Survey_Detailed_Notes.pdf`, `Ref_20_Jain_Kar_Nonconvex_Monograph_Detailed_Notes.pdf`) push the page to 405 px. Suggest `overflow-wrap: anywhere` (or `word-break: break-all`) on `.sec-h .sub`. All other pages of mine stay at 373 px.
+- Otherwise none required for my pages. New tag names introduced: "positive homogeneity", "landscape condition", "generalized smoothness", "adaptive methods", "higher-order optimality", "reparameterization", "generalization", "batch size" (the hub's Concepts view should pick them up automatically).
+- `data/atlas_refs.json` / `papers.json` links: use `research/round3/A-links.json` (all URLs checked: 200, or DOI resolving to the publisher; SIAM/ACM/MIT Press block scripted fetches with 403 but the DOIs are correct).
+- `data/notes_map.json`: shub1987global → `Ref109_Shub_1987.pdf`, Drive id `1LjCBSKfXTQnHAlgAJr-OKveMW6r0HKMB` (already mapped; the PDF is now in `public/notes/`).

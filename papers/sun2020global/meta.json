@@ -1,0 +1,9 @@
+{
+  "result": "An overview of the <b>global landscape</b> of neural networks: when all local minima are global (linear and suitably <b>wide</b> networks, <b>no spurious valleys</b>), when they are not (even <b>one neuron can have bad local minima</b>, depending on the activation), and what empirical studies show.",
+  "result_plain": "Overview of landscape results: benign cases (linear, wide nets, no spurious valleys) and spurious minima, down to a single neuron.",
+  "tags": ["spurious local minimum", "no spurious minima", "overparameterization"],
+  "tag_tabs": { "spurious local minimum": "neuron", "no spurious minima": "neuron", "overparameterization": "neuron" },
+  "tabs": [["neuron", "One neuron"]],
+  "thumb": "neuron",
+  "data": true
+}

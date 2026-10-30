@@ -1,0 +1,9 @@
+{
+  "result": "A survey of non-convex optimization theory: <b>complexity of reaching ε-stationary points</b> (deterministic, stochastic, variance-reduced, lower bounds), problem classes with <b>global guarantees such as the Polyak–Łojasiewicz condition</b>, and higher- and zeroth-order methods.",
+  "result_plain": "Survey of non-convex complexity theory: stationarity rates, PL and other structured classes, higher- and zeroth-order methods.",
+  "tags": ["convergence rate", "landscape condition", "lower bound"],
+  "tag_tabs": { "convergence rate": "pl", "landscape condition": "pl", "lower bound": "pl" },
+  "tabs": [["pl", "PL condition"]],
+  "thumb": "pl",
+  "data": true
+}

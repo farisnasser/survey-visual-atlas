@@ -1,0 +1,9 @@
+{
+  "result": "A <b>flat minimum</b>, a large region of weight space where the error stays nearly constant, lets the weights be specified with <b>low precision (few bits)</b>; an MDL argument links this to <b>less overfitting</b>, and <b>flat minimum search</b> looks for such minima explicitly.",
+  "result_plain": "Flat minima need fewer bits to describe and, by an MDL argument, overfit less; flat minimum search seeks them.",
+  "tags": ["sharp vs flat minima", "sharpness", "generalization"],
+  "tag_tabs": { "sharp vs flat minima": "flat", "sharpness": "flat", "generalization": "flat" },
+  "tabs": [["flat", "Flat vs sharp"]],
+  "thumb": "flat",
+  "data": true
+}

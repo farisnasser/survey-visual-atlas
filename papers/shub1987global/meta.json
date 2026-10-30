@@ -1,0 +1,9 @@
+{
+  "result": "The <b>stable and center-stable manifold theorems</b>: the points whose orbits converge to a fixed point with an expanding direction lie on a <b>lower-dimensional manifold tangent to the contracting directions</b>, a set of measure zero. Applied to the gradient-descent map, this is why GD from a random start almost never converges to a strict saddle.",
+  "result_plain": "Stable-manifold theorems: starts converging to a fixed point with an expanding direction form a measure-zero manifold, the basis of GD saddle avoidance.",
+  "tags": ["stable manifold", "saddle avoidance", "strict saddle"],
+  "tag_tabs": { "stable manifold": "manifold", "saddle avoidance": "manifold", "strict saddle": "curve" },
+  "tabs": [["manifold", "Stable manifold"], ["curve", "Tangent, not equal"]],
+  "thumb": "manifold",
+  "data": true
+}

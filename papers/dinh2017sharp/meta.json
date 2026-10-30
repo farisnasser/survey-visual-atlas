@@ -1,0 +1,9 @@
+{
+  "result": "Because ReLU networks are invariant to <b>rescaling one layer by α and the next by 1/α</b>, any minimum has observationally equivalent minima that are <b>arbitrarily sharp</b> (or have infinitely large flat regions), so common <b>flatness measures cannot by themselves explain generalization</b>.",
+  "result_plain": "Rescaling symmetries of ReLU nets make any minimum arbitrarily sharp without changing the function; sharpness alone cannot explain generalization.",
+  "tags": ["sharp vs flat minima", "sharpness", "reparameterization", "weight symmetry"],
+  "tag_tabs": { "sharp vs flat minima": "rescale", "sharpness": "curve", "reparameterization": "rescale", "weight symmetry": "rescale" },
+  "tabs": [["rescale", "Same function, any sharpness"], ["curve", "Sharpness vs a"]],
+  "thumb": "rescale",
+  "data": true
+}

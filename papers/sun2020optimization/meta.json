@@ -1,0 +1,8 @@
+{
+  "result": "An overview of optimization for deep learning: <b>gradient explosion/vanishing</b> and the remedies of <b>initialization and normalization</b>, the theory of <b>SGD, adaptive and distributed methods</b>, and results on the <b>global landscape</b> (bad local minima, mode connectivity, infinite width).",
+  "result_plain": "Overview: explosion/vanishing and their fixes, SGD and adaptive methods, global landscape results.",
+  "tags": ["initialization", "deep linear network", "step size"],
+  "tag_tabs": { "initialization": "chain", "deep linear network": "chain", "step size": "chain" },
+  "tabs": [["chain", "Exploding & vanishing"]],
+  "thumb": "chain"
+}

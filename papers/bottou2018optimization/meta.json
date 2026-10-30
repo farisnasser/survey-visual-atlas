@@ -1,0 +1,9 @@
+{
+  "result": "A review of optimization for large-scale machine learning centred on <b>stochastic gradient</b>: on nonconvex objectives a <b>fixed step</b> drives the average squared gradient only to a <b>noise floor proportional to the step</b>, while <b>diminishing steps</b> drive it to zero; noise reduction and second-order methods are the two ways to do better.",
+  "result_plain": "Review of SG and its variants: fixed steps give a noise floor, diminishing steps convergence; noise reduction and second-order methods improve on SG.",
+  "tags": ["stochastic gradients", "step size", "convergence rate", "noise"],
+  "tag_tabs": { "stochastic gradients": "sg", "step size": "sg", "convergence rate": "sg", "noise": "sg" },
+  "tabs": [["sg", "Fixed vs diminishing step"]],
+  "thumb": "sg",
+  "data": true
+}
