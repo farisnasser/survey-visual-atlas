@@ -8,7 +8,7 @@ $\phi$ (one subnetwork) and $\theta$ (its regularizer) positively homogeneous of
 - Theorem 2: if $r>\operatorname{card}(X)$, from any point there is a non-increasing path to a global minimizer
 ### Toy on screen
 $\phi(u,v)=uv$, $\theta=\tfrac12(u^2+v^2)$ (both degree 2), $f=\tfrac12(1-uv)^2+\tfrac\lambda2(u^2+v^2)$. Here $\Omega(X)=|X|$ and (16) is $\min_X\tfrac12(1-X)^2+\lambda|X|$, solved by $X^\star=\max(1-\lambda,0)$.
-$$\nabla^2f(0)=\begin{pmatrix}\lambda&-1\-1&\lambda\end{pmatrix},\qquad \lambda_{\min}=\lambda-1$$
+$$\nabla^2f(0)=\begin{pmatrix}\lambda&-1\\-1&\lambda\end{pmatrix},\qquad \lambda_{\min}=\lambda-1$$
 > Check script: $\lambda=0.3$: origin strict saddle ($\lambda_{\min}=-0.7$), global minima $u=v=\pm\sqrt{0.7}$ with $f^\star=\lambda-\lambda^2/2=0.255$; 200/200 GD runs reach $f^\star$. $\lambda=1.2$: the origin is a local minimum and the global one.
 
 ## mismatch | Mismatched degrees

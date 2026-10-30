@@ -73,13 +73,13 @@
   },
   "16": {
    "key": "cohen2021gradient",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2103.00065",
+   "pdf": "https://arxiv.org/pdf/2103.00065"
   },
   "17": {
    "key": "lewkowycz2020large",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2003.02218",
+   "pdf": "https://arxiv.org/pdf/2003.02218"
   },
   "18": {
    "key": "zhang2026saddle",
@@ -88,48 +88,48 @@
   },
   "19": {
    "key": "bottou2018optimization",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1137/16M1080173",
+   "pdf": "https://arxiv.org/pdf/1606.04838"
   },
   "20": {
    "key": "jain2017non",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1712.07897",
+   "pdf": "https://arxiv.org/pdf/1712.07897"
   },
   "21": {
    "key": "jin2021nonconvex",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1145/3418526",
+   "pdf": "https://arxiv.org/pdf/1902.04811"
   },
   "22": {
    "key": "sun2020optimization",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1007/s40305-020-00309-6",
+   "pdf": "https://arxiv.org/pdf/1912.08957"
   },
   "23": {
    "key": "sun2020global",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1109/MSP.2020.3004124",
+   "pdf": "https://arxiv.org/pdf/2007.01429"
   },
   "24": {
    "key": "danilova2022recent",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1007/978-3-031-00832-0_3",
+   "pdf": "https://arxiv.org/pdf/2012.06188"
   },
   "25": {
    "key": "hochreiter1997flat",
-   "link": null,
-   "pdf": null
+   "link": "https://doi.org/10.1162/neco.1997.9.1.1",
+   "pdf": "http://www.bioinf.jku.at/publications/older/3304.pdf"
   },
   "26": {
    "key": "keskar2017large",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1609.04836",
+   "pdf": "https://arxiv.org/pdf/1609.04836"
   },
   "27": {
    "key": "dinh2017sharp",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v70/dinh17b.html",
+   "pdf": "https://arxiv.org/pdf/1703.04933"
   },
   "28": {
    "key": "martens2010deep",
@@ -153,8 +153,8 @@
   },
   "32": {
    "key": "chizat2018global",
-   "link": null,
-   "pdf": null
+   "link": "https://papers.nips.cc/paper/2018/hash/a1afc58c6ca9540d057299ec3016d726-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1805.09545"
   },
   "33": {
    "key": "allenzhu2018neon2",
@@ -163,18 +163,18 @@
   },
   "34": {
    "key": "foret2021sharpness",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2010.01412",
+   "pdf": "https://arxiv.org/pdf/2010.01412"
   },
   "35": {
    "key": "damian2023self",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2209.15594",
+   "pdf": "https://arxiv.org/pdf/2209.15594"
   },
   "36": {
    "key": "kalra2024warmup",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2406.09405",
+   "pdf": "https://arxiv.org/pdf/2406.09405"
   },
   "37": {
    "key": "kalra2025universal",
@@ -194,17 +194,17 @@
   "40": {
    "key": "nesterov2006cubic",
    "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
-   "pdf": null
+   "pdf": "https://research.dial.uclouvain.be/bitstreams/bae87e54-345e-4d37-98f1-d1cd3c9a9226/download"
   },
   "41": {
    "key": "zhang2020gradient",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1905.11881",
+   "pdf": "https://arxiv.org/pdf/1905.11881"
   },
   "42": {
    "key": "li2023convergence",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2304.13972",
+   "pdf": "https://arxiv.org/pdf/2304.13972"
   },
   "43": {
    "key": "apidopoulos2026taming",
@@ -213,17 +213,17 @@
   },
   "44": {
    "key": "nesterov2004introductory",
-   "link": null,
+   "link": "https://link.springer.com/book/10.1007/978-1-4419-8853-9",
    "pdf": null
   },
   "45": {
    "key": "carmon2020lower",
-   "link": null,
-   "pdf": null
+   "link": "https://link.springer.com/article/10.1007/s10107-019-01406-y",
+   "pdf": "https://arxiv.org/pdf/1710.11606"
   },
   "46": {
    "key": "robbins1951stochastic",
-   "link": null,
+   "link": "https://doi.org/10.1214/aoms/1177729586",
    "pdf": null
   },
   "47": {
@@ -233,23 +233,23 @@
   },
   "48": {
    "key": "arjevani2023lower",
-   "link": null,
-   "pdf": null
+   "link": "https://link.springer.com/article/10.1007/s10107-022-01822-7",
+   "pdf": "https://arxiv.org/pdf/1912.02365"
   },
   "49": {
    "key": "polyak1964some",
-   "link": null,
+   "link": "https://doi.org/10.1016/0041-5553(64)90137-5",
    "pdf": null
   },
   "50": {
    "key": "duchi2011adaptive",
-   "link": null,
-   "pdf": null
+   "link": "https://jmlr.org/papers/v12/duchi11a.html",
+   "pdf": "https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf"
   },
   "51": {
    "key": "kingma2015adam",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1412.6980",
+   "pdf": "https://arxiv.org/pdf/1412.6980"
   },
   "52": {
    "key": "laurent2018deep",
@@ -278,8 +278,8 @@
   },
   "57": {
    "key": "islamov2024loss",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2410.12455",
+   "pdf": "https://arxiv.org/pdf/2410.12455"
   },
   "58": {
    "key": "bhojanapalli2016global",
@@ -288,8 +288,8 @@
   },
   "59": {
    "key": "bhojanapalli2016dropping",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v49/bhojanapalli16.html",
+   "pdf": "https://proceedings.mlr.press/v49/bhojanapalli16.pdf"
   },
   "60": {
    "key": "ge2017no",
@@ -298,8 +298,8 @@
   },
   "61": {
    "key": "anandkumar2016efficient",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v49/anandkumar16.html",
+   "pdf": "https://proceedings.mlr.press/v49/anandkumar16.pdf"
   },
   "62": {
    "key": "li2018visualizing",
@@ -308,33 +308,33 @@
   },
   "63": {
    "key": "goodfellow2015qualitatively",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1412.6544",
+   "pdf": "https://arxiv.org/pdf/1412.6544"
   },
   "64": {
    "key": "panageas2019first",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.neurips.cc/paper/2019/hash/3fb04953d95a94367bb133f862402bce-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1906.07772"
   },
   "65": {
    "key": "mertikopoulos2020almost",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.neurips.cc/paper/2020/hash/0cb5ebb1b34ec343dfe135db691e4a85-Abstract.html",
+   "pdf": "https://proceedings.neurips.cc/paper/2020/file/0cb5ebb1b34ec343dfe135db691e4a85-Paper.pdf"
   },
   "66": {
    "key": "antonakopoulos2022adagrad",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v162/antonakopoulos22a.html",
+   "pdf": "https://proceedings.mlr.press/v162/antonakopoulos22a/antonakopoulos22a.pdf"
   },
   "67": {
    "key": "cheridito2024gradient",
-   "link": null,
-   "pdf": null
+   "link": "https://link.springer.com/article/10.1007/s10957-024-02513-3",
+   "pdf": "https://arxiv.org/pdf/2208.02083"
   },
   "68": {
    "key": "du2017gradient",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.neurips.cc/paper/2017/hash/f79921bbae40a577928b76d2fc3edc2a-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1705.10412"
   },
   "69": {
    "key": "daneshmand2018escaping",
@@ -388,8 +388,8 @@
   },
   "82": {
    "key": "zhang2021escape",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.neurips.cc/paper/2021/hash/47bd8ac1becf213f155a82244b4a696a-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/2111.14069"
   },
   "83": {
    "key": "reddi2016stochastic",
@@ -398,138 +398,138 @@
   },
   "84": {
    "key": "wang2019spiderboost",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.neurips.cc/paper/2019/hash/512c5cad6c37edb98ae91c8a76c3a291-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1810.10690"
   },
   "85": {
    "key": "allenzhu2018natasha",
-   "link": null,
-   "pdf": null
+   "link": "https://papers.nips.cc/paper/7533-natasha-2-faster-non-convex-optimization-than-sgd",
+   "pdf": "https://arxiv.org/pdf/1708.08694"
   },
   "86": {
    "key": "ge2019stabilized",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v99/ge19a.html",
+   "pdf": "http://proceedings.mlr.press/v99/ge19a/ge19a.pdf"
   },
   "87": {
    "key": "li2019ssrgd",
-   "link": null,
-   "pdf": null
+   "link": "https://papers.nips.cc/paper/8431-ssrgd-simple-stochastic-recursive-gradient-descent-for-escaping-saddle-points",
+   "pdf": "https://arxiv.org/pdf/1904.09265"
   },
   "88": {
    "key": "chen2022faster",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v167/chen22b.html",
+   "pdf": "https://proceedings.mlr.press/v167/chen22b/chen22b.pdf"
   },
   "89": {
    "key": "staib2019escaping",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v97/staib19a.html",
+   "pdf": "http://proceedings.mlr.press/v97/staib19a/staib19a.pdf"
   },
   "90": {
    "key": "zou2019improved",
-   "link": null,
-   "pdf": null
+   "link": "https://papers.nips.cc/paper/2019/hash/6a61d423d02a1c56250dc23ae7ff12f3-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1906.04688"
   },
   "91": {
    "key": "arora2019fine",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v97/arora19a.html",
+   "pdf": "http://proceedings.mlr.press/v97/arora19a/arora19a.pdf"
   },
   "92": {
    "key": "nguyen2021proof",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v139/nguyen21a.html",
+   "pdf": "http://proceedings.mlr.press/v139/nguyen21a/nguyen21a.pdf"
   },
   "93": {
    "key": "mei2019mean",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v99/mei19a.html",
+   "pdf": "http://proceedings.mlr.press/v99/mei19a/mei19a.pdf"
   },
   "94": {
    "key": "lu2020mean",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v119/lu20b.html",
+   "pdf": "http://proceedings.mlr.press/v119/lu20b/lu20b.pdf"
   },
   "95": {
    "key": "li2020learning",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v125/li20a.html",
+   "pdf": "http://proceedings.mlr.press/v125/li20a/li20a.pdf"
   },
   "96": {
    "key": "xu2023over",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v195/xu23a.html",
+   "pdf": "https://proceedings.mlr.press/v195/xu23a/xu23a.pdf"
   },
   "97": {
    "key": "zhang2019lookahead",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/1907.08610",
+   "pdf": "https://arxiv.org/pdf/1907.08610"
   },
   "98": {
    "key": "wang2022analyzing",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2207.12678",
+   "pdf": "https://arxiv.org/pdf/2207.12678"
   },
   "99": {
    "key": "chen2023beyond",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2206.04172",
+   "pdf": "https://arxiv.org/pdf/2206.04172"
   },
   "100": {
    "key": "mohtashami2023special",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2205.15142",
+   "pdf": "https://arxiv.org/pdf/2205.15142"
   },
   "101": {
    "key": "agarwala2023sam",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v202/agarwala23a.html",
+   "pdf": "https://arxiv.org/pdf/2302.08692"
   },
   "102": {
    "key": "shin2025sassha",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2502.18153",
+   "pdf": "https://arxiv.org/pdf/2502.18153"
   },
   "103": {
    "key": "taniguchi2024adopt",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2411.02853",
+   "pdf": "https://arxiv.org/pdf/2411.02853"
   },
   "104": {
    "key": "gupta2018shampoo",
-   "link": null,
-   "pdf": null
+   "link": "https://proceedings.mlr.press/v80/gupta18a.html",
+   "pdf": "https://arxiv.org/pdf/1802.09568"
   },
   "105": {
    "key": "defazio2024road",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2405.15682",
+   "pdf": "https://arxiv.org/pdf/2405.15682"
   },
   "106": {
    "key": "ahn2025general",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2411.07061",
+   "pdf": "https://arxiv.org/pdf/2411.07061"
   },
   "107": {
    "key": "crawshaw2026exploration",
-   "link": null,
-   "pdf": null
+   "link": "https://arxiv.org/abs/2510.09827",
+   "pdf": "https://arxiv.org/pdf/2510.09827"
   },
   "108": {
    "key": "he2016deep",
-   "link": null,
-   "pdf": null
+   "link": "https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html",
+   "pdf": "https://arxiv.org/pdf/1512.03385"
   },
   "109": {
    "key": "shub1987global",
-   "link": null,
+   "link": "https://doi.org/10.1007/978-1-4757-1947-5",
    "pdf": null
   },
   "110": {
    "key": "chizat2019lazy",
-   "link": null,
-   "pdf": null
+   "link": "https://papers.nips.cc/paper/2019/hash/ae614c557843b1df326cb29c57225459-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1812.07956"
   }
  }
 }

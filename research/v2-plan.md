@@ -45,3 +45,33 @@ wu2025loss [56], li2018visualizing [62].
 - Fig. 5 caption: "The four branches correspond to Sections III–VII" — the figure has five branches (III, IV, V, VI, VII).
 - Fig. 5 caption: "a work … appears under its primary contribution" — yet [5], [6], [57] and [66] each appear in two leaves. The hub follows the figure as drawn.
 - Every reference is cited in the text: [26] only inside the range [25]–[27] (Sec. I-B).
+
+# Round 3 (2026-10-30/31): 64 pages built by three parallel sessions
+
+Notes for 64 more references were added to Drive. They were mapped to survey numbers, then built in three git worktrees
+(branches round3-A/B/C, brief in `research/round3/BRIEF.md`), merged into main, synced, checked and audited.
+Per-paper findings are in `research/findings.md` (originals in `research/round3/*-findings.md`), and links were merged
+into `data/atlas_refs.json`. Result: 111 references, 98 with notes, 99 visuals (Kawaguchi is visual-only).
+
+Still without notes (13): [1], [6], [9], [13], [28], [29], [31], [38], [73], [78], [80], [83], [111]. [31] Kawaguchi has a visual.
+
+## Round 3 survey statements to double-check
+- [98] wrong author order: the survey lists "Z. Wang, Z. Li, and J. Li". The paper's authors are Zhouzi Li, Zixuan Wang and Jian Li.
+- [54] "if the network is large enough …": Theorem 1 has no size condition. Size enters only in Theorem 2 (r > card(X)), and the λ > 0 regularizer is essential.
+- [57] "convergence guarantees" holds only up to an O(βσ²_int) neighbourhood, which is vacuous for the paper's Example 2.
+- [64] the arXiv v3 (2025) correction needs an invertible Hessian at the saddle, so non-isolated saddles are not covered. Consider citing v3.
+- [65] "Robbins–Monro step sizes": the paper goes beyond them (γ_n ∝ 1/n^p).
+- [66] the analysis is of deterministic AdaGrad (full gradients).
+- [84] SpiderBoost is cited in Sec. V (escape algorithms), but the paper proves only first-order stationarity.
+- [92] Nguyen 2021 is an existence/width result. The guaranteed step for a small net is about 1.7e-16, so it should not be described as practical.
+- [36] "roughly two orders of magnitude": √(1 − β2) ≈ 1/32 is about 1.5 orders. This repeats the paper's own rounding.
+
+## Round 3 notes errors (content otherwise correct)
+- Most notes headers carry old working reference numbers.
+- jin2021nonconvex: §3 describes the 2017 perturbation rule, not the JACM Algorithm 1.
+- panageas2019first: missing the v3 invertible-Hessian caveat.
+- haeffele2017global: the cited supplement URL is dead. The result is Prop. 19 of arXiv 1506.07540.
+- mei2019mean: says "Theorem 3", but it is Theorem 1.
+- li2020learning: says "Theorem 2", but it is Theorem 1.2.
+- agarwala2023sam: Theorems 2.2 and 2.3 are swapped.
+- polyak1964some: drops α in one remark (trivial).

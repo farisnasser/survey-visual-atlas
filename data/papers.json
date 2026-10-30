@@ -1,5 +1,5 @@
 {
- "synced": "2026-10-30 22:12",
+ "synced": "2026-10-30 23:48",
  "source": "NonConvex_Survey_Final.pdf",
  "survey": {
   "title": "Non-Convex Optimization in Neural Networks: Saddles, Escape Methods and Practical Dynamics",
@@ -1351,17 +1351,42 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2103.00065",
+   "pdf": "https://arxiv.org/pdf/2103.00065",
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+on+neural+networks+typically+occurs+at+the+edge+of+stability",
    "notes": "public/notes/cohen2021gradient.pdf",
    "notes_title": "Ref_16_Cohen_Edge_of_Stability_Detailed_Notes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "sharpness",
+    "step size",
+    "progressive sharpening",
+    "momentum"
+   ],
+   "result": "GD sharpness rises to 2/η and hovers there while loss keeps falling non-monotonically.",
+   "tabs": [
+    [
+     "quad",
+     "Why 2/η"
+    ],
+    [
+     "mlp",
+     "Edge of stability"
+    ],
+    [
+     "mom",
+     "With momentum"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "mlp",
+    "sharpness": "mlp",
+    "step size": "quad",
+    "progressive sharpening": "mlp",
+    "momentum": "mom"
+   },
+   "thumb": "public/thumbs/cohen2021gradient.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1421,17 +1446,42 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2003.02218",
+   "pdf": "https://arxiv.org/pdf/2003.02218",
    "scholar": "https://scholar.google.com/scholar?q=The+large+learning+rate+phase+of+deep+learning%3A+The+catapult+mechanism",
    "notes": "public/notes/lewkowycz2020large.pdf",
    "notes_title": "Ref_17_Lewkowycz_Catapult_Detailed_Notes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "catapult",
+    "large learning rate",
+    "sharpness",
+    "lazy training",
+    "step size"
+   ],
+   "result": "Large learning rates catapult: loss spikes, curvature drops below 2/η, training converges flatter.",
+   "tabs": [
+    [
+     "spike",
+     "Catapult"
+    ],
+    [
+     "width",
+     "Width n"
+    ],
+    [
+     "phases",
+     "Three phases"
+    ]
+   ],
+   "tag_tabs": {
+    "catapult": "spike",
+    "large learning rate": "phases",
+    "sharpness": "spike",
+    "lazy training": "width",
+    "step size": "phases"
+   },
+   "thumb": "public/thumbs/lewkowycz2020large.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1559,17 +1609,32 @@
      "A. Existing Surveys"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1137/16M1080173",
+   "pdf": "https://arxiv.org/pdf/1606.04838",
    "scholar": "https://scholar.google.com/scholar?q=Optimization+methods+for+large-scale+machine+learning",
    "notes": "public/notes/bottou2018optimization.pdf",
    "notes_title": "Ref_19_Bottou_Curtis_Nocedal_Survey_Detailed_Notes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "stochastic gradients",
+    "step size",
+    "convergence rate",
+    "noise"
+   ],
+   "result": "Review of SG and its variants: fixed steps give a noise floor, diminishing steps convergence; noise reduction and second-order methods improve on SG.",
+   "tabs": [
+    [
+     "sg",
+     "Fixed vs diminishing step"
+    ]
+   ],
+   "tag_tabs": {
+    "stochastic gradients": "sg",
+    "step size": "sg",
+    "convergence rate": "sg",
+    "noise": "sg"
+   },
+   "thumb": "public/thumbs/bottou2018optimization.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1592,17 +1657,30 @@
      "A. Existing Surveys"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1712.07897",
+   "pdf": "https://arxiv.org/pdf/1712.07897",
    "scholar": "https://scholar.google.com/scholar?q=Non-convex+optimization+for+machine+learning",
    "notes": "public/notes/jain2017non.pdf",
    "notes_title": "Ref_20_Jain_Kar_Nonconvex_Monograph_Detailed_Notes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "low-rank recovery",
+    "restricted isometry",
+    "convergence rate"
+   ],
+   "result": "Monograph: non-convex PGD, alternating minimization and EM succeed under restricted convexity/smoothness; includes saddle escape.",
+   "tabs": [
+    [
+     "gpgd",
+     "Projected GD on a sparse set"
+    ]
+   ],
+   "tag_tabs": {
+    "low-rank recovery": "gpgd",
+    "restricted isometry": "gpgd",
+    "convergence rate": "gpgd"
+   },
+   "thumb": "public/thumbs/jain2017non.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1644,17 +1722,36 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1145/3418526",
+   "pdf": "https://arxiv.org/pdf/1902.04811",
    "scholar": "https://scholar.google.com/scholar?q=On+nonconvex+optimization+for+machine+learning%3A+Gradients%2C+stochasticity%2C+and+saddle+points",
    "notes": "public/notes/jin2021nonconvex.pdf",
    "notes_title": "Ref_21_Jin_Netrapalli_Ge_JACM_Detailed_Notes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle escape",
+    "perturbation",
+    "second-order stationarity",
+    "stochastic gradients"
+   ],
+   "result": "Perturbed GD/SGD reach second-order stationary points about as fast as first-order ones, with polylog dimension dependence.",
+   "tabs": [
+    [
+     "saddle",
+     "Perturbed GD"
+    ],
+    [
+     "dim",
+     "Dimension"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle escape": "saddle",
+    "perturbation": "saddle",
+    "second-order stationarity": "saddle",
+    "stochastic gradients": "dim"
+   },
+   "thumb": "public/thumbs/jin2021nonconvex.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1677,17 +1774,30 @@
      "A. Existing Surveys"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1007/s40305-020-00309-6",
+   "pdf": "https://arxiv.org/pdf/1912.08957",
    "scholar": "https://scholar.google.com/scholar?q=Optimization+for+deep+learning%3A+An+overview",
    "notes": "public/notes/sun2020optimization.pdf",
    "notes_title": "22_Sun_Optimization_Overview.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "initialization",
+    "deep linear network",
+    "step size"
+   ],
+   "result": "Overview: explosion/vanishing and their fixes, SGD and adaptive methods, global landscape results.",
+   "tabs": [
+    [
+     "chain",
+     "Exploding & vanishing"
+    ]
+   ],
+   "tag_tabs": {
+    "initialization": "chain",
+    "deep linear network": "chain",
+    "step size": "chain"
+   },
+   "thumb": "public/thumbs/sun2020optimization.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1710,17 +1820,30 @@
      "A. Existing Surveys"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1109/MSP.2020.3004124",
+   "pdf": "https://arxiv.org/pdf/2007.01429",
    "scholar": "https://scholar.google.com/scholar?q=The+global+landscape+of+neural+networks%3A+An+overview",
    "notes": "public/notes/sun2020global.pdf",
    "notes_title": "23_Sun_Global_Landscape_Overview.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "spurious local minimum",
+    "no spurious minima",
+    "overparameterization"
+   ],
+   "result": "Overview of landscape results: benign cases (linear, wide nets, no spurious valleys) and spurious minima, down to a single neuron.",
+   "tabs": [
+    [
+     "neuron",
+     "One neuron"
+    ]
+   ],
+   "tag_tabs": {
+    "spurious local minimum": "neuron",
+    "no spurious minima": "neuron",
+    "overparameterization": "neuron"
+   },
+   "thumb": "public/thumbs/sun2020global.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1743,17 +1866,30 @@
      "A. Existing Surveys"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1007/978-3-031-00832-0_3",
+   "pdf": "https://arxiv.org/pdf/2012.06188",
    "scholar": "https://scholar.google.com/scholar?q=Recent+theoretical+advances+in+non-convex+optimization",
    "notes": "public/notes/danilova2022recent.pdf",
    "notes_title": "24_Danilova_Recent_Advances.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "convergence rate",
+    "landscape condition",
+    "lower bound"
+   ],
+   "result": "Survey of non-convex complexity theory: stationarity rates, PL and other structured classes, higher- and zeroth-order methods.",
+   "tabs": [
+    [
+     "pl",
+     "PL condition"
+    ]
+   ],
+   "tag_tabs": {
+    "convergence rate": "pl",
+    "landscape condition": "pl",
+    "lower bound": "pl"
+   },
+   "thumb": "public/thumbs/danilova2022recent.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1776,17 +1912,30 @@
      "B. Scope and Research Questions"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://doi.org/10.1162/neco.1997.9.1.1",
+   "pdf": "http://www.bioinf.jku.at/publications/older/3304.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Flat+minima",
    "notes": "public/notes/hochreiter1997flat.pdf",
    "notes_title": "25_Hochreiter_Schmidhuber_Flat_Minima.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "sharp vs flat minima",
+    "sharpness",
+    "generalization"
+   ],
+   "result": "Flat minima need fewer bits to describe and, by an MDL argument, overfit less; flat minimum search seeks them.",
+   "tabs": [
+    [
+     "flat",
+     "Flat vs sharp"
+    ]
+   ],
+   "tag_tabs": {
+    "sharp vs flat minima": "flat",
+    "sharpness": "flat",
+    "generalization": "flat"
+   },
+   "thumb": "public/thumbs/hochreiter1997flat.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1809,17 +1958,36 @@
      "B. Scope and Research Questions"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1609.04836",
+   "pdf": "https://arxiv.org/pdf/1609.04836",
    "scholar": "https://scholar.google.com/scholar?q=On+large-batch+training+for+deep+learning%3A+Generalization+gap+and+sharp+minima",
    "notes": "public/notes/keskar2017large.pdf",
    "notes_title": "26_Keskar_Large_Batch_Sharp_Minima.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "sharp vs flat minima",
+    "sharpness",
+    "noise",
+    "batch size"
+   ],
+   "result": "Large-batch training finds sharp minimizers and generalizes worse; small-batch noise favours flat minimizers.",
+   "tabs": [
+    [
+     "batch",
+     "Batch size"
+    ],
+    [
+     "threshold",
+     "Batch threshold"
+    ]
+   ],
+   "tag_tabs": {
+    "sharp vs flat minima": "batch",
+    "sharpness": "batch",
+    "noise": "batch",
+    "batch size": "threshold"
+   },
+   "thumb": "public/thumbs/keskar2017large.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -1847,17 +2015,36 @@
      "G. Coupling Optimization with Generalization"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v70/dinh17b.html",
+   "pdf": "https://arxiv.org/pdf/1703.04933",
    "scholar": "https://scholar.google.com/scholar?q=Sharp+minima+can+generalize+for+deep+nets",
    "notes": "public/notes/dinh2017sharp.pdf",
    "notes_title": "27_Dinh_Sharp_Minima.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "sharp vs flat minima",
+    "sharpness",
+    "reparameterization",
+    "weight symmetry"
+   ],
+   "result": "Rescaling symmetries of ReLU nets make any minimum arbitrarily sharp without changing the function; sharpness alone cannot explain generalization.",
+   "tabs": [
+    [
+     "rescale",
+     "Same function, any sharpness"
+    ],
+    [
+     "curve",
+     "Sharpness vs a"
+    ]
+   ],
+   "tag_tabs": {
+    "sharp vs flat minima": "rescale",
+    "sharpness": "curve",
+    "reparameterization": "rescale",
+    "weight symmetry": "rescale"
+   },
+   "thumb": "public/thumbs/dinh2017sharp.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2231,17 +2418,38 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://papers.nips.cc/paper/2018/hash/a1afc58c6ca9540d057299ec3016d726-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1805.09545",
    "scholar": "https://scholar.google.com/scholar?q=On+the+global+convergence+of+gradient+descent+for+over-parameterized+models+using+optimal+transport",
    "notes": "public/notes/chizat2018global.pdf",
    "notes_title": "29_Chizat_Bach_Optimal_Transport.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "mean-field",
+    "optimal transport",
+    "global convergence",
+    "width"
+   ],
+   "result": "Many-particle gradient flow (Wasserstein) for wide two-layer nets converges to global minimizers under initialization conditions.",
+   "tabs": [
+    [
+     "fit",
+     "Output surface"
+    ],
+    [
+     "particles",
+     "Particle paths"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "fit",
+    "mean-field": "particles",
+    "optimal transport": "particles",
+    "global convergence": "fit",
+    "width": "fit"
+   },
+   "thumb": "public/thumbs/chizat2018global.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2376,17 +2584,36 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2010.01412",
+   "pdf": "https://arxiv.org/pdf/2010.01412",
    "scholar": "https://scholar.google.com/scholar?q=Sharpness-aware+minimization+for+efficiently+improving+generalization",
    "notes": "public/notes/foret2021sharpness.pdf",
    "notes_title": "Ref100_Foret_Kleiner_Mobahi_Neyshabur_2021.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "sharpness",
+    "sharp vs flat minima",
+    "sharpness-aware minimization",
+    "generalization"
+   ],
+   "result": "SAM minimizes the worst nearby loss with a two-gradient step; flatter solutions, better test error.",
+   "tabs": [
+    [
+     "objective",
+     "SAM objective"
+    ],
+    [
+     "basins",
+     "Where starts end"
+    ]
+   ],
+   "tag_tabs": {
+    "sharpness": "objective",
+    "sharp vs flat minima": "objective",
+    "sharpness-aware minimization": "objective",
+    "generalization": "basins"
+   },
+   "thumb": "public/thumbs/foret2021sharpness.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2447,17 +2674,38 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2209.15594",
+   "pdf": "https://arxiv.org/pdf/2209.15594",
    "scholar": "https://scholar.google.com/scholar?q=Self-stabilization%3A+The+implicit+bias+of+gradient+descent+at+the+edge+of+stability",
    "notes": "public/notes/damian2023self.pdf",
    "notes_title": "30_Damian_Self_Stabilization.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "sharpness",
+    "self-stabilization",
+    "conserved quantity",
+    "progressive sharpening"
+   ],
+   "result": "Oscillation's cubic term pushes sharpness back below 2/η; GD follows projected descent on {S ≤ 2/η}.",
+   "tabs": [
+    [
+     "stages",
+     "Four stages"
+    ],
+    [
+     "orbit",
+     "Predator–prey"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "stages",
+    "sharpness": "stages",
+    "self-stabilization": "stages",
+    "conserved quantity": "orbit",
+    "progressive sharpening": "stages"
+   },
+   "thumb": "public/thumbs/damian2023self.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2514,17 +2762,44 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2406.09405",
+   "pdf": "https://arxiv.org/pdf/2406.09405",
    "scholar": "https://scholar.google.com/scholar?q=Why+warmup+the+learning+rate%3F+underlying+mechanisms+and+improvements",
    "notes": "public/notes/kalra2024warmup.pdf",
    "notes_title": "Ref99_Kalra_Barkeshli_2024.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "warmup",
+    "large learning rate",
+    "catapult",
+    "sharpness",
+    "edge of stability",
+    "adaptive methods"
+   ],
+   "result": "Warmup lets larger target learning rates train by reducing (preconditioned) sharpness via catapults.",
+   "tabs": [
+    [
+     "warm",
+     "Warmup"
+    ],
+    [
+     "sweep",
+     "Larger targets"
+    ],
+    [
+     "adam",
+     "Adam & GI-Adam"
+    ]
+   ],
+   "tag_tabs": {
+    "warmup": "warm",
+    "large learning rate": "sweep",
+    "catapult": "warm",
+    "sharpness": "warm",
+    "edge of stability": "warm",
+    "adaptive methods": "adam"
+   },
+   "thumb": "public/thumbs/kalra2024warmup.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2811,16 +3086,39 @@
     ]
    ],
    "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
-   "pdf": null,
+   "pdf": "https://research.dial.uclouvain.be/bitstreams/bae87e54-345e-4d37-98f1-d1cd3c9a9226/download",
    "scholar": "https://scholar.google.com/scholar?q=Cubic+regularization+of+Newton+method+and+its+global+performance",
    "notes": "public/notes/nesterov2006cubic.pdf",
    "notes_title": "32_Nesterov_Polyak_Cubic.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "cubic regularization",
+    "saddle escape",
+    "second-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Cubic-regularized Newton: escapes strict saddles, reaches second-order points, O(k^-2/3) gradient rate.",
+   "tabs": [
+    [
+     "saddle",
+     "Newton vs cubic"
+    ],
+    [
+     "model",
+     "The cubic model"
+    ],
+    [
+     "rate",
+     "Gradient rate"
+    ]
+   ],
+   "tag_tabs": {
+    "cubic regularization": "model",
+    "saddle escape": "saddle",
+    "second-order stationarity": "saddle",
+    "convergence rate": "rate"
+   },
+   "thumb": "public/thumbs/nesterov2006cubic.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2848,17 +3146,38 @@
      "B. What Is Proved Versus What Is Observed"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1905.11881",
+   "pdf": "https://arxiv.org/pdf/1905.11881",
    "scholar": "https://scholar.google.com/scholar?q=Why+gradient+clipping+accelerates+training%3A+A+theoretical+justification+for+adaptivity",
    "notes": "public/notes/zhang2020gradient.pdf",
    "notes_title": "33_Zhang_Gradient_Clipping.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "generalized smoothness",
+    "gradient clipping",
+    "adaptive methods",
+    "step size",
+    "convergence rate"
+   ],
+   "result": "Curvature grows with gradient norm; clipped GD's rate doesn't depend on the initial gradient, fixed-step GD's does.",
+   "tabs": [
+    [
+     "steep",
+     "Clipped vs fixed step"
+    ],
+    [
+     "scaling",
+     "Cost vs start"
+    ]
+   ],
+   "tag_tabs": {
+    "generalized smoothness": "steep",
+    "gradient clipping": "steep",
+    "adaptive methods": "steep",
+    "step size": "scaling",
+    "convergence rate": "scaling"
+   },
+   "thumb": "public/thumbs/zhang2020gradient.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2918,17 +3237,36 @@
      "B. Theory for Adaptive, Large-Step Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2304.13972",
+   "pdf": "https://arxiv.org/pdf/2304.13972",
    "scholar": "https://scholar.google.com/scholar?q=Convergence+of+Adam+under+relaxed+assumptions",
    "notes": "public/notes/li2023convergence.pdf",
    "notes_title": "34_Li_Rakhlin_Jadbabaie_Adam.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "generalized smoothness",
+    "convergence rate",
+    "first-order stationarity"
+   ],
+   "result": "Adam converges (O(ε⁻⁴)) under curvature growing sub-quadratically with the gradient norm.",
+   "tabs": [
+    [
+     "adam",
+     "Steep walls"
+    ],
+    [
+     "classes",
+     "(ρ, L0, Lρ) smoothness"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "adam",
+    "generalized smoothness": "classes",
+    "convergence rate": "adam",
+    "first-order stationarity": "adam"
+   },
+   "thumb": "public/thumbs/li2023convergence.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -2971,12 +3309,31 @@
    "scholar": "https://scholar.google.com/scholar?q=Taming+stochastic+gradient+descent%3A+Almost+sure+convergence+and+saddle-point+avoidance+under+%28l0%2C+l1%29-smoothness",
    "notes": "public/notes/apidopoulos2026taming.pdf",
    "notes_title": "35_Apidopoulos_Lytras_Mertikopoulos_Tamed_SGD.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle avoidance",
+    "stochastic gradients",
+    "step size",
+    "generalized smoothness"
+   ],
+   "result": "Tamed SGD converges a.s. and avoids strict saddles without a global Lipschitz gradient, under (L0,L1)-smoothness.",
+   "tabs": [
+    [
+     "taming",
+     "Tamed vs plain SGD"
+    ],
+    [
+     "stability",
+     "Step-size stability"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle avoidance": "taming",
+    "stochastic gradients": "taming",
+    "step size": "stability",
+    "generalized smoothness": "taming"
+   },
+   "thumb": "public/thumbs/apidopoulos2026taming.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3004,17 +3361,32 @@
      "A. The Neural Tangent Kernel and Lazy Training"
     ]
    ],
-   "link": null,
+   "link": "https://link.springer.com/book/10.1007/978-1-4419-8853-9",
    "pdf": null,
    "scholar": "https://scholar.google.com/scholar?q=Introductory+Lectures+on+Convex+Optimization%3A+A+Basic+Course",
    "notes": "public/notes/nesterov2004introductory.pdf",
    "notes_title": "36_Nesterov_Introductory_Lectures.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "step size",
+    "convergence rate",
+    "first-order stationarity",
+    "gradient descent"
+   ],
+   "result": "Textbook background: L-smoothness, descent lemma, GD reaches ‖∇f‖ ≤ ε in O(ε^-2) steps without convexity.",
+   "tabs": [
+    [
+     "descent",
+     "Step 1/L"
+    ]
+   ],
+   "tag_tabs": {
+    "step size": "descent",
+    "convergence rate": "descent",
+    "first-order stationarity": "descent",
+    "gradient descent": "descent"
+   },
+   "thumb": "public/thumbs/nesterov2004introductory.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3052,17 +3424,36 @@
      "F. From Oracle Complexity to Wall-Clock Cost"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://link.springer.com/article/10.1007/s10107-019-01406-y",
+   "pdf": "https://arxiv.org/pdf/1710.11606",
    "scholar": "https://scholar.google.com/scholar?q=Lower+bounds+for+finding+stationary+points+I",
    "notes": "public/notes/carmon2020lower.pdf",
    "notes_title": "37_Carmon_Duchi_Hinder_Sidford_Lower_Bounds_I.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "lower bound",
+    "first-order stationarity",
+    "convergence rate",
+    "cubic regularization"
+   ],
+   "result": "Lower bound ε^-(p+1)/p for finding stationary points; GD and cubic Newton are optimal in their classes.",
+   "tabs": [
+    [
+     "chain",
+     "The hard function"
+    ],
+    [
+     "bounds",
+     "The bounds"
+    ]
+   ],
+   "tag_tabs": {
+    "lower bound": "bounds",
+    "first-order stationarity": "chain",
+    "convergence rate": "bounds",
+    "cubic regularization": "bounds"
+   },
+   "thumb": "public/thumbs/carmon2020lower.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3085,17 +3476,36 @@
      "E. The Algorithms Under Study"
     ]
    ],
-   "link": null,
+   "link": "https://doi.org/10.1214/aoms/1177729586",
    "pdf": null,
    "scholar": "https://scholar.google.com/scholar?q=A+stochastic+approximation+method",
    "notes": "public/notes/robbins1951stochastic.pdf",
    "notes_title": "38_Robbins_Monro_Stochastic_Approximation.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "stochastic gradients",
+    "step size",
+    "noise",
+    "convergence rate"
+   ],
+   "result": "Robbins–Monro stochastic approximation: decreasing gains (Σa=∞, Σa²<∞) give convergence to the root; ancestor of SGD.",
+   "tabs": [
+    [
+     "gains",
+     "Gain sequences"
+    ],
+    [
+     "original",
+     "The 1951 setting"
+    ]
+   ],
+   "tag_tabs": {
+    "stochastic gradients": "gains",
+    "step size": "gains",
+    "noise": "original",
+    "convergence rate": "original"
+   },
+   "thumb": "public/thumbs/robbins1951stochastic.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3222,17 +3632,38 @@
      "F. From Oracle Complexity to Wall-Clock Cost"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://link.springer.com/article/10.1007/s10107-022-01822-7",
+   "pdf": "https://arxiv.org/pdf/1912.02365",
    "scholar": "https://scholar.google.com/scholar?q=Lower+bounds+for+non-convex+stochastic+optimization",
    "notes": "public/notes/arjevani2023lower.pdf",
    "notes_title": "40_Arjevani_Lower_Bounds_Stochastic.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "lower bound",
+    "stochastic gradients",
+    "variance reduction",
+    "first-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Stochastic lower bounds: ε^-4 (SGD optimal) and ε^-3 under mean-squared smoothness (variance reduction optimal).",
+   "tabs": [
+    [
+     "oracle",
+     "Rare progress"
+    ],
+    [
+     "bounds",
+     "ε⁻⁴ and ε⁻³"
+    ]
+   ],
+   "tag_tabs": {
+    "lower bound": "bounds",
+    "stochastic gradients": "oracle",
+    "variance reduction": "bounds",
+    "first-order stationarity": "oracle",
+    "convergence rate": "bounds"
+   },
+   "thumb": "public/thumbs/arjevani2023lower.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3260,17 +3691,34 @@
      "B. Avoidance Is Not Efficiency"
     ]
    ],
-   "link": null,
+   "link": "https://doi.org/10.1016/0041-5553(64)90137-5",
    "pdf": null,
    "scholar": "https://scholar.google.com/scholar?q=Some+methods+of+speeding+up+the+convergence+of+iteration+methods",
    "notes": "public/notes/polyak1964some.pdf",
    "notes_title": "41_Polyak_Heavy_Ball.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "momentum",
+    "acceleration",
+    "convergence rate"
+   ],
+   "result": "Heavy-ball momentum: error shrinks by (√κ − 1)/(√κ + 1) per step on quadratics, vs (κ − 1)/(κ + 1) for GD.",
+   "tabs": [
+    [
+     "ball",
+     "Heavy ball"
+    ],
+    [
+     "kappa",
+     "√κ vs κ"
+    ]
+   ],
+   "tag_tabs": {
+    "momentum": "ball",
+    "acceleration": "kappa",
+    "convergence rate": "kappa"
+   },
+   "thumb": "public/thumbs/polyak1964some.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3293,17 +3741,36 @@
      "E. The Algorithms Under Study"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://jmlr.org/papers/v12/duchi11a.html",
+   "pdf": "https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Adaptive+subgradient+methods+for+online+learning+and+stochastic+optimization",
    "notes": "public/notes/duchi2011adaptive.pdf",
    "notes_title": "42_Duchi_Hazan_Singer_AdaGrad.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "preconditioning",
+    "online learning",
+    "convergence rate"
+   ],
+   "result": "Per-coordinate steps η/√(Σg²); regret adapts to the data, O(log d √T) on sparse features.",
+   "tabs": [
+    [
+     "sparse",
+     "Rare features"
+    ],
+    [
+     "regret",
+     "Sparse regret"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "sparse",
+    "preconditioning": "sparse",
+    "online learning": "regret",
+    "convergence rate": "regret"
+   },
+   "thumb": "public/thumbs/duchi2011adaptive.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3326,17 +3793,36 @@
      "E. The Algorithms Under Study"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1412.6980",
+   "pdf": "https://arxiv.org/pdf/1412.6980",
    "scholar": "https://scholar.google.com/scholar?q=Adam%3A+A+method+for+stochastic+optimization",
    "notes": "public/notes/kingma2015adam.pdf",
    "notes_title": "43_Kingma_Ba_Adam.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "momentum",
+    "preconditioning",
+    "step size"
+   ],
+   "result": "Bias-corrected moving averages of g and g²; step α m̂/√v̂, scale-invariant and bounded by about α.",
+   "tabs": [
+    [
+     "scales",
+     "Badly scaled"
+    ],
+    [
+     "bias",
+     "Bias correction"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "scales",
+    "momentum": "scales",
+    "preconditioning": "scales",
+    "step size": "bias"
+   },
+   "thumb": "public/thumbs/kingma2015adam.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3520,12 +4006,37 @@
    "scholar": "https://scholar.google.com/scholar?q=Global+optimality+in+neural+network+training",
    "notes": "public/notes/haeffele2017global.pdf",
    "notes_title": "47_Haeffele_Vidal_Global_Optimality.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "no spurious minima",
+    "positive homogeneity",
+    "overparameterization",
+    "ReLU network",
+    "spurious local minimum"
+   ],
+   "result": "Matched-degree homogeneous nets: a local min with a zero subnetwork is global; large enough nets have a descent path to a global min.",
+   "tabs": [
+    [
+     "matched",
+     "Matched degree"
+    ],
+    [
+     "mismatch",
+     "Degree mismatch"
+    ],
+    [
+     "relu",
+     "ReLU network"
+    ]
+   ],
+   "tag_tabs": {
+    "no spurious minima": "matched",
+    "positive homogeneity": "matched",
+    "overparameterization": "relu",
+    "ReLU network": "relu",
+    "spurious local minimum": "mismatch"
+   },
+   "thumb": "public/thumbs/haeffele2017global.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3746,17 +4257,36 @@
      "E. Finite-Width Guarantees with Feature Learning"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2410.12455",
+   "pdf": "https://arxiv.org/pdf/2410.12455",
    "scholar": "https://scholar.google.com/scholar?q=Loss+landscape+characterization+of+neural+networks+without+over-parametrization",
    "notes": "public/notes/islamov2024loss.pdf",
    "notes_title": "50_Islamov_Alpha_Beta_Landscapes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle",
+    "convergence rate",
+    "stochastic gradients",
+    "landscape condition"
+   ],
+   "result": "A landscape condition that allows saddles and gives SGD-type methods convergence up to a neighbourhood, checked empirically on deep nets.",
+   "tabs": [
+    [
+     "saddle",
+     "Saddle allowed"
+    ],
+    [
+     "condition",
+     "α needed"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle": "saddle",
+    "convergence rate": "condition",
+    "stochastic gradients": "saddle",
+    "landscape condition": "condition"
+   },
+   "thumb": "public/thumbs/islamov2024loss.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3863,17 +4393,36 @@
      "E. Benign Geometry in Low-Rank Testbeds"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v49/bhojanapalli16.html",
+   "pdf": "https://proceedings.mlr.press/v49/bhojanapalli16.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Dropping+convexity+for+faster+semi-definite+optimization",
    "notes": "public/notes/bhojanapalli2016dropping.pdf",
    "notes_title": "52_Bhojanapalli_Factored_GD.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "low-rank recovery",
+    "step size",
+    "convergence rate",
+    "strict saddle"
+   ],
+   "result": "Factored GD on UU^T keeps convex-like local rates (1/k smooth, linear strongly convex) with a norm-scaled step and a good start.",
+   "tabs": [
+    [
+     "step",
+     "Step size"
+    ],
+    [
+     "rate",
+     "Linear rate"
+    ]
+   ],
+   "tag_tabs": {
+    "low-rank recovery": "step",
+    "step size": "step",
+    "convergence rate": "rate",
+    "strict saddle": "step"
+   },
+   "thumb": "public/thumbs/bhojanapalli2016dropping.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -3990,17 +4539,34 @@
      "A. Degenerate and Non-Smooth Saddles"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v49/anandkumar16.html",
+   "pdf": "https://proceedings.mlr.press/v49/anandkumar16.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Efficient+approaches+for+escaping+higher+order+saddle+points+in+non-convex+optimization",
    "notes": "public/notes/anandkumar2016efficient.pdf",
    "notes_title": "54_Anandkumar_Ge_Higher_Order.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "degenerate saddle",
+    "computational hardness",
+    "higher-order optimality"
+   ],
+   "result": "Third-order local minima can be found efficiently with third-derivative steps; fourth-order local minima are NP-hard to find.",
+   "tabs": [
+    [
+     "third",
+     "Third-order saddle"
+    ],
+    [
+     "fourth",
+     "Fourth-order saddle"
+    ]
+   ],
+   "tag_tabs": {
+    "degenerate saddle": "third",
+    "computational hardness": "fourth",
+    "higher-order optimality": "third"
+   },
+   "thumb": "public/thumbs/anandkumar2016efficient.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4097,17 +4663,34 @@
      "G. Empirical Views of the Landscape"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1412.6544",
+   "pdf": "https://arxiv.org/pdf/1412.6544",
    "scholar": "https://scholar.google.com/scholar?q=Qualitatively+characterizing+neural+network+optimization+problems",
    "notes": "public/notes/goodfellow2015qualitatively.pdf",
    "notes_title": "56_Goodfellow_Vinyals_Saxe_Loss_Paths.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "loss landscape visualization",
+    "saddle",
+    "deep linear network"
+   ],
+   "result": "Loss along the init-to-solution line usually falls monotonically; lines between two solutions show barriers.",
+   "tabs": [
+    [
+     "factored",
+     "Factored model"
+    ],
+    [
+     "mlp",
+     "MLP interpolation"
+    ]
+   ],
+   "tag_tabs": {
+    "loss landscape visualization": "mlp",
+    "saddle": "factored",
+    "deep linear network": "factored"
+   },
+   "thumb": "public/thumbs/goodfellow2015qualitatively.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4140,17 +4723,36 @@
      "A. Asymptotic Avoidance: GD Almost Never Converges to a"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.neurips.cc/paper/2019/hash/3fb04953d95a94367bb133f862402bce-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1906.07772",
    "scholar": "https://scholar.google.com/scholar?q=First-order+methods+almost+always+avoid+saddle+points%3A+The+case+of+vanishing+step-sizes",
    "notes": "public/notes/panageas2019first.pdf",
    "notes_title": "57_Panageas_Vanishing_Step_Sizes.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle avoidance",
+    "stable manifold",
+    "step size",
+    "strict saddle"
+   ],
+   "result": "GD and relatives with vanishing Omega(1/k) steps avoid strict saddles almost surely; summable steps may stall at non-critical points.",
+   "tabs": [
+    [
+     "schedules",
+     "Step schedules"
+    ],
+    [
+     "stable",
+     "Where starts end"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle avoidance": "stable",
+    "stable manifold": "stable",
+    "step size": "schedules",
+    "strict saddle": "schedules"
+   },
+   "thumb": "public/thumbs/panageas2019first.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4183,17 +4785,38 @@
      "A. Asymptotic Avoidance: GD Almost Never Converges to a"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.neurips.cc/paper/2020/hash/0cb5ebb1b34ec343dfe135db691e4a85-Abstract.html",
+   "pdf": "https://proceedings.neurips.cc/paper/2020/file/0cb5ebb1b34ec343dfe135db691e4a85-Paper.pdf",
    "scholar": "https://scholar.google.com/scholar?q=On+the+almost+sure+convergence+of+stochastic+gradient+descent+in+non-convex+problems",
    "notes": "public/notes/mertikopoulos2020almost.pdf",
    "notes_title": "58_Mertikopoulos_Hallak_Kavis_Cevher_SGD.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle avoidance",
+    "stochastic gradients",
+    "noise",
+    "strict saddle",
+    "convergence rate"
+   ],
+   "result": "SGD with 1/n^p steps converges a.s. to critical points and a.s. avoids strict saddle manifolds; local rate O(1/n^p).",
+   "tabs": [
+    [
+     "ridge",
+     "Saddle ridge"
+    ],
+    [
+     "rate",
+     "Local rate"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle avoidance": "ridge",
+    "stochastic gradients": "ridge",
+    "noise": "ridge",
+    "strict saddle": "ridge",
+    "convergence rate": "rate"
+   },
+   "thumb": "public/thumbs/mertikopoulos2020almost.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4245,17 +4868,36 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v162/antonakopoulos22a.html",
+   "pdf": "https://proceedings.mlr.press/v162/antonakopoulos22a/antonakopoulos22a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=AdaGrad+avoids+saddle+points",
    "notes": "public/notes/antonakopoulos2022adagrad.pdf",
    "notes_title": "59_Antonakopoulos_AdaGrad_Saddles.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle avoidance",
+    "adaptive methods",
+    "stable manifold",
+    "strict saddle"
+   ],
+   "result": "AdaGrad (norm, diagonal, full-matrix) avoids strict saddles from almost every start.",
+   "tabs": [
+    [
+     "adagrad",
+     "AdaGrad near a saddle"
+    ],
+    [
+     "escape",
+     "Escape time"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle avoidance": "adagrad",
+    "adaptive methods": "adagrad",
+    "stable manifold": "escape",
+    "strict saddle": "adagrad"
+   },
+   "thumb": "public/thumbs/antonakopoulos2022adagrad.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4293,17 +4935,38 @@
      "A. Degenerate and Non-Smooth Saddles"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://link.springer.com/article/10.1007/s10957-024-02513-3",
+   "pdf": "https://arxiv.org/pdf/2208.02083",
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+provably+escapes+saddle+points+in+the+training+of+shallow+ReLU+networks",
    "notes": "public/notes/cheridito2024gradient.pdf",
    "notes_title": "60_Cheridito_Jentzen_Rossmannek_ReLU.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle avoidance",
+    "ReLU network",
+    "nonsmooth activation",
+    "stable manifold",
+    "spurious local minimum"
+   ],
+   "result": "GD on shallow scalar-input (leaky) ReLU nets with affine targets avoids most saddles; below an explicit loss threshold it reaches a global minimum.",
+   "tabs": [
+    [
+     "slice",
+     "Loss slice"
+    ],
+    [
+     "levels",
+     "Critical levels"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle avoidance": "levels",
+    "ReLU network": "slice",
+    "nonsmooth activation": "slice",
+    "stable manifold": "levels",
+    "spurious local minimum": "slice"
+   },
+   "thumb": "public/thumbs/cheridito2024gradient.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -4346,17 +5009,36 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.neurips.cc/paper/2017/hash/f79921bbae40a577928b76d2fc3edc2a-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1705.10412",
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+can+take+exponential+time+to+escape+saddle+points",
    "notes": "public/notes/du2017gradient.pdf",
    "notes_title": "61_Du_Jin_Lee_Exponential_Escape.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle escape",
+    "perturbation",
+    "lower bound",
+    "strict saddle"
+   ],
+   "result": "GD can take exponential time to escape a sequence of saddles; perturbed GD escapes in polynomial time.",
+   "tabs": [
+    [
+     "chain",
+     "Saddle chain"
+    ],
+    [
+     "exp",
+     "Six saddles"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle escape": "chain",
+    "perturbation": "chain",
+    "lower bound": "exp",
+    "strict saddle": "chain"
+   },
+   "thumb": "public/thumbs/du2017gradient.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5294,17 +5976,40 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.neurips.cc/paper/2021/hash/47bd8ac1becf213f155a82244b4a696a-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/2111.14069",
    "scholar": "https://scholar.google.com/scholar?q=Escape+saddle+points+by+a+simple+gradient-descent+based+algorithm",
-   "notes": null,
+   "notes": "public/notes/zhang2021escape.pdf",
    "notes_title": "Ref78_Zhang_Li_2021.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle escape",
+    "negative curvature",
+    "Hessian-free",
+    "perturbation",
+    "second-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Gradient-only negative-curvature finding: Õ(log n/ε^1.75) saddle escape, fewer log n factors than PGD.",
+   "tabs": [
+    [
+     "find",
+     "Find the curvature"
+    ],
+    [
+     "rates",
+     "Dimension dependence"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle escape": "find",
+    "negative curvature": "find",
+    "Hessian-free": "find",
+    "perturbation": "find",
+    "second-order stationarity": "rates",
+    "convergence rate": "rates"
+   },
+   "thumb": "public/thumbs/zhang2021escape.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5399,17 +6104,38 @@
      "A. Three Meanings of “Solved”"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.neurips.cc/paper/2019/hash/512c5cad6c37edb98ae91c8a76c3a291-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1810.10690",
    "scholar": "https://scholar.google.com/scholar?q=SpiderBoost+and+momentum%3A+Faster+variance+reduction+algorithms",
    "notes": "public/notes/wang2019spiderboost.pdf",
    "notes_title": "Ref80_Wang_Ji_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "variance reduction",
+    "stochastic gradients",
+    "step size",
+    "convergence rate",
+    "nonsmooth loss"
+   ],
+   "result": "SpiderBoost: SPIDER estimator with a large constant step; O(√n/ε² + n), with prox and momentum versions.",
+   "tabs": [
+    [
+     "boost",
+     "Big steps"
+    ],
+    [
+     "prox",
+     "Prox step"
+    ]
+   ],
+   "tag_tabs": {
+    "variance reduction": "boost",
+    "stochastic gradients": "boost",
+    "step size": "boost",
+    "convergence rate": "boost",
+    "nonsmooth loss": "prox"
+   },
+   "thumb": "public/thumbs/wang2019spiderboost.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5447,17 +6173,42 @@
      "A. The Neural Tangent Kernel and Lazy Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://papers.nips.cc/paper/7533-natasha-2-faster-non-convex-optimization-than-sgd",
+   "pdf": "https://arxiv.org/pdf/1708.08694",
    "scholar": "https://scholar.google.com/scholar?q=Natasha+2%3A+Faster+non-convex+optimization+than+SGD",
-   "notes": null,
+   "notes": "public/notes/allenzhu2018natasha.pdf",
    "notes_title": "Ref81_Allen_Zhu_2018.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "saddle escape",
+    "negative curvature",
+    "Hessian-vector product",
+    "variance reduction",
+    "stochastic gradients",
+    "second-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Natasha 2: Oja negative-curvature steps + safe-zone variance reduction, Õ(ε^-3.25) for approximate local minima.",
+   "tabs": [
+    [
+     "swing",
+     "Swing by"
+    ],
+    [
+     "rates",
+     "ε^−3.25"
+    ]
+   ],
+   "tag_tabs": {
+    "saddle escape": "swing",
+    "negative curvature": "swing",
+    "Hessian-vector product": "swing",
+    "variance reduction": "rates",
+    "stochastic gradients": "rates",
+    "second-order stationarity": "swing",
+    "convergence rate": "rates"
+   },
+   "thumb": "public/thumbs/allenzhu2018natasha.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5495,17 +6246,38 @@
      "A. The Neural Tangent Kernel and Lazy Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v99/ge19a.html",
+   "pdf": "http://proceedings.mlr.press/v99/ge19a/ge19a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Stabilized+SVRG%3A+Simple+variance+reduction+for+nonconvex+optimization",
-   "notes": null,
+   "notes": "public/notes/ge2019stabilized.pdf",
    "notes_title": "Ref82_Ge_Li_Wang_Wang_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "variance reduction",
+    "perturbation",
+    "saddle escape",
+    "second-order stationarity",
+    "convergence rate"
+   ],
+   "result": "Stabilized SVRG: perturbation + gradient shift give second-order guarantees at Õ(n^2/3/ε² + n/ε^1.5).",
+   "tabs": [
+    [
+     "stabilize",
+     "Shift the gradient"
+    ],
+    [
+     "rates",
+     "Complexity"
+    ]
+   ],
+   "tag_tabs": {
+    "variance reduction": "stabilize",
+    "perturbation": "stabilize",
+    "saddle escape": "stabilize",
+    "second-order stationarity": "rates",
+    "convergence rate": "rates"
+   },
+   "thumb": "public/thumbs/ge2019stabilized.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5548,17 +6320,40 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://papers.nips.cc/paper/8431-ssrgd-simple-stochastic-recursive-gradient-descent-for-escaping-saddle-points",
+   "pdf": "https://arxiv.org/pdf/1904.09265",
    "scholar": "https://scholar.google.com/scholar?q=SSRGD%3A+Simple+stochastic+recursive+gradient+descent+for+escaping+saddle+points",
-   "notes": null,
+   "notes": "public/notes/li2019ssrgd.pdf",
    "notes_title": "Ref83_Li_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "variance reduction",
+    "perturbation",
+    "saddle escape",
+    "second-order stationarity",
+    "convergence rate",
+    "lower bound"
+   ],
+   "result": "SSRGD: recursive gradient + occasional perturbation; near-optimal √n/ε² finite-sum rate for second-order points.",
+   "tabs": [
+    [
+     "escape",
+     "Perturb once"
+    ],
+    [
+     "rates",
+     "√n vs n^{2/3}"
+    ]
+   ],
+   "tag_tabs": {
+    "variance reduction": "escape",
+    "perturbation": "escape",
+    "saddle escape": "escape",
+    "second-order stationarity": "rates",
+    "convergence rate": "rates",
+    "lower bound": "rates"
+   },
+   "thumb": "public/thumbs/li2019ssrgd.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5596,17 +6391,42 @@
      "A. The Neural Tangent Kernel and Lazy Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v167/chen22b.html",
+   "pdf": "https://proceedings.mlr.press/v167/chen22b/chen22b.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Faster+perturbed+stochastic+gradient+methods+for+finding+local+minima",
-   "notes": null,
+   "notes": "public/notes/chen2022faster.pdf",
    "notes_title": "Ref84_Chen_Zhou_Gu_2022.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "perturbation",
+    "variance reduction",
+    "stochastic gradients",
+    "saddle escape",
+    "second-order stationarity",
+    "convergence rate",
+    "lower bound"
+   ],
+   "result": "LENA: perturbed SPIDER/STORM with last-step shrinkage, Õ(ε^-3 + ε_H^-6) for approximate local minima.",
+   "tabs": [
+    [
+     "lena",
+     "Last-step shrinkage"
+    ],
+    [
+     "rates",
+     "ε^−3"
+    ]
+   ],
+   "tag_tabs": {
+    "perturbation": "lena",
+    "variance reduction": "lena",
+    "stochastic gradients": "lena",
+    "saddle escape": "lena",
+    "second-order stationarity": "rates",
+    "convergence rate": "rates",
+    "lower bound": "rates"
+   },
+   "thumb": "public/thumbs/chen2022faster.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5639,17 +6459,38 @@
      "F. Adaptive Methods and Saddles"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v97/staib19a.html",
+   "pdf": "http://proceedings.mlr.press/v97/staib19a/staib19a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Escaping+saddle+points+with+adaptive+gradient+methods",
-   "notes": null,
+   "notes": "public/notes/staib2019escaping.pdf",
    "notes_title": "Ref85_Staib_Reddi_Kale_Kumar_Sra_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "noise",
+    "stochastic gradients",
+    "saddle escape",
+    "second-order stationarity"
+   ],
+   "result": "Adaptive methods whiten gradient noise near saddles and escape faster; first second-order result for RMSProp.",
+   "tabs": [
+    [
+     "escape",
+     "Escape race"
+    ],
+    [
+     "whiten",
+     "Isotropic noise"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "escape",
+    "noise": "whiten",
+    "stochastic gradients": "escape",
+    "saddle escape": "escape",
+    "second-order stationarity": "whiten"
+   },
+   "thumb": "public/thumbs/staib2019escaping.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5692,17 +6533,42 @@
      "B. What Is Proved Versus What Is Observed"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://papers.nips.cc/paper/2019/hash/6a61d423d02a1c56250dc23ae7ff12f3-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1906.04688",
    "scholar": "https://scholar.google.com/scholar?q=An+improved+analysis+of+training+over-parameterized+deep+neural+networks",
-   "notes": null,
+   "notes": "public/notes/zou2019improved.pdf",
    "notes_title": "Ref86_Zou_Gu_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "global convergence",
+    "width",
+    "ReLU network",
+    "lazy training"
+   ],
+   "result": "Improved over-parameterization: GD converges for deep ReLU nets with width Ω̃(n^8 L^12/φ^4) instead of n^24.",
+   "tabs": [
+    [
+     "slice",
+     "Loss near init"
+    ],
+    [
+     "stay",
+     "Wider = closer"
+    ],
+    [
+     "width",
+     "Width needed"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "width",
+    "global convergence": "stay",
+    "width": "width",
+    "ReLU network": "slice",
+    "lazy training": "stay"
+   },
+   "thumb": "public/thumbs/zou2019improved.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5740,17 +6606,38 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v97/arora19a.html",
+   "pdf": "http://proceedings.mlr.press/v97/arora19a/arora19a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Fine-grained+analysis+of+optimization+and+generalization+for+overparameterized+two-layer+neural+networks",
-   "notes": null,
+   "notes": "public/notes/arora2019fine.pdf",
    "notes_title": "Ref87_Arora_Du_Hu_Li_Wang_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "lazy training",
+    "kernel",
+    "global convergence",
+    "ReLU network"
+   ],
+   "result": "Fine-grained NTK analysis: per-eigendirection convergence explains true vs random label speed; y^T H^-1 y bounds generalization.",
+   "tabs": [
+    [
+     "valley",
+     "Fast and slow directions"
+    ],
+    [
+     "labels",
+     "True vs random labels"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "valley",
+    "lazy training": "labels",
+    "kernel": "labels",
+    "global convergence": "labels",
+    "ReLU network": "valley"
+   },
+   "thumb": "public/thumbs/arora2019fine.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5793,17 +6680,38 @@
      "E. Finite-Width Guarantees with Feature Learning"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v139/nguyen21a.html",
+   "pdf": "http://proceedings.mlr.press/v139/nguyen21a/nguyen21a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=On+the+proof+of+global+convergence+of+gradient+descent+for+deep+ReLU+networks+with+linear+widths",
-   "notes": null,
+   "notes": "public/notes/nguyen2021proof.pdf",
    "notes_title": "Ref88_Nguyen_2021.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "global convergence",
+    "width",
+    "ReLU network",
+    "feature rank"
+   ],
+   "result": "Deep ReLU GD converges if last-layer features stay full rank; one wide layer of width N, N^2 or N^3 suffices.",
+   "tabs": [
+    [
+     "lastlayer",
+     "Full-rank features"
+    ],
+    [
+     "rate",
+     "The guarantee"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "rate",
+    "global convergence": "rate",
+    "width": "rate",
+    "ReLU network": "lastlayer",
+    "feature rank": "lastlayer"
+   },
+   "thumb": "public/thumbs/nguyen2021proof.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5846,17 +6754,38 @@
      "E. Finite-Width Guarantees with Feature Learning"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v99/mei19a.html",
+   "pdf": "http://proceedings.mlr.press/v99/mei19a/mei19a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Mean-field+theory+of+two-layers+neural+networks%3A+Dimension-free+bounds+and+kernel+limit",
-   "notes": null,
+   "notes": "public/notes/mei2019mean.pdf",
    "notes_title": "Ref89_Mei_Misiakiewicz_Montanari_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "mean-field",
+    "overparameterization",
+    "optimal transport",
+    "width",
+    "kernel"
+   ],
+   "result": "Mean-field theory with dimension-free 1/√N approximation bounds; kernel regression as a limit.",
+   "tabs": [
+    [
+     "neurons",
+     "Neurons as a population"
+    ],
+    [
+     "dimfree",
+     "Dimension-free error"
+    ]
+   ],
+   "tag_tabs": {
+    "mean-field": "neurons",
+    "overparameterization": "dimfree",
+    "optimal transport": "neurons",
+    "width": "dimfree",
+    "kernel": "dimfree"
+   },
+   "thumb": "public/thumbs/mei2019mean.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5894,17 +6823,38 @@
      ""
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v119/lu20b.html",
+   "pdf": "http://proceedings.mlr.press/v119/lu20b/lu20b.pdf",
    "scholar": "https://scholar.google.com/scholar?q=A+mean+field+analysis+of+deep+ResNet+and+beyond%3A+Towards+provable+optimization+via+overparameterization+from+depth",
-   "notes": null,
+   "notes": "public/notes/lu2020mean.pdf",
    "notes_title": "Ref90_Lu_Ma_Lu_Lu_Ying_2020.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "mean-field",
+    "overparameterization",
+    "no spurious minima",
+    "global convergence",
+    "optimal transport"
+   ],
+   "result": "Mean-field continuous-depth ResNet: every local minimizer is global; flow converges to zero loss under assumptions.",
+   "tabs": [
+    [
+     "flow",
+     "Data flowing through depth"
+    ],
+    [
+     "depth",
+     "Depth limit & gradients"
+    ]
+   ],
+   "tag_tabs": {
+    "mean-field": "flow",
+    "overparameterization": "depth",
+    "no spurious minima": "depth",
+    "global convergence": "flow",
+    "optimal transport": "flow"
+   },
+   "thumb": "public/thumbs/lu2020mean.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -5952,17 +6902,38 @@
      "E. Finite-Width Guarantees with Feature Learning"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v125/li20a.html",
+   "pdf": "http://proceedings.mlr.press/v125/li20a/li20a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Learning+over-parametrized+two-layer+neural+networks+beyond+NTK",
-   "notes": null,
+   "notes": "public/notes/li2020learning.pdf",
    "notes_title": "Ref91_Li_Ma_Zhang_2020.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "feature learning",
+    "kernel",
+    "ReLU network",
+    "global convergence"
+   ],
+   "result": "Beyond NTK: GD on a two-layer net learns |W*x| teachers to o(1/d) loss; every poly-size kernel method has Ω(1/d).",
+   "tabs": [
+    [
+     "neurons",
+     "Neurons find the teacher"
+    ],
+    [
+     "vsfixed",
+     "Learned vs fixed features"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "neurons",
+    "feature learning": "neurons",
+    "kernel": "vsfixed",
+    "ReLU network": "neurons",
+    "global convergence": "vsfixed"
+   },
+   "thumb": "public/thumbs/li2020learning.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6014,17 +6985,38 @@
      "A. Degenerate and Non-Smooth Saddles"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v195/xu23a.html",
+   "pdf": "https://proceedings.mlr.press/v195/xu23a/xu23a.pdf",
    "scholar": "https://scholar.google.com/scholar?q=Over-parameterization+exponentially+slows+down+gradient+descent+for+learning+a+single+neuron",
-   "notes": null,
+   "notes": "public/notes/xu2023over.pdf",
    "notes_title": "Ref92_Xu_Du_2023.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "overparameterization",
+    "convergence rate",
+    "ReLU network",
+    "lower bound",
+    "width"
+   ],
+   "result": "Over-parameterization slows GD on a single ReLU neuron from exp(−T) to Θ(T^−3).",
+   "tabs": [
+    [
+     "split",
+     "Why it slows down"
+    ],
+    [
+     "rates",
+     "T⁻³ vs exp(−T)"
+    ]
+   ],
+   "tag_tabs": {
+    "overparameterization": "split",
+    "convergence rate": "rates",
+    "ReLU network": "split",
+    "lower bound": "rates",
+    "width": "rates"
+   },
+   "thumb": "public/thumbs/xu2023over.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6057,17 +7049,36 @@
      "A. Initialization and Momentum"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/1907.08610",
+   "pdf": "https://arxiv.org/pdf/1907.08610",
    "scholar": "https://scholar.google.com/scholar?q=Lookahead+optimizer%3A+k+steps+forward%2C+1+step+back",
-   "notes": null,
+   "notes": "public/notes/zhang2019lookahead.pdf",
    "notes_title": "Ref94_Zhang_Lucas_Hinton_Ba_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "momentum",
+    "noise",
+    "stochastic gradients",
+    "weight averaging"
+   ],
+   "result": "k fast steps, then slow weights interpolate; lower stationary variance than SGD at the same learning rate.",
+   "tabs": [
+    [
+     "noisy",
+     "Noisy quadratic"
+    ],
+    [
+     "ratio",
+     "Variance ratio"
+    ]
+   ],
+   "tag_tabs": {
+    "momentum": "noisy",
+    "noise": "noisy",
+    "stochastic gradients": "noisy",
+    "weight averaging": "ratio"
+   },
+   "thumb": "public/thumbs/zhang2019lookahead.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6104,17 +7115,36 @@
      "D. Modern Optimizers Through the Non-Convex Lens"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2207.12678",
+   "pdf": "https://arxiv.org/pdf/2207.12678",
    "scholar": "https://scholar.google.com/scholar?q=Analyzing+sharpness+along+GD+trajectory%3A+Progressive+sharpening+and+edge+of+stability",
-   "notes": null,
+   "notes": "public/notes/wang2022analyzing.pdf",
    "notes_title": "Ref95_Li_Wang_Li_2022.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "progressive sharpening",
+    "sharpness",
+    "deep linear network"
+   ],
+   "result": "Four-phase EoS cycle; the output-layer norm tracks sharpness; proofs for two-layer linear nets.",
+   "tabs": [
+    [
+     "sign",
+     "Output-layer norm"
+    ],
+    [
+     "trace",
+     "Four phases"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "trace",
+    "progressive sharpening": "trace",
+    "sharpness": "sign",
+    "deep linear network": "trace"
+   },
+   "thumb": "public/thumbs/wang2022analyzing.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6156,17 +7186,38 @@
      "B. Theory for Adaptive, Large-Step Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2206.04172",
+   "pdf": "https://arxiv.org/pdf/2206.04172",
    "scholar": "https://scholar.google.com/scholar?q=Beyond+the+edge+of+stability+via+two-step+gradient+updates",
-   "notes": null,
+   "notes": "public/notes/chen2023beyond.pdf",
    "notes_title": "Ref96_Chen_Bruna_2023.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "edge of stability",
+    "period-2 orbit",
+    "chaos",
+    "large learning rate",
+    "fixed-point analysis"
+   ],
+   "result": "Beyond EoS GD can converge to a stable period-2 orbit; proved via the two-step map.",
+   "tabs": [
+    [
+     "orbit",
+     "Period-2 orbit"
+    ],
+    [
+     "bif",
+     "Bifurcation"
+    ]
+   ],
+   "tag_tabs": {
+    "edge of stability": "orbit",
+    "period-2 orbit": "orbit",
+    "chaos": "bif",
+    "large learning rate": "bif",
+    "fixed-point analysis": "bif"
+   },
+   "thumb": "public/thumbs/chen2023beyond.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6212,17 +7263,36 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2205.15142",
+   "pdf": "https://arxiv.org/pdf/2205.15142",
    "scholar": "https://scholar.google.com/scholar?q=Special+properties+of+gradient+descent+with+large+learning+rates",
-   "notes": null,
+   "notes": "public/notes/mohtashami2023special.pdf",
    "notes_title": "Ref97_Mohtashami_Jaggi_Stich_2023.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "large learning rate",
+    "spurious local minimum",
+    "sharp vs flat minima",
+    "step size"
+   ],
+   "result": "A large step makes sharp spurious minima unstable; GD then reaches the global minimum, even without noise.",
+   "tabs": [
+    [
+     "escape",
+     "Large step escapes"
+    ],
+    [
+     "odds",
+     "Outcome vs η"
+    ]
+   ],
+   "tag_tabs": {
+    "large learning rate": "escape",
+    "spurious local minimum": "escape",
+    "sharp vs flat minima": "escape",
+    "step size": "odds"
+   },
+   "thumb": "public/thumbs/mohtashami2023special.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6269,17 +7339,40 @@
      "G. Coupling Optimization with Generalization"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v202/agarwala23a.html",
+   "pdf": "https://arxiv.org/pdf/2302.08692",
    "scholar": "https://scholar.google.com/scholar?q=SAM+operates+far+from+home%3A+Eigenvalue+regularization+as+a+dynamical+phenomenon",
-   "notes": null,
+   "notes": "public/notes/agarwala2023sam.pdf",
    "notes_title": "Ref101_Agarwala_Dauphin_2023.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "sharpness-aware minimization",
+    "edge of stability",
+    "sharpness",
+    "Hessian spectrum"
+   ],
+   "result": "SAM has its own edge of stability η(λ + ρλ²) = 2 and pins the top eigenvalue there during training.",
+   "tabs": [
+    [
+     "uv",
+     "Flatter landing"
+    ],
+    [
+     "mlp",
+     "SAM edge of stability"
+    ],
+    [
+     "edge",
+     "Where the edge sits"
+    ]
+   ],
+   "tag_tabs": {
+    "sharpness-aware minimization": "uv",
+    "edge of stability": "mlp",
+    "sharpness": "mlp",
+    "Hessian spectrum": "mlp"
+   },
+   "thumb": "public/thumbs/agarwala2023sam.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6317,17 +7410,36 @@
      "E. Cross-Cutting Lessons"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2502.18153",
+   "pdf": "https://arxiv.org/pdf/2502.18153",
    "scholar": "https://scholar.google.com/scholar?q=SASSHA%3A+Sharpness-aware+adaptive+second-order+optimization+with+stable+hessian+approximation",
-   "notes": null,
+   "notes": "public/notes/shin2025sassha.pdf",
    "notes_title": "Ref102_Shin_Lee_Chung_Lee_2025.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "second-order method",
+    "sharpness-aware minimization",
+    "sharp vs flat minima",
+    "adaptive methods"
+   ],
+   "result": "SAM gradient + √|diag H| preconditioning (lazy) avoids sharp minima; better generalization than second-order baselines.",
+   "tabs": [
+    [
+     "wells",
+     "Sharp or flat"
+    ],
+    [
+     "table",
+     "Reported sharpness"
+    ]
+   ],
+   "tag_tabs": {
+    "second-order method": "wells",
+    "sharpness-aware minimization": "wells",
+    "sharp vs flat minima": "table",
+    "adaptive methods": "wells"
+   },
+   "thumb": "public/thumbs/shin2025sassha.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6382,17 +7494,36 @@
      "B. Theory for Adaptive, Large-Step Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2411.02853",
+   "pdf": "https://arxiv.org/pdf/2411.02853",
    "scholar": "https://scholar.google.com/scholar?q=ADOPT%3A+Modified+Adam+can+converge+with+any+%CE%B22+with+the+optimal+rate",
-   "notes": null,
+   "notes": "public/notes/taniguchi2024adopt.pdf",
    "notes_title": "Ref103_Taniguchi_et_al_2024.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "convergence rate",
+    "first-order stationarity",
+    "stochastic gradients"
+   ],
+   "result": "Normalize by the previous second moment, then momentum: optimal O(1/√T) for any β2.",
+   "tabs": [
+    [
+     "toy",
+     "Where Adam fails"
+    ],
+    [
+     "beta2",
+     "Any β2"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "toy",
+    "convergence rate": "beta2",
+    "first-order stationarity": "beta2",
+    "stochastic gradients": "toy"
+   },
+   "thumb": "public/thumbs/taniguchi2024adopt.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6430,17 +7561,36 @@
      "B. Theory for Adaptive, Large-Step Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://proceedings.mlr.press/v80/gupta18a.html",
+   "pdf": "https://arxiv.org/pdf/1802.09568",
    "scholar": "https://scholar.google.com/scholar?q=Shampoo%3A+Preconditioned+stochastic+tensor+optimization",
-   "notes": null,
+   "notes": "public/notes/gupta2018shampoo.pdf",
    "notes_title": "Ref104_Gupta_Koren_Singer_2018.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "preconditioning",
+    "second-order method",
+    "convergence rate"
+   ],
+   "result": "Left/right Kronecker-factored preconditioner L^{-1/4} G R^{-1/4}; O(√T) regret, m² + n² memory.",
+   "tabs": [
+    [
+     "rotate",
+     "Rotated valley"
+    ],
+    [
+     "matrix",
+     "Matrix problem"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "rotate",
+    "preconditioning": "matrix",
+    "second-order method": "matrix",
+    "convergence rate": "matrix"
+   },
+   "thumb": "public/thumbs/gupta2018shampoo.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6473,17 +7623,38 @@
      "D. Modern Optimizers Through the Non-Convex Lens"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2405.15682",
+   "pdf": "https://arxiv.org/pdf/2405.15682",
    "scholar": "https://scholar.google.com/scholar?q=The+road+less+scheduled",
-   "notes": null,
+   "notes": "public/notes/defazio2024road.pdf",
    "notes_title": "Ref105_Defazio_et_al_2024.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "schedule-free",
+    "weight averaging",
+    "momentum",
+    "convergence rate",
+    "step size"
+   ],
+   "result": "SGD on z, average x, gradients at y = (1 − β)z + βx: no schedule, no horizon, optimal convex rate.",
+   "tabs": [
+    [
+     "three",
+     "Three sequences"
+    ],
+    [
+     "anytime",
+     "No horizon needed"
+    ]
+   ],
+   "tag_tabs": {
+    "schedule-free": "three",
+    "weight averaging": "three",
+    "momentum": "three",
+    "convergence rate": "anytime",
+    "step size": "anytime"
+   },
+   "thumb": "public/thumbs/defazio2024road.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6530,17 +7701,38 @@
      "A. Degenerate and Non-Smooth Saddles"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2411.07061",
+   "pdf": "https://arxiv.org/pdf/2411.07061",
    "scholar": "https://scholar.google.com/scholar?q=General+framework+for+online-to-nonconvex+conversion%3A+Schedule-free+SGD+is+also+effective+for+nonconvex+optimization",
-   "notes": null,
+   "notes": "public/notes/ahn2025general.pdf",
    "notes_title": "Ref106_Ahn_Magakyan_Cutkosky_2025.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "schedule-free",
+    "nonsmooth loss",
+    "first-order stationarity",
+    "convergence rate",
+    "lower bound"
+   ],
+   "result": "Schedule-free SGD is optimal for nonsmooth nonconvex stationarity: O(ε⁻⁴) smooth, O(ε^(−3.5)) second-order smooth.",
+   "tabs": [
+    [
+     "kink",
+     "Nonsmooth landscape"
+    ],
+    [
+     "rates",
+     "Optimal rates"
+    ]
+   ],
+   "tag_tabs": {
+    "schedule-free": "kink",
+    "nonsmooth loss": "kink",
+    "first-order stationarity": "kink",
+    "convergence rate": "rates",
+    "lower bound": "rates"
+   },
+   "thumb": "public/thumbs/ahn2025general.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6578,17 +7770,36 @@
      "B. Theory for Adaptive, Large-Step Training"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://arxiv.org/abs/2510.09827",
+   "pdf": "https://arxiv.org/pdf/2510.09827",
    "scholar": "https://scholar.google.com/scholar?q=An+exploration+of+non-euclidean+gradient+descent%3A+Muon+and+its+many+variants",
-   "notes": null,
+   "notes": "public/notes/crawshaw2026exploration.pdf",
    "notes_title": "Ref107_Crawshaw_Modi_Liu_Gower_2026.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "adaptive methods",
+    "preconditioning",
+    "steepest descent",
+    "step size"
+   ],
+   "result": "Muon = constrained steepest descent in the spectral norm; product norms give MuonMax, Momo adds robustness.",
+   "tabs": [
+    [
+     "steps",
+     "Steepest in which norm?"
+    ],
+    [
+     "lmo",
+     "Polar factor"
+    ]
+   ],
+   "tag_tabs": {
+    "adaptive methods": "steps",
+    "preconditioning": "lmo",
+    "steepest descent": "steps",
+    "step size": "steps"
+   },
+   "thumb": "public/thumbs/crawshaw2026exploration.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6611,17 +7822,36 @@
      "G. Empirical Views of the Landscape"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html",
+   "pdf": "https://arxiv.org/pdf/1512.03385",
    "scholar": "https://scholar.google.com/scholar?q=Deep+residual+learning+for+image+recognition",
-   "notes": null,
+   "notes": "public/notes/he2016deep.pdf",
    "notes_title": "Ref108_He_Zhang_Ren_Sun_2016.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "architecture",
+    "skip connections",
+    "initialization",
+    "loss landscape visualization"
+   ],
+   "result": "Identity shortcuts y = F(x) + x fix the degradation of deep plain nets; deeper ResNets train better.",
+   "tabs": [
+    [
+     "chain",
+     "Plain vs residual"
+    ],
+    [
+     "imagenet",
+     "Degradation"
+    ]
+   ],
+   "tag_tabs": {
+    "architecture": "chain",
+    "skip connections": "chain",
+    "initialization": "chain",
+    "loss landscape visualization": "imagenet"
+   },
+   "thumb": "public/thumbs/he2016deep.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6644,17 +7874,34 @@
      "A. Asymptotic Avoidance: GD Almost Never Converges to a"
     ]
    ],
-   "link": null,
+   "link": "https://doi.org/10.1007/978-1-4757-1947-5",
    "pdf": null,
    "scholar": "https://scholar.google.com/scholar?q=Global+Stability+of+Dynamical+Systems",
-   "notes": null,
+   "notes": "public/notes/shub1987global.pdf",
    "notes_title": "Ref109_Shub_1987.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "stable manifold",
+    "saddle avoidance",
+    "strict saddle"
+   ],
+   "result": "Stable-manifold theorems: starts converging to a fixed point with an expanding direction form a measure-zero manifold, the basis of GD saddle avoidance.",
+   "tabs": [
+    [
+     "manifold",
+     "Stable manifold"
+    ],
+    [
+     "curve",
+     "Tangent, not equal"
+    ]
+   ],
+   "tag_tabs": {
+    "stable manifold": "manifold",
+    "saddle avoidance": "manifold",
+    "strict saddle": "curve"
+   },
+   "thumb": "public/thumbs/shub1987global.webp",
    "summary": "",
    "assumptions": ""
   },
@@ -6692,17 +7939,38 @@
      "E. Finite-Width Guarantees with Feature Learning"
     ]
    ],
-   "link": null,
-   "pdf": null,
+   "link": "https://papers.nips.cc/paper/2019/hash/ae614c557843b1df326cb29c57225459-Abstract.html",
+   "pdf": "https://arxiv.org/pdf/1812.07956",
    "scholar": "https://scholar.google.com/scholar?q=On+lazy+training+in+differentiable+programming",
-   "notes": null,
+   "notes": "public/notes/chizat2019lazy.pdf",
    "notes_title": "Ref110_Chizat_Oyallon_Bach_2019.pdf",
-   "visual": false,
-   "tags": [],
-   "result": "",
-   "tabs": [],
-   "tag_tabs": {},
-   "thumb": null,
+   "visual": true,
+   "tags": [
+    "lazy training",
+    "kernel",
+    "overparameterization",
+    "initialization",
+    "ReLU network"
+   ],
+   "result": "Lazy training comes from scaling: training follows the linearization (O(1/α) motion); it hurts performance in practice.",
+   "tabs": [
+    [
+     "scale",
+     "Scale makes it linear"
+    ],
+    [
+     "neurons",
+     "Lazy vs active neurons"
+    ]
+   ],
+   "tag_tabs": {
+    "lazy training": "scale",
+    "kernel": "scale",
+    "overparameterization": "neurons",
+    "initialization": "neurons",
+    "ReLU network": "neurons"
+   },
+   "thumb": "public/thumbs/chizat2019lazy.webp",
    "summary": "",
    "assumptions": ""
   },

@@ -37,6 +37,9 @@ references) and prints **"NEW WORK — notes but no visual yet"**.
 For every key in that list run the **paper-visuals** skill. Read the original paper (official PDF) and the notes
 fully; trust the notes' math but verify every claim against the paper; write the verified findings (with theorem
 numbers, the survey number, and anything the survey or notes get wrong) into `research/findings.md`.
+For a large batch (more than ~10 pages) split it across parallel sessions, one git worktree and branch each, with a
+shared brief like `research/round3/BRIEF.md` (own port, own findings/links files, no shared files touched); then
+merge the branches, fold the findings and links in, and do step 6 once on main.
 
 ## 6. Thumbnails, resync, check, ship
 - `python scripts/serve.py` (or preview "survey-atlas"), open `http://localhost:8570/thumbs.html?only=<k1>,<k2>`, wait for "done".

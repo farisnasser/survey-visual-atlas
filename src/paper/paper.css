@@ -86,7 +86,7 @@ main { max-width: 1440px; margin: 0 auto; padding: 0 max(16px, env(safe-area-ins
 .notes, .tracker { margin-top: 34px; }
 .sec-h { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 12px; }
 .sec-h h2 { font: 700 19px var(--display); letter-spacing: -.01em; }
-.sec-h .sub { font: 400 12px var(--mono); color: var(--muted); }
+.sec-h .sub { font: 400 12px var(--mono); color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
 .pdfview { background: #161b30; border: 1px solid var(--line-soft); border-radius: 16px; padding: 18px; display: grid; gap: 16px; justify-items: center; max-height: 1100px; overflow: auto; }
 .pdfview canvas { width: 100%; max-width: 900px; height: auto; background: #fff; border-radius: 4px; box-shadow: 0 8px 30px rgba(0, 0, 0, .35); }
 .pdfview .loading { color: var(--muted); font: 400 13px var(--mono); padding: 40px; }
