@@ -52,8 +52,8 @@
   "drive_id": "1VV7rO5TXEAetlAxkExE_pkuParo9I6er"
  },
  "wu2025loss": {
-  "file": "Wu_2025_Study_Notes.pdf",
-  "drive_id": "1pb4EGba8zjCEXxbEIHwx7fjOS0Nso98-"
+  "file": "49_Wu_Simsek_Ged_ReLU_Stationarity.pdf",
+  "drive_id": "1wAR16B7TQYFjs-t6LRophr55KM9bIAql"
  },
  "zhang2026saddle": {
   "file": "Zhang_2026_Study_Notes.pdf",
@@ -134,5 +134,261 @@
  "xu2018first": {
   "file": "Ref76_Xu_Jin_Yang_2018.pdf",
   "drive_id": "1_zrznv0ZXwYZWcX_4W20IP8u0gJ4n3C5"
+ },
+ "cohen2021gradient": {
+  "file": "Ref_16_Cohen_Edge_of_Stability_Detailed_Notes.pdf",
+  "drive_id": "1QdecsV0H_Nr8LNQDioLD9y1RZsyTURlw"
+ },
+ "lewkowycz2020large": {
+  "file": "Ref_17_Lewkowycz_Catapult_Detailed_Notes.pdf",
+  "drive_id": "1xclZ7M-aioDM5grKpB8vJOVM7SBR1k0S"
+ },
+ "bottou2018optimization": {
+  "file": "Ref_19_Bottou_Curtis_Nocedal_Survey_Detailed_Notes.pdf",
+  "drive_id": "1RGNcMSZUJ8DYCBXVF1sq0jFpfW6Tbj9O"
+ },
+ "jain2017non": {
+  "file": "Ref_20_Jain_Kar_Nonconvex_Monograph_Detailed_Notes.pdf",
+  "drive_id": "1tBdH1VS3oZyV74BhD_NyMvxmz8_e5ylV"
+ },
+ "jin2021nonconvex": {
+  "file": "Ref_21_Jin_Netrapalli_Ge_JACM_Detailed_Notes.pdf",
+  "drive_id": "1tzDtDd58LNnWdUPn5BwIzi9HZZ4YtnQh"
+ },
+ "sun2020optimization": {
+  "file": "22_Sun_Optimization_Overview.pdf",
+  "drive_id": "1B6NLJe_aRz0YbI6vzYZZqfp-gFOn-Lvx"
+ },
+ "sun2020global": {
+  "file": "23_Sun_Global_Landscape_Overview.pdf",
+  "drive_id": "1j1iAOFy-uslEUPEV4Zvhv08lqZkOd9Pm"
+ },
+ "danilova2022recent": {
+  "file": "24_Danilova_Recent_Advances.pdf",
+  "drive_id": "1nLZxZKoCd6uEoNSWvjEdmccciNg2HcNn"
+ },
+ "hochreiter1997flat": {
+  "file": "25_Hochreiter_Schmidhuber_Flat_Minima.pdf",
+  "drive_id": "1EhTSgtVI7M0G3HaUIsDB51KxYsIMhtKh"
+ },
+ "keskar2017large": {
+  "file": "26_Keskar_Large_Batch_Sharp_Minima.pdf",
+  "drive_id": "1ayUbUNXMs9XCM4AFI_OhEaj2SoCEaxKJ"
+ },
+ "dinh2017sharp": {
+  "file": "27_Dinh_Sharp_Minima.pdf",
+  "drive_id": "1qOP9OxE3kcR5ELhqfZuBuHPZZ3xe6TuJ"
+ },
+ "chizat2018global": {
+  "file": "29_Chizat_Bach_Optimal_Transport.pdf",
+  "drive_id": "1SRTpA-nZcEtWIvQndCj2oR4Xr9BTtXem"
+ },
+ "foret2021sharpness": {
+  "file": "Ref100_Foret_Kleiner_Mobahi_Neyshabur_2021.pdf",
+  "drive_id": "1O4_nRzfHWDDdafzXHHDZfqB-JQa3m-cO"
+ },
+ "damian2023self": {
+  "file": "30_Damian_Self_Stabilization.pdf",
+  "drive_id": "1fiJE4Yx2elX_vZWTOIKHGYBq8Cw-XWiu"
+ },
+ "kalra2024warmup": {
+  "file": "Ref99_Kalra_Barkeshli_2024.pdf",
+  "drive_id": "1oq5P7kH2si4GoheKf3oHnBtjreuwicK5"
+ },
+ "nesterov2006cubic": {
+  "file": "32_Nesterov_Polyak_Cubic.pdf",
+  "drive_id": "1ZoT6QZFnYTCeAFMLuutiEo2y0V72Yx9g"
+ },
+ "zhang2020gradient": {
+  "file": "33_Zhang_Gradient_Clipping.pdf",
+  "drive_id": "1Pgtm9ruFBBfpALo1hlx-1srHMlogNmbJ"
+ },
+ "li2023convergence": {
+  "file": "34_Li_Rakhlin_Jadbabaie_Adam.pdf",
+  "drive_id": "1N4NrzyGXtL52Ki1JSK6YoaZ4wtk84L2l"
+ },
+ "apidopoulos2026taming": {
+  "file": "35_Apidopoulos_Lytras_Mertikopoulos_Tamed_SGD.pdf",
+  "drive_id": "1RjYRK7O3gRFmY-Z3r8HikFi9oZQshfWM"
+ },
+ "nesterov2004introductory": {
+  "file": "36_Nesterov_Introductory_Lectures.pdf",
+  "drive_id": "17nYQBjV7pPEH7hXJ86rUmziHLgDx20hd"
+ },
+ "carmon2020lower": {
+  "file": "37_Carmon_Duchi_Hinder_Sidford_Lower_Bounds_I.pdf",
+  "drive_id": "17YwH8lgcRANj_Sc4eyu3VjRCWwMUmXCc"
+ },
+ "robbins1951stochastic": {
+  "file": "38_Robbins_Monro_Stochastic_Approximation.pdf",
+  "drive_id": "1JfgRhkT8RCyRZ_IWWcP0UCOrtd5YbGMV"
+ },
+ "arjevani2023lower": {
+  "file": "40_Arjevani_Lower_Bounds_Stochastic.pdf",
+  "drive_id": "1VfcLqy_BbsRsswfnxiMqhvmLCoc-MQBp"
+ },
+ "polyak1964some": {
+  "file": "41_Polyak_Heavy_Ball.pdf",
+  "drive_id": "1o2EI4NzQG8lYO-VaTzrX1Yo41XZIKCUw"
+ },
+ "duchi2011adaptive": {
+  "file": "42_Duchi_Hazan_Singer_AdaGrad.pdf",
+  "drive_id": "1YldgQh_BE4J19DVLK11pcfmyBAnQ9arz"
+ },
+ "kingma2015adam": {
+  "file": "43_Kingma_Ba_Adam.pdf",
+  "drive_id": "1bIArQCvyPAL3pErhI7z0xoH8Hgiyhj9g"
+ },
+ "haeffele2017global": {
+  "file": "47_Haeffele_Vidal_Global_Optimality.pdf",
+  "drive_id": "10aJVB81Pch0oBw5mc-mz-YsgqVIKsmx4"
+ },
+ "islamov2024loss": {
+  "file": "50_Islamov_Alpha_Beta_Landscapes.pdf",
+  "drive_id": "1p-TT6jbmiF-CMJvzxZfhgXeopxmEnEhs"
+ },
+ "bhojanapalli2016dropping": {
+  "file": "52_Bhojanapalli_Factored_GD.pdf",
+  "drive_id": "1GZ18UG9aux98rMzf5az832aWZunjTmBj"
+ },
+ "anandkumar2016efficient": {
+  "file": "54_Anandkumar_Ge_Higher_Order.pdf",
+  "drive_id": "17xD2Yl_KUy1f4xbKjXp6h7zRmO7T4g9W"
+ },
+ "goodfellow2015qualitatively": {
+  "file": "56_Goodfellow_Vinyals_Saxe_Loss_Paths.pdf",
+  "drive_id": "1pBFilvEcJuhwftqB84fd-4nqEOtfdvOo"
+ },
+ "panageas2019first": {
+  "file": "57_Panageas_Vanishing_Step_Sizes.pdf",
+  "drive_id": "1ZBXZ-zx7qNB-9gBzkp6qPHA1DKWsjKQm"
+ },
+ "mertikopoulos2020almost": {
+  "file": "58_Mertikopoulos_Hallak_Kavis_Cevher_SGD.pdf",
+  "drive_id": "1VVFVilyNmZ8tB00A2xWHa8ueO0ZX4l_s"
+ },
+ "antonakopoulos2022adagrad": {
+  "file": "59_Antonakopoulos_AdaGrad_Saddles.pdf",
+  "drive_id": "1Uj27wnYLRwVLi1_xHlDYzQG9qAcFzyOX"
+ },
+ "cheridito2024gradient": {
+  "file": "60_Cheridito_Jentzen_Rossmannek_ReLU.pdf",
+  "drive_id": "1VhJ_eJR9sH1TMHTF0k9AZlyH7RA3boxR"
+ },
+ "du2017gradient": {
+  "file": "61_Du_Jin_Lee_Exponential_Escape.pdf",
+  "drive_id": "1e5HXNWOkuyJJBLs-zc7bJkw9_AatKFul"
+ },
+ "zhang2021escape": {
+  "file": "Ref78_Zhang_Li_2021.pdf",
+  "drive_id": "17nSzPjY3gMZX9moVQ3YNtRQrJuVX25Gc"
+ },
+ "wang2019spiderboost": {
+  "file": "Ref80_Wang_Ji_2019.pdf",
+  "drive_id": "1Vw7_b2MZgymadjPLEGBXoVB7mRk-EJJ0"
+ },
+ "allenzhu2018natasha": {
+  "file": "Ref81_Allen_Zhu_2018.pdf",
+  "drive_id": "10nqarV7hGnfyGX8G3LZPbUlX9pAdz8g3"
+ },
+ "ge2019stabilized": {
+  "file": "Ref82_Ge_Li_Wang_Wang_2019.pdf",
+  "drive_id": "1r30yq2IMtubL9umSwRf3iPSHeFtC2Hb4"
+ },
+ "li2019ssrgd": {
+  "file": "Ref83_Li_2019.pdf",
+  "drive_id": "1NB-gJYzv57NEGO_dkl8X3BzGDZNvTidC"
+ },
+ "chen2022faster": {
+  "file": "Ref84_Chen_Zhou_Gu_2022.pdf",
+  "drive_id": "1DPOJ9gtfSuYo0oOmIP6JCCTtEC-_UbBJ"
+ },
+ "staib2019escaping": {
+  "file": "Ref85_Staib_Reddi_Kale_Kumar_Sra_2019.pdf",
+  "drive_id": "1emibwNUdnGPdiBWilnhGWTaC3tuzMzvK"
+ },
+ "zou2019improved": {
+  "file": "Ref86_Zou_Gu_2019.pdf",
+  "drive_id": "1BjRzEXS4lOOkBSXG-KPFHzYrg90J2fjH"
+ },
+ "arora2019fine": {
+  "file": "Ref87_Arora_Du_Hu_Li_Wang_2019.pdf",
+  "drive_id": "1IeXfPy79nbOGmP4JSujfjlBnJiYnwCrf"
+ },
+ "nguyen2021proof": {
+  "file": "Ref88_Nguyen_2021.pdf",
+  "drive_id": "1ochPRTDk6K5RApl5EIA7dPdatKB8F7On"
+ },
+ "mei2019mean": {
+  "file": "Ref89_Mei_Misiakiewicz_Montanari_2019.pdf",
+  "drive_id": "1-6Zg89tbXDQvtSMiJFjdbW8IBNDCU_xx"
+ },
+ "lu2020mean": {
+  "file": "Ref90_Lu_Ma_Lu_Lu_Ying_2020.pdf",
+  "drive_id": "1OnE-9lIA_w7Q8D6voN_yX8lh1nhjiIJM"
+ },
+ "li2020learning": {
+  "file": "Ref91_Li_Ma_Zhang_2020.pdf",
+  "drive_id": "1H5uFAgutiuOUX-qheJJKN72UsKymTlA8"
+ },
+ "xu2023over": {
+  "file": "Ref92_Xu_Du_2023.pdf",
+  "drive_id": "1X61VJuo7CGBrKGdeROm4uWqEZMVWqaWy"
+ },
+ "zhang2019lookahead": {
+  "file": "Ref94_Zhang_Lucas_Hinton_Ba_2019.pdf",
+  "drive_id": "1ZTlH4D_OBR9WbSMetwp2885Ut-c_Yy5U"
+ },
+ "wang2022analyzing": {
+  "file": "Ref95_Li_Wang_Li_2022.pdf",
+  "drive_id": "1m0efnyk0_O7d829YfB7DNML79kOdZmvv"
+ },
+ "chen2023beyond": {
+  "file": "Ref96_Chen_Bruna_2023.pdf",
+  "drive_id": "1YC9hcyB8Av2w_p8biCwm8bYkN5sVK4Mc"
+ },
+ "mohtashami2023special": {
+  "file": "Ref97_Mohtashami_Jaggi_Stich_2023.pdf",
+  "drive_id": "1jR_lOKe3R9q22BuEXeLB1d2g4WlxmUIw"
+ },
+ "agarwala2023sam": {
+  "file": "Ref101_Agarwala_Dauphin_2023.pdf",
+  "drive_id": "1sIR3scElNbTmrABESpDNjSdyHMvW3Hcy"
+ },
+ "shin2025sassha": {
+  "file": "Ref102_Shin_Lee_Chung_Lee_2025.pdf",
+  "drive_id": "1_-DCGjkKzXMyntunwOa075sPOLZ3j3_N"
+ },
+ "taniguchi2024adopt": {
+  "file": "Ref103_Taniguchi_et_al_2024.pdf",
+  "drive_id": "1DsrzzGCXP5glF_T7NLNbYGhqNFmRCe11"
+ },
+ "gupta2018shampoo": {
+  "file": "Ref104_Gupta_Koren_Singer_2018.pdf",
+  "drive_id": "1Vbc-FQeX8cV21zcscXdpcINYIl1obdnK"
+ },
+ "defazio2024road": {
+  "file": "Ref105_Defazio_et_al_2024.pdf",
+  "drive_id": "1gBNtHg7yewPmbczZfWIFN0lFi_mxQDkv"
+ },
+ "ahn2025general": {
+  "file": "Ref106_Ahn_Magakyan_Cutkosky_2025.pdf",
+  "drive_id": "10w-g7vV6wGX0OrAbmBI0fnex9NulMyn2"
+ },
+ "crawshaw2026exploration": {
+  "file": "Ref107_Crawshaw_Modi_Liu_Gower_2026.pdf",
+  "drive_id": "19XqM5nR2sKqsDEH5FfY2iBeQBv3p-gi5"
+ },
+ "he2016deep": {
+  "file": "Ref108_He_Zhang_Ren_Sun_2016.pdf",
+  "drive_id": "1j3XTvyuKFO-e4TG9pET8al9KtnZuS6OX"
+ },
+ "shub1987global": {
+  "file": "Ref109_Shub_1987.pdf",
+  "drive_id": "1LjCBSKfXTQnHAlgAJr-OKveMW6r0HKMB"
+ },
+ "chizat2019lazy": {
+  "file": "Ref110_Chizat_Oyallon_Bach_2019.pdf",
+  "drive_id": "1ffjJ4hiPZ5u_Qr4q30P6LB4S67uORYQN"
  }
 }

@@ -71,10 +71,65 @@
    "link": "https://proceedings.mlr.press/v97/allen-zhu19a.html",
    "pdf": "https://proceedings.mlr.press/v97/allen-zhu19a/allen-zhu19a.pdf"
   },
+  "16": {
+   "key": "cohen2021gradient",
+   "link": null,
+   "pdf": null
+  },
+  "17": {
+   "key": "lewkowycz2020large",
+   "link": null,
+   "pdf": null
+  },
   "18": {
    "key": "zhang2026saddle",
    "link": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/5e96d63b20f335f57999a1aca7fa0474-Abstract-Conference.html",
    "pdf": "https://proceedings.iclr.cc/paper_files/paper/2026/file/5e96d63b20f335f57999a1aca7fa0474-Paper-Conference.pdf"
+  },
+  "19": {
+   "key": "bottou2018optimization",
+   "link": null,
+   "pdf": null
+  },
+  "20": {
+   "key": "jain2017non",
+   "link": null,
+   "pdf": null
+  },
+  "21": {
+   "key": "jin2021nonconvex",
+   "link": null,
+   "pdf": null
+  },
+  "22": {
+   "key": "sun2020optimization",
+   "link": null,
+   "pdf": null
+  },
+  "23": {
+   "key": "sun2020global",
+   "link": null,
+   "pdf": null
+  },
+  "24": {
+   "key": "danilova2022recent",
+   "link": null,
+   "pdf": null
+  },
+  "25": {
+   "key": "hochreiter1997flat",
+   "link": null,
+   "pdf": null
+  },
+  "26": {
+   "key": "keskar2017large",
+   "link": null,
+   "pdf": null
+  },
+  "27": {
+   "key": "dinh2017sharp",
+   "link": null,
+   "pdf": null
   },
   "28": {
    "key": "martens2010deep",
@@ -96,10 +151,30 @@
    "link": "https://papers.nips.cc/paper_files/paper/2016/hash/f2fc990265c712c49d51a18a32b39f0c-Abstract.html",
    "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/f2fc990265c712c49d51a18a32b39f0c-Paper.pdf"
   },
+  "32": {
+   "key": "chizat2018global",
+   "link": null,
+   "pdf": null
+  },
   "33": {
    "key": "allenzhu2018neon2",
    "link": "https://arxiv.org/abs/1711.06673",
    "pdf": "https://arxiv.org/pdf/1711.06673"
+  },
+  "34": {
+   "key": "foret2021sharpness",
+   "link": null,
+   "pdf": null
+  },
+  "35": {
+   "key": "damian2023self",
+   "link": null,
+   "pdf": null
+  },
+  "36": {
+   "key": "kalra2024warmup",
+   "link": null,
+   "pdf": null
   },
   "37": {
    "key": "kalra2025universal",
@@ -121,15 +196,60 @@
    "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
    "pdf": null
   },
+  "41": {
+   "key": "zhang2020gradient",
+   "link": null,
+   "pdf": null
+  },
+  "42": {
+   "key": "li2023convergence",
+   "link": null,
+   "pdf": null
+  },
   "43": {
    "key": "apidopoulos2026taming",
    "link": "https://proceedings.mlr.press/v306/apidopoulos26a.html",
    "pdf": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/apidopoulos26a/apidopoulos26a.pdf"
   },
+  "44": {
+   "key": "nesterov2004introductory",
+   "link": null,
+   "pdf": null
+  },
+  "45": {
+   "key": "carmon2020lower",
+   "link": null,
+   "pdf": null
+  },
+  "46": {
+   "key": "robbins1951stochastic",
+   "link": null,
+   "pdf": null
+  },
   "47": {
    "key": "ghadimi2013stochastic",
    "link": "https://epubs.siam.org/doi/10.1137/120880811",
    "pdf": "https://arxiv.org/pdf/1309.5549"
+  },
+  "48": {
+   "key": "arjevani2023lower",
+   "link": null,
+   "pdf": null
+  },
+  "49": {
+   "key": "polyak1964some",
+   "link": null,
+   "pdf": null
+  },
+  "50": {
+   "key": "duchi2011adaptive",
+   "link": null,
+   "pdf": null
+  },
+  "51": {
+   "key": "kingma2015adam",
+   "link": null,
+   "pdf": null
   },
   "52": {
    "key": "laurent2018deep",
@@ -156,20 +276,65 @@
    "link": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/a86d17b6cd70366d56ab48d2a05a4df1-Abstract-Conference.html",
    "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/a86d17b6cd70366d56ab48d2a05a4df1-Paper-Conference.pdf"
   },
+  "57": {
+   "key": "islamov2024loss",
+   "link": null,
+   "pdf": null
+  },
   "58": {
    "key": "bhojanapalli2016global",
    "link": "https://papers.nips.cc/paper_files/paper/2016/hash/b139e104214a08ae3f2ebcce149cdf6e-Abstract.html",
    "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/b139e104214a08ae3f2ebcce149cdf6e-Paper.pdf"
+  },
+  "59": {
+   "key": "bhojanapalli2016dropping",
+   "link": null,
+   "pdf": null
   },
   "60": {
    "key": "ge2017no",
    "link": "https://proceedings.mlr.press/v70/ge17a.html",
    "pdf": "https://proceedings.mlr.press/v70/ge17a/ge17a.pdf"
   },
+  "61": {
+   "key": "anandkumar2016efficient",
+   "link": null,
+   "pdf": null
+  },
   "62": {
    "key": "li2018visualizing",
    "link": "https://papers.nips.cc/paper/7875-visualizing-the-loss-l",
    "pdf": "https://arxiv.org/pdf/1712.09913"
+  },
+  "63": {
+   "key": "goodfellow2015qualitatively",
+   "link": null,
+   "pdf": null
+  },
+  "64": {
+   "key": "panageas2019first",
+   "link": null,
+   "pdf": null
+  },
+  "65": {
+   "key": "mertikopoulos2020almost",
+   "link": null,
+   "pdf": null
+  },
+  "66": {
+   "key": "antonakopoulos2022adagrad",
+   "link": null,
+   "pdf": null
+  },
+  "67": {
+   "key": "cheridito2024gradient",
+   "link": null,
+   "pdf": null
+  },
+  "68": {
+   "key": "du2017gradient",
+   "link": null,
+   "pdf": null
   },
   "69": {
    "key": "daneshmand2018escaping",
@@ -221,10 +386,150 @@
    "link": "https://arxiv.org/abs/1711.01944",
    "pdf": "https://arxiv.org/pdf/1711.01944"
   },
+  "82": {
+   "key": "zhang2021escape",
+   "link": null,
+   "pdf": null
+  },
   "83": {
    "key": "reddi2016stochastic",
    "link": "https://proceedings.mlr.press/v48/reddi16.html",
    "pdf": "https://proceedings.mlr.press/v48/reddi16.pdf"
+  },
+  "84": {
+   "key": "wang2019spiderboost",
+   "link": null,
+   "pdf": null
+  },
+  "85": {
+   "key": "allenzhu2018natasha",
+   "link": null,
+   "pdf": null
+  },
+  "86": {
+   "key": "ge2019stabilized",
+   "link": null,
+   "pdf": null
+  },
+  "87": {
+   "key": "li2019ssrgd",
+   "link": null,
+   "pdf": null
+  },
+  "88": {
+   "key": "chen2022faster",
+   "link": null,
+   "pdf": null
+  },
+  "89": {
+   "key": "staib2019escaping",
+   "link": null,
+   "pdf": null
+  },
+  "90": {
+   "key": "zou2019improved",
+   "link": null,
+   "pdf": null
+  },
+  "91": {
+   "key": "arora2019fine",
+   "link": null,
+   "pdf": null
+  },
+  "92": {
+   "key": "nguyen2021proof",
+   "link": null,
+   "pdf": null
+  },
+  "93": {
+   "key": "mei2019mean",
+   "link": null,
+   "pdf": null
+  },
+  "94": {
+   "key": "lu2020mean",
+   "link": null,
+   "pdf": null
+  },
+  "95": {
+   "key": "li2020learning",
+   "link": null,
+   "pdf": null
+  },
+  "96": {
+   "key": "xu2023over",
+   "link": null,
+   "pdf": null
+  },
+  "97": {
+   "key": "zhang2019lookahead",
+   "link": null,
+   "pdf": null
+  },
+  "98": {
+   "key": "wang2022analyzing",
+   "link": null,
+   "pdf": null
+  },
+  "99": {
+   "key": "chen2023beyond",
+   "link": null,
+   "pdf": null
+  },
+  "100": {
+   "key": "mohtashami2023special",
+   "link": null,
+   "pdf": null
+  },
+  "101": {
+   "key": "agarwala2023sam",
+   "link": null,
+   "pdf": null
+  },
+  "102": {
+   "key": "shin2025sassha",
+   "link": null,
+   "pdf": null
+  },
+  "103": {
+   "key": "taniguchi2024adopt",
+   "link": null,
+   "pdf": null
+  },
+  "104": {
+   "key": "gupta2018shampoo",
+   "link": null,
+   "pdf": null
+  },
+  "105": {
+   "key": "defazio2024road",
+   "link": null,
+   "pdf": null
+  },
+  "106": {
+   "key": "ahn2025general",
+   "link": null,
+   "pdf": null
+  },
+  "107": {
+   "key": "crawshaw2026exploration",
+   "link": null,
+   "pdf": null
+  },
+  "108": {
+   "key": "he2016deep",
+   "link": null,
+   "pdf": null
+  },
+  "109": {
+   "key": "shub1987global",
+   "link": null,
+   "pdf": null
+  },
+  "110": {
+   "key": "chizat2019lazy",
+   "link": null,
+   "pdf": null
   }
  }
 }
