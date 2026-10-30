@@ -1,0 +1,8 @@
+{
+  "result": "Even for a <b>quadratic program</b> with simple constraints, checking that a point is <b>not a local minimum</b> (or that the objective is not bounded below) is <b>NP-complete</b>; testing copositivity is the core hard problem.",
+  "result_plain": "Deciding whether a point is a local minimum is NP-hard, already for quadratic programs.",
+  "tags": ["computational hardness", "copositivity", "degenerate saddle", "local minimum test"],
+  "tag_tabs": { "computational hardness": "subset", "copositivity": "copositive", "degenerate saddle": "quartic", "local minimum test": "quartic" },
+  "tabs": [["copositive", "Copositivity"], ["quartic", "Silent Hessian"], ["subset", "Subset sum"]],
+  "thumb": "quartic"
+}

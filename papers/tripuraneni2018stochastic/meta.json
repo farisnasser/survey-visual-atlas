@@ -1,0 +1,8 @@
+{
+  "result": "Cubic-regularized Newton steps built from <b>sampled gradients and Hessian-vector products</b> reach ε-second-order stationary points in <b>Õ(ε^{−3.5})</b> stochastic evaluations, faster than perturbed SGD's Õ(ε^{−4}).",
+  "result_plain": "Stochastic cubic regularization: Õ(ε^−3.5) gradient + HVP evaluations to an ε-SOSP.",
+  "tags": ["cubic regularization", "Hessian-vector product", "saddle escape", "second-order stationarity", "stochastic gradients"],
+  "tag_tabs": { "cubic regularization": "model", "Hessian-vector product": "model", "saddle escape": "outer", "second-order stationarity": "outer", "stochastic gradients": "outer" },
+  "tabs": [["model", "Sampled model"], ["outer", "Outer loop"], ["oned", "1D check"]],
+  "thumb": "outer"
+}

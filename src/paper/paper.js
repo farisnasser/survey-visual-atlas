@@ -19,7 +19,7 @@ if (EMBED) document.body.classList.add('embed');
 if (THUMB) document.body.classList.add('thumb');
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-export const statusOf = p => p.visual && p.notes ? ['complete', 'Complete'] : p.visual ? ['visual', 'Visual · no notes yet'] : p.notes ? ['notes', 'Notes only'] : ['queued', 'Queued'];
+export const statusOf = p => p.visual && p.notes ? ['complete', 'Complete'] : p.visual ? ['visual', 'Visual · no notes yet'] : p.notes ? ['notes', 'Notes only'] : ['queued', 'Not started'];
 const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch { /* private mode */ } } };
 
 async function main() {
@@ -41,17 +41,23 @@ async function main() {
   new Shell(visual, parseMath(mathText), data, P, meta);
 }
 
+const ROMAN = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10 };
+const secShort = s => s.replace(/^([IVX]+)\. (.*)$/, (_, r, t) => `${r}. ${t.charAt(0) + t.slice(1).toLowerCase()}`);
+
 function renderHeader(P, meta, db) {
   const [st, stLabel] = statusOf(P);
   const tags = (meta.tags || []).map(t => `<a class="tag" href="./?concept=${encodeURIComponent(t)}">${esc(t)}</a>`).join('');
+  const br = (P.branches || []).map(([id, leaf]) => `<a class="chip" href="./#b-${id}">${id} · ${esc(leaf)}</a>`).join('');
+  const cited = (P.cited || []).map(s => s.split('.')[0]).filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => (ROMAN[a] || 0) - (ROMAN[b] || 0));
   $('#ph').innerHTML = `
-    <div class="row"><span class="chip st-${st}"><i></i>${stLabel}</span><span class="chip">${esc(P.phase)}</span><span class="chip">${esc(P.section)}</span>${P.priority ? `<span class="chip">${esc(P.priority)}</span>` : ''}</div>
+    <div class="row"><span class="chip st-${st}"><i></i>${stLabel}</span><span class="chip mono">survey [${P.n}]</span>${br || '<span class="chip">Background</span>'}</div>
     <h1>${esc(P.title)}</h1>
-    <div class="meta">${esc(P.authors)} · ${esc(P.venue)} ${P.year}</div>
+    <div class="meta">${esc(P.authors)} · ${esc(P.venue)}${P.year ? ' ' + P.year : ''}${cited.length ? ` · <span title="${esc((P.cited || []).map(secShort).join(' · '))}">cited in Sections ${cited.join(', ')}</span>` : ''}</div>
     ${meta.result ? `<p class="result">${meta.result}</p>` : ''}
     <div class="row">
       ${P.link ? `<a class="btnlink" href="${esc(P.link)}" target="_blank" rel="noopener">Paper page ↗</a>` : ''}
       ${P.pdf ? `<a class="btnlink" href="${esc(P.pdf)}" target="_blank" rel="noopener">Paper PDF ↗</a>` : ''}
+      ${!P.link && !P.pdf && P.scholar ? `<a class="btnlink" href="${esc(P.scholar)}" target="_blank" rel="noopener">Find the paper ↗</a>` : ''}
       ${P.notes ? `<a class="btnlink" href="#notes">Study notes</a>` : ''}
       ${tags}
     </div>`;
@@ -59,22 +65,22 @@ function renderHeader(P, meta, db) {
 
 function showEmpty(P) {
   const e = $('#emptyViz'); e.hidden = false;
-  e.innerHTML = `<div><b>${P.notes ? 'Visual not built yet' : 'Not started'}</b>${P.notes ? 'The notes are below. The interactive visual comes next.' : 'This paper is in the tracker but has no notes or visual yet.'}</div>`;
+  e.innerHTML = `<div><b>${P.notes ? 'Visual not built yet' : 'Not started'}</b>${P.notes ? 'The notes are below. The interactive visual comes next.' : 'This reference is in the survey but has no notes or visual yet.'}</div>`;
   ['#tabs', '#mathBtn', '#hud'].forEach(s => $(s).hidden = true);
 }
 
 function renderTracker(P) {
   if (!P.summary && !P.assumptions) return;
-  $('#tracker').innerHTML = `<details><summary>Tracker summary <span>from Papers Master · AI-drafted, team-edited, not verified</span></summary>
+  $('#tracker').innerHTML = `<details><summary>Tracker summary <span>from the old Papers Master sheet · AI-drafted, not verified</span></summary>
     <div class="txt">${P.summary ? `<h3>Summary</h3><div>${esc(P.summary)}</div>` : ''}${P.assumptions ? `<h3>Assumptions &amp; limits</h3><div>${esc(P.assumptions)}</div>` : ''}</div></details>`;
 }
 
 function renderNav(P, db) {
-  const list = db.papers.filter(p => p.visual || p.notes);
+  const list = db.papers.filter(p => p.visual || p.notes).sort((a, b) => a.n - b.n);
   const i = list.findIndex(p => p.key === P.key);
   const prev = i > 0 ? list[i - 1] : null, next = i >= 0 && i < list.length - 1 ? list[i + 1] : null;
   $('#pn').innerHTML = `${prev ? `<a href="paper.html?id=${prev.key}" title="${esc(prev.title)}">← ${esc(prev.short)}</a>` : ''}${next ? `<a href="paper.html?id=${next.key}" title="${esc(next.title)}">${esc(next.short)} →</a>` : ''}`;
-  $('#foot').innerHTML = `<span>Survey Visual Atlas · MLR570 · key <b>${esc(P.key)}</b></span><span>Every surface is a real function; every ball runs a real optimizer. <a href="https://github.com/farisnasser/survey-visual-atlas/tree/main/scripts/check-math">Math checks</a></span>`;
+  $('#foot').innerHTML = `<span>Survey Visual Atlas · MLR570 · survey reference [${P.n}] · key <b>${esc(P.key)}</b></span><span>Every surface is a real function; every ball runs a real optimizer. <a href="https://github.com/farisnasser/survey-visual-atlas/tree/main/scripts/check-math">Math checks</a></span>`;
 }
 
 function renderNotes(P) {
@@ -165,7 +171,7 @@ class Shell {
     if (prev?.leave) prev.leave(ctx);
     this.listeners.forEach(([el, t, f, o]) => el.removeEventListener(t, f, o)); this.listeners = [];
     cancelAnimationFrame(this.raf2d);
-    this.stage.clear();
+    this.stage.clear(); this.stage.frameFns = [];
     Object.values(ctx.charts).forEach(p => p.ro.disconnect()); ctx.charts = {};
     const t = this.tab = this.v.tabs.find(x => x.id === id);
     document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === id));

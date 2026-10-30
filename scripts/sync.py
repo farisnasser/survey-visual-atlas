@@ -1,18 +1,19 @@
-"""Sync the Atlas from Drive exports: Papers Master (.xlsx) -> data/papers.json, notes PDFs -> public/notes/<Key>.pdf.
+"""Sync the Atlas: survey references -> data/papers.json, Drive notes PDFs -> public/notes/<Key>.pdf.
 
-The Google Sheet stays the single source of truth; this script only reads exports of it and never edits Drive.
+Sources (all read-only):
+  data/survey.json        built from the final survey PDF by scripts/build_survey.py — every reference, where it is cited,
+                          and the Fig. 5 taxonomy. This is the source of truth for which papers the Atlas lists.
+  data/atlas_refs.json    survey reference number -> Atlas key + official paper links (hand-maintained)
+  data/notes_map.json     Atlas key -> notes file name in the Drive notes folder + Drive id (hand-maintained)
+  data/legacy_sheet.json  tracker summaries from the old Papers Master sheet (frozen; shown as "AI-drafted")
+  papers/<Key>/meta.json  per-paper result, tags, tabs (written with each visual)
 
 usage:
-  python scripts/sync.py --xlsx <Papers Master.xlsx> [--notes-dir <folder with downloaded notes PDFs>]
-                         [--drive-listing <notes folder listing .json>]
+  python scripts/sync.py [--notes-dir <folder with the downloaded notes PDFs>]
 
-What it does
-  1. Reads the "Papers" tab (columns A-N; column O "Our notes" is private team scribble and is NOT published).
-  2. Matches each notes PDF to a Key by first-author surname tokens + year (e.g. Allen_Zhu_2019_Study_Notes.pdf ->
-     allenzhu2019convergence). Unmatched or ambiguous files are reported, never guessed.
-  3. Copies matched notes to public/notes/<Key>.pdf and records them in data/notes_map.json.
-  4. Writes data/papers.json, adding: short name, notes path, visual flag (papers/<Key>/visual.js exists),
-     tags + result from papers/<Key>/meta.json, thumbnail path if public/thumbs/<Key>.webp exists.
+Notes files are matched by the exact file name recorded in notes_map.json (the Drive names follow no single
+pattern, e.g. "Ref71_Carmon_Duchi_2019.pdf" uses an old working number). PDFs in --notes-dir that are not in the
+map are listed so they can be mapped by hand after reading their title page; nothing is guessed.
 """
 import argparse
 import datetime as dt
@@ -20,121 +21,123 @@ import json
 import os
 import re
 import shutil
-import sys
-
-import openpyxl
+import unicodedata
+from urllib.parse import quote_plus
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-COLS = ["Key", "Title", "Authors", "Year", "Venue", "Phase", "Survey section", "Lead (auto)", "Priority", "Link", "PDF",
-        "Summary (AI)", "Assumptions & limits (AI)", "Status"]
+STOP = {"a", "an", "the", "on", "in", "of", "for", "to", "how", "why", "what", "when", "does", "do", "is", "are", "can", "and", "with", "via", "from", "by"}
 
 
-def first_surname(authors):
-    a = re.sub(r"\bet al\.?", "", authors.split(",")[0]).strip()
-    return a.split()[-1] if a else ""
+def load(name, default=None):
+    p = os.path.join(ROOT, "data", name)
+    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else default
 
 
-def tokens(s):
-    return re.findall(r"[a-z]+|\d+", s.lower())
+def author_list(s):
+    s = re.sub(r",?\s+and\s+", ", ", s)
+    return [a.strip() for a in s.split(",") if a.strip() and a.strip() != "et al."]
 
 
-def read_sheet(path):
-    wb = openpyxl.load_workbook(path)
-    ws = wb["Papers"]
-    hdr = [c.value for c in ws[1]]
-    missing = [c for c in COLS if c not in hdr]
-    if missing:
-        sys.exit(f"Sheet columns changed; missing {missing}. Update COLS in scripts/sync.py.")
-    ix = {c: hdr.index(c) for c in COLS}
-    rows = []
-    for r in ws.iter_rows(min_row=2):
-        key = r[ix["Key"]].value
-        if not key:
-            continue
-        link_cell, pdf_cell = r[ix["Link"]], r[ix["PDF"]]
-        rows.append({
-            "key": str(key).strip(),
-            "title": str(r[ix["Title"]].value or "").strip(),
-            "authors": str(r[ix["Authors"]].value or "").strip(),
-            "year": int(float(r[ix["Year"]].value)) if r[ix["Year"]].value else None,
-            "venue": str(r[ix["Venue"]].value or "").strip(),
-            "phase": str(r[ix["Phase"]].value or "").strip(),
-            "section": str(r[ix["Survey section"]].value or "").strip(),
-            "priority": str(r[ix["Priority"]].value or "").strip(),
-            "link": link_cell.hyperlink.target if link_cell.hyperlink else None,
-            "pdf": pdf_cell.hyperlink.target if pdf_cell.hyperlink else None,
-            "summary": str(r[ix["Summary (AI)"]].value or "").replace("\r\n", "\n").strip(),
-            "assumptions": str(r[ix["Assumptions & limits (AI)"]].value or "").replace("\r\n", "\n").strip(),
-            "sheet_status": str(r[ix["Status"]].value or "").strip(),
-        })
-    return rows
+PARTICLES = {"von", "van", "de", "da", "der", "den", "di", "le"}
 
 
-def match_notes(files, rows):
-    out, problems = {}, []
-    for f in files:
-        tk = set(tokens(os.path.splitext(os.path.basename(f))[0]))
-        cands = [r for r in rows if str(r["year"]) in tk and all(p in tk for p in tokens(first_surname(r["authors"])))]
-        if len(cands) == 1:
-            out[f] = cands[0]["key"]
-        else:
-            problems.append((f, [c["key"] for c in cands]))
-    return out, problems
+def surname(a):
+    w = re.sub(r"\bet al\.?", "", a).split()
+    if not w:
+        return ""
+    k = len(w) - 1
+    while k > 0 and w[k - 1].lower() in PARTICLES:
+        k -= 1
+    return " ".join(w[k:])
+
+
+def ascii_key(s):
+    return re.sub(r"[^a-z0-9]", "", unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower())
+
+
+def short_name(authors, year):
+    al = author_list(authors)
+    sn = [surname(a) for a in al]
+    y = f" {year}" if year else ""
+    if len(sn) == 1:
+        return sn[0] + y
+    if len(sn) == 2:
+        return f"{sn[0]} & {sn[1]}{y}"
+    return f"{sn[0]} et al.{y}" if sn else (authors[:30] + y)
+
+
+def auto_key(r, taken):
+    sn = ascii_key(surname(author_list(r["authors"])[0])) if r["authors"] else "anon"
+    word = next((w for w in re.findall(r"[A-Za-z]+", r["title"]) if w.lower() not in STOP), "x").lower()
+    k = f"{sn}{r['year'] or ''}{word}"
+    while k in taken:
+        k += "b"
+    return k
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--xlsx", required=True)
     ap.add_argument("--notes-dir")
-    ap.add_argument("--drive-listing", help="JSON list of {id,title} for the Drive notes folder (optional, recorded in notes_map)")
     a = ap.parse_args()
-    rows = read_sheet(a.xlsx)
-    keys = [r["key"] for r in rows]
-    dup = {k for k in keys if keys.count(k) > 1}
-    if dup:
-        sys.exit(f"Duplicate Keys in the sheet: {dup}")
-    map_path = os.path.join(ROOT, "data", "notes_map.json")
-    nmap = json.load(open(map_path, encoding="utf-8")) if os.path.exists(map_path) else {}
-    drive = {d["title"]: d["id"] for d in json.load(open(a.drive_listing, encoding="utf-8"))} if a.drive_listing else {}
+    S = load("survey.json")
+    amap = load("atlas_refs.json")["refs"]
+    nmap = load("notes_map.json", {})
+    legacy = load("legacy_sheet.json", {"refs": {}})["refs"]
+    by_file = {v["file"]: k for k, v in nmap.items()}
     if a.notes_dir:
-        files = [os.path.join(a.notes_dir, f) for f in os.listdir(a.notes_dir) if f.lower().endswith(".pdf")]
-        matched, problems = match_notes(files, rows)
         os.makedirs(os.path.join(ROOT, "public", "notes"), exist_ok=True)
-        for f, k in matched.items():
-            shutil.copyfile(f, os.path.join(ROOT, "public", "notes", f"{k}.pdf"))
-            nmap[k] = {"file": os.path.basename(f), "drive_id": drive.get(os.path.basename(f), nmap.get(k, {}).get("drive_id"))}
-            print(f"notes  {os.path.basename(f):45s} -> {k}")
-        for f, c in problems:
-            print(f"UNMATCHED notes file {os.path.basename(f)} (candidates: {c or 'none'}) — rename it or add it to notes_map.json by hand")
-        json.dump(nmap, open(map_path, "w", encoding="utf-8"), indent=1)
+        for f in sorted(os.listdir(a.notes_dir)):
+            if not f.lower().endswith(".pdf"):
+                continue
+            k = by_file.get(f)
+            if k:
+                shutil.copyfile(os.path.join(a.notes_dir, f), os.path.join(ROOT, "public", "notes", f"{k}.pdf"))
+                print(f"notes  {f:58s} -> {k}")
+            else:
+                print(f"UNMAPPED notes file {f} — read its title page, then add it to data/notes_map.json")
+    leaves = {}
+    for br in S["taxonomy"]:
+        for lf in br["leaves"]:
+            for n in lf["refs"]:
+                leaves.setdefault(n, []).append([br["id"], lf["name"]])
+    taken = {v["key"] for v in amap.values()}
     papers = []
-    for r in rows:
-        k = r["key"]
-        meta_p = os.path.join(ROOT, "papers", k, "meta.json")
+    for n_s, r in S["refs"].items():
+        n = int(n_s)
+        m = amap.get(n_s)
+        key = m["key"] if m else auto_key(r, taken)
+        taken.add(key)
+        meta_p = os.path.join(ROOT, "papers", key, "meta.json")
         meta = json.load(open(meta_p, encoding="utf-8")) if os.path.exists(meta_p) else {}
-        notes_file = os.path.join(ROOT, "public", "notes", f"{k}.pdf")
-        sn = first_surname(r["authors"])
-        papers.append({**r,
-                       "short": f"{sn} {r['year']}",
-                       "notes": f"public/notes/{k}.pdf" if os.path.exists(notes_file) else None,
-                       "notes_title": nmap.get(k, {}).get("file"),
-                       "visual": os.path.exists(os.path.join(ROOT, "papers", k, "visual.js")),
-                       "tags": meta.get("tags", []),
-                       "result": meta.get("result_plain") or "",
-                       "tabs": meta.get("tabs", []),
-                       "tag_tabs": meta.get("tag_tabs", {}),
-                       "thumb": next((f"public/thumbs/{k}.{e}" for e in ("webp", "png") if os.path.exists(os.path.join(ROOT, "public", "thumbs", f"{k}.{e}"))), None)})
-    out = {"synced": dt.datetime.now().strftime("%Y-%m-%d %H:%M"), "source": "Google Sheet 'Papers Master' (Drive: MLR570 Project / NonConvex Survey)", "papers": papers}
+        lg = legacy.get(n_s, {})
+        cited = []
+        for sec, _ in r["cited_in"]:
+            if sec not in cited:
+                cited.append(sec)
+        papers.append({
+            "n": n, "key": key, "title": r["title"] or r["text"], "authors": r["authors"], "year": r["year"], "venue": r["venue"],
+            "short": short_name(r["authors"], r["year"]), "ref": r["text"],
+            "branches": leaves.get(n, []), "cited": cited, "cited_detail": r["cited_in"],
+            "link": (m or {}).get("link") or lg.get("link"), "pdf": (m or {}).get("pdf") or lg.get("pdf"),
+            "scholar": "https://scholar.google.com/scholar?q=" + quote_plus(r["title"] or r["text"][:120]),
+            "notes": f"public/notes/{key}.pdf" if os.path.exists(os.path.join(ROOT, "public", "notes", f"{key}.pdf")) else None,
+            "notes_title": nmap.get(key, {}).get("file"),
+            "visual": os.path.exists(os.path.join(ROOT, "papers", key, "visual.js")),
+            "tags": meta.get("tags", []), "result": meta.get("result_plain") or "", "tabs": meta.get("tabs", []), "tag_tabs": meta.get("tag_tabs", {}),
+            "thumb": next((f"public/thumbs/{key}.{e}" for e in ("webp", "png") if os.path.exists(os.path.join(ROOT, "public", "thumbs", f"{key}.{e}"))), None),
+            "summary": lg.get("summary", ""), "assumptions": lg.get("assumptions", ""),
+        })
+    out = {"synced": dt.datetime.now().strftime("%Y-%m-%d %H:%M"), "source": S["source"], "survey": {"title": S["title"], "authors": S["authors"]},
+           "taxonomy": [{"id": b["id"], "name": b["name"], "leaves": [lf["name"] for lf in b["leaves"]]} for b in S["taxonomy"]], "papers": papers}
     json.dump(out, open(os.path.join(ROOT, "data", "papers.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
-    n_notes = sum(1 for p in papers if p["notes"])
-    n_vis = sum(1 for p in papers if p["visual"])
-    print(f"papers.json: {len(papers)} papers, {n_notes} with notes, {n_vis} with visuals")
-    no_notes_but_read = [p["key"] for p in papers if p["sheet_status"] == "Read" and not p["notes"]]
-    if no_notes_but_read:
-        print("marked Read in the sheet but no notes PDF:", no_notes_but_read)
-    notes_no_visual = [p["key"] for p in papers if p["notes"] and not p["visual"]]
-    if notes_no_visual:
-        print("NEW WORK — notes but no visual yet:", notes_no_visual)
+    nn = sum(1 for p in papers if p["notes"]); nv = sum(1 for p in papers if p["visual"]); nb = sum(1 for p in papers if p["notes"] and p["visual"])
+    print(f"papers.json: {len(papers)} survey references, {nn} with notes, {nv} with visuals, {nb} complete")
+    todo = [f"[{p['n']}] {p['key']}" for p in papers if p["notes"] and not p["visual"]]
+    if todo:
+        print("NEW WORK — notes but no visual yet:", ", ".join(todo))
+    missing = [k for k in nmap if not os.path.exists(os.path.join(ROOT, "public", "notes", f"{k}.pdf"))]
+    if missing:
+        print("in notes_map.json but no PDF copied yet (run with --notes-dir):", missing)
 
 
 if __name__ == "__main__":

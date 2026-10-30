@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Survey Visual Atlas</title>
-<meta name="description" content="Every paper in the MLR570 survey on non-convex optimization in neural networks, each with an interactive 3D visual of its core ideas, the math behind it, and study notes.">
+<meta name="description" content="Every reference of the MLR570 survey on non-convex optimization in neural networks, organized by the survey taxonomy, with interactive 3D visuals of the core ideas, the math behind them, and study notes.">
 <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
   <div class="hero-in">
     <div class="kicker mono">MLR570 · Non-Convex Optimization in Neural Networks</div>
     <h1>Survey Visual Atlas</h1>
-    <p class="lede">Every paper in our survey, each with an interactive visual of its core result, the math behind it, and our study notes. Every surface is a real loss function. Every ball runs a real optimizer.</p>
+    <p class="lede">Every reference of our survey, placed where the survey’s taxonomy puts it. Papers we have studied get an interactive visual of their core result, the math behind it, and our study notes. Every surface is a real loss function. Every ball runs a real optimizer.</p>
     <div class="stats" id="stats"></div>
   </div>
 </header>
@@ -25,10 +25,11 @@
   <div class="toolbar" id="toolbar">
     <label class="search"><span class="sr-only">Search papers</span>
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <input id="q" type="search" placeholder="Search title, author, concept…" autocomplete="off">
+      <input id="q" type="search" placeholder="Search title, author, [ref], concept…" autocomplete="off">
     </label>
     <div class="seg" role="group" aria-label="View" id="views">
-      <button type="button" data-view="themes" aria-pressed="true">Themes</button>
+      <button type="button" data-view="map" aria-pressed="true">Survey map</button>
+      <button type="button" data-view="refs" aria-pressed="false">References</button>
       <button type="button" data-view="timeline" aria-pressed="false">Timeline</button>
       <button type="button" data-view="concepts" aria-pressed="false">Concepts</button>
     </div>

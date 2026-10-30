@@ -11,7 +11,7 @@ It must feel like a sibling of `reference/saddles.html` and of the existing page
 ## 1. Read
 - Paper PDF: `pdftotext -layout` it; read the abstract, every theorem/definition/corollary statement, the figure
   captions and the experimental setup. Notes PDF: read all of it.
-- Pick 2–4 core claims. Write them, with equation/theorem numbers and exact assumptions, into `research/findings.md`.
+- Pick 2–4 core claims. Write them, with equation/theorem numbers, exact assumptions and the survey reference number `[n]`, into `research/findings.md`. Note anything the survey or the notes state differently from the paper.
 
 ## 2. One honest toy model per claim
 Use, in order of preference: the paper's own example or experiment; a 2–3 parameter loss that provably has the
@@ -43,6 +43,9 @@ export default { tabs: [ {
 - 2D: `ctx.plot.clear()...line/fn/scatter/hline/vline/heat/arrows/bars/custom...draw()`.
 - Colours: coral ball, violet/white for extra optimizers, red λ<0, blue λ>0, amber flat, green global minima.
 - Text budget: tab names, one-sentence caption, one-line note, tiny legend. No paragraphs on the visual.
+- At least one tab must be 3D: thumbnails render the WebGL stage only (`meta.thumb` names it; `meta.thumbTicks` sets how many frames run first).
+- Rebuilding a 3D tab in `onControl` with `ctx.stage.clear(); this.build(ctx)` is fine: `clear()` keeps the tab's frame callback.
+- Live MC/randomness: seed it (`rng(seed)`) when the stat line quotes a number that should match the check script.
 
 ## 5. `math.md` and `meta.json`
 `math.md`: one `## <tabId> | Title` section per tab — definition, the theorem in one or two lines with its number,

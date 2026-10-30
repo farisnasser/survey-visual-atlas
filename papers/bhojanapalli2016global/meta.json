@@ -1,0 +1,9 @@
+{
+  "result": "For low-rank matrix sensing under the <b>restricted isometry property</b>, the factorized objective has <b>no spurious local minima</b> (noisy: all local minima are near the truth) and every other critical point is a <b>strict saddle</b>, so SGD from a random start succeeds.",
+  "result_plain": "Matrix sensing under RIP: no spurious local minima, strict saddles, SGD works from random init.",
+  "tags": ["no spurious minima", "strict saddle", "low-rank recovery", "restricted isometry"],
+  "tag_tabs": { "no spurious minima": "sensing", "strict saddle": "sensing", "low-rank recovery": "sensing", "restricted isometry": "rip" },
+  "tabs": [["sensing", "Sensing landscape"], ["rip", "RIP"]],
+  "thumb": "sensing",
+  "data": true
+}

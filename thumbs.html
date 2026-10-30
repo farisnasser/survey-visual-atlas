@@ -29,7 +29,7 @@
     await done; await new Promise(r => setTimeout(r, 400));
     log(`✓ ${k}`);
   }
-  log(`done: ${keys.length} thumbnails. Now run: python scripts/sync.py --xlsx .cache/papers_master.xlsx`);
+  log(`done: ${keys.length} thumbnails. Now run: python scripts/sync.py`);
   window.__thumbsDone = true;
 </script>
 </body>

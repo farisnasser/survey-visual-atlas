@@ -1,0 +1,8 @@
+{
+  "result": "Adding an <b>adaptive momentum</b> step and a <b>monotone choice</b> to cubic-regularized Newton keeps the optimal O(ε^{−3/2}) second-order rate, adds local quadratic convergence under an error bound, and speeds up training in experiments.",
+  "result_plain": "Cubic regularization with safeguarded momentum: same O(ε^−3/2) rate, faster in practice.",
+  "tags": ["cubic regularization", "momentum", "saddle escape", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "cubic regularization": "race", "momentum": "race", "saddle escape": "saddle", "second-order stationarity": "saddle", "convergence rate": "race" },
+  "tabs": [["race", "CR vs CRm"], ["saddle", "Zero gradient"]],
+  "thumb": "race"
+}

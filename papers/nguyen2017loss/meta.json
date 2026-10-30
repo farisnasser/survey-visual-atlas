@@ -1,0 +1,9 @@
+{
+  "result": "If one hidden layer has at least <b>N − 1 units</b> (N training samples), then every critical point that is non-degenerate on the upper layers and has full-rank weights above is a <b>global minimum</b>; rank-deficient features are a measure-zero exception.",
+  "result_plain": "A layer with ≥ N − 1 units makes regular critical points global minima.",
+  "tags": ["no spurious minima", "overparameterization", "width", "feature rank"],
+  "tag_tabs": { "no spurious minima": "width", "overparameterization": "width", "width": "width", "feature rank": "rank" },
+  "tabs": [["rank", "Feature rank"], ["width", "Width sweep"]],
+  "thumb": "rank",
+  "data": true
+}

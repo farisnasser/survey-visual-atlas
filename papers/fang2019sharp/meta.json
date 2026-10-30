@@ -1,0 +1,8 @@
+{
+  "result": "Ordinary <b>SGD</b> with a simple ball-restart rule and averaged output reaches an ε-second-order stationary point in <b>Õ(ε^{−3.5})</b> stochastic gradients under dispersive noise, beating the classical ε^{−4} without added perturbations or variance reduction.",
+  "result_plain": "Plain SGD escapes saddles in Õ(ε^−3.5) stochastic gradients (dispersive noise, anchor-ball rule).",
+  "tags": ["saddle escape", "stochastic gradients", "noise", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "saddle escape": "anchor", "stochastic gradients": "anchor", "noise": "coupling", "second-order stationarity": "anchor", "convergence rate": "anchor" },
+  "tabs": [["anchor", "Anchor ball"], ["coupling", "Coupling"]],
+  "thumb": "anchor"
+}

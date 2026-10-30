@@ -1,0 +1,8 @@
+{
+  "result": "One argument covers <b>matrix sensing, matrix completion and robust PCA</b>: the aligned difference Δ = U − U*R is always a direction of improvement, so (under RIP or incoherence) these non-convex objectives have <b>no spurious local minima</b> and are <b>strict saddle</b>.",
+  "result_plain": "Unified analysis: low-rank sensing, completion and robust PCA have no spurious local minima.",
+  "tags": ["no spurious minima", "strict saddle", "low-rank recovery", "restricted isometry"],
+  "tag_tabs": { "no spurious minima": "delta", "strict saddle": "delta", "low-rank recovery": "balance", "restricted isometry": "balance" },
+  "tabs": [["delta", "Direction Δ"], ["balance", "Balancing"]],
+  "thumb": "delta"
+}

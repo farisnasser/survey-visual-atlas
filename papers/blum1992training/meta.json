@@ -1,0 +1,8 @@
+{
+  "result": "Finding weights for a tiny net with <b>two hidden threshold units and one output</b> that fit the training data is <b>NP-complete</b> (reduction from Set-Splitting), while a perceptron over pairwise-product features is trainable by LP.",
+  "result_plain": "Training a 3-node (2 hidden + 1 output) threshold network is NP-complete.",
+  "tags": ["computational hardness", "threshold network", "representation"],
+  "tag_tabs": { "computational hardness": "split", "threshold network": "split", "representation": "xor" },
+  "tabs": [["split", "Two planes"], ["xor", "Lifted XOR"]],
+  "thumb": "split"
+}

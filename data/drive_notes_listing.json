@@ -1,17 +1,138 @@
 [
- {"id": "1L5O2PPEdJ5GXPBEezXJW0cbOr9yNBJt-", "title": "baldi1989-NOTES.pdf"},
- {"id": "1xYIr9bMQ0BDCyC1Q8-KCssfUf2UpCn7V", "title": "Laurent2018-NOTES.pdf"},
- {"id": "13rQCNhd1E1wNeNQ3CFXD9-9m0DjpLuNT", "title": "ghadimi2013-NOTES.pdf"},
- {"id": "1VV7rO5TXEAetlAxkExE_pkuParo9I6er", "title": "saxe2014-NOTES.pdf"},
- {"id": "1KPRuQPAMXIP662wE-V2BLsd4KJ_RI0YM", "title": "Allen_Zhu_2019_Study_Notes.pdf"},
- {"id": "1VNJoZwgPJauQW3fwSOeAO4b4hFFiVwrs", "title": "Safran_Shamir_2018_Study_Notes.pdf"},
- {"id": "1E-z-5Dez59OVtNsZiz3G_bKxRhaFZUsx", "title": "Kalra_2025_Study_Notes.pdf"},
- {"id": "1pb4EGba8zjCEXxbEIHwx7fjOS0Nso98-", "title": "Wu_2025_Study_Notes.pdf"},
- {"id": "1huGLKaCp23bgwQwwkhxP6JOpLGfkwWI3", "title": "Zhang_2026_Study_Notes.pdf"},
- {"id": "1MWNv36c59JhKoQYpqAcCSEq3JjJFEJoC", "title": "Galli_2026_Study_Notes.pdf"},
- {"id": "1dEcLqL9dtqnqrZMnVt_r6cnU65ufD52V", "title": "Du_2019_Study_Guide_Fresh.pdf"},
- {"id": "15br4HAcjST60AgwPF3rMVvv49_B1H7Zo", "title": "Lee_2016_Study_Notes.pdf"},
- {"id": "1amGmfboV7whPbdPCg-YW5zsqb8PPplec", "title": "Jin_2017_Study_Notes.pdf"},
- {"id": "1Ure_1kaYFKaKRLulyA5inIDlVmf_H8-Q", "title": "Li_2018_Study_Notes.pdf"},
- {"id": "1DMARhHdzMhgUnJh8CJkJko5pnNdOSgFH", "title": "Dauphin_2014_Study_Notes.pdf"}
+{
+"id": "1L5O2PPEdJ5GXPBEezXJW0cbOr9yNBJt-",
+"title": "baldi1989-NOTES.pdf"
+},
+{
+"id": "1xYIr9bMQ0BDCyC1Q8-KCssfUf2UpCn7V",
+"title": "Laurent2018-NOTES.pdf"
+},
+{
+"id": "13rQCNhd1E1wNeNQ3CFXD9-9m0DjpLuNT",
+"title": "ghadimi2013-NOTES.pdf"
+},
+{
+"id": "1VV7rO5TXEAetlAxkExE_pkuParo9I6er",
+"title": "saxe2014-NOTES.pdf"
+},
+{
+"id": "1KPRuQPAMXIP662wE-V2BLsd4KJ_RI0YM",
+"title": "Allen_Zhu_2019_Study_Notes.pdf"
+},
+{
+"id": "1VNJoZwgPJauQW3fwSOeAO4b4hFFiVwrs",
+"title": "Safran_Shamir_2018_Study_Notes.pdf"
+},
+{
+"id": "1E-z-5Dez59OVtNsZiz3G_bKxRhaFZUsx",
+"title": "Kalra_2025_Study_Notes.pdf"
+},
+{
+"id": "1pb4EGba8zjCEXxbEIHwx7fjOS0Nso98-",
+"title": "Wu_2025_Study_Notes.pdf"
+},
+{
+"id": "1huGLKaCp23bgwQwwkhxP6JOpLGfkwWI3",
+"title": "Zhang_2026_Study_Notes.pdf"
+},
+{
+"id": "1MWNv36c59JhKoQYpqAcCSEq3JjJFEJoC",
+"title": "Galli_2026_Study_Notes.pdf"
+},
+{
+"id": "1dEcLqL9dtqnqrZMnVt_r6cnU65ufD52V",
+"title": "Du_2019_Study_Guide_Fresh.pdf"
+},
+{
+"id": "15br4HAcjST60AgwPF3rMVvv49_B1H7Zo",
+"title": "Lee_2016_Study_Notes.pdf"
+},
+{
+"id": "1amGmfboV7whPbdPCg-YW5zsqb8PPplec",
+"title": "Jin_2017_Study_Notes.pdf"
+},
+{
+"id": "1Ure_1kaYFKaKRLulyA5inIDlVmf_H8-Q",
+"title": "Li_2018_Study_Notes.pdf"
+},
+{
+"id": "1DMARhHdzMhgUnJh8CJkJko5pnNdOSgFH",
+"title": "Dauphin_2014_Study_Notes.pdf"
+},
+{
+"id": "12KOJtIPah8Gw9ulbdFQbFQGb1FDZev7g",
+"title": "Ref_02_Murty_Kabadi_1987_Detailed_Notes.pdf"
+},
+{
+"id": "1XXfeSlerspu62ot94mje5U7oYNiaIdgL",
+"title": "Ref_03_Blum_Rivest_1992_Detailed_Notes.pdf"
+},
+{
+"id": "1MmZMoanyu-Iy5rHqwBhja7Dy_co3fysz",
+"title": "Ref_10_Jin_Netrapalli_Jordan_2018_Detailed_Notes (1).pdf"
+},
+{
+"id": "1UbWcQkGjgh-KOl06mNYA0zGvOw8uFVkr",
+"title": "Ref_11_Fang_SPIDER_2018_Detailed_Notes.pdf"
+},
+{
+"id": "10kwwNTbya_XtGkBTKkaQEi18slAQoE5X",
+"title": "Ref_12_Arjevani_etal_2020_Detailed_Notes.pdf"
+},
+{
+"id": "1Kwkmfej4Kwpz6cOoMCZ_nk0WfvTdKcLf",
+"title": "Ref77_Allen_Zhu_Li_2018.pdf"
+},
+{
+"id": "1uBOfDm326ihmehUjOvOLkoavXqy1T-h8",
+"title": "Nguyen_Hein_2017_Study_Notes.pdf"
+},
+{
+"id": "1Kyfeng8pUM71mjK1wedWqjydKNjCACJv",
+"title": "Bhojanapalli_2016_Study_Notes.pdf"
+},
+{
+"id": "1DeRQnJG4lOWNacbWauMaGE1EC5lzI6ND",
+"title": "Ge_Jin_Zheng_2017_Study_Notes.pdf"
+},
+{
+"id": "1hteTGyGlr8BkKWWWW75WMmH_x-IrpJTe",
+"title": "Daneshmand_2018_Study_Notes.pdf"
+},
+{
+"id": "1b4WE5sE291MSOieDiW4zvM9dittH_X7z",
+"title": "41_fang2019sharp.pdf"
+},
+{
+"id": "1YRijySWt_P3FU5ajXVlsoIdqrWTwBFaT",
+"title": "42_gurbuzbalaban2021heavy.pdf"
+},
+{
+"id": "1DL4NI_WcQJUcVuAZYEcmVJVd-oju3p5s",
+"title": "43_azizian2025global.pdf"
+},
+{
+"id": "14S9PZy5HZGNWL7lKfVJdZSzb-Ur4SToE",
+"title": "44_tripuraneni2018stochastic.pdf"
+},
+{
+"id": "1a8m7qDpHAuLjYTgru6HqZIzNeOmd_NCd",
+"title": "45_carmon2018analysis.pdf"
+},
+{
+"id": "1ds8cmQZfycFOe7EGB0XAZZlo7mchHHgn",
+"title": "Ref71_Carmon_Duchi_2019.pdf"
+},
+{
+"id": "16HO6JgnVGtesqmYVITUUMJV-Culdc5Mo",
+"title": "Ref72_Wang_2020.pdf"
+},
+{
+"id": "1p8VWce3RWd6mjEAuoJLpCINeRP3qxo6N",
+"title": "Ref74_Reddi_2018.pdf"
+},
+{
+"id": "1_zrznv0ZXwYZWcX_4W20IP8u0gJ4n3C5",
+"title": "Ref76_Xu_Jin_Yang_2018.pdf"
+}
 ]

@@ -1,0 +1,9 @@
+{
+  "result": "Krylov subspace (Lanczos) solutions of the non-convex <b>trust-region</b> and cubic-regularized problems converge <b>linearly</b> once t ≳ √κ and <b>sublinearly</b> (∝ 1/t²) before, with bounds that are tight; a random perturbation fixes the <b>hard case</b>.",
+  "result_plain": "Lanczos solves the non-convex trust-region subproblem at sharp linear and sublinear rates; perturb to fix the hard case.",
+  "tags": ["cubic regularization", "trust region", "Krylov subspace", "convergence rate", "lower bound"],
+  "tag_tabs": { "cubic regularization": "rates", "trust region": "hardcase", "Krylov subspace": "hardcase", "convergence rate": "rates", "lower bound": "rates" },
+  "tabs": [["hardcase", "Hard case"], ["rates", "Theorem 1"]],
+  "thumb": "hardcase",
+  "data": true
+}

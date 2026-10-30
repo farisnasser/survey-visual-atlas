@@ -1,3 +1,39 @@
+allenzhu2018neon2
+  [PASS] gradient f  (max rel err 9.53e-11)
+  [PASS] mean of component gradients = grad f
+  [PASS] Hessian saddle  (fd=[[1.0, 0.0], [0.0, -0.4]] err 2.0e-08)
+  [PASS] 2D: at the saddle (lambda_min = -0.4) NEON2 returns a direction almost always  (300/300)
+  [PASS] 2D: returned directions have v^T H v <= -delta/2 with delta = 0.4
+  d = 20, delta = 0.2, eta = 0.05, T = 871, r = 0.05, sigma = 0.0001
+  lambda_min/delta = -1.60: P(return v) = 1.00, mean v^T H v/delta = -1.565, max -1.534
+  lambda_min/delta = -1.50: P(return v) = 1.00, mean v^T H v/delta = -1.464, max -1.415
+  lambda_min/delta = -1.40: P(return v) = 0.99, mean v^T H v/delta = -1.364, max -1.323
+  lambda_min/delta = -1.30: P(return v) = 1.00, mean v^T H v/delta = -1.263, max -1.225
+  lambda_min/delta = -1.20: P(return v) = 0.98, mean v^T H v/delta = -1.162, max -1.116
+  lambda_min/delta = -1.10: P(return v) = 0.97, mean v^T H v/delta = -1.062, max -1.029
+  lambda_min/delta = -1.00: P(return v) = 0.97, mean v^T H v/delta = -0.961, max -0.930
+  lambda_min/delta = -0.90: P(return v) = 0.93, mean v^T H v/delta = -0.861, max -0.820
+  lambda_min/delta = -0.80: P(return v) = 0.86, mean v^T H v/delta = -0.760, max -0.723
+  lambda_min/delta = -0.70: P(return v) = 0.69, mean v^T H v/delta = -0.661, max -0.620
+  lambda_min/delta = -0.60: P(return v) = 0.27, mean v^T H v/delta = -0.560, max -0.539
+  lambda_min/delta = -0.50: P(return v) = 0.01, mean v^T H v/delta = -0.471, max -0.471
+  lambda_min/delta = -0.40: P(return v) = 0.00
+  lambda_min/delta = -0.30: P(return v) = 0.00
+  lambda_min/delta = -0.20: P(return v) = 0.00
+  lambda_min/delta = -0.10: P(return v) = 0.00
+  lambda_min/delta = +0.00: P(return v) = 0.00
+  lambda_min/delta = +0.10: P(return v) = 0.00
+  lambda_min/delta = +0.20: P(return v) = 0.00
+  lambda_min/delta = +0.30: P(return v) = 0.00
+  lambda_min/delta = +0.40: P(return v) = 0.00
+  lambda_min/delta = +0.50: P(return v) = 0.00
+  lambda_min/delta = +0.60: P(return v) = 0.00
+  [PASS] lambda_min <= -delta: NEON2 returns v (>= 95%)
+  [PASS] lambda_min >= -delta/2: NEON2 returns bottom (>= 95%)
+  [PASS] returned v have v^T H v <= -delta/2 except with small probability (Theorem 1 holds w.p. >= 1 - p)  (1 of 1448 returns violate)
+  wrote papers/allenzhu2018neon2/data.json (4 KB)
+all checks passed
+
 allenzhu2019convergence
   [PASS] backprop gradient matches finite differences
   m=   16: F0=9.248 F600=3.00e-01  min ||grad||^2/(F m) 0.123  movement 0.1638
@@ -19,6 +55,72 @@ allenzhu2019convergence
   wrote papers/allenzhu2019convergence/data.json (87 KB)
 all checks passed
 
+arjevani2020second
+  [PASS] gradient f  (max rel err 6.64e-11)
+  [PASS] Hessian at [-0.72 -0.6 ]  (fd=[[-0.1839, 0.084], [0.084, 1.0]] err 3.1e-08)
+  [PASS] Hessian at [ 0.94 -1.22]  (fd=[[3.0629, -0.1856], [-0.1856, 1.0]] err 1.9e-09)
+  [PASS] Hessian at [0.3  0.69]  (fd=[[-1.1945, 0.495], [0.495, 1.0]] err 2.8e-08)
+  [PASS] Hessian at [-0.94 -1.33]  (fd=[[0.1009, -0.1783], [-0.1783, 1.0]] err 4.6e-08)
+  [PASS] Hessian at [-0.68  0.47]  (fd=[[0.9203, 0.1313], [0.1313, 1.0]] err 1.1e-08)
+  |dx| = 0.5, K = 1: HVP-integral MSE 4.05e-01  vs two-gradient MSE 3.977
+  |dx| = 0.5, K = 4: HVP-integral MSE 9.64e-02  vs two-gradient MSE 3.977
+  |dx| = 0.5, K = 16: HVP-integral MSE 2.35e-02  vs two-gradient MSE 3.977
+  |dx| = 0.1, K = 1: HVP-integral MSE 1.53e-02  vs two-gradient MSE 4.009
+  |dx| = 0.1, K = 4: HVP-integral MSE 3.72e-03  vs two-gradient MSE 4.009
+  |dx| = 0.1, K = 16: HVP-integral MSE 9.34e-04  vs two-gradient MSE 4.009
+  |dx| = 0.02, K = 1: HVP-integral MSE 6.06e-04  vs two-gradient MSE 4.045
+  |dx| = 0.02, K = 4: HVP-integral MSE 1.48e-04  vs two-gradient MSE 4.045
+  |dx| = 0.02, K = 16: HVP-integral MSE 3.72e-05  vs two-gradient MSE 4.045
+  [PASS] two single-point gradients: MSE ~ 2 d s_g^2 = 4, independent of |dx|
+  [PASS] HVP-integral MSE shrinks ~ |dx|^2 (x25 smaller from 0.5 to 0.1)
+  [PASS] HVP-integral MSE shrinks ~ 1/K at fixed |dx| (variance part)
+  [PASS] E|(Z+Z^T)/2 v|^2 = 1.5 |v|^2 in 2D (used for the page's predicted line)
+  [PASS] elbow: stochastic exponent drops 4 -> 3 at p = 2, then flat; deterministic (p+1)/p
+all checks passed
+
+azizian2025global
+  [PASS] gradient camel  (max rel err 6.84e-10)
+  [PASS] five critical points
+  [PASS] Hessian at (-2.533,1.013)  (fd=[[52.7417, 1.0], [1.0, 2.5]] err 1.0e-06)
+  (-2.5330, 1.0132) f = -7.2477 eig [ 2.48  52.762] min
+  [PASS] Hessian at (-1.116,0.447)  (fd=[[-8.9763, 1.0], [1.0, 2.5]] err 6.7e-08)
+  (-1.1164, 0.4466) f = 1.5905 eig [-9.063  2.586] saddle
+  [PASS] Hessian at (0.000,-0.000)  (fd=[[5.25, 1.0], [1.0, 2.5]] err 1.1e-07)
+  (0.0000, -0.0000) f = 0.0000 eig [2.175 5.575] min
+  [PASS] Hessian at (0.894,-0.358)  (fd=[[-6.3336, 1.0], [1.0, 2.5]] err 7.9e-08)
+  (0.8939, -0.3576) f = 0.8226 eig [-6.445  2.612] saddle
+  [PASS] Hessian at (2.078,-0.831)  (fd=[[33.8786, 1.0], [1.0, 2.5]] err 6.8e-07)
+  (2.0784, -0.8314) f = -3.2971 eig [ 2.468 33.91 ] min
+  [PASS] pattern min, saddle, min, saddle, min
+  [PASS] global minimum is the leftmost point (paper's p1)
+  paper prints p1 ~ (-2.573, 1.029); the printed formula gives (-2.533, 1.013)
+  B('p3', 'p1') = 3.1809 / sigma^2
+  B('p3', 'p5') = 1.6451 / sigma^2
+  B('p5', 'p3') = 8.2394 / sigma^2
+  B('p5', 'p1') = 11.4203 / sigma^2
+  min forest 11.4203, E(Q|p3) = 9.7752, E(Q|p5) = 9.7752, E(Q|x=p3) = 9.7752  (/sigma^2)
+  [PASS] E(Q|p3) = B31 + B53 - B35 (rare detour into p5 dominates)
+  [PASS] notes: min forest 7, E(G|A) = 4
+  [PASS] notes: exact T at eta=0.5  (T = 3027.17, eta log T = 4.00769)
+  [PASS] notes: exact T at eta=0.25  (T = 8889035.88, eta log T = 4.00008)
+  [PASS] eta=0.02: no blow-up, all hit  (1.00 hit)
+  eta=0.02: mean tau 1264, log 7.142, E/eta = 4.039
+  [PASS] eta=0.017: no blow-up, all hit  (1.00 hit)
+  eta=0.017: mean tau 3100, log 8.039, E/eta = 4.752
+  [PASS] eta=0.0145: no blow-up, all hit  (1.00 hit)
+  eta=0.0145: mean tau 8849, log 9.088, E/eta = 5.571
+  [PASS] eta=0.0125: no blow-up, all hit  (1.00 hit)
+  eta=0.0125: mean tau 20897, log 9.947, E/eta = 6.463
+  [PASS] eta=0.011: no blow-up, all hit  (1.00 hit)
+  eta=0.011: mean tau 63211, log 11.054, E/eta = 7.344
+  [PASS] eta=0.0098: no blow-up, all hit  (1.00 hit)
+  eta=0.0098: mean tau 162841, log 12.001, E/eta = 8.244
+  fitted slope of log E[tau]: 0.0930; of log(eta E[tau]): 0.0793; predicted E = 0.0808
+  [PASS] log E[tau] slope within 25% of E (iteration count)
+  [PASS] log(eta E[tau]) slope within 5% of E
+  wrote papers/azizian2025global/data.json (0 KB)
+all checks passed
+
 baldi1989neural
   [PASS] tied formula = full E with B = A^T
   [PASS] gradient tied  (max rel err 2.88e-10)
@@ -37,6 +139,124 @@ baldi1989neural
   [PASS] gradient untied  (max rel err 2.78e-10)
   [PASS] random starts all reach E=1 (tied)  (max final 1.00000)
   [PASS] random starts all reach E=1 (untied)  (max final 1.00000)
+all checks passed
+
+bhojanapalli2016global
+  [PASS] gradient sensing loss m = 8  (max rel err 1.55e-10)
+  [PASS] E<A, X>^2 = |X|_F^2 for this ensemble
+  [PASS] Hessian population loss at u = 0 is -4 X*  (fd=[[-4.0, -2.0], [-2.0, -1.0]] err 8.4e-08)
+  m = 1: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 761/800, median RIP delta 1.490
+  m = 2: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 201/800, median RIP delta 1.790
+  m = 3: spurious local minima in 12/40 draws (90/800 runs), zero-loss-but-wrong 0/800, median RIP delta 1.174
+  m = 4: spurious local minima in 6/40 draws (40/800 runs), zero-loss-but-wrong 4/800, median RIP delta 0.990
+  m = 6: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 0/800, median RIP delta 0.846
+  m = 10: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 0/800, median RIP delta 0.784
+  m = 20: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 0/800, median RIP delta 0.574
+  m = 50: spurious local minima in 0/40 draws (0/800 runs), zero-loss-but-wrong 0/800, median RIP delta 0.381
+  [PASS] m = 1 or 2: zero training loss does not identify X* (wrong zero-loss solutions)
+  [PASS] spurious local minima exist for small m (RIP fails)
+  [PASS] they become rarer as m grows: none found at m = 50
+  m = 3: median RIP constant 1.056
+  m = 5: median RIP constant 0.950
+  m = 10: median RIP constant 0.747
+  m = 20: median RIP constant 0.579
+  m = 50: median RIP constant 0.378
+  m = 100: median RIP constant 0.273
+  m = 200: median RIP constant 0.200
+  m = 500: median RIP constant 0.118
+  m = 1000: median RIP constant 0.081
+  m = 2000: median RIP constant 0.059
+  [PASS] RIP constant decreases with m and drops below 1/10 only for large m
+  wrote papers/bhojanapalli2016global/data.json (0 KB)
+all checks passed
+C:\Users\Asus\faris-brain\university\courses\fall-2026\MLR570\survey-atlas\scripts\check-math\bhojanapalli2016global.py:48: RuntimeWarning: invalid value encountered in subtract
+  U = U - .02 * 4 / len(A) * np.einsum("nm,mij,nj->ni", r_, A, U)
+
+blum1992training
+  [PASS] split S1=[0, 1, 2]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[0, 1]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[0, 2]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[0]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[1, 2]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[1]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[2]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] split S1=[]: planes classify all 6 points iff it is a valid set-splitting
+  [PASS] only the split {s2} | {s1, s3} (and its swap) works
+  [PASS] no single plane separates '+' from '-' (grid search; also follows from 3 inequalities)
+  [PASS] XOR separable with the pairwise product feature
+  [PASS] XOR not separable in the raw inputs
+all checks passed
+
+carmon2018analysis
+  [PASS] notes: global TR value -7/6 at (+-2 sqrt2/3, -1/3)  (x = [ 0.9428 -0.3333], lam = 2.000)
+  [PASS] notes: Krylov space span{b} stalls at -1/2 (hard case)
+  [PASS] perturbed b: t = 2 Krylov space is R^2 and reaches ~ -7/6  (-1.16761)
+  generic: lam* = 0.6007, hard case False, f* = -0.310782, gap t=10 2.24e-02, t=60 1.00e-16, t=120 1.00e-16
+  [PASS] generic: gap below both Theorem 1 bounds for all t
+  hard: lam* = 0.6000, hard case True, f* = -0.302545, gap t=10 3.11e-02, t=60 2.32e-02, t=120 2.32e-02
+  perturbed: lam* = 0.6000, hard case False, f* = -0.302603, gap t=10 3.13e-02, t=60 1.00e-16, t=120 1.00e-16
+  [PASS] perturbed: gap below both Theorem 1 bounds for all t
+  [PASS] hard case: Krylov solutions never reach f* (gap stays > 1e-3)
+  [PASS] perturbed hard case converges (gap < 1e-6 by t = 120)
+  [PASS] generic instance converges
+  wrote papers/carmon2018analysis/data.json (7 KB)
+all checks passed
+
+carmon2019gradient
+  [PASS] gradient f  (max rel err 1.74e-10)
+  [PASS] b=[ 0.06 -0.5 ]: stationary point [-0.4753  0.4078]
+  [PASS] b=[ 0.06 -0.5 ]: |x_t| non-decreasing (Lemma 2.3)
+  [PASS] b=[ 0.06 -0.5 ]: GD converges to the global minimum (Prop. 2.5)  (f* = -0.15713)
+  [PASS] b=[ 0.  -0.5]: stationary point [0.     0.4681]
+  [PASS] b=[ 0.  -0.5]: stationary point [0.2083 0.4545]
+  [PASS] b=[ 0.  -0.5]: stationary point [-0.2083  0.4545]
+  [PASS] b=[ 0.  -0.5]: |x_t| non-decreasing (Lemma 2.3)
+  [PASS] hard case b1 = 0: GD stays on the axis x1 = 0 and stops at a saddle
+  [PASS] perturbed b~ = b + sigma q: GD reaches a global minimizer of the original f (up to sigma)  (f = -0.13447 vs f* = -0.13447)
+  [PASS] b=[0.01 0.3 ]: stationary point [ 0.0583 -0.3232]
+  [PASS] b=[0.01 0.3 ]: stationary point [ 0.3828 -0.2794]
+  [PASS] b=[0.01 0.3 ]: stationary point [-0.4487 -0.2673]
+  [PASS] b=[0.01 0.3 ]: |x_t| non-decreasing (Lemma 2.3)
+  [PASS] b=[0.01 0.3 ]: GD converges to the global minimum (Prop. 2.5)  (f* = -0.06609)
+  [PASS] notes 1D: GD iterate 0.24
+  [PASS] notes 1D: GD iterate 0.2856
+  |b| = 1.0: |x*| = 1.903, gap after 6000: 2.22e-16, f increases on 0 of 299 samples, |x_t| monotone True
+  [PASS] |b| = 1.0: |x_t| non-decreasing
+  |b| = 0.3: |x*| = 1.169, gap after 6000: 1.00e-16, f increases on 0 of 299 samples, |x_t| monotone True
+  [PASS] |b| = 0.3: |x_t| non-decreasing
+  |b| = 0.15: |x*| = 1.001, gap after 6000: 1.25e-05, f increases on 0 of 299 samples, |x_t| monotone True
+  [PASS] |b| = 0.15: |x_t| non-decreasing
+  |b| = 0.05: |x*| = 1.000, gap after 6000: 8.33e-08, f increases on 0 of 299 samples, |x_t| monotone True
+  [PASS] |b| = 0.05: |x_t| non-decreasing
+  |b| = 0.001: |x*| = 1.000, gap after 6000: 7.26e-09, f increases on 0 of 299 samples, |x_t| monotone True
+  [PASS] |b| = 0.001: |x_t| non-decreasing
+  [PASS] a small-|b| instance stalls (gap > 1e-3 for > 1000 iterations) before converging
+  wrote papers/carmon2019gradient/data.json (21 KB)
+all checks passed
+
+daneshmand2018escaping
+  [PASS] gradient f  (max rel err 8.40e-11)
+  [PASS] CNC constant at the saddle: E<v, grad f_i>^2 = mean(a^2)  (gamma = 0.940)
+  CNC=True gd: fraction escaped 0.00
+  [PASS] GD from the stable set stays at the saddle
+  CNC=True pgd: fraction escaped 1.00
+  [PASS] pgd with CNC noise escapes every time
+  CNC=True sgd: fraction escaped 1.00
+  [PASS] sgd with CNC noise escapes every time
+  CNC=False gd: fraction escaped 0.00
+  [PASS] GD from the stable set stays at the saddle
+  CNC=False pgd: fraction escaped 0.00
+  [PASS] pgd without CNC (noise orthogonal to e_y) never escapes
+  CNC=False sgd: fraction escaped 0.00
+  [PASS] sgd without CNC (noise orthogonal to e_y) never escapes
+  d = 2: isotropic kick 23 steps, CNC-aligned 22
+  d = 10: isotropic kick 36 steps, CNC-aligned 22
+  d = 100: isotropic kick 47 steps, CNC-aligned 22
+  d = 1000: isotropic kick 60 steps, CNC-aligned 22
+  d = 10000: isotropic kick 71 steps, CNC-aligned 22
+  [PASS] isotropic kick: escape time grows with d (projection ~ r/sqrt(d))
+  [PASS] CNC-aligned noise: escape time independent of d
+  wrote papers/daneshmand2018escaping/data.json (1 KB)
 all checks passed
 
 dauphin2014identifying
@@ -81,6 +301,28 @@ du2019gradient
   [PASS] wide net follows the linear Gram dynamics; narrow net does not
 all checks passed
 
+fang2018spider
+  [PASS] gradient f  (max rel err 1.04e-10)
+  [PASS] gradient f_7  (max rel err 1.11e-10)
+  [PASS] mean of component gradients = grad f
+  mean-square smoothness L = 9.371
+  [PASS] Lemma 1: E|v_k - grad f(x_k)|^2 <= k L^2 eps1^2 / S2 within each epoch  (at k = 24: 1.57e-03 <= 2.11e-01)
+  [PASS] error grows roughly linearly in k (martingale sum)
+  [PASS] plain minibatch SGD estimator error is much larger than SPIDER's  (SGD 1.323 vs SPIDER 0.0008)
+  [PASS] SPIDER-SFO reaches a minimum neighbourhood (|grad f| ~ eta)  (x = [-1.018 -0.   ])
+  wrote papers/fang2018spider/data.json (4 KB)
+all checks passed
+
+fang2019sharp
+  [PASS] gradient f  (max rel err 7.38e-11)
+  [PASS] Hessian saddle  (fd=[[-1.0, 0.0], [0.0, 1.0]] err 2.0e-08)
+  [PASS] Algorithm 2 stops in every run  (median 628 steps, 7 exits)
+  [PASS] averaged output is near a minimum (x = +-1): small gradient, positive curvature
+  example output [1.    0.023], |grad f| = 0.023
+  [PASS] quadratic: gradient at the average = average gradient
+  [PASS] notes: coupled paths separate as 0.002*1.1^k; first exceed 2B = 0.02 at k = 25  (k = 25, distance 0.0216694)
+all checks passed
+
 galli2026flatland
   [PASS] gradient valley  (max rel err 2.98e-10)
   [PASS] analytic Hessian matches
@@ -101,6 +343,22 @@ galli2026flatland
   [PASS] K=8: flat point is stationary with top-K eigenvalues = 2/K and a negative eigenvalue  (lam_min -0.060)
 all checks passed
 
+ge2017no
+  [PASS] gradient f  (max rel err 8.97e-11)
+  [PASS] Lemma 7 identity holds at 400 random points  (max |lhs - rhs| 1.7e-06)
+  [PASS] Lemma 6: |Delta Delta^T|^2 <= 2 |M - M*|^2
+  [PASS] at the saddle u = 0: Delta^T H Delta = -2|u*|^4 <= -|M - M*|_F^2  (-2.0503)
+  [PASS] Hessian Hessian at 0 = -2 M*  (fd=[[-1.62, -0.81], [-0.81, -0.405]] err 4.4e-08)
+  [PASS] u = 1 u* is a strict minimum
+  [PASS] u = -1 u* is a strict minimum
+  [PASS] notes: f(x, y) = 1/2(x^2-1)^2 + x^2 y^2 + 1/2 y^4, f(0.5, 0) = 0.28125
+  [PASS] Hessian notes: Hessian at 0 = diag(-2, 0)  (fd=[[-2.0, 0.0], [0.0, 0.0]] err 4.0e-08)
+  [PASS] gradient balanced  (max rel err 1.23e-10)
+  [PASS] without the regularizer the minimizers form the hyperbola uv = 1 (a zero eigenvalue)
+  [PASS] with it the minima are isolated: (1,1), (-1,-1), positive definite
+  [PASS] origin stays a strict saddle with the regularizer
+all checks passed
+
 ghadimi2013stochastic
   [PASS] gradient f  (max rel err 1.09e-10)
   f* ~ -1.1596, L ~ 5.529 (max |eig H| on the grid)
@@ -119,6 +377,24 @@ ghadimi2013stochastic
   [PASS] empirical E||grad f(x_R)||^2 below the Corollary 2.2 bound for every N
   [PASS] empirical value decreases with N
   [PASS] RSGF estimator ~ grad f for small mu  ([-0.23  -0.486] vs [-0.23  -0.482])
+all checks passed
+
+gurbuzbalaban2021heavy
+  [PASS] E|1 - a^2| = 4 phi(1) ~ 0.96788  (MC 0.96846)
+  [PASS] E (1 - a^2)^2 = 2  (MC 2.0098)
+  [PASS] scalar example: 1 < alpha < 2  (alpha = 1.089)
+  [PASS] eta_crit = 2b/(sigma^2(d+b+1)) = 2/3 here
+  [PASS] h(2) closed form d=5 b=2 eta=0.2  (MC 0.7599 vs 0.7600)
+  [PASS] h(2) closed form d=20 b=5 eta=0.1  (MC 0.8521 vs 0.8520)
+  [PASS] h(2) closed form d=1 b=1 eta=0.5  (MC 0.7542 vs 0.7500)
+  [PASS] alpha(eta_crit) = 2  (alpha = 1.992 at eta_crit = 0.500)
+  [PASS] alpha increases with batch 1->2 (eta = 0.329)  (0.631 < 6.499)
+  [PASS] alpha increases with batch 2->4 (eta = 0.575)  (0.649 < 5.815)
+  [PASS] alpha increases with batch 4->8 (eta = 0.920)  (0.622 < 4.786)
+  [PASS] alpha decreases with eta
+  [PASS] alpha decreases with dimension (eta = 0.16, b = 2)  (d=5: 12.000 > d=20: 6.962)
+  [PASS] scalar chain: Hill estimate near alpha  (Hill 1.102 vs alpha 1.089)
+  wrote papers/gurbuzbalaban2021heavy/data.json (6 KB)
 all checks passed
 
 jin2017escape
@@ -146,6 +422,25 @@ jin2017escape
   d=1000: median escape iterations 41
   d=10000: median escape iterations 47
   [PASS] escape iterations grow only ~log d  (26 -> 47)
+all checks passed
+
+jin2018accelerated
+  [PASS] gradient toy  (max rel err 7.37e-11)
+  [PASS] Hessian saddle  (fd=[[1.0, 0.0], [0.0, -0.1]] err 2.0e-09)
+  [PASS] Hessian min  (fd=[[1.0, 0.0], [0.0, 0.2]] err 2.0e-09)
+  lam=0.2: GD escapes in 178 steps, AGD in 47
+  lam=0.1: GD escapes in 351 steps, AGD in 68
+  lam=0.05: GD escapes in 697 steps, AGD in 98
+  lam=0.02: GD escapes in 1737 steps, AGD in 158
+  lam=0.01: GD escapes in 3469 steps, AGD in 226
+  [PASS] GD escape time ~ 1/lam (slope ~ -1)  (slope -0.992)
+  [PASS] AGD escape time ~ 1/sqrt(lam) (slope ~ -1/2)  (slope -0.524)
+  [PASS] AGD faster for every lam
+  [PASS] PAGD from the saddle's stable set reaches a minimum  (f = -0.025000)
+  f increased on 1556 steps; NCE fired 31 times; E_(t+1) > E_t on 0 steps
+  [PASS] f alone is not monotone along AGD
+  [PASS] Hamiltonian E = f + |v|^2/(2 eta) never increases over a step (Lemma 4 without NCE, Lemma 5 with NCE); only kicks add energy
+  wrote papers/jin2018accelerated/data.json (0 KB)
 all checks passed
 
 kalra2025universal
@@ -224,6 +519,83 @@ li2018visualizing
   wrote papers/li2018visualizing/data.json (2 KB)
 all checks passed
 
+murty1987some
+  [PASS] q=-1.5: copositive iff q >= -1 (min on simplex -0.2500); PSD iff |q| <= 1
+  [PASS] q=-1.0: copositive iff q >= -1 (min on simplex 0.0000); PSD iff |q| <= 1
+  [PASS] q=-0.6: copositive iff q >= -1 (min on simplex 0.2000); PSD iff |q| <= 1
+  [PASS] q=0: copositive iff q >= -1 (min on simplex 0.5000); PSD iff |q| <= 1
+  [PASS] q=0.5: copositive iff q >= -1 (min on simplex 0.7500); PSD iff |q| <= 1
+  [PASS] q=1.0: copositive iff q >= -1 (min on simplex 1.0000); PSD iff |q| <= 1
+  [PASS] q=1.5: copositive iff q >= -1 (min on simplex 1.0001); PSD iff |q| <= 1
+  [PASS] closed form min over simplex = (1+q)/2 for q <= 1
+  [PASS] gradient quartic q=-1.4  (max rel err 3.06e-10)
+  [PASS] Hessian quartic q=-1.4 at 0 (zero: second-order test silent)  (fd=[[0.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] quartic q=-1.4: origin is a local min iff Q copositive  (min on small circle -2.00e-09)
+  q=-1.4: GD from (0.6, 0.62) ends at [1.2 1.2], p = -1.66e+00
+  [PASS] q < -1: GD runs away along the diagonal to the edge of the box, p < 0
+  [PASS] gradient quartic q=-1.0  (max rel err 1.17e-10)
+  [PASS] Hessian quartic q=-1.0 at 0 (zero: second-order test silent)  (fd=[[0.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] quartic q=-1.0: origin is a local min iff Q copositive  (min on small circle -8.27e-25)
+  q=-1.0: GD from (0.6, 0.62) ends at [0.61 0.61], p = 2.78e-17
+  [PASS] q = -1: p = (u1^2 - u2^2)^2, GD stops on the zero valley u1 = u2 (non-strict minima)
+  [PASS] gradient quartic q=-0.5  (max rel err 9.13e-11)
+  [PASS] Hessian quartic q=-0.5 at 0 (zero: second-order test silent)  (fd=[[0.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] quartic q=-0.5: origin is a local min iff Q copositive  (min on small circle 2.50e-09)
+  q=-0.5: GD from (0.6, 0.62) ends at [0.035 0.035], p = 1.55e-06
+  [PASS] q >= -1: GD creeps into the degenerate minimum at 0
+  [PASS] gradient quartic q=0.7  (max rel err 9.77e-11)
+  [PASS] Hessian quartic q=0.7 at 0 (zero: second-order test silent)  (fd=[[0.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] quartic q=0.7: origin is a local min iff Q copositive  (min on small circle 8.50e-09)
+  q=0.7: GD from (0.6, 0.62) ends at [0.019 0.019], p = 4.57e-07
+  [PASS] q >= -1: GD creeps into the degenerate minimum at 0
+  [PASS] gradient subset-sum QP  (max rel err 1.28e-10)
+  d0=3: global min 0.0000 at [1. 0.]; projected GD lands at values [0.   0.24]
+  [PASS] d0=3: min 0 iff a subset of {3,5} sums to d0
+  d0=4: global min 0.1562 at [1.     0.1875]; projected GD lands at values [0.156]
+  [PASS] d0=4: min 0 iff a subset of {3,5} sums to d0
+  d0=5: global min 0.0000 at [0. 1.]; projected GD lands at values [0.   0.24]
+  [PASS] d0=5: min 0 iff a subset of {3,5} sums to d0
+  d0=8: global min 0.0000 at [1. 1.]; projected GD lands at values [0.]
+  [PASS] d0=8: min 0 iff a subset of {3,5} sums to d0
+  [PASS] d0 = 4: no subset -> minimum stays positive
+  [PASS] projected GD can land in non-global box minima (d0 = 5)
+all checks passed
+
+nguyen2017loss
+  [PASS] notes: det [F, 1] ~ -0.98225  (-0.98225)
+  [PASS] notes: readout (3.339, -2.326, 1.772) fits y exactly
+  [PASS] rank-deficient features: least-squares readout is stationary (F^T r = 0) but r != 0  (|r| = 1.225)
+  [PASS] determinant formula used on the page matches numpy
+  [PASS] near-singular area shrinks toward 0 as the tolerance shrinks (Lemma 4.4: measure zero)  (0.1002, 0.0335, 0.01179)
+  width 1: final loss min 8.74e-02 median 8.74e-02; |grad| median 8.1e-05; rank[F,1] [2, 2, 2, 2, 2, 2]
+  width 2: final loss min 1.70e-02 median 1.70e-02; |grad| median 4.1e-05; rank[F,1] [3, 3, 3, 3, 3, 3]
+  width 3: final loss min 2.16e-29 median 3.15e-06; |grad| median 2.1e-05; rank[F,1] [4, 4, 4, 4, 4, 4]
+  width 4: final loss min 1.02e-29 median 3.17e-29; |grad| median 7.2e-16; rank[F,1] [5, 5, 5, 5, 5, 5]
+  width 5: final loss min 1.22e-29 median 1.45e-29; |grad| median 5.2e-16; rank[F,1] [6, 6, 6, 6, 6, 6]
+  width 6: final loss min 4.13e-30 median 1.88e-29; |grad| median 5.7e-16; rank[F,1] [7, 7, 7, 7, 6, 7]
+  width 7: final loss min 8.47e-30 median 1.37e-29; |grad| median 5.8e-16; rank[F,1] [8, 8, 8, 8, 8, 8]
+  width 8: final loss min 2.56e-30 median 5.28e-30; |grad| median 4.2e-16; rank[F,1] [8, 8, 8, 8, 8, 8]
+  width 9: final loss min 3.86e-30 median 6.62e-30; |grad| median 4.3e-16; rank[F,1] [8, 8, 8, 8, 8, 8]
+  width 10: final loss min 3.55e-30 median 6.81e-30; |grad| median 4.5e-16; rank[F,1] [8, 8, 8, 8, 8, 8]
+  [PASS] width >= N-1 = 7: every seed reaches ~zero loss
+  [PASS] width 1-2: every seed stalls at a near-critical point with positive loss (bad critical points)
+  [PASS] N - 1 is sufficient, not necessary: width 3-6 also fit here
+  wrote papers/nguyen2017loss/data.json (63 KB)
+all checks passed
+
+reddi2018generic
+  [PASS] gamma=0.5, M=1: exact eigenvector decrease = gamma^3/(3M^2)
+  [PASS] gamma=0.5, M=1: every admissible v decreases f by >= gamma^3/(24 M^2)  (worst 0.005858 vs h 0.005208)
+  [PASS] gamma=0.2, M=2: exact eigenvector decrease = gamma^3/(3M^2)
+  [PASS] gamma=0.2, M=2: every admissible v decreases f by >= gamma^3/(24 M^2)  (worst 8.96e-05 vs h 8.333e-05)
+  [PASS] gamma=1, M=3: exact eigenvector decrease = gamma^3/(3M^2)
+  [PASS] gamma=1, M=3: every admissible v decreases f by >= gamma^3/(24 M^2)  (worst 0.005469 vs h 0.00463)
+  [PASS] gradient f  (max rel err 8.40e-11)
+  SVRG step 1/(4 L n^(2/3)) = 0.0024, M = 9.0
+  [PASS] SVRG alone from the saddle's stable set converges to the saddle
+  [PASS] framework: HessianDescent steps leave the saddle; ends at a minimum  (x = [ 0. -1.], HFO moves 4, rounds 162)
+all checks passed
+
 safran2018spurious
   [PASS] closed-form F matches Monte Carlo  (0.2881 vs 0.2880)
   [PASS] gradient F (analytic)  (max rel err 3.05e-10)
@@ -260,6 +632,64 @@ saxe2014exact
   [PASS] gaussian products: most sv tiny, a few large
 all checks passed
 
+tripuraneni2018stochastic
+  [PASS] notes: |D*| ~ 1.811043  (D* = -1.811040)
+  [PASS] notes: m(D*) ~ -0.504055, true model ~ -0.649939, true change cos(D*) - 1 ~ -1.237943
+  [PASS] gradient model 0  (max rel err 1.94e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 0)  (R_c = 0.0733, scan 0.0733)
+  trial 0: subsolver m = -0.00223, global m = -0.00224, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 0)  (gap 3.9e-06)
+  [PASS] gradient model 1  (max rel err 1.39e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 1)  (R_c = 2.8713, scan 2.8713)
+  trial 1: subsolver m = -3.96981, global m = -3.96981, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 1)  (gap 5.7e-07)
+  [PASS] gradient model 2  (max rel err 1.42e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 2)  (R_c = 0.1667, scan 0.1667)
+  trial 2: subsolver m = -0.02659, global m = -0.02659, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 2)  (gap 5.3e-07)
+  [PASS] gradient model 3  (max rel err 1.43e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 3)  (R_c = 2.9726, scan 2.9726)
+  trial 3: subsolver m = -5.69538, global m = -5.69538, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 3)  (gap 2.4e-07)
+  [PASS] gradient model 4  (max rel err 1.56e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 4)  (R_c = 1.5232, scan 1.5232)
+  trial 4: subsolver m = -1.21708, global m = -1.21708, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 4)  (gap 1.2e-06)
+  [PASS] gradient model 5  (max rel err 2.33e-10)
+  [PASS] Cauchy radius R_c minimizes m along -g (trial 5)  (R_c = 2.9599, scan 2.9599)
+  trial 5: subsolver m = -8.86613, global m = -8.86614, branch GD
+  [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 5)  (gap 1.1e-06)
+  [PASS] gradient f  (max rel err 2.26e-10)
+  [PASS] SCR escapes the saddle line and stops near a minimum y = +-pi  (median outer steps 163.5)
+all checks passed
+
+wang2020cubic
+  [PASS] cubic subproblem solved globally (instance 0)  (m(s) = 0.00000, scan 0.00000)
+  [PASS] cubic subproblem solved globally (instance 1)  (m(s) = -31.19599, scan -25.31370)
+  [PASS] cubic subproblem solved globally (instance 2)  (m(s) = -3.74261, scan -3.74063)
+  [PASS] cubic subproblem solved globally (instance 3)  (m(s) = -1.38610, scan -1.38551)
+  [PASS] cubic subproblem solved globally (instance 4)  (m(s) = -0.80439, scan -0.80380)
+  [PASS] cubic subproblem solved globally (instance 5)  (m(s) = -5.34252, scan -5.34148)
+  [PASS] cubic subproblem solved globally (instance 6)  (m(s) = -1.33447, scan -1.33443)
+  [PASS] cubic subproblem solved globally (instance 7)  (m(s) = -6.60665, scan -6.60614)
+  [PASS] gradient f  (max rel err 1.56e-10)
+  [PASS] Hessian at [-1.66 -1.05]  (fd=[[186.8743, 33.1481], [33.1481, 10.0]] err 7.3e-07)
+  [PASS] Hessian at [1.21 0.33]  (fd=[[81.5627, -24.102], [-24.102, 10.0]] err 3.7e-07)
+  [PASS] Hessian at [-1.62 -0.27]  (fd=[[164.4921, 32.4697], [32.4697, 10.0]] err 6.1e-07)
+  [PASS] Hessian at [-0.08 -1.36]  (fd=[[28.6422, 1.6759], [1.6759, 10.0]] err 4.6e-07)
+  [PASS] start has an indefinite Hessian
+  M = 60: CR 42 iterations, CRm 39 (momentum candidate accepted 37 of 39)
+  [PASS] M = 60: both reach the minimum (1, 1)
+  [PASS] M = 60: CRm needs no more iterations than CR on this run
+  M = 180: CR 65 iterations, CRm 61 (momentum candidate accepted 61 of 61)
+  [PASS] M = 180: both reach the minimum (1, 1)
+  [PASS] M = 180 > L2: CR and CRm are both monotone
+  [PASS] M = 180: CRm needs no more iterations than CR on this run
+  [PASS] at a saddle with zero gradient the cubic step moves along the negative eigenvector (|s| = 2|lambda_min|/M = 1)
+  [PASS] notes: f(0.8) = -0.2176, f(0.86) = -0.2330
+  wrote papers/wang2020cubic/data.json (0 KB)
+all checks passed
+
 wu2025loss
   [PASS] gradient one neuron (w>0 half)  (max rel err 1.26e-10)
   [PASS] gradient one neuron (w<0 half)  (max rel err 0.00e+00)
@@ -276,6 +706,23 @@ wu2025loss
   [PASS] dead neurons sit in the paper's dead wedge (3.93, 5.67) rad
   largest neurons: angles [2.53 0.88 2.53 2.53 2.53 0.88], |h| [0.164 0.16  0.143 0.117 0.113 0.111]
   wrote papers/wu2025loss/data.json (589 KB)
+all checks passed
+
+xu2018first
+  [PASS] gradient f  (max rel err 1.01e-10)
+  [PASS] gradient f_hat  (max rel err 4.27e-11)
+  [PASS] f_hat(0) = 0 and grad f_hat(0) = 0 although grad f(x) != 0
+  hess f(x) eigenvalues [-0.4736  1.0011]
+  [PASS] x has negative curvature
+  [PASS] 2D NEON: detection, and u aligns with the negative eigenvector  (t = 63, cos = 1.000)
+  gamma = 0.1: NEON 151 iterations, NEON+ 50
+  gamma = 0.03: NEON 535 iterations, NEON+ 102
+  gamma = 0.01: NEON 1707 iterations, NEON+ 194
+  gamma = 0.003: NEON 6081 iterations, NEON+ 385
+  gamma = 0.001: NEON 19331 iterations, NEON+ 713
+  [PASS] NEON iterations ~ 1/gamma (power method)  (slope -1.054)
+  [PASS] NEON+ iterations ~ 1/sqrt(gamma) (accelerated)  (slope -0.577)
+  wrote papers/xu2018first/data.json (0 KB)
 all checks passed
 
 zhang2026saddle

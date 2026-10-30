@@ -1,0 +1,9 @@
+{
+  "result": "If stochastic gradients have a non-vanishing second moment along the most negative curvature direction (<b>CNC</b>), SGD-type methods escape saddles <b>without added isotropic noise</b>, reaching (ε, ε^{2/5})-second-order points with no explicit dimension dependence.",
+  "result_plain": "SGD's own noise escapes saddles when it is correlated with negative curvature (CNC).",
+  "tags": ["saddle escape", "stochastic gradients", "noise", "second-order stationarity"],
+  "tag_tabs": { "saddle escape": "cnc", "stochastic gradients": "cnc", "noise": "dim", "second-order stationarity": "cnc" },
+  "tabs": [["cnc", "CNC"], ["dim", "Dimension"]],
+  "thumb": "cnc",
+  "data": true
+}

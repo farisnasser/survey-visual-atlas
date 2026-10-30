@@ -1,0 +1,10 @@
+{
+  "result": "Even on <b>Gaussian</b> linear regression, constant-step SGD has a <b>power-law (heavy-tailed)</b> stationary distribution; the tail index falls as η/b grows and drops below 2 (infinite variance) past η_crit = 2b/(σ²(d + b + 1)).",
+  "result_plain": "SGD iterates become heavy-tailed from multiplicative noise; larger η/b means heavier tails.",
+  "tags": ["noise", "heavy tails", "stochastic gradients", "large learning rate"],
+  "tag_tabs": { "noise": "cloud", "heavy tails": "tail", "stochastic gradients": "cloud", "large learning rate": "alpha" },
+  "tabs": [["cloud", "Iterate cloud"], ["tail", "Power-law tail"], ["alpha", "α(η, b, d)"]],
+  "thumb": "cloud",
+  "thumbTicks": 120,
+  "data": true
+}

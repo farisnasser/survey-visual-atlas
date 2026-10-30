@@ -1,0 +1,230 @@
+{
+ "_doc": "Survey reference number -> Atlas key and official links. Hand-maintained: add a row when a new paper gets notes or a page.",
+ "refs": {
+  "2": {
+   "key": "murty1987some",
+   "link": "https://doi.org/10.1007/BF02592948",
+   "pdf": "https://public.websites.umich.edu/~murty/np.pdf"
+  },
+  "3": {
+   "key": "blum1992training",
+   "link": "https://papers.nips.cc/paper_files/paper/1988/hash/3def184ad8f4755ff269862ea77393dd-Abstract.html",
+   "pdf": "https://people.csail.mit.edu/rivest/pubs/BR93.pdf"
+  },
+  "4": {
+   "key": "baldi1989neural",
+   "link": "https://www.sciencedirect.com/science/article/pii/0893608089900142",
+   "pdf": null
+  },
+  "5": {
+   "key": "dauphin2014identifying",
+   "link": "https://papers.nips.cc/paper_files/paper/2014/hash/04192426585542c54b96ba14445be996-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2014/file/04192426585542c54b96ba14445be996-Paper.pdf"
+  },
+  "6": {
+   "key": "ge2015escaping",
+   "link": "https://proceedings.mlr.press/v40/Ge15.html",
+   "pdf": "https://proceedings.mlr.press/v40/Ge15.pdf"
+  },
+  "7": {
+   "key": "lee2016gradient",
+   "link": "https://proceedings.mlr.press/v49/lee16.html",
+   "pdf": "https://proceedings.mlr.press/v49/lee16.pdf"
+  },
+  "8": {
+   "key": "jin2017escape",
+   "link": "https://proceedings.mlr.press/v70/jin17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/jin17a/jin17a.pdf"
+  },
+  "9": {
+   "key": "carmon2018accelerated",
+   "link": "https://epubs.siam.org/doi/10.1137/17M1114296",
+   "pdf": "https://arxiv.org/pdf/1611.00756"
+  },
+  "10": {
+   "key": "jin2018accelerated",
+   "link": "https://arxiv.org/abs/1711.10456",
+   "pdf": "https://arxiv.org/pdf/1711.10456"
+  },
+  "11": {
+   "key": "fang2018spider",
+   "link": "https://arxiv.org/abs/1807.01695",
+   "pdf": "https://arxiv.org/pdf/1807.01695"
+  },
+  "12": {
+   "key": "arjevani2020second",
+   "link": "https://arxiv.org/abs/2006.13476",
+   "pdf": "https://arxiv.org/pdf/2006.13476"
+  },
+  "13": {
+   "key": "jacot2018neural",
+   "link": "https://papers.nips.cc/paper_files/paper/2018/hash/5a4be1fa34e62bb8a6ec6b91d2462f5a-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf"
+  },
+  "14": {
+   "key": "du2019gradient",
+   "link": "https://proceedings.mlr.press/v97/du19c.html",
+   "pdf": "https://proceedings.mlr.press/v97/du19c/du19c.pdf"
+  },
+  "15": {
+   "key": "allenzhu2019convergence",
+   "link": "https://proceedings.mlr.press/v97/allen-zhu19a.html",
+   "pdf": "https://proceedings.mlr.press/v97/allen-zhu19a/allen-zhu19a.pdf"
+  },
+  "18": {
+   "key": "zhang2026saddle",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/5e96d63b20f335f57999a1aca7fa0474-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2026/file/5e96d63b20f335f57999a1aca7fa0474-Paper-Conference.pdf"
+  },
+  "28": {
+   "key": "martens2010deep",
+   "link": "https://icml.cc/Conferences/2010/papers/458.pdf",
+   "pdf": "https://icml.cc/Conferences/2010/papers/458.pdf"
+  },
+  "29": {
+   "key": "sutskever2013importance",
+   "link": "https://proceedings.mlr.press/v28/sutskever13.html",
+   "pdf": "https://proceedings.mlr.press/v28/sutskever13.pdf"
+  },
+  "30": {
+   "key": "saxe2014exact",
+   "link": "https://arxiv.org/abs/1312.6120",
+   "pdf": "https://arxiv.org/pdf/1312.6120"
+  },
+  "31": {
+   "key": "kawaguchi2016deep",
+   "link": "https://papers.nips.cc/paper_files/paper/2016/hash/f2fc990265c712c49d51a18a32b39f0c-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/f2fc990265c712c49d51a18a32b39f0c-Paper.pdf"
+  },
+  "33": {
+   "key": "allenzhu2018neon2",
+   "link": "https://arxiv.org/abs/1711.06673",
+   "pdf": "https://arxiv.org/pdf/1711.06673"
+  },
+  "37": {
+   "key": "kalra2025universal",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/8c8cd1b78cdae751265c88efc136e5bd-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/8c8cd1b78cdae751265c88efc136e5bd-Paper-Conference.pdf"
+  },
+  "38": {
+   "key": "choromanska2015loss",
+   "link": "https://proceedings.mlr.press/v38/choromanska15.html",
+   "pdf": "https://proceedings.mlr.press/v38/choromanska15.pdf"
+  },
+  "39": {
+   "key": "galli2026flatland",
+   "link": "https://proceedings.mlr.press/v306/galli26a.html",
+   "pdf": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/galli26a/galli26a.pdf"
+  },
+  "40": {
+   "key": "nesterov2006cubic",
+   "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
+   "pdf": null
+  },
+  "43": {
+   "key": "apidopoulos2026taming",
+   "link": "https://proceedings.mlr.press/v306/apidopoulos26a.html",
+   "pdf": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/apidopoulos26a/apidopoulos26a.pdf"
+  },
+  "47": {
+   "key": "ghadimi2013stochastic",
+   "link": "https://epubs.siam.org/doi/10.1137/120880811",
+   "pdf": "https://arxiv.org/pdf/1309.5549"
+  },
+  "52": {
+   "key": "laurent2018deep",
+   "link": "https://proceedings.mlr.press/v80/laurent18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/laurent18a/laurent18a.pdf"
+  },
+  "53": {
+   "key": "nguyen2017loss",
+   "link": "https://proceedings.mlr.press/v70/nguyen17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/nguyen17a/nguyen17a.pdf"
+  },
+  "54": {
+   "key": "haeffele2017global",
+   "link": "https://openaccess.thecvf.com/content_cvpr_2017/html/Haeffele_Global_Optimality_in_CVPR_2017_paper.html",
+   "pdf": "https://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf"
+  },
+  "55": {
+   "key": "safran2018spurious",
+   "link": "https://proceedings.mlr.press/v80/safran18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/safran18a/safran18a.pdf"
+  },
+  "56": {
+   "key": "wu2025loss",
+   "link": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/a86d17b6cd70366d56ab48d2a05a4df1-Abstract-Conference.html",
+   "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/a86d17b6cd70366d56ab48d2a05a4df1-Paper-Conference.pdf"
+  },
+  "58": {
+   "key": "bhojanapalli2016global",
+   "link": "https://papers.nips.cc/paper_files/paper/2016/hash/b139e104214a08ae3f2ebcce149cdf6e-Abstract.html",
+   "pdf": "https://papers.nips.cc/paper_files/paper/2016/file/b139e104214a08ae3f2ebcce149cdf6e-Paper.pdf"
+  },
+  "60": {
+   "key": "ge2017no",
+   "link": "https://proceedings.mlr.press/v70/ge17a.html",
+   "pdf": "https://proceedings.mlr.press/v70/ge17a/ge17a.pdf"
+  },
+  "62": {
+   "key": "li2018visualizing",
+   "link": "https://papers.nips.cc/paper/7875-visualizing-the-loss-l",
+   "pdf": "https://arxiv.org/pdf/1712.09913"
+  },
+  "69": {
+   "key": "daneshmand2018escaping",
+   "link": "https://proceedings.mlr.press/v80/daneshmand18a.html",
+   "pdf": "https://proceedings.mlr.press/v80/daneshmand18a/daneshmand18a.pdf"
+  },
+  "70": {
+   "key": "fang2019sharp",
+   "link": "https://arxiv.org/abs/1902.00247",
+   "pdf": "https://arxiv.org/pdf/1902.00247"
+  },
+  "71": {
+   "key": "gurbuzbalaban2021heavy",
+   "link": "https://arxiv.org/abs/2006.04740",
+   "pdf": "https://arxiv.org/pdf/2006.04740"
+  },
+  "72": {
+   "key": "azizian2025global",
+   "link": "https://arxiv.org/abs/2503.16398",
+   "pdf": "https://arxiv.org/pdf/2503.16398"
+  },
+  "74": {
+   "key": "tripuraneni2018stochastic",
+   "link": "https://arxiv.org/abs/1711.02838",
+   "pdf": "https://arxiv.org/pdf/1711.02838"
+  },
+  "75": {
+   "key": "carmon2018analysis",
+   "link": "https://arxiv.org/abs/1806.09222",
+   "pdf": "https://arxiv.org/pdf/1806.09222"
+  },
+  "76": {
+   "key": "carmon2019gradient",
+   "link": "https://arxiv.org/abs/1612.00547",
+   "pdf": "https://arxiv.org/pdf/1612.00547"
+  },
+  "77": {
+   "key": "wang2020cubic",
+   "link": "https://proceedings.mlr.press/v115/wang20c.html",
+   "pdf": "https://proceedings.mlr.press/v115/wang20c/wang20c.pdf"
+  },
+  "79": {
+   "key": "reddi2018generic",
+   "link": "https://proceedings.mlr.press/v84/reddi18a.html",
+   "pdf": "https://proceedings.mlr.press/v84/reddi18a/reddi18a.pdf"
+  },
+  "81": {
+   "key": "xu2018first",
+   "link": "https://arxiv.org/abs/1711.01944",
+   "pdf": "https://arxiv.org/pdf/1711.01944"
+  },
+  "83": {
+   "key": "reddi2016stochastic",
+   "link": "https://proceedings.mlr.press/v48/reddi16.html",
+   "pdf": "https://proceedings.mlr.press/v48/reddi16.pdf"
+  }
+ }
+}

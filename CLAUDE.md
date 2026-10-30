@@ -1,6 +1,6 @@
 # Survey Visual Atlas — project rules
 
-One static website that lists every paper in the MLR570 survey (*Non-Convex Optimization in Neural Networks*, Faris Nasser & Salah Moussa) and gives each paper an interactive visual of its core results, the math behind each visual, and the team's study-notes PDF. Live at **https://farisnasser.github.io/survey-visual-atlas/** (GitHub Pages, public repo `farisnasser/survey-visual-atlas`, branch `main`, root).
+One static website that lists every reference of the MLR570 survey (*Non-Convex Optimization in Neural Networks*, Faris Nasser & Salah Moussa), organized by the survey's Fig. 5 taxonomy, and gives each studied paper an interactive visual of its core results, the math behind each visual, and the team's study-notes PDF. Live at **https://farisnasser.github.io/survey-visual-atlas/** (GitHub Pages, public repo `farisnasser/survey-visual-atlas`, branch `main`, root).
 
 Full original brief: `reference/build-brief.md`. Quality bar: `reference/saddles.html` (the Kawaguchi visual every page must feel like a sibling of).
 
@@ -8,16 +8,14 @@ Full original brief: `reference/build-brief.md`. Quality bar: `reference/saddles
 **Every surface is a real function and every ball runs a real optimizer on it.** Display height may be rescaled (`def.h`, `fit`), dynamics never are. Each paper's formulas are checked in `scripts/check-math/<Key>.py` before they go into `visual.js`; when a picture simplifies the theorem, the tab's `note` says so in one line. Never sculpt a shape to look right. Never state a number on a page that a check script or the paper didn't produce.
 
 ## Sources of truth (read-only)
-Google Drive, alumni account `b00097313@alumni.aus.edu`, folder `My Drive / MLR570 Project / NonConvex Survey` (`1NqINAeP0iZ9xk639kOxgK9QcIiva9VVz`):
-| Item | Drive ID |
-|---|---|
-| Papers Master (Google Sheet, single source of truth) | `1DzVJJDWxBM6I5YbaMa21Yr5rlE5duIX5dK-sWnmGS94` |
-| `PDFs/` (paper PDFs) | `1Gpw30TRACyBap3_c5DsZWrXaHR3IwdBl` |
-| `PDFs/Notes/` (study-notes PDFs) | `1XmjqySjmFT-BPS04Uti5m6-ibsx0makK` |
-Never edit Drive. The site only reads exports of it. Column O "Our notes" of the sheet is the team's private scribble and is **not** published.
+- **The survey PDF** (`NonConvex_Survey_Final.pdf`, 111 references) decides which papers the Atlas lists, their numbering and grouping. `scripts/build_survey.py` turns it into `data/survey.json` (references, where each is cited, Fig. 5 taxonomy). Rebuild only when the survey changes.
+- **Drive notes folder**, alumni account `b00097313@alumni.aus.edu`, `My Drive / MLR570 Project / NonConvex Survey / PDFs / Notes` (`1XmjqySjmFT-BPS04Uti5m6-ibsx0makK`). Notes file names follow no pattern; map them by hand in `data/notes_map.json` after reading the title page.
+- `data/atlas_refs.json` (hand-maintained): survey reference number → Atlas key + official links.
+- The old Papers Master sheet (`1DzVJJDWxBM6I5YbaMa21Yr5rlE5duIX5dK-sWnmGS94`) is no longer read; its AI summaries are frozen in `data/legacy_sheet.json`. Its column O "Our notes" was never published and must not be.
+Never edit Drive.
 
 ## When Faris says new papers / notes were added
-Run the **atlas-sync** skill (`.claude/skills/atlas-sync/SKILL.md`). In short: export the sheet + download new notes through the Drive connector, `scripts/sync.py`, then for every paper the sync reports as "notes but no visual yet" run the **paper-visuals** skill (`.claude/skills/paper-visuals/SKILL.md`), regenerate thumbnails, commit, push. No scheduled or automatic refreshes — only on request.
+Run the **atlas-sync** skill (`.claude/skills/atlas-sync/SKILL.md`). In short: list the Drive notes folder, download new notes, map each to its survey reference number (`data/atlas_refs.json`, `data/notes_map.json`), `scripts/sync.py --notes-dir`, then for every paper the sync reports as "notes but no visual yet" run the **paper-visuals** skill (`.claude/skills/paper-visuals/SKILL.md`), regenerate thumbnails, commit, push. No scheduled or automatic refreshes — only on request.
 
 ## Layout
 ```
@@ -27,15 +25,19 @@ src/lib/atlas3d.js          surfaces (def/gridDef), optimizer balls (opt.gd/sgd/
 src/lib/charts.js           canvas Plot: lines, log axes, reference lines, heat maps, arrows, bars
 src/lib/math.js             seeded rng, Jacobi eigensolver, finite-difference checks
 src/paper/paper.js|css      paper shell: header, tabs, HUD, side charts, KaTeX math drawer, PDF.js notes
-src/hub/hub.js|css          hub: progress, search, filters, Themes / Timeline / Concepts, compare picker
+src/hub/hub.js|css          hub: progress, search, filters, Survey map (Fig. 5) / References / Timeline / Concepts, compare
 papers/<Key>/visual.js      { tabs: [...] } — see the paper-visuals skill for the tab API
 papers/<Key>/math.md        "## <tabId> | Title" sections, $$display$$, $inline$, ### heads, - bullets, > source lines
 papers/<Key>/meta.json      result (HTML), result_plain, tags, tag_tabs, tabs, thumb, data
 papers/<Key>/data.json      only when a paper needs precomputed data (written by its check script)
+data/survey.json            GENERATED by scripts/build_survey.py from the survey PDF
+data/atlas_refs.json        survey ref number -> Key + links (hand-maintained)
+data/notes_map.json         Key -> notes file name + Drive id (hand-maintained)
+data/legacy_sheet.json      frozen summaries from the old sheet
 data/papers.json            GENERATED by scripts/sync.py — never edit by hand
-data/notes_map.json         notes file -> Key (+ Drive id)
 public/notes/<Key>.pdf      synced notes · public/thumbs/<Key>.webp generated thumbnails
-scripts/sync.py             sheet .xlsx + notes folder -> papers.json + public/notes
+scripts/build_survey.py     survey PDF -> data/survey.json
+scripts/sync.py             survey.json + maps + notes folder -> papers.json + public/notes
 scripts/decode_mcp.py       decode Drive-connector downloads (base64 JSON) into files
 scripts/serve.py            dev server on :8570 + POST /__thumb for thumbnails
 scripts/check-math/*.py     per-paper math checks (run_all.py runs every one)
@@ -46,7 +48,7 @@ research/findings.md        what each paper actually proves, checked against the
 ball/optimizer 1 coral `#ff7a59` · optimizer 2 violet `#b28cff` · optimizer 3 white `#f2f4ff` · negative curvature red `#ff5d73` · positive curvature blue `#7cc4ff` · flat/zero curvature amber `#ffc857` · global minima green `#5fe0b0`. Height ramp indigo → teal → pale yellow. Dark theme only.
 
 ## Status on the hub (computed, not typed)
-Complete = notes + visual · Notes only · Visual only (Kawaguchi: visual ported from the reference, no notes yet) · Queued = neither.
+Complete = notes + visual · Notes only · Visual only (Kawaguchi: visual ported from the reference, no notes yet) · Not started = neither (shown as compact rows).
 
 ## Dev
 `python scripts/serve.py` → http://localhost:8570 (also registered as preview "survey-atlas" in `faris-brain/.claude/launch.json`). On localhost the paper shell exposes `window.__atlas.tick(n)` (advance n frames without requestAnimationFrame) and `window.__atlasErrors`; use them to audit every tab. No build step: plain ES modules + pinned CDNs (three@0.128.0, katex@0.16.9, pdf.js 3.11.174).

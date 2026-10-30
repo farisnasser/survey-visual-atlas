@@ -1,0 +1,9 @@
+{
+  "result": "Running gradient descent on the <b>centered function</b> f(x + u) − f(x) − ∇f(x)ᵀu from random noise extracts a negative-curvature direction with first-order information only (<b>NEON</b>); a Nesterov version is quadratically faster, giving saddle-escaping SGD in time <b>almost linear in d</b>.",
+  "result_plain": "NEON: noise + gradient descent on a centered function finds negative curvature without Hessians.",
+  "tags": ["negative curvature", "Hessian-free", "saddle escape", "acceleration", "stochastic gradients"],
+  "tag_tabs": { "negative curvature": "fhat", "Hessian-free": "fhat", "saddle escape": "fhat", "acceleration": "speed", "stochastic gradients": "fhat" },
+  "tabs": [["fhat", "Centered function"], ["speed", "Power vs Lanczos"]],
+  "thumb": "fhat",
+  "data": true
+}

@@ -3,8 +3,8 @@ body { min-height: 100vh; }
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: calc(12px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); max-width: 1440px; margin: 0 auto; }
 .brand { font: 600 13px var(--display); color: var(--muted); text-decoration: none; }
 .brand:hover { color: var(--ink); }
-.pn { display: flex; gap: 6px; }
-.pn a { font: 500 12px var(--mono); color: var(--muted); text-decoration: none; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; max-width: 42vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pn { display: flex; gap: 6px; min-width: 0; }
+.pn a { font: 500 12px var(--mono); color: var(--muted); text-decoration: none; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; max-width: 42vw; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pn a:hover { color: var(--ink); border-color: var(--muted); }
 main { max-width: 1440px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left, 0px)) 40px; }
 
@@ -131,3 +131,5 @@ body.thumb .hud, body.thumb .tabs, body.thumb .mathbtn, body.thumb .labels { dis
 .stage-box.mode2d .hud { position: static; background: var(--bg-2); border-top: 1px solid var(--line-soft); }
 .stage-box.mode2d .cap { background: none; border: 0; padding: 4px 2px; backdrop-filter: none; max-width: 640px; }
 .stage-box.mode2d .sliders { background: none; border-color: var(--line-soft); }
+
+@media (max-width: 560px) { .brand { white-space: nowrap; flex: none; } .pn a { max-width: 30vw; padding: 6px 8px; } }

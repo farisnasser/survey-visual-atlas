@@ -1,0 +1,9 @@
+{
+  "result": "Tracking the gradient through <b>same-sample differences</b> along the path (SPIDER) finds ε-stationary points with <b>O(min(n^{1/2}ε^{−2}, ε^{−3}))</b> stochastic gradients, matching a lower bound for finite sums.",
+  "result_plain": "SPIDER variance reduction: O(ε^−3) online, near-optimal n^{1/2}ε^−2 for finite sums.",
+  "tags": ["variance reduction", "stochastic gradients", "convergence rate", "lower bound"],
+  "tag_tabs": { "variance reduction": "estimator", "stochastic gradients": "estimator", "convergence rate": "rates", "lower bound": "rates" },
+  "tabs": [["estimator", "Estimator"], ["rates", "Oracle counts"]],
+  "thumb": "estimator",
+  "data": true
+}

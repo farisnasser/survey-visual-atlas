@@ -1,0 +1,9 @@
+{
+  "result": "A negative-curvature direction can be found with <b>stochastic gradient differences only</b>: Neon2 either returns v with vᵀ∇²f v ≤ −δ/2 or certifies ∇²f ⪰ −δI, turning any stationary-point finder into an <b>approximate local-minimum finder</b> without Hessian-vector products.",
+  "result_plain": "Neon2: gradient differences find negative curvature (or certify none), no Hessians needed.",
+  "tags": ["negative curvature", "Hessian-free", "saddle escape", "second-order stationarity", "stochastic gradients"],
+  "tag_tabs": { "negative curvature": "neon2", "Hessian-free": "neon2", "saddle escape": "neon2", "second-order stationarity": "outcomes", "stochastic gradients": "neon2" },
+  "tabs": [["neon2", "Neon2"], ["outcomes", "Two outcomes"]],
+  "thumb": "neon2",
+  "data": true
+}

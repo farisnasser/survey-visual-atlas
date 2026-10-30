@@ -1,0 +1,8 @@
+{
+  "result": "Any fast method for first-order stationarity (e.g. <b>SVRG</b>) becomes a <b>second-order</b> method by interleaving it with a Hessian-focused step, and the combined rate is set by the slower of the two (Theorem 1); one HessianDescent step gains at least γ³/(24M²).",
+  "result_plain": "Generic framework: alternate a gradient method with occasional negative-curvature steps.",
+  "tags": ["saddle escape", "variance reduction", "negative curvature", "second-order stationarity"],
+  "tag_tabs": { "saddle escape": "framework", "variance reduction": "framework", "negative curvature": "lemma2", "second-order stationarity": "framework" },
+  "tabs": [["framework", "Framework"], ["lemma2", "Lemma 2"]],
+  "thumb": "framework"
+}

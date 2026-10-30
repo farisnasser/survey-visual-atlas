@@ -1,0 +1,10 @@
+{
+  "result": "The mean time for constant-step SGD to first reach the <b>global minimum</b> of a non-convex landscape is <b>exp((E ± a)/η)</b>, where the energy E comes from large-deviation transition costs between basins (forests minus prunings); E = 0 exactly when there are no spurious minima.",
+  "result_plain": "SGD's time to reach the global minimum scales like exp(E/η), with E set by spurious basins.",
+  "tags": ["global convergence", "large deviations", "noise", "spurious local minimum", "stochastic gradients"],
+  "tag_tabs": { "global convergence": "camel", "large deviations": "graph", "noise": "camel", "spurious local minimum": "graph", "stochastic gradients": "scaling" },
+  "tabs": [["camel", "Hopping basins"], ["graph", "Transition graph"], ["scaling", "Exponential scaling"]],
+  "thumb": "camel",
+  "thumbTicks": 60,
+  "data": true
+}

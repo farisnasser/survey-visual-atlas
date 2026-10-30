@@ -102,7 +102,7 @@ export class Stage {
     this.scene.remove(this.world);
     this.world.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose?.(); });
     this.world = new THREE.Group(); this.scene.add(this.world);
-    this.balls = []; this.labels.forEach(L => L.e.remove()); this.labels = []; this.frameFns = [];
+    this.balls = []; this.labels.forEach(L => L.e.remove()); this.labels = [];   // frame callbacks belong to the tab, not the scene
   }
   view(cam, tgt) { this.camera.position.set(...cam); this.controls.target.set(...tgt); this.controls.update(); }
   add(o) { this.world.add(o); return o; }

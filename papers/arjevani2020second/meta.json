@@ -1,0 +1,8 @@
+{
+  "result": "With stochastic gradients <b>and Hessian-vector products</b> from a single-point oracle, ε-stationary points cost <b>O(ε^{−3})</b> queries instead of ε^{−4}, and an <b>Ω(ε^{−3}) lower bound</b> shows no higher-order stochastic oracle can do better.",
+  "result_plain": "Second-order stochastic oracles improve ε^−4 to ε^−3, and nothing beyond that helps (lower bound).",
+  "tags": ["variance reduction", "stochastic gradients", "Hessian-vector product", "lower bound", "convergence rate"],
+  "tag_tabs": { "variance reduction": "estimator", "stochastic gradients": "race", "Hessian-vector product": "estimator", "lower bound": "elbow", "convergence rate": "elbow" },
+  "tabs": [["race", "Noisy race"], ["estimator", "HVP estimator"], ["elbow", "Elbow"]],
+  "thumb": "race"
+}

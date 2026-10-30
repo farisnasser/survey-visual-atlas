@@ -1,0 +1,9 @@
+{
+  "result": "Plain <b>gradient descent</b> on the non-convex cubic-regularized quadratic, despite saddles and a bad local minimum, converges to the <b>global</b> Newton step from x₀ = −r b/‖b‖, with explicit rates and a random perturbation for the hard case.",
+  "result_plain": "Gradient descent provably finds the global cubic-regularized Newton step.",
+  "tags": ["cubic regularization", "Hessian-free", "convergence rate", "degenerate saddle"],
+  "tag_tabs": { "cubic regularization": "gd", "Hessian-free": "gd", "convergence rate": "regimes", "degenerate saddle": "regimes" },
+  "tabs": [["gd", "GD finds the global step"], ["regimes", "Stalls"]],
+  "thumb": "gd",
+  "data": true
+}

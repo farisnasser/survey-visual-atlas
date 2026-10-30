@@ -1,0 +1,9 @@
+{
+  "result": "Adding a perturbation and <b>negative curvature exploitation</b> to Nesterov's method finds ε-second-order stationary points in <b>Õ(ε^{−7/4})</b> iterations, faster than gradient descent's Õ(ε^{−2}), using only gradients.",
+  "result_plain": "Perturbed accelerated GD escapes saddles faster than GD: Õ(ε^−7/4) iterations.",
+  "tags": ["saddle escape", "acceleration", "perturbation", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "saddle escape": "escape", "acceleration": "escape", "perturbation": "energy", "second-order stationarity": "scaling", "convergence rate": "scaling" },
+  "tabs": [["escape", "Faster escape"], ["scaling", "Scaling"], ["energy", "Hamiltonian"]],
+  "thumb": "escape",
+  "data": true
+}
