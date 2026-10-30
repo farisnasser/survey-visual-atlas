@@ -1,0 +1,10 @@
+{
+  "result": "AdaGrad gives every coordinate its own step size <b>η/√(Σ g²)</b> from the gradients seen so far, so rarely active features keep large steps. Its regret competes with the best diagonal preconditioner in hindsight, e.g. <b>O(log d·√T)</b> instead of O(√(dT)) for sparse data.",
+  "result_plain": "Per-coordinate steps η/√(Σg²); regret adapts to the data, O(log d √T) on sparse features.",
+  "tags": ["adaptive methods", "preconditioning", "online learning", "convergence rate"],
+  "tag_tabs": { "adaptive methods": "sparse", "preconditioning": "sparse", "online learning": "regret", "convergence rate": "regret" },
+  "tabs": [["sparse", "Rare features"], ["regret", "Sparse regret"]],
+  "thumb": "sparse",
+  "thumbTicks": 300,
+  "data": true
+}

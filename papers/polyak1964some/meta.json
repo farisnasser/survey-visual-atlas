@@ -1,0 +1,9 @@
+{
+  "result": "The <b>heavy-ball</b> method adds the previous step to the gradient step, x_{t+1} = x_t − α∇f(x_t) + β(x_t − x_{t−1}). On a quadratic with condition number κ, the optimal α, β contract the error by <b>(√κ − 1)/(√κ + 1)</b> per step instead of (κ − 1)/(κ + 1): about √κ times fewer iterations.",
+  "result_plain": "Heavy-ball momentum: error shrinks by (√κ − 1)/(√κ + 1) per step on quadratics, vs (κ − 1)/(κ + 1) for GD.",
+  "tags": ["momentum", "acceleration", "convergence rate"],
+  "tag_tabs": { "momentum": "ball", "acceleration": "kappa", "convergence rate": "kappa" },
+  "tabs": [["ball", "Heavy ball"], ["kappa", "√κ vs κ"]],
+  "thumb": "ball",
+  "thumbTicks": 200
+}

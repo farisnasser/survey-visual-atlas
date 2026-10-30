@@ -1,0 +1,10 @@
+{
+  "result": "Shampoo preconditions a matrix (or tensor) gradient from each side: <b>W ← W − η L^{-1/4} G R^{-1/4}</b> with L = Σ GGᵀ, R = Σ GᵀG. The Kronecker product of the two small factors dominates full-matrix AdaGrad's preconditioner (Lemma 8), giving O(√T) regret with m² + n² memory instead of (mn)².",
+  "result_plain": "Left/right Kronecker-factored preconditioner L^{-1/4} G R^{-1/4}; O(√T) regret, m² + n² memory.",
+  "tags": ["adaptive methods", "preconditioning", "second-order method", "convergence rate"],
+  "tag_tabs": { "adaptive methods": "rotate", "preconditioning": "matrix", "second-order method": "matrix", "convergence rate": "matrix" },
+  "tabs": [["rotate", "Rotated valley"], ["matrix", "Matrix problem"]],
+  "thumb": "rotate",
+  "thumbTicks": 200,
+  "data": true
+}

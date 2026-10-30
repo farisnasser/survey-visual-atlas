@@ -1,0 +1,10 @@
+{
+  "result": "Full-batch GD on neural networks first <b>sharpens</b> (top Hessian eigenvalue rises) and then trains at the <b>edge of stability</b>: the sharpness hovers at 2/η and the loss falls non-monotonically. With momentum the edge moves to (2 + 2β)/η.",
+  "result_plain": "GD sharpness rises to 2/η and hovers there while loss keeps falling non-monotonically.",
+  "tags": ["edge of stability", "sharpness", "step size", "progressive sharpening", "momentum"],
+  "tag_tabs": { "edge of stability": "mlp", "sharpness": "mlp", "step size": "quad", "progressive sharpening": "mlp", "momentum": "mom" },
+  "tabs": [["quad", "Why 2/η"], ["mlp", "Edge of stability"], ["mom", "With momentum"]],
+  "thumb": "quad",
+  "thumbTicks": 160,
+  "data": true
+}

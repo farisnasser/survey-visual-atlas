@@ -1,0 +1,9 @@
+{
+  "result": "A monograph on non-convex optimization for machine learning: <b>projected gradient descent onto non-convex sets</b> (sparse, low-rank), alternating minimization and EM converge globally when the problem has <b>restricted strong convexity and smoothness</b>, with a chapter on <b>escaping saddle points</b>.",
+  "result_plain": "Monograph: non-convex PGD, alternating minimization and EM succeed under restricted convexity/smoothness; includes saddle escape.",
+  "tags": ["low-rank recovery", "restricted isometry", "convergence rate"],
+  "tag_tabs": { "low-rank recovery": "gpgd", "restricted isometry": "gpgd", "convergence rate": "gpgd" },
+  "tabs": [["gpgd", "Projected GD on a sparse set"]],
+  "thumb": "gpgd",
+  "data": true
+}

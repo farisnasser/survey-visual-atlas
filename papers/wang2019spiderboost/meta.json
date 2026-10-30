@@ -1,0 +1,10 @@
+{
+  "result": "Keeping SPIDER’s recursive gradient estimator but taking <b>constant steps η = 1/(2L)</b> keeps the near-optimal <b>O(√n ε^{−2} + n)</b> stochastic-gradient complexity for ε-stationary points, runs much faster in practice, and extends to <b>proximal</b> (nonsmooth regularized) and momentum variants.",
+  "result_plain": "SpiderBoost: SPIDER estimator with a large constant step; O(√n/ε² + n), with prox and momentum versions.",
+  "tags": ["variance reduction", "stochastic gradients", "step size", "convergence rate", "nonsmooth loss"],
+  "tag_tabs": { "variance reduction": "boost", "stochastic gradients": "boost", "step size": "boost", "convergence rate": "boost", "nonsmooth loss": "prox" },
+  "tabs": [["boost", "Big steps"], ["prox", "Prox step"]],
+  "thumb": "boost",
+  "thumbTicks": 300,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "A <b>Hessian power method built from gradient differences</b>, renormalized to stay local, finds the negative-curvature direction at a saddle in Õ(log n/√ε) steps; plugged into (accelerated) GD it reaches an ε-second-order point in <b>Õ(log n/ε^{1.75})</b> iterations, polynomially fewer log n factors than perturbed GD.",
+  "result_plain": "Gradient-only negative-curvature finding: Õ(log n/ε^1.75) saddle escape, fewer log n factors than PGD.",
+  "tags": ["saddle escape", "negative curvature", "Hessian-free", "perturbation", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "saddle escape": "find", "negative curvature": "find", "Hessian-free": "find", "perturbation": "find", "second-order stationarity": "rates", "convergence rate": "rates" },
+  "tabs": [["find", "Find the curvature"], ["rates", "Dimension dependence"]],
+  "thumb": "find",
+  "thumbTicks": 160,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "Along a GD trajectory at the edge of stability the sharpness cycles through <b>four phases</b> (sharpen, overshoot, fall, recover). The <b>output-layer norm ‖A‖²</b>, which grows exactly when residual and output disagree (d‖A‖²/dt = −(4/n)DᵀF), tracks the sharpness; proved for two-layer linear networks under spectral assumptions.",
+  "result_plain": "Four-phase EoS cycle; the output-layer norm tracks sharpness; proofs for two-layer linear nets.",
+  "tags": ["edge of stability", "progressive sharpening", "sharpness", "deep linear network"],
+  "tag_tabs": { "edge of stability": "trace", "progressive sharpening": "trace", "sharpness": "sign", "deep linear network": "trace" },
+  "tabs": [["sign", "Output-layer norm"], ["trace", "Four phases"]],
+  "thumb": "sign",
+  "thumbTicks": 300,
+  "data": true
+}

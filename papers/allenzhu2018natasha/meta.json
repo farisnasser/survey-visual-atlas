@@ -1,0 +1,10 @@
+{
+  "result": "Alternating <b>Oja’s algorithm</b> (to find and follow negative curvature) with a fast solver for the remaining <b>almost-convex</b> safe zone, Natasha 2 finds (ε, δ)-approximate local minima with <b>Õ(δ^{−5} + δ^{−1}ε^{−3})</b> stochastic gradients, i.e. <b>Õ(ε^{−3.25})</b> for δ = ε^{1/4}, beating SGD’s ε^{−4}.",
+  "result_plain": "Natasha 2: Oja negative-curvature steps + safe-zone variance reduction, Õ(ε^-3.25) for approximate local minima.",
+  "tags": ["saddle escape", "negative curvature", "Hessian-vector product", "variance reduction", "stochastic gradients", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "saddle escape": "swing", "negative curvature": "swing", "Hessian-vector product": "swing", "variance reduction": "rates", "stochastic gradients": "rates", "second-order stationarity": "swing", "convergence rate": "rates" },
+  "tabs": [["swing", "Swing by"], ["rates", "ε^−3.25"]],
+  "thumb": "swing",
+  "thumbTicks": 400,
+  "data": true
+}

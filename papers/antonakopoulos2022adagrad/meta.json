@@ -1,0 +1,9 @@
+{
+  "result": "Deterministic <b>AdaGrad</b> with scalar (norm), diagonal or full-matrix preconditioning <b>avoids strict saddle points from almost every initialization</b>, even though its step depends on the whole gradient history: the preconditioner settles to a positive-definite limit and a new stable-manifold argument applies.",
+  "result_plain": "AdaGrad (norm, diagonal, full-matrix) avoids strict saddles from almost every start.",
+  "tags": ["saddle avoidance", "adaptive methods", "stable manifold", "strict saddle"],
+  "tag_tabs": { "saddle avoidance": "adagrad", "adaptive methods": "adagrad", "stable manifold": "escape", "strict saddle": "adagrad" },
+  "tabs": [["adagrad", "AdaGrad near a saddle"], ["escape", "Escape time"]],
+  "thumb": "adagrad",
+  "data": true
+}

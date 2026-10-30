@@ -1,0 +1,10 @@
+{
+  "result": "Training a wide one-hidden-layer network is gradient descent on <b>particles</b> of a measure; the objective is <b>convex in the measure</b>, and in the many-particle limit (a Wasserstein gradient flow) with a suitably spread initialization, if the flow converges its limit is a <b>global minimizer</b>.",
+  "result_plain": "Many-particle gradient flow (Wasserstein) for wide two-layer nets converges to global minimizers under initialization conditions.",
+  "tags": ["overparameterization", "mean-field", "optimal transport", "global convergence", "width"],
+  "tag_tabs": { "overparameterization": "fit", "mean-field": "particles", "optimal transport": "particles", "global convergence": "fit", "width": "fit" },
+  "tabs": [["fit", "Output surface"], ["particles", "Particle paths"]],
+  "thumb": "fit",
+  "thumbTicks": 45,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "“Lazy training” — fast convergence with parameters barely moving — is not special to wide networks but a consequence of <b>scale</b>: multiplying the model by α (or the initialization of a homogeneous net) makes gradient descent follow the <b>linearized model</b>, with ‖w − w₀‖ = O(1/α) and distance to the linear path O(1/α²); experiments show this regime <b>generalizes worse</b>.",
+  "result_plain": "Lazy training comes from scaling: training follows the linearization (O(1/α) motion); it hurts performance in practice.",
+  "tags": ["lazy training", "kernel", "overparameterization", "initialization", "ReLU network"],
+  "tag_tabs": { "lazy training": "scale", "kernel": "scale", "overparameterization": "neurons", "initialization": "neurons", "ReLU network": "neurons" },
+  "tabs": [["scale", "Scale makes it linear"], ["neurons", "Lazy vs active neurons"]],
+  "thumb": "scale",
+  "thumbTicks": 200,
+  "data": true
+}

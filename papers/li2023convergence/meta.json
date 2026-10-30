@@ -1,0 +1,9 @@
+{
+  "result": "Adam reaches ε-stationary points with <b>O(ε⁻⁴)</b> stochastic gradients without assuming bounded gradients or global smoothness: curvature may grow like <b>L0 + Lρ‖∇f‖^ρ, ρ < 2</b>, and the proof shows gradients stay bounded along Adam's trajectory (variance-reduced variant: O(ε⁻³)).",
+  "result_plain": "Adam converges (O(ε⁻⁴)) under curvature growing sub-quadratically with the gradient norm.",
+  "tags": ["adaptive methods", "generalized smoothness", "convergence rate", "first-order stationarity"],
+  "tag_tabs": { "adaptive methods": "adam", "generalized smoothness": "classes", "convergence rate": "adam", "first-order stationarity": "adam" },
+  "tabs": [["adam", "Steep walls"], ["classes", "(ρ, L0, Lρ) smoothness"]],
+  "thumb": "adam",
+  "thumbTicks": 300
+}

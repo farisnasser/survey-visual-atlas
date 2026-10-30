@@ -1,0 +1,10 @@
+{
+  "result": "Viewing RMSProp/Adam as SGD preconditioned by <b>E[ggᵀ]^{−1/2}</b>, the preconditioner makes gradient noise <b>isotropic near stationary points</b>, so weak-noise escape directions get pushed; with an online estimate this gives the first <b>second-order guarantee</b> for an adaptive method, Õ(τ^{−5}) to a (τ, √(ρτ))-stationary point.",
+  "result_plain": "Adaptive methods whiten gradient noise near saddles and escape faster; first second-order result for RMSProp.",
+  "tags": ["adaptive methods", "noise", "stochastic gradients", "saddle escape", "second-order stationarity"],
+  "tag_tabs": { "adaptive methods": "escape", "noise": "whiten", "stochastic gradients": "escape", "saddle escape": "escape", "second-order stationarity": "whiten" },
+  "tabs": [["escape", "Escape race"], ["whiten", "Isotropic noise"]],
+  "thumb": "escape",
+  "thumbTicks": 200,
+  "data": true
+}

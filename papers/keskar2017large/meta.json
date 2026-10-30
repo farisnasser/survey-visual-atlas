@@ -1,0 +1,9 @@
+{
+  "result": "Training with <b>large batches</b> tends to converge to <b>sharp minimizers</b> and generalizes worse than small-batch training, which finds flatter ones; the authors attribute this to the <b>gradient noise of small batches</b> pushing iterates out of sharp basins.",
+  "result_plain": "Large-batch training finds sharp minimizers and generalizes worse; small-batch noise favours flat minimizers.",
+  "tags": ["sharp vs flat minima", "sharpness", "noise", "batch size"],
+  "tag_tabs": { "sharp vs flat minima": "batch", "sharpness": "batch", "noise": "batch", "batch size": "threshold" },
+  "tabs": [["batch", "Batch size"], ["threshold", "Batch threshold"]],
+  "thumb": "batch",
+  "data": true
+}

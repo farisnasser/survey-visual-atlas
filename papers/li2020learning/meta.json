@@ -1,0 +1,10 @@
+{
+  "result": "For a teacher f*(x) = Σ aᵢ|w*ᵢ·x| with Gaussian inputs, a wide two-layer ReLU net trained by (truncated) gradient descent reaches population loss <b>O(1/d^{1+Q})</b>, while <b>any polynomial-size kernel or feature method, NTK included, is stuck at Ω(1/d)</b>: training that moves the features provably beats the kernel regime.",
+  "result_plain": "Beyond NTK: GD on a two-layer net learns |W*x| teachers to o(1/d) loss; every poly-size kernel method has Ω(1/d).",
+  "tags": ["overparameterization", "feature learning", "kernel", "ReLU network", "global convergence"],
+  "tag_tabs": { "overparameterization": "neurons", "feature learning": "neurons", "kernel": "vsfixed", "ReLU network": "neurons", "global convergence": "vsfixed" },
+  "tabs": [["neurons", "Neurons find the teacher"], ["vsfixed", "Learned vs fixed features"]],
+  "thumb": "neurons",
+  "thumbTicks": 5,
+  "data": true
+}

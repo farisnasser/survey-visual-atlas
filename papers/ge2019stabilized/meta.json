@@ -1,0 +1,10 @@
+{
+  "result": "Adding a small <b>perturbation</b> and a <b>gradient shift</b> (run SVRG on f − ⟨∇f(x̃), x − x̃⟩ during a super epoch) makes plain SVRG find ε-second-order stationary points with <b>Õ(n^{2/3}/ε² + n/ε^{1.5})</b> stochastic gradients, almost its first-order cost and without a negative-curvature subroutine.",
+  "result_plain": "Stabilized SVRG: perturbation + gradient shift give second-order guarantees at Õ(n^2/3/ε² + n/ε^1.5).",
+  "tags": ["variance reduction", "perturbation", "saddle escape", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "variance reduction": "stabilize", "perturbation": "stabilize", "saddle escape": "stabilize", "second-order stationarity": "rates", "convergence rate": "rates" },
+  "tabs": [["stabilize", "Shift the gradient"], ["rates", "Complexity"]],
+  "thumb": "stabilize",
+  "thumbTicks": 300,
+  "data": true
+}

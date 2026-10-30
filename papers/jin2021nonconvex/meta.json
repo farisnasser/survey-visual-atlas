@@ -1,0 +1,9 @@
+{
+  "result": "<b>Perturbed gradient descent</b> and <b>perturbed SGD</b> find ε-second-order stationary points in essentially the same number of iterations as GD and SGD need for first-order ones, with only a <b>polylogarithmic dependence on the dimension</b>.",
+  "result_plain": "Perturbed GD/SGD reach second-order stationary points about as fast as first-order ones, with polylog dimension dependence.",
+  "tags": ["saddle escape", "perturbation", "second-order stationarity", "stochastic gradients"],
+  "tag_tabs": { "saddle escape": "saddle", "perturbation": "saddle", "second-order stationarity": "saddle", "stochastic gradients": "dim" },
+  "tabs": [["saddle", "Perturbed GD"], ["dim", "Dimension"]],
+  "thumb": "saddle",
+  "data": true
+}

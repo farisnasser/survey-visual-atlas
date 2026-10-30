@@ -1,0 +1,10 @@
+{
+  "result": "Any algorithm — even randomized and using all derivatives — needs <b>ε^{−(p+1)/p}</b> queries in the worst case to find an ε-stationary point of a function with Lipschitz p-th derivative; the hard instance is a <b>zero-chain</b> that reveals one coordinate per query. So gradient descent (ε^{−2}) and cubic regularization (ε^{−3/2}) are worst-case optimal.",
+  "result_plain": "Lower bound ε^-(p+1)/p for finding stationary points; GD and cubic Newton are optimal in their classes.",
+  "tags": ["lower bound", "first-order stationarity", "convergence rate", "cubic regularization"],
+  "tag_tabs": { "lower bound": "bounds", "first-order stationarity": "chain", "convergence rate": "bounds", "cubic regularization": "bounds" },
+  "tabs": [["chain", "The hard function"], ["bounds", "The bounds"]],
+  "thumb": "chain",
+  "thumbTicks": 200,
+  "data": true
+}

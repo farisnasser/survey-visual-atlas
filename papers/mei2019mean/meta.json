@@ -1,0 +1,10 @@
+{
+  "result": "SGD on a wide two-layer network is tracked by a <b>PDE for the distribution of neurons</b> with error <b>O(1/√N)</b> whose constant <b>does not depend on the dimension</b> (step size must be ≪ 1/D); the analysis extends to unbounded activations and noisy SGD, and <b>kernel ridge regression</b> appears as a special scaling limit.",
+  "result_plain": "Mean-field theory with dimension-free 1/√N approximation bounds; kernel regression as a limit.",
+  "tags": ["mean-field", "overparameterization", "optimal transport", "width", "kernel"],
+  "tag_tabs": { "mean-field": "neurons", "overparameterization": "dimfree", "optimal transport": "neurons", "width": "dimfree", "kernel": "dimfree" },
+  "tabs": [["neurons", "Neurons as a population"], ["dimfree", "Dimension-free error"]],
+  "thumb": "neurons",
+  "thumbTicks": 400,
+  "data": true
+}

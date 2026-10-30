@@ -1,0 +1,10 @@
+{
+  "result": "LENA perturbs at small estimated gradients and <b>shrinks the last step</b> whenever the average movement exceeds a budget, which keeps SPIDER/STORM gradient estimates accurate without big batches; it finds (ε, ε_H)-approximate local minima with <b>Õ(ε^{−3} + ε_H^{−6})</b> stochastic gradients, Õ(ε^{−3}) for ε_H = √ε.",
+  "result_plain": "LENA: perturbed SPIDER/STORM with last-step shrinkage, Õ(ε^-3 + ε_H^-6) for approximate local minima.",
+  "tags": ["perturbation", "variance reduction", "stochastic gradients", "saddle escape", "second-order stationarity", "convergence rate", "lower bound"],
+  "tag_tabs": { "perturbation": "lena", "variance reduction": "lena", "stochastic gradients": "lena", "saddle escape": "lena", "second-order stationarity": "rates", "convergence rate": "rates", "lower bound": "rates" },
+  "tabs": [["lena", "Last-step shrinkage"], ["rates", "ε^−3"]],
+  "thumb": "lena",
+  "thumbTicks": 600,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "A general online-to-nonconvex conversion contains <b>schedule-free SGD</b> as a special case, so SF-SGD reaches (λ, ε)-stationary points of nonsmooth nonconvex losses with the optimal <b>O(λ^(1/2)ε^(−7/2))</b> gradients, hence O(ε⁻⁴) for smooth and O(ε^(−3.5)) for second-order smooth losses. The analysis also explains the practical choices β ≈ 1 and large base steps.",
+  "result_plain": "Schedule-free SGD is optimal for nonsmooth nonconvex stationarity: O(ε⁻⁴) smooth, O(ε^(−3.5)) second-order smooth.",
+  "tags": ["schedule-free", "nonsmooth loss", "first-order stationarity", "convergence rate", "lower bound"],
+  "tag_tabs": { "schedule-free": "kink", "nonsmooth loss": "kink", "first-order stationarity": "kink", "convergence rate": "rates", "lower bound": "rates" },
+  "tabs": [["kink", "Nonsmooth landscape"], ["rates", "Optimal rates"]],
+  "thumb": "kink",
+  "thumbTicks": 400,
+  "data": true
+}

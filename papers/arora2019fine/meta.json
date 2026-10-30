@@ -1,0 +1,10 @@
+{
+  "result": "For a wide two-layer ReLU net, GD’s residual follows <b>(I − ηH∞)ᵏy</b>, so labels aligned with the top eigenvectors of the kernel H∞ are learned fast and random labels slowly; and the width-independent quantity <b>√(2yᵀ(H∞)⁻¹y/n)</b> bounds the generalization error.",
+  "result_plain": "Fine-grained NTK analysis: per-eigendirection convergence explains true vs random label speed; y^T H^-1 y bounds generalization.",
+  "tags": ["overparameterization", "lazy training", "kernel", "global convergence", "ReLU network"],
+  "tag_tabs": { "overparameterization": "valley", "lazy training": "labels", "kernel": "labels", "global convergence": "labels", "ReLU network": "valley" },
+  "tabs": [["valley", "Fast and slow directions"], ["labels", "True vs random labels"]],
+  "thumb": "valley",
+  "thumbTicks": 60,
+  "data": true
+}

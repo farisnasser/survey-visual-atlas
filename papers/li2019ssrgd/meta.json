@@ -1,0 +1,10 @@
+{
+  "result": "SARAH/SPIDER-style recursive gradients plus <b>a uniform perturbation when the gradient is small</b> find (ε, δ)-second-order stationary points of finite sums with <b>Õ(√n/ε² + √n/δ⁴ + n/δ³)</b> stochastic gradients, almost matching the √n/ε² lower bound, with no negative-curvature subroutine.",
+  "result_plain": "SSRGD: recursive gradient + occasional perturbation; near-optimal √n/ε² finite-sum rate for second-order points.",
+  "tags": ["variance reduction", "perturbation", "saddle escape", "second-order stationarity", "convergence rate", "lower bound"],
+  "tag_tabs": { "variance reduction": "escape", "perturbation": "escape", "saddle escape": "escape", "second-order stationarity": "rates", "convergence rate": "rates", "lower bound": "rates" },
+  "tabs": [["escape", "Perturb once"], ["rates", "√n vs n^{2/3}"]],
+  "thumb": "escape",
+  "thumbTicks": 300,
+  "data": true
+}

@@ -1,0 +1,9 @@
+{
+  "result": "A <b>center-stable manifold theorem with weakened regularity</b> shows that gradient descent on shallow, scalar-input <b>ReLU and leaky-ReLU networks</b> fitting an affine target <b>avoids most saddle points</b>; whenever its limit loss is below an explicit threshold, it has reached a <b>global minimum</b>.",
+  "result_plain": "GD on shallow scalar-input (leaky) ReLU nets with affine targets avoids most saddles; below an explicit loss threshold it reaches a global minimum.",
+  "tags": ["saddle avoidance", "ReLU network", "nonsmooth activation", "stable manifold", "spurious local minimum"],
+  "tag_tabs": { "saddle avoidance": "levels", "ReLU network": "slice", "nonsmooth activation": "slice", "stable manifold": "levels", "spurious local minimum": "slice" },
+  "tabs": [["slice", "Loss slice"], ["levels", "Critical levels"]],
+  "thumb": "slice",
+  "data": true
+}

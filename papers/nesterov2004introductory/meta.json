@@ -1,0 +1,10 @@
+{
+  "result": "The standard toolkit the survey builds on: for an <b>L-smooth</b> function the descent lemma makes a gradient step of size 1/L lower f by ‖∇f‖²/(2L), so gradient descent finds an ε-stationary point in <b>O(ε^{−2})</b> steps even without convexity; convexity adds that stationary points are global minima.",
+  "result_plain": "Textbook background: L-smoothness, descent lemma, GD reaches ‖∇f‖ ≤ ε in O(ε^-2) steps without convexity.",
+  "tags": ["step size", "convergence rate", "first-order stationarity", "gradient descent"],
+  "tag_tabs": { "step size": "descent", "convergence rate": "descent", "first-order stationarity": "descent", "gradient descent": "descent" },
+  "tabs": [["descent", "Step 1/L"]],
+  "thumb": "descent",
+  "thumbTicks": 300,
+  "data": true
+}

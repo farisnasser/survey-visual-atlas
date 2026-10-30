@@ -1,0 +1,10 @@
+{
+  "result": "Minimizing a <b>cubic-regularized</b> Newton model at every step gives a monotone method that <b>cannot be attracted by non-degenerate saddles</b>, converges to second-order stationary points and drives ‖∇f‖ down like <b>O(k^{−2/3})</b>, faster than gradient descent’s O(k^{−1/2}).",
+  "result_plain": "Cubic-regularized Newton: escapes strict saddles, reaches second-order points, O(k^-2/3) gradient rate.",
+  "tags": ["cubic regularization", "saddle escape", "second-order stationarity", "convergence rate"],
+  "tag_tabs": { "cubic regularization": "model", "saddle escape": "saddle", "second-order stationarity": "saddle", "convergence rate": "rate" },
+  "tabs": [["saddle", "Newton vs cubic"], ["model", "The cubic model"], ["rate", "Gradient rate"]],
+  "thumb": "saddle",
+  "thumbTicks": 300,
+  "data": true
+}

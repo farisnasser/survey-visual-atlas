@@ -1,0 +1,9 @@
+{
+  "result": "Lookahead runs any inner optimizer for k fast steps, then moves the slow weights a fraction α towards the result. On the noisy quadratic its <b>steady-state variance is strictly below SGD's</b> at the same learning rate (Prop. 2), and in practice it makes training more robust to hyperparameters.",
+  "result_plain": "k fast steps, then slow weights interpolate; lower stationary variance than SGD at the same learning rate.",
+  "tags": ["momentum", "noise", "stochastic gradients", "weight averaging"],
+  "tag_tabs": { "momentum": "noisy", "noise": "noisy", "stochastic gradients": "noisy", "weight averaging": "ratio" },
+  "tabs": [["noisy", "Noisy quadratic"], ["ratio", "Variance ratio"]],
+  "thumb": "noisy",
+  "thumbTicks": 300
+}

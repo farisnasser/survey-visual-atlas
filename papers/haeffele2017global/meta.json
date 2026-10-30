@@ -1,0 +1,9 @@
+{
+  "result": "If the network and its regularizer are <b>positively homogeneous of the same degree</b>, any local minimum in which one subnetwork is <b>entirely zero is a global minimum</b>, and with enough parallel subnetworks a <b>non-increasing path</b> to a global minimum exists from every start.",
+  "result_plain": "Matched-degree homogeneous nets: a local min with a zero subnetwork is global; large enough nets have a descent path to a global min.",
+  "tags": ["no spurious minima", "positive homogeneity", "overparameterization", "ReLU network", "spurious local minimum"],
+  "tag_tabs": { "no spurious minima": "matched", "positive homogeneity": "matched", "overparameterization": "relu", "ReLU network": "relu", "spurious local minimum": "mismatch" },
+  "tabs": [["matched", "Matched degree"], ["mismatch", "Degree mismatch"], ["relu", "ReLU network"]],
+  "thumb": "matched",
+  "data": true
+}

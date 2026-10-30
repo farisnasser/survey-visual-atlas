@@ -1,0 +1,9 @@
+{
+  "result": "Muon and its relatives are <b>non-Euclidean steepest descent</b>: pick a norm per layer (spectral for matrices, so the step is −polar(G)), combine them into a product norm, and use either a constrained or a regularized step. This recovers MuonAdam and yields <b>MuonMax</b>; with model-based momentum (Momo) it is much less sensitive to the learning rate.",
+  "result_plain": "Muon = constrained steepest descent in the spectral norm; product norms give MuonMax, Momo adds robustness.",
+  "tags": ["adaptive methods", "preconditioning", "steepest descent", "step size"],
+  "tag_tabs": { "adaptive methods": "steps", "preconditioning": "lmo", "steepest descent": "steps", "step size": "steps" },
+  "tabs": [["steps", "Steepest in which norm?"], ["lmo", "Polar factor"]],
+  "thumb": "steps",
+  "thumbTicks": 300
+}

@@ -1,0 +1,10 @@
+{
+  "result": "In real training, curvature grows with the gradient: <b>‖∇²f‖ ≤ L0 + L1‖∇f‖</b> ((L0, L1)-smoothness). Under it, fixed-step GD must slow down by a factor tied to the largest gradient it may see, while <b>clipped GD</b> converges at a rate independent of it, so clipping can be arbitrarily faster.",
+  "result_plain": "Curvature grows with gradient norm; clipped GD's rate doesn't depend on the initial gradient, fixed-step GD's does.",
+  "tags": ["generalized smoothness", "gradient clipping", "adaptive methods", "step size", "convergence rate"],
+  "tag_tabs": { "generalized smoothness": "steep", "gradient clipping": "steep", "adaptive methods": "steep", "step size": "scaling", "convergence rate": "scaling" },
+  "tabs": [["steep", "Clipped vs fixed step"], ["scaling", "Cost vs start"]],
+  "thumb": "steep",
+  "thumbTicks": 300,
+  "data": true
+}

@@ -1,0 +1,10 @@
+{
+  "result": "Treating residual blocks as <b>particles of a distribution over parameters and depth</b>, a deep ResNet becomes a continuous ODE model whose loss has <b>no bad local minima</b> (any positive loss admits a descent direction, Theorem 3); the backpropagated signal stays bounded below by the loss, and the Wasserstein gradient flow reaches zero loss if it converges (Theorem 4).",
+  "result_plain": "Mean-field continuous-depth ResNet: every local minimizer is global; flow converges to zero loss under assumptions.",
+  "tags": ["mean-field", "overparameterization", "no spurious minima", "global convergence", "optimal transport"],
+  "tag_tabs": { "mean-field": "flow", "overparameterization": "depth", "no spurious minima": "depth", "global convergence": "flow", "optimal transport": "flow" },
+  "tabs": [["flow", "Data flowing through depth"], ["depth", "Depth limit & gradients"]],
+  "thumb": "flow",
+  "thumbTicks": 5,
+  "data": true
+}
