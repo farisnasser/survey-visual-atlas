@@ -1,0 +1,14 @@
+{
+ "40": {
+  "link": "https://link.springer.com/article/10.1007/s10107-006-0706-8",
+  "pdf": "https://research.dial.uclouvain.be/bitstreams/bae87e54-345e-4d37-98f1-d1cd3c9a9226/download"
+ },
+ "82": {
+  "link": "https://proceedings.neurips.cc/paper/2021/hash/47bd8ac1becf213f155a82244b4a696a-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/2111.14069"
+ },
+ "84": {
+  "link": "https://proceedings.neurips.cc/paper/2019/hash/512c5cad6c37edb98ae91c8a76c3a291-Abstract.html",
+  "pdf": "https://arxiv.org/pdf/1810.10690"
+ }
+}
