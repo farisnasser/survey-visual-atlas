@@ -1,0 +1,10 @@
+{
+  "result": "Beyond the edge of stability GD need not diverge: if the loss's higher derivatives satisfy <b>3f‴² − f″f⁗ > 0</b>, the two-step map has stable fixed points and GD converges to a <b>period-2 orbit</b> straddling the minimum. Proved for (x² − μ)²/4, for (xy − μ)²/2 (which first balances x and y), a single neuron and matrix factorization.",
+  "result_plain": "Beyond EoS GD can converge to a stable period-2 orbit; proved via the two-step map.",
+  "tags": ["edge of stability", "period-2 orbit", "chaos", "large learning rate", "fixed-point analysis"],
+  "tag_tabs": { "edge of stability": "orbit", "period-2 orbit": "orbit", "chaos": "bif", "large learning rate": "bif", "fixed-point analysis": "bif" },
+  "tabs": [["orbit", "Period-2 orbit"], ["bif", "Bifurcation"]],
+  "thumb": "orbit",
+  "thumbTicks": 300,
+  "data": true
+}

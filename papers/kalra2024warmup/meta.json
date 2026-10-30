@@ -1,0 +1,10 @@
+{
+  "result": "Warmup mainly lets training tolerate a <b>larger target learning rate</b>: as η_t rises, catapults push the network to flatter regions so the sharpness tracks 2/η_t. For Adam the relevant quantity is the <b>preconditioned sharpness</b>, which starts huge; initializing v₀ = g₀² (GI-Adam) lowers it by √(1 − β2).",
+  "result_plain": "Warmup lets larger target learning rates train by reducing (preconditioned) sharpness via catapults.",
+  "tags": ["warmup", "large learning rate", "catapult", "sharpness", "edge of stability", "adaptive methods"],
+  "tag_tabs": { "warmup": "warm", "large learning rate": "sweep", "catapult": "warm", "sharpness": "warm", "edge of stability": "warm", "adaptive methods": "adam" },
+  "tabs": [["warm", "Warmup"], ["sweep", "Larger targets"], ["adam", "Adam & GI-Adam"]],
+  "thumb": "warm",
+  "thumbTicks": 400,
+  "data": true
+}
