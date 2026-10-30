@@ -1,0 +1,10 @@
+{
+  "result": "SAM minimizes the <b>worst loss in a ρ-ball</b> around the weights, approximated by one normalized ascent step and a gradient taken there (two gradients per step). It lowers test error across image benchmarks and finds lower-curvature solutions.",
+  "result_plain": "SAM minimizes the worst nearby loss with a two-gradient step; flatter solutions, better test error.",
+  "tags": ["sharpness", "sharp vs flat minima", "sharpness-aware minimization", "generalization"],
+  "tag_tabs": { "sharpness": "objective", "sharp vs flat minima": "objective", "sharpness-aware minimization": "objective", "generalization": "basins" },
+  "tabs": [["objective", "SAM objective"], ["basins", "Where starts end"]],
+  "thumb": "objective",
+  "thumbTicks": 300,
+  "data": true
+}

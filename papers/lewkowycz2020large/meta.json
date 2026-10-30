@@ -1,0 +1,9 @@
+{
+  "result": "In a solvable wide model, learning rates between <b>2/λ₀ and 4/λ₀</b> make the loss spike while the kernel (curvature) drops below 2/η: a <b>catapult</b> into a flatter minimum after ~log n steps. Real ReLU networks show the same lower edge, with the upper edge near 12/λ₀.",
+  "result_plain": "Large learning rates catapult: loss spikes, curvature drops below 2/η, training converges flatter.",
+  "tags": ["catapult", "large learning rate", "sharpness", "lazy training", "step size"],
+  "tag_tabs": { "catapult": "spike", "large learning rate": "phases", "sharpness": "spike", "lazy training": "width", "step size": "phases" },
+  "tabs": [["spike", "Catapult"], ["width", "Width n"], ["phases", "Three phases"]],
+  "thumb": "spike",
+  "thumbTicks": 200
+}

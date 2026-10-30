@@ -1,0 +1,9 @@
+{
+  "result": "At the edge of stability the growing oscillation along the top eigenvector creates, through the <b>third-order</b> term of the loss, a drift that lowers the sharpness: <b>self-stabilization</b>. GD then tracks projected descent on the stable set {S ≤ 2/η}.",
+  "result_plain": "Oscillation's cubic term pushes sharpness back below 2/η; GD follows projected descent on {S ≤ 2/η}.",
+  "tags": ["edge of stability", "sharpness", "self-stabilization", "conserved quantity", "progressive sharpening"],
+  "tag_tabs": { "edge of stability": "stages", "sharpness": "stages", "self-stabilization": "stages", "conserved quantity": "orbit", "progressive sharpening": "stages" },
+  "tabs": [["stages", "Four stages"], ["orbit", "Predator–prey"]],
+  "thumb": "stages",
+  "thumbTicks": 260
+}
