@@ -1,0 +1,10 @@
+{
+  "result": "Deeper plain networks can train <b>worse</b> than shallower ones (the degradation problem). Letting each block learn a <b>residual</b> F(x) = H(x) − x with an identity shortcut, y = F(x) + x, makes very deep networks trainable: 34-layer ResNet 25.03% vs plain 28.54% top-1 error on ImageNet.",
+  "result_plain": "Identity shortcuts y = F(x) + x fix the degradation of deep plain nets; deeper ResNets train better.",
+  "tags": ["architecture", "skip connections", "initialization", "loss landscape visualization"],
+  "tag_tabs": { "architecture": "chain", "skip connections": "chain", "initialization": "chain", "loss landscape visualization": "imagenet" },
+  "tabs": [["chain", "Plain vs residual"], ["imagenet", "Degradation"]],
+  "thumb": "chain",
+  "thumbTicks": 200,
+  "data": true
+}

@@ -126,3 +126,34 @@ Same conventions as `research/findings.md`: what each paper actually proves (che
 - Check script: −polar(M) is the spectral LMO (40 000 random candidates never beat it), ⟨M, polar(M)⟩ = nuclear norm, diagonal case reduces to sign descent; notes' diag(3, 1) example (−√10 vs −4) reproduced.
 - Notes: correct (header "Ref 107"). Survey (VII-D): consistent ("non-Euclidean steepest descent under layer-wise norms combined into a product norm", MuonMax, Momo for arbitrary norms, GPT-2 experiments).
 - Visuals: (steps, 3D) W = diag(a, b) on an ill-conditioned quadratic: GD, Muon-style CSD (sign steps of length 0.05, ends in a 2-cycle with loss ~1e-3 — which cycle is rounding-sensitive) and spectral RSD (5.7e-10 after 400 steps); (lmo) 2 × 2 gradient with σ₂ and rotation sliders: Frobenius decrease ‖G‖_F vs spectral decrease σ₁ + σ₂.
+
+## zhang2020gradient — Zhang, He, Sra, Jadbabaie, ICLR 2020 (arXiv 1905.11881) [survey 41]
+- Definition 1: (L0, L1)-smooth if ‖∇²f‖ ≤ L0 + L1‖∇f‖, motivated by AWD-LSTM on PTB (Fig. 1); Remark 1: positive correlation suffices. Lemma 2: polynomials of degree ≥ 3 are (L0, L1)-smooth but not L-smooth. Theorem 3: clipped GD (h = min{η_c, γη_c/‖∇f‖}) needs O(L0Δ/ε² + L1²Δ/L0) iterations. Assumption 4: M = sup‖∇f‖ on the initial sublevel set. Theorem 4: fixed-step GD needs Ω(L1MΔ/(ε² log M)); Theorem 6: O((ML1 + L0)Δ/ε²) suffices. Theorems 7–8: stochastic versions.
+- Notes: correct; header "Ref. [33]" is old numbering. Survey (Assumption 4 and VIII): consistent ("curvature may grow with the gradient norm").
+- Toy: f = x²/2 + x⁴/4 + y²/2 is (1, 3)-smooth on [−6, 6]² (ratio ≤ 0.84). Iterations to ‖∇f‖ ≤ 1e-4 from (x₀, 1), x₀ = 1…8 (M = 2.2…520): best fixed-step GD 6, 22, 47, 81, 189, 322; clipped GD (η = 1, γ = 0.5) 4, 6, 8, 10, 14, 18.
+- Visuals: (steep, 3D) best fixed step vs clipped GD from x₀ ∈ {2, 4, 6}; (scaling) iterations vs M on log axes.
+
+## polyak1964some — Polyak, USSR Comput. Math. Math. Phys. 4(5), 1964 [survey 49]
+- The original article is not openly available (no arXiv/author copy); the page uses the standard heavy-ball formulas (as in the notes and survey Eq. 5): x_{t+1} = x_t − α∇f(x_t) + β(x_t − x_{t−1}); on quadratics with spectrum [μ, L], α = 4/(√L + √μ)², β = ((√L − √μ)/(√L + √μ))² gives contraction (√κ − 1)/(√κ + 1), vs (κ − 1)/(κ + 1) for GD with step 2/(L + μ).
+- Check script: worst spectral radius equals (√κ − 1)/(√κ + 1) for κ = 10, 25, 100; κ = 25: GD 126 steps vs heavy ball 35 to f < 1e-8. Notes' saddle remark checked (p(1) = −αa < 0; the notes write "−a", dropping α — trivial).
+- Notes header "Ref. [41]" is old numbering. Survey: consistent.
+- Visuals: (ball, 3D) GD vs heavy ball with κ seg; (kappa) steps-to-1e-6 vs κ.
+- Link: no free official PDF; `link` points to the journal DOI page only.
+
+## duchi2011adaptive — Duchi, Hazan, Singer, JMLR 12, 2011 [survey 50]
+- Eq. (1) diagonal AdaGrad x_{t+1} = Π(x_t − η diag(G_t)^{−1/2} g_t); full-matrix variant with G_t^{1/2}. Corollary 1: η = D∞/√2 ⇒ R(T) ≤ √2 D∞ Σᵢ‖g_{1:T,i}‖₂ (= √(2d) D∞ inf over diagonal preconditioners). Theorem 7: full-matrix O(‖x*‖ tr(G_T^{1/2})). Sec. 1.3 sparse example: p_i = min{1, ci^{−α}} ⇒ O(log d √T) for α ≥ 2 vs O(√(dT)) for online GD on the box.
+- Check script: Σᵢ√pᵢ = 2.93/5.19/7.49/9.79 for d = 10…10⁴ (log growth); Jensen step by Monte Carlo; toy logistic regression with a 3%-frequency feature: excess loss SGD 0.0050 vs AdaGrad 0.0021, |w₂ − w₂*| 1.37 vs 0.53 (1500 steps, best step each).
+- Notes: correct (convex online setting stressed). Header "Ref. [42]" old numbering. Survey: consistent.
+- Visuals: (sparse, 3D) SGD vs AdaGrad on the empirical logistic loss with w₂ chart; (regret) Σ√pᵢ vs √d.
+
+## kingma2015adam — Kingma & Ba, ICLR 2015 (arXiv 1412.6980) [survey 51]
+- Algorithm 1 with bias correction; Sec. 2.1: |Δ_t| ≤ α(1 − β1)/√(1 − β2) in the most sparse case, ≈ ≤ α otherwise; scale invariance; Sec. 3: E[v_t] = E[g²](1 − β2ᵗ) + ζ; Sec. 6.4 / Fig. 4: without correction β2 near 1 is unstable (VAE). Theorem 4.1 / Corollary 4.2 (O(√T) regret) — their proof was later shown to be flawed (Reddi et al. 2018, survey [111]); the page says so. AdaMax (Sec. 7.1).
+- Check script: corrected constant-gradient step = α exactly; uncorrected step = α(1 − β1ᵗ)/√(1 − β2ᵗ), peak 6.57α at t = 12 for (0.9, 0.999); single spike after 100/1000 zeros: 0.98α/2.52α (bound 3.16α); scale invariance; toy late loss SGD 0.018, momentum 0.010, Adam 0.008.
+- Notes: correct. Survey (Sec. II): consistent.
+- Visuals: (scales, 3D) SGD / momentum / Adam on a noisy, 400:1 quadratic; (bias) step/α curves with β2 seg.
+
+## he2016deep — He, Zhang, Ren, Sun, CVPR 2016 (arXiv 1512.03385) [survey 108]
+- Eq. (1) y = F(x, {W_i}) + x; Eq. (2) projection shortcut when shapes change. Degradation problem: deeper plain nets have higher training error (Fig. 1 CIFAR-10 20 vs 56 layers; Fig. 4 ImageNet 18 vs 34), not overfitting; with BN the forward/backward signals do not vanish, so the authors do not attribute it to vanishing gradients. Table 2 (top-1 %, 10-crop): plain-18 27.94, plain-34 28.54, ResNet-18 27.88, ResNet-34 25.03. Up to 152 layers on ImageNet (ILSVRC 2015 1st place), 1202 layers on CIFAR-10.
+- Toy (ours): tied scalar chain of depth 2K from (0.02, 0.03): gradient norm plain vs residual 0.07 vs 1.4 (depth 2), 7.8e-8 vs 4.0 (depth 6), 7.3e-30 vs 8.2 (depth 20); at depth 6 and 20 the plain chain stays at loss 2.0 after 2000 steps while the residual one converges. Caveat recorded on the page: the paper itself says its degradation is not explained by vanishing gradients (BN); the toy only illustrates the identity-shortcut mechanism.
+- Notes: correct. Survey (III-G): cites ResNets via Li et al. [62] (skip connections smooth landscapes) — consistent.
+- Visuals: (chain, 3D) plain vs residual surfaces side by side with depth seg; (imagenet) reported Table 2 bars.

@@ -1,0 +1,10 @@
+{
+  "result": "Adam combines momentum with per-coordinate scaling: it keeps moving averages of g and g², <b>corrects their bias</b> towards zero, and steps α·m̂/(√v̂ + ε). The step is invariant to gradient scale and roughly bounded by α, which makes α easy to set.",
+  "result_plain": "Bias-corrected moving averages of g and g²; step α m̂/√v̂, scale-invariant and bounded by about α.",
+  "tags": ["adaptive methods", "momentum", "preconditioning", "step size"],
+  "tag_tabs": { "adaptive methods": "scales", "momentum": "scales", "preconditioning": "scales", "step size": "bias" },
+  "tabs": [["scales", "Badly scaled"], ["bias", "Bias correction"]],
+  "thumb": "scales",
+  "thumbTicks": 300,
+  "data": true
+}

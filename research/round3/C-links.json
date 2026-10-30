@@ -66,5 +66,25 @@
  "107": {
   "link": "https://arxiv.org/abs/2510.09827",
   "pdf": "https://arxiv.org/pdf/2510.09827"
+ },
+ "41": {
+  "link": "https://openreview.net/forum?id=BJgnXpVYwS",
+  "pdf": "https://arxiv.org/pdf/1905.11881"
+ },
+ "49": {
+  "link": "https://doi.org/10.1016/0041-5553(64)90137-5",
+  "pdf": null
+ },
+ "50": {
+  "link": "https://jmlr.org/papers/v12/duchi11a.html",
+  "pdf": "https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf"
+ },
+ "51": {
+  "link": "https://arxiv.org/abs/1412.6980",
+  "pdf": "https://arxiv.org/pdf/1412.6980"
+ },
+ "108": {
+  "link": "https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html",
+  "pdf": "https://arxiv.org/pdf/1512.03385"
  }
 }
