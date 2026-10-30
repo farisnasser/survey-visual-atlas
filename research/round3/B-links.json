@@ -10,5 +10,25 @@
  "84": {
   "link": "https://proceedings.neurips.cc/paper/2019/hash/512c5cad6c37edb98ae91c8a76c3a291-Abstract.html",
   "pdf": "https://arxiv.org/pdf/1810.10690"
+ },
+ "85": {
+  "link": "https://papers.nips.cc/paper/7533-natasha-2-faster-non-convex-optimization-than-sgd",
+  "pdf": "https://arxiv.org/pdf/1708.08694"
+ },
+ "86": {
+  "link": "https://proceedings.mlr.press/v99/ge19a.html",
+  "pdf": "http://proceedings.mlr.press/v99/ge19a/ge19a.pdf"
+ },
+ "87": {
+  "link": "https://papers.nips.cc/paper/8431-ssrgd-simple-stochastic-recursive-gradient-descent-for-escaping-saddle-points",
+  "pdf": "https://arxiv.org/pdf/1904.09265"
+ },
+ "88": {
+  "link": "https://proceedings.mlr.press/v167/chen22b.html",
+  "pdf": "https://proceedings.mlr.press/v167/chen22b/chen22b.pdf"
+ },
+ "89": {
+  "link": "https://proceedings.mlr.press/v97/staib19a.html",
+  "pdf": "http://proceedings.mlr.press/v97/staib19a/staib19a.pdf"
  }
 }
