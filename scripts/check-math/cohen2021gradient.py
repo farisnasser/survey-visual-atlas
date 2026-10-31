@@ -130,4 +130,37 @@ spikes = {e: int((np.diff(R[e][:, 1]) > 0).sum()) for e in ETAS}
 check("MLP: loss is non-monotone at large eta", all(spikes[e] > 0 for e in ETAS[1:]) and spikes[ETAS[0]] == 0, f"increasing 10-step windows: {spikes}")
 save_json("cohen2021gradient", "data.json", {"etas": ETAS, "curves": {k: [[int(r[0]), float(f"{r[1]:.4g}"), round(float(r[2]), 3)] for r in v] for k, v in curves.items()},
                                              "setup": f"tanh MLP {D}-{W}-{W}-1, {N} points, MSE, full-batch GD"})
+
+# in-page notes (papers/cohen2021gradient/notes.md): quadratic threshold (Sec. 1) and primer numbers
+for a_, et in [(10., .15), (10., .25), (3., .5)]:
+    e0 = .7; ee = e0
+    for t in range(30):
+        ee = ee - et * a_ * ee
+    assert abs(ee - (1 - et * a_) ** 30 * e0) < 1e-9 * max(1, abs(ee))
+    assert (abs(ee) < e0) == (0 < et * a_ < 2)
+check("notes: e_t = (1 - eta a)^t e0; shrinks iff 0 < eta a < 2, flips sign and grows if eta a > 2", True)
+Hd = np.diag([20., 1]); vv = np.array([1., 1]); est = []
+for k in range(2):
+    vv = Hd @ vv; vv /= np.linalg.norm(vv); est.append(vv @ Hd @ vv)
+check("primer: power iteration on diag(20,1) from (1,1): 19.95 then 19.9999", abs(est[0] - 19.95) < .005 and abs(est[1] - 19.9999) < 5e-5, f"{est}")
+xs_ = np.random.default_rng(1).normal(size=(50, 2))
+quadL = lambda p: .5 * (20 * p[0] ** 2 + p[1] ** 2)
+check("primer: one GD step decreases L by at least eta(1 - l eta/2)|grad|^2 (l = 20)",
+      all(quadL(p - et * Hd @ p) <= quadL(p) - et * (1 - 20 * et / 2) * np.sum((Hd @ p) ** 2) + 1e-12 for p in xs_ for et in [.02, .05, .09]))
+check("primer: Fig. 2 example: eta = 0.11, 2/eta ~ 18.2, multipliers -1.2 and 0.89", abs(2 / .11 - 18.2) < .02 and np.allclose([1 - .11 * 20, 1 - .11 * 1], [-1.2, .89]))
+Luv = lambda p: .5 * (p[0] * p[1] - 1) ** 2
+for uu, vv_ in [(2, .5), (1, 1)]:
+    Hm = fd_hess(Luv, [uu, vv_])
+    assert np.allclose(np.linalg.eigvalsh(Hm), [0, uu ** 2 + vv_ ** 2], atol=1e-5), Hm
+check("primer: (uv-1)^2/2 on uv = 1 has Hessian eigenvalues 0 and u^2 + v^2: 4.25 at (2, 0.5), 2 at (1, 1)", True)
+def run_uv(p, eta, T=4000):
+    p = np.array(p, float)
+    for _ in range(T):
+        r = p[0] * p[1] - 1
+        p = p - eta * np.array([p[1] * r, p[0] * r])
+    return p
+pa = run_uv([2.02, .5], .6); pb = run_uv([1.02, 1], .6)
+check("primer: eta = 0.6 (2/eta ~ 3.33): GD leaves the sharp minimum (2, 0.5), stays near (1, 1)",
+      abs(2 / .6 - 3.33) < .01 and np.linalg.norm(pa - [2, .5]) > .3 and np.linalg.norm(pb - [1, 1]) < .05, f"{pa}, {pb}")
+check("primer: eta lambda = 2.02 -> multiplier -1.02 (2% growth per step)", abs((1 - 2.02) + 1.02) < 1e-12)
 done()

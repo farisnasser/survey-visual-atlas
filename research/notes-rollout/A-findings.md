@@ -147,3 +147,35 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   per-layer 1/√m scaling). All in `du2019gradient.py`, plus the notes' fixed-Gram example (r1..r3, losses 1.00000 /
   0.12500 / 0.03125 / 0.00781, λ_min = 0.5) and 2^10 = 1024 vs 1.1^10 ≈ 2.59.
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px (tables stack).
+
+## [10] allenzhu2019convergence — Why Very Wide ReLU Networks Can Be Trained
+- Notes checked against: ICML 2019 PMLR 97 PDF (proceedings.mlr.press/v97/allen-zhu19a/allen-zhu19a.pdf): Sec. 2
+  (model h_{i,0} = φ(Ax_i), h_{i,ℓ} = φ(W_ℓ h_{i,ℓ−1}), ŷ = Bh_{i,L}; A, B fixed), Sec. 3 Theorems 1–2,
+  Theorem 3 (no critical point, Ω(δm/(dn²))), Theorem 4 (semi-smoothness: + O(nL²m/d)‖W′‖² + poly(L)√(nm log m)/√d ·
+  ‖W′‖ √F), Fig. 1 (CIFAR-10 slices along ∇F and the most negatively curved direction "after smoothing"), the remark
+  "in practice, we acknowledge that one often goes beyond this theory-predicted spectral-norm boundary" (p. 4),
+  Sec. 4 proof steps, Sec. 5 Theorems 5–7 (arbitrary loss, CNN, ResNet), Sec. 6.
+- Fixes to the notes: none. No discrepancies found ("Theorems 1–7 and Sections 3–6" matches the ICML numbering).
+- Title: "Paper 11 — …" → without "Paper 11". Boxes: "Do not overread 'global minimum.'" → warn, "What transfers to
+  the paper:" and "Why this is more than…" → key, "Our notes (copy into Papers Master):" → plain.
+- Primer (4 ideas): PL inequality without convexity (x² + 3 sin²x: F″ reaches −4, F′²/(2F) ≥ ≈ 0.17); ReLU kinks break
+  the descent lemma (slope ratio 5 over ±0.1, 500 over ±0.001); few ReLUs flip under small moves (P(|z| < 0.01) ≈ 0.8%,
+  labelled an illustration of proof step 2); geometric decrease gives log(1/ε) steps (1375 for γ = 0.01, ε = 1e−6) and a
+  bounded path (1/(1 − √0.99) ≈ 200). All in `allenzhu2019convergence.py`, with the notes' Jacobian example (K
+  eigenvalues 1, 3; ‖∇F‖² ≥ 2F; F1 = 0.5625) and the ReLU values. (Script is slow, ~2–3 min: it trains small nets.)
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 13 sections, no overflow at 375 px.
+
+## [11] cohen2021gradient — Gradient Descent at the Edge of Stability
+- Notes checked against: arXiv 2103.00065 (ICLR 2021): Sec. 2 quadratic instability (Prop. 1, Fig. 2: eigenvalues 20
+  and 1, η = 0.11), sharpness = λ_max of the training-loss Hessian and "we do not claim that this quantity has any
+  connection to generalization" (p. 3), Sec. 3 progressive sharpening / edge of stability, Sec. 6 and p. 3 ("the
+  sharpness does not flatline at any value during SGD").
+- Fixes to the notes: none. No discrepancies found.
+- Minute box: no "paper in one minute" heading in the notes (labels Problem / Method / Main finding); standard title.
+  "What this calculation proves:" (amber) → warn; "Connection to our survey." (green) → key. "Source:" → `>` line.
+- Primer (4 ideas): power iteration for sharpness (diag(20,1): 19.95, 19.9999); thresholds 1/ℓ (descent lemma) vs 2/λ
+  (quadratic stability), with the paper's Fig. 2 numbers (2/0.11 ≈ 18.2, multipliers −1.2, 0.89); sharpness depends on
+  position (½(uv − 1)²: sharpness u² + v² on the valley, 4.25 at (2, 0.5) vs 2 at (1, 1); η = 0.6 leaves the first,
+  stays at the second — simulated); period-2 oscillation just past 2 (multiplier −1.02). All in `cohen2021gradient.py`
+  together with the notes' e_t = (1 − ηa)^t e_0 behaviour.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
