@@ -65,4 +65,30 @@ for L in [1., 2.]:
 check("PGD clears all 6 saddles in every run", all(b[-1] is not None for L in data for b in data[L]["pgd"]))
 check("d = 6, L = 2: GD needs > 5x the steps of PGD, or never clears the last saddle within 400 000 steps", all(a[-1] is None or a[-1] > 5 * b[-1] for a, b in zip(data["2.0"]["gd"], data["2.0"]["pgd"])))
 save_json("du2017gradient", "data.json", {"esc": data, "g": G_, "c": CC})
+
+# in-page notes (papers/du2017gradient/notes.md): notes Sec. 2 toy f = x^2/2 - y^2/2 + y^4/4, primer ideas 1, 3, 4
+ft = lambda p: .5 * p[0] ** 2 - .5 * p[1] ** 2 + .25 * p[1] ** 4
+gt = lambda p: np.array([p[0], -p[1] + p[1] ** 3])
+check_grad("notes toy", ft, gt, rand_pts(30, -1.5, 1.5))
+check_hess_at("notes toy saddle (0,0)", ft, [0, 0], [[1, 0], [0, -1]])
+check("notes toy: minima at (0, +-1) (zero gradient, Hessian diag(1, 2))", np.allclose(gt(np.array([0., 1.])), 0) and np.allclose(fd_hess(ft, [0, -1]), [[1, 0], [0, 2]], atol=1e-3))
+et = .1; q = np.array([.3, .7])
+check("notes toy: GD map x <- (1-eta)x, y <- y + eta(y - y^3)", np.allclose(q - et * gt(q), [(1 - et) * q[0], q[1] + et * (q[1] - q[1] ** 3)]))
+for dl in [1e-3, 1e-9]:
+    y, k = dl, 0
+    while abs(y) < .5: y += et * (y - y ** 3); k += 1
+    pred = np.log(.5 / dl) / np.log(1 + et)
+    check(f"notes toy: T_esc ~ log(r/delta)/log(1+eta) (delta = {dl:g}, r = 0.5: {k} steps vs {pred:.1f})", abs(k - pred) < .1 * pred + 3)
+check("primer: 2^10 = 1024, 2^30 ~ 1.07e9", 2 ** 10 == 1024 and abs(2 ** 30 / 1.07e9 - 1) < .005)
+ga, La, ea = 1., 1., .1                       # paper Eq. (3) multipliers 1 + 2 eta gamma, 1 - 2 eta L
+x1, x2, t1 = .01, .5, 0
+while x1 < 1: x1 *= 1 + 2 * ea * ga; x2 *= 1 - 2 * ea * La; t1 += 1
+x2t1, s2 = x2, 0
+while x2 < 1: x2 *= 1 + 2 * ea * ga; s2 += 1
+print(f"  primer Eq. (3) chain: t1 = {t1}, x2(t1) = {x2t1:.5f}, extra {s2}, t2 = {t1 + s2}, bound (L+g)/g t1 = {(La + ga) / ga * t1:.0f}")
+check("primer: t1 = 26, x2(t1) ~ 0.0015, 36 more steps, t2 = 62 >= (L+gamma)/gamma t1 = 52", t1 == 26 and abs(x2t1 - .0015) < 5e-5 and s2 == 36 and t1 + s2 == 62 and (La + ga) / ga * t1 == 52)
+dd, w = 100, 1e-6                             # uniform ball in R^d: density of u1/r is prop. to (1 - t^2)^((d-1)/2)
+tt = np.linspace(0, 1, 2000001); Z = np.trapezoid((1 - tt ** 2) ** ((dd - 1) / 2), tt)
+Pw = w / Z                                    # P(|u1| < w r) = int_0^w dens / Z ~ w / Z for tiny w
+check("primer: P(|u1| < w r) ~ w sqrt(2d/pi); d = 100, w = 1e-6 gives ~8e-6", abs(Pw / (w * np.sqrt(2 * dd / np.pi)) - 1) < .01 and abs(Pw / 8e-6 - 1) < .01, f"{Pw:.3e}")
 done()

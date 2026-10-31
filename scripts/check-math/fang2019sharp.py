@@ -42,4 +42,22 @@ while abs(u1 - u2) <= .02:
     k += 1; n_ = np.random.default_rng(k).normal()
     u1 = 1.1 * u1 - .1 * n_; u2 = 1.1 * u2 - .1 * n_
 check("notes: coupled paths separate as 0.002*1.1^k; first exceed 2B = 0.02 at k = 25", k == 25 and abs(abs(u1 - u2) - .0216694) < 1e-6, f"k = {k}, distance {abs(u1 - u2):.7f}")
+
+# in-page notes (papers/fang2019sharp/notes.md): notes Secs. 3, 5 and primer numbers (coupled-path k = 25 checked above)
+check("notes Sec. 3: ceil(log 10 / log 1.1) = 25 and both starts lie inside B = 0.01", int(np.ceil(np.log(10) / np.log(1.1))) == 25 and np.hypot(.001, .002) < .01)
+check("notes Sec. 5: 2^(7/2) ~ 11.31", abs(2 ** 3.5 - 11.31) < 5e-3)
+e_ = 1e-3                                     # scales: B^2/(eta K0) ~ eps^1.5, gap/that ~ eps^-1.5 exits, times K0 ~ eps^-2 -> eps^-3.5
+B_, et_, K_ = e_ ** .5, e_ ** 1.5, e_ ** -2
+check("notes Sec. 5: B = eps^1/2, eta = eps^3/2, K0 = eps^-2 give decrease ~eps^1.5 per exit and eps^-3.5 total", np.isclose(B_ ** 2 / (et_ * K_), e_ ** 1.5) and np.isclose(1 / (B_ ** 2 / (et_ * K_)) * K_, e_ ** -3.5))
+check("primer: eps = 0.01 -> eps^-4 = 1e8, eps^-3.5 = 1e7", np.isclose(.01 ** -4, 1e8) and np.isclose(.01 ** -3.5, 1e7))
+Lc, sg, ep = 1., 1., .1                       # one-step bound E f+ <= f - eta(1 - L eta/2)|g|^2 + L eta^2 sigma^2/2
+eta_ = ep ** 2 / (Lc * sg ** 2)
+gain = eta_ * (1 - Lc * eta_ / 2) * ep ** 2 - Lc * eta_ ** 2 * sg ** 2 / 2
+check("primer: with eta = eps^2/(L sigma^2) the net per-step gain is ~eps^4/2 (order eps^4)", abs(gain / (ep ** 4 / 2) - 1) < .02, f"{gain:.3e}")
+rng_f = np.random.default_rng(3); xi_ = rng_f.standard_normal((200, 10000, 4)) / 2.   # E|xi|^2 = 1 in R^4
+avg = np.linalg.norm(xi_.mean(1), axis=1); sm = np.linalg.norm(xi_.sum(1), axis=1)
+check("primer: K = 1e4 unit-size noises: average ~0.01, sum ~100 (sqrt K)", abs(np.sqrt(np.mean(avg ** 2)) - .01) < 5e-4 and abs(np.sqrt(np.mean(sm ** 2)) - 100) < 5)
+check("primer: eta sigma sqrt(K0) = eps^1/2 sigma when eta = eps^1.5, K0 = eps^-2", np.isclose(et_ * np.sqrt(K_), e_ ** .5))
+qerr = abs(-np.sin(.1) - (-.1))
+check("primer: cos x at 0.1: quadratic-model gradient error 1.7e-4 <= rho r^2/2 = 0.005", abs(qerr - 1.7e-4) < 5e-6 and qerr <= .005 and abs(-np.sin(.1) + .09983) < 5e-6)
 done()

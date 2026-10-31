@@ -78,4 +78,25 @@ lv = [Ln(n) for n in (0, 2, 4)]
 near = [min(abs(np.log(q / l)) for l in lv) for q in above[:, 1]]
 check("runs above the threshold sit at one of the critical levels L_0, L_2, L_4 (within 5%) or are still moving", len(above) == 0 or np.mean(np.array(near) < .05) >= .5, f"{np.round(near, 3).tolist()}")
 save_json("cheridito2024gradient", "data.json", {"thr": thr, "levels": lv, "final": [float(f"{q:.4g}") for q in rows[:, 1]], "curves": [[[a, float(f"{b:.4g}")] for a, b in cv] for cv in curves]})
+
+# in-page notes (papers/cheridito2024gradient/notes.md): primer idea 4, one ReLU neuron, bias only, x ~ U[0,1], target x
+gx, gw = np.polynomial.legendre.leggauss(8)        # exact for the piecewise polynomial integrand
+def Lb(b):
+    tot = 0.
+    for lo, hi in [(0., min(max(-b, 0.), 1.)), (min(max(-b, 0.), 1.), 1.)]:
+        if hi > lo:
+            x = (hi - lo) / 2 * gx + (hi + lo) / 2
+            tot += (hi - lo) / 2 * np.sum(gw * (np.maximum(x + b, 0) - x) ** 2)
+    return tot
+Lpw = lambda b: b * b if b >= 0 else (b * b + 2 * b ** 3 / 3 if b >= -1 else 1 / 3)
+bs = np.linspace(-2, 1, 61)
+check("primer: L(b) = b^2 (b>=0), b^2 + 2b^3/3 (-1<=b<=0), 1/3 (b<=-1) matches the integral", max(abs(Lb(b) - Lpw(b)) for b in bs) < 1e-10)
+d1 = lambda b, h=1e-4: (Lpw(b + h) - Lpw(b - h)) / (2 * h)
+d2r = lambda b, h=1e-3: (Lpw(b + 2 * h) - 2 * Lpw(b + h) + Lpw(b)) / h ** 2
+d2l = lambda b, h=1e-3: (Lpw(b) - 2 * Lpw(b - h) + Lpw(b - 2 * h)) / h ** 2
+print(f"  primer: at b=0: L'={d1(0):.2e}, L'' right {d2r(0):.3f} left {d2l(0):.3f}; at b=-1: L'={d1(-1):.2e}, L'' right {d2r(-1):.3f} left {d2l(-1):.3f}")
+check("primer: at b = 0, L = L' = 0 and L'' = 2 from both sides (kink smoothed to second order)", Lpw(0) == 0 and abs(d1(0)) < 1e-6 and abs(d2r(0) - 2) < 1e-2 and abs(d2l(0) - 2) < 1e-2)
+d1r, d1l = (Lpw(-1 + 1e-7) - Lpw(-1)) / 1e-7, (Lpw(-1) - Lpw(-1 - 1e-7)) / 1e-7
+check("primer: at b = -1, L' = 0 from both sides but L'' = -2 from the right and 0 from the left (C^1, not C^2)", abs(d1r) < 1e-5 and abs(d1l) < 1e-8 and abs(d2r(-1) + 2) < 1e-2 and abs(d2l(-1)) < 1e-9)
+check("primer: max(x,0) maps (-inf,0] to {0} (preimage of a null set has positive length)", all(max(x, 0) == 0 for x in np.linspace(-5, 0, 11)))
 done()
