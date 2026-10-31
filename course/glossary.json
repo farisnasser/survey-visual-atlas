@@ -722,17 +722,20 @@
   "def": "The only way an algorithm may learn about $f$: it asks for information at a point, for example $f(x)$ and $\\nabla f(x)$ (a first-order oracle) or also the Hessian (second-order). Complexity is counted in oracle calls.",
   "aka": [
    "first-order oracle"
-  ]
+  ],
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "upper-bound": {
   "term": "Upper bound",
   "ch": "limits",
-  "def": "A guarantee that some algorithm needs at most this many oracle calls on every function of a class; for example GD needs $O(\\varepsilon^{-2})$ on $L$-smooth functions."
+  "def": "A guarantee that some algorithm needs at most this many oracle calls on every function of a class; for example GD needs $O(\\varepsilon^{-2})$ on $L$-smooth functions.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "lower-bound": {
   "term": "Lower bound",
   "ch": "limits",
-  "def": "A proof that every algorithm of a class needs at least this many oracle calls on some function of the class, for example $\\Omega(\\varepsilon^{-2})$ for first-order methods on $L$-smooth functions (Carmon et al. 2020). When upper and lower bounds match, the method is optimal."
+  "def": "A proof that every algorithm of a class needs at least this many oracle calls on some function of the class, for example $\\Omega(\\varepsilon^{-2})$ for first-order methods on $L$-smooth functions (Carmon et al. 2020). When upper and lower bounds match, the method is optimal.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "soft-o": {
   "term": "$\\tilde O$ notation",
@@ -741,16 +744,28 @@
   "aka": [
    "soft-O",
    "$\\tilde O(\\cdot)$"
-  ]
+  ],
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "np-hard": {
   "term": "NP-hard",
   "ch": "limits",
-  "def": "At least as hard as every problem in the class NP: no polynomial-time algorithm is known, and finding one would prove P = NP. Global minimization of non-convex functions is NP-hard in general (Murty & Kabadi 1987)."
+  "def": "At least as hard as every problem in the class NP: no polynomial-time algorithm is known, and finding one would prove P = NP. Global minimization of non-convex functions is NP-hard in general (Murty & Kabadi 1987).",
+  "sec": "n-5-a-different-kind-of-hard-np-hardness"
  },
  "worst-case": {
   "term": "Worst case",
   "ch": "limits",
-  "def": "A guarantee that holds for every function in the assumed class, including adversarially built ones. Real problems are often much easier than the worst case."
+  "def": "A guarantee that holds for every function in the assumed class, including adversarially built ones. Real problems are often much easier than the worst case.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
+ },
+ "zero-chain": {
+  "term": "Zero chain",
+  "ch": "limits",
+  "def": "A hard function built so that a gradient query reveals at most one new coordinate: the gradient is zero beyond coordinate $i$ whenever $x$ is zero beyond $i - 1$. A method that only moves within the span of the gradients it has seen (a zero-respecting method, such as GD) then needs at least $T$ queries to uncover $T$ coordinates. Carmon et al. 2020 use it to prove the $\\Omega(\\varepsilon^{-2})$ lower bound.",
+  "aka": [
+   "zero-respecting method"
+  ],
+  "sec": "n-2-a-hard-function-the-zero-chain"
  }
 }

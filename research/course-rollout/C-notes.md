@@ -71,3 +71,32 @@ arora2019fine (Thms 4.1, 5.1), chizat2019lazy (Thms 2.2, 2.5, experiments), li20
 (μ = 0.1755 for the same function).
 Not from findings: the PL condition's history (Polyak 1963, Łojasiewicz 1963) is stated as standard background, no
 Atlas link.
+
+## Stop 12 · limits (`course/limits`, check `scripts/check-math/course_limits.py`)
+Sections: 1 oracles, upper and lower bounds, Ω, Õ, worst case · 2 the zero chain (Carmon et al. Ψ, Φ, Lemmas 1–3) ·
+3 scaling to Ω(ε⁻²) (derivation with a symbolic ℓ₁) and the ε^−(p+1)/p table · 4 stochastic lower bounds (Arjevani 2023
+probability-p chain, heuristic balance p ≈ ε²/σ², Theorems 1–3; Arjevani 2020 elbow) · 5 NP-hardness (Murty–Kabadi,
+quartic / copositivity, Blum–Rivest, Anandkumar–Ge, Arjevani 2020 footnote) · 6 the complexity ladder · 7 how to read a
+paper (six questions, worked on Jin et al. 2017 Theorem 3) · 8 where to go next (links to the hub's branches
+`index.html#b-III` … `#b-VII` and the glossary). Ends with the Atlas box, no next problem (last stop).
+
+Visuals:
+- `chain2` (3D): f̄₂ with GD from 0, η slider [0.01, 0.1]; amber line x₁ = ½. η = 0.05: x₂ first moves at step 8 (x₁ =
+  0.554), ‖∇f̄₂‖ ≤ 1 at step 29. The JS uses a ~1e-14 erf (series + continued fraction) so paths match Python's math.erf.
+- `chain` (2D bars + chart): T slider 2–16, oracle seg exact / p = 0.2 / p = 0.05 (Arjevani et al. Eq. 17, seeded rng
+  1000T + 100p). Queries until ‖∇f̄_T‖ ≤ 1: T = 8: 71 / 90 / 191; T = 16: 121 / 156 / 529; exact GD ≈ 6.5 per coordinate.
+- `quartic` (3D): u₁⁴ + 2q u₁²u₂² + u₂⁴, q slider; Hessian 0 for every q, local min iff q ≥ −1 (= Q copositive); ball
+  leaves the square after 30 steps at q = −1.3.
+- `ladder` (2D custom): 17 rows (upper bounds coral, lower bounds violet outline) grouped by oracle; row and ε sliders.
+  It covers the main rates (stops 3, 4, 6, 7, 8, 11, 12) from findings; stops 4–9 written by A and B may quote further
+  rates (e.g. SVRG's n^{2/3}) that the coordinator may want to add.
+
+Paper claims (findings entries): carmon2020lower (Eq. 10, Lemmas 1–3, Theorems 1–2, sharpness for p = 1, 2),
+arjevani2023lower (Eq. 17, Lemma 1, Lemma 3 variance, Theorems 1–3), arjevani2020second (O(ε⁻³) with HVPs, Ω(ε⁻³) for
+p ≥ 2, elbow, Murty–Kabadi footnote), murty1987some (+ Ahmadi–Zhang restatement), blum1992training (Theorem 2, two hidden
++ one output), anandkumar2016efficient (Theorem 10), fang2018spider (Thm 1 online ε⁻³, Thm 3 finite-sum lower bound),
+jin2017escape (Def. 6, Thm 3 with log⁴), jin2018accelerated (Thm 3), nesterov2006cubic + wang2020cubic (O(ε^−3/2) to an
+ε-SOSP), ghadimi2013stochastic (Cor. 2.2), fang2019sharp, tripuraneni2018stochastic, allenzhu2018natasha (Cor. 4.6).
+Stated without a findings line (standard): the definition of zero-respecting methods and that GD, momentum and Adam are
+zero-respecting; ℓ₁ (the smoothness constant of f̄_T) is kept symbolic because findings do not record its value.
+Glossary: new term `zero-chain` added to the limits block (and to course.json terms).
