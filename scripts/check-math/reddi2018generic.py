@@ -68,4 +68,16 @@ for t in range(400):
     if cert and np.linalg.norm(g(x)) < 1e-6:
         break
 check("framework: HessianDescent steps leave the saddle; ends at a minimum", abs(f(x) + .25) < 1e-6, f"x = {np.round(x, 4)}, HFO moves {hfo}, rounds {t + 1}")
+
+# in-page notes (papers/reddi2018generic/notes.md): notes Sec. 1 example, primer numbers
+fr = lambda x_, y_: .5 * x_ ** 2 - .5 * y_ ** 2 + .25 * y_ ** 4
+check("notes Sec. 1: grad f(0,0) = 0, Hessian diag(1,-1), v = (0,1) has v^T H v = -1", np.allclose(fd_grad(lambda p_: fr(*p_), [0., 0.]), 0, atol=1e-8) and np.allclose(fd_hess(lambda p_: fr(*p_), [0., 0.]), [[1, 0], [0, -1]], atol=1e-4))
+check("notes Sec. 1: f(0, 0.1) = -0.005 + 0.000025 = -0.004975", np.isclose(fr(0, .1), -.004975) and np.isclose(-.005 + .000025, -.004975))
+a_i = np.array([-1., 1.]); xs_, xt_ = .5, -.3
+plain = xs_ - a_i; svrg = (xs_ - a_i) - (xt_ - a_i) + (xt_ - a_i.mean())
+check("primer: f_i = (x - a_i)^2/2, a = +-1, x = 0.5: plain gradients -0.5/1.5 (variance 1), SVRG gives 0.5 every time", np.allclose(sorted(plain), [-.5, 1.5]) and np.isclose(plain.var(), 1) and np.allclose(svrg, .5))
+for g_, M_ in [(1., 1.), (.3, 2.)]:
+    fh = lambda y_: -g_ / 2 * y_ ** 2 + M_ / 6 * abs(y_) ** 3
+    check(f"primer: step gamma/M along v gives -gamma^3/(3M^2) (gamma = {g_}, M = {M_}) >= Lemma 2's gamma^3/(24 M^2)", np.isclose(fh(g_ / M_), -g_ ** 3 / (3 * M_ ** 2)) and g_ ** 3 / (3 * M_ ** 2) >= g_ ** 3 / (24 * M_ ** 2))
+check("primer: Delta = 10, theta = 0.01, T = 4000 -> Delta/(T theta) = 0.25", np.isclose(10 / (4000 * .01), .25))
 done()

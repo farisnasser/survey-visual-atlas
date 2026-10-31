@@ -1,7 +1,7 @@
 # Session D — in-page notes findings
 
 ## Shared changes needed
-None so far.
+None. (Optional, data/papers.json is shared: fang2019sharp and tripuraneni2018stochastic notes follow publisher numbering; see "Shared observations" at the end.)
 
 Conventions used on this branch (for the coordinator's consistency pass):
 - Notes without a one-minute summary: the minute box is built from the notes' own sentences, with labels taken from
@@ -163,3 +163,50 @@ Conventions used on this branch (for the coordinator's consistency pass):
 - Primer: (1) the global-minimizer certificate $(A+\rho\|s^*\|I)s^*=-b$, $A+\rho\|s^*\|I\succeq0$, 2-D example
   (λ* ≈ 1.092, s* ≈ (−1.090, −0.065), q ≈ −0.278; the other two critical points fail the shift test); (2) Assumption A step
   (R ≈ 2.106, η ≤ 0.061, GD reaches s*); (3) the hard case b = (0, 0.2): GD stops at (0, −0.095), q ≈ −0.0097 vs −0.173.
+
+## [11] wang2020cubic — Cubic regularization with momentum for nonconvex optimization
+- Checked against: UAI 2020 PMLR version (v115): Eq. (2) target, Algorithm 1 (M > L₂, ρ < 1, Eqs. 3–6), Assumptions 1–3,
+  Theorems 1–4, Section 4.3 (cubic-step solvers), Section 5 experiments.
+- **Fix (1):** §3, Theorem 3. Original: "A carefully inexact cubic subproblem still attains the same O(ε^{-3/2}) outer iteration
+  order." Fixed: "A carefully inexact cubic subproblem (inexact Hessian, Assumption 3) still attains …". Paper, Sec. 4.1:
+  Theorem 3 replaces ∇²f(x_k) by H_k with Assumption 3 "∥H_k − ∇²f(x_k)∥ ⩽ ϵ₁" (ϵ₁ = θ√ϵ); it is not a theorem about an
+  approximately *solved* subproblem (Sec. 4.3 only discusses solvers, without a theorem).
+- **Fix (2):** §4. Original: "The inexact version imposes explicit solver-accuracy conditions." Fixed: "… explicit
+  Hessian-accuracy conditions." Same source (Assumption 3).
+- **Fix (3), numbering only:** "Carmon–Duchi (Ref 71)" → "Ref 76" (current survey number; old [71] is not this paper).
+- Verified: β_{k+1} = min{ρ, ∥∇f(y_{k+1})∥, ∥y_{k+1} − x_k∥} with ρ < 1 (the notes' symbols match the paper); target
+  ∥∇f∥ ⩽ ϵ, λ_min ⩾ −√ϵ; Theorem 2 needs Assumption 2 (local error bound) and M > L₂; Section V placement; Galli [39], Kalra [37].
+  Toy numbers checked (f(0.8) = −0.2176, f(0.86) ≈ −0.2330, cubic model minima ±1).
+- Layout: the β/v display is split into two lines (it is two equations) to avoid a 622-px equation at 375 px.
+- Primer: (1) momentum can overshoot (y = 1, v = 1.25, f = −0.171 > −0.25) and the monotone choice prevents it; (2) ε^{-3/2} vs
+  ε^{-2} counts (3.2e4 vs 1e6 at ε = 1e-3) and quadratic convergence (0.1 → 1e-2 → 1e-4 → 1e-8); (3) the local error bound,
+  holds for (x²−1)²/4 near 1 (κ ≈ ½), fails for x⁴ at 0.
+
+## [12] reddi2018generic — A generic approach for escaping saddle points
+- Checked against: AISTATS 2018 PMLR version (v84): Section 2 assumptions (f_i L-smooth, f M-Lipschitz Hessian, f ≥ B),
+  Definitions 1–2, Algorithm 1, G.1–G.2, H.1–H.2, Theorem 1 (probability 1 − max(Δ/(Tθ), q); rate set by
+  θ = min{(1−p)ε²g, ph}), Algorithm 2 (SVRG), Algorithm 3 (HessianDescent), Lemma 2 (h = ργ³/(24M²)), Theorem 2, Experiments.
+- **Fix (1), numbering only:** "Xu–Jin–Yang (Ref 76) and NEON2 (Ref 77)" → "(Ref 81)" and "(Ref 33)" (current survey numbers).
+- Otherwise no discrepancies. Toy f(0, 0.1) = −0.004975 checked.
+- Primer: (1) SVRG variance reduction (f_i = (x − a_i)²/2: plain variance 1, SVRG exact); (2) a negative-curvature step
+  buys γ³/(3M²) on the cubic toy (Lemma 2 guarantees ργ³/(24M²)); (3) the finite-budget argument behind Theorem 1
+  (Δ/(Tθ) = 0.25 example).
+
+## [13] xu2018first — First-order stochastic algorithms for escaping from saddle points in almost linear time
+- Checked against: NeurIPS 2018 proceedings PDF (the notes' section numbers follow it): Assumption 1 (i)–(iii), Eq. (2)–(4),
+  Lemma 1 (decrease c³γ³/(3L₂²)), Algorithms 1–3 (NEON, NEON+, NCFind), Theorems 1–4, Algorithms 4–6 (NEON-A, SM, SCSG),
+  Table 1, Figure 1 (Power, Lanczos, NEON, NEON+ and stochastic versions), abstract's Õ(d/ε^{3.5}).
+- **Fix (1), numbering only:** "NEON2 (Ref 77)" → "Ref 33".
+- Otherwise no discrepancies. Worked example u₁ = (0.06, 0.12), u₂ = (0.036, 0.144) checked; gradient difference ≈ Hu checked
+  on a random smooth function.
+- The notes have no topic title other than the paper title; the page uses it.
+- Primer: (1) power iteration on I − ηH: cos > 0.99 after 21 steps (γ = 0.1) vs 196 (γ = 0.01), ~1/γ, acceleration ~1/√γ;
+  (2) why the search starts from a random point; (3) Lemma 1's decrease (3.3e-4 for γ = 0.1, L₂ = 1) and the escape budget.
+
+## Shared observations (not edited; for the coordinator)
+- Several notes on this branch use the old "Ref NN" numbering inside the text. Where an old number would now point at a
+  different Atlas paper, it was updated to the current survey number and logged above (carmon2019gradient, wang2020cubic,
+  reddi2018generic, xu2018first). Header "Ref NN" lines are title-block metadata and are dropped.
+- Two notes follow publisher copies whose numbering differs from the arXiv copy in data/papers.json (fang2019sharp: COLT;
+  tripuraneni2018stochastic: NeurIPS algorithm order). The coordinator may want those pages' header links to point to the
+  publisher PDF so readers find "Theorem 5" / "Algorithm 2" where the notes say. Not changed (data/*.json is shared).
