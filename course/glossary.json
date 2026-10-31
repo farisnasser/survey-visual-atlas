@@ -446,7 +446,8 @@
   "def": "Adding a fraction $\\beta$ of the previous step to the current one, so the optimizer keeps moving in consistent directions while back-and-forth zig-zags partly cancel.",
   "aka": [
    "$\\beta$"
-  ]
+  ],
+  "sec": "n-2-the-heavy-ball"
  },
  "ema": {
   "term": "Exponential moving average",
@@ -455,7 +456,8 @@
   "tex": "m_t = \\beta\\, m_{t-1} + (1 - \\beta)\\, g_t",
   "aka": [
    "EMA"
-  ]
+  ],
+  "sec": "n-3-momentum-is-an-average-of-past-gradients"
  },
  "heavy-ball": {
   "term": "Heavy-ball method",
@@ -464,7 +466,8 @@
   "tex": "x_{t+1} = x_t - \\eta \\nabla f(x_t) + \\beta\\, (x_t - x_{t-1})",
   "aka": [
    "Polyak momentum"
-  ]
+  ],
+  "sec": "n-2-the-heavy-ball"
  },
  "nesterov": {
   "term": "Nesterov's accelerated gradient",
@@ -474,18 +477,21 @@
   "aka": [
    "NAG",
    "Nesterov momentum"
-  ]
+  ],
+  "sec": "n-4-nesterov-s-look-ahead"
  },
  "acceleration": {
   "term": "Acceleration",
   "ch": "memory",
-  "def": "Converging faster than plain GD by changing how the condition number enters: on smooth strongly convex functions about $\\sqrt{\\kappa}\\log(1/\\varepsilon)$ steps instead of $\\kappa\\log(1/\\varepsilon)$. Non-convex accelerated methods improve GD's $\\varepsilon^{-2}$ to about $\\varepsilon^{-7/4}$ (e.g. Jin et al. 2018)."
+  "def": "Converging faster than plain GD by changing how the condition number enters: on quadratics and smooth strongly convex functions about $\\sqrt{\\kappa}\\log(1/\\varepsilon)$ steps instead of $\\kappa\\log(1/\\varepsilon)$. For non-convex problems, accelerated methods reach $\\varepsilon$-stationary points (Carmon et al. 2018) or $\\varepsilon$-SOSPs (Jin et al. 2018) in $\\tilde O(\\varepsilon^{-7/4})$ gradient steps instead of $\\varepsilon^{-2}$.",
+  "sec": "n-6-why-the-square-root-a-2-2-matrix"
  },
  "lookahead": {
   "term": "Lookahead",
   "ch": "memory",
   "def": "Zhang et al. 2019: let an inner optimizer take $k$ fast steps, then move the slow weights a fraction $\\alpha$ of the way toward where the fast weights ended, and restart the fast weights from there.",
-  "tex": "\\phi_{t+1} = \\phi_t + \\alpha\\,(\\theta_{t,k} - \\phi_t)"
+  "tex": "\\phi_{t+1} = \\phi_t + \\alpha\\,(\\theta_{t,k} - \\phi_t)",
+  "sec": "n-9-lookahead-averaging-the-trajectory"
  },
  "sgd": {
   "term": "Stochastic gradient descent",
