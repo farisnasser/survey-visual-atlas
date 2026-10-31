@@ -45,4 +45,20 @@ for s in range(3):
 save_json("robbins1951stochastic", "data.json", {"theta": round(float(theta), 6), "root": r(root, 6), "paths": paths,
                                                "b": {k: sig(v[np.unique(np.round(np.logspace(0, np.log10(N - 1), 120)).astype(int))], 4) for k, v in B.items()},
                                                "bn": np.unique(np.round(np.logspace(0, np.log10(N - 1), 120)).astype(int)).tolist()})
+# in-page notes (papers/robbins1951stochastic/notes.md): Sec. 2 drift, Sec. 3 b_{n+1} - b_n = -2 a_n d_n + a_n^2 q_n
+Rr = np.random.default_rng(12); xs_r = Rr.normal(theta, .7, 400000); an_ = .3
+ys_r = np.tanh(xs_r) + Rr.uniform(-1, 1, xs_r.size); xn_ = xs_r + an_ * (alpha - ys_r)
+bn_, bn1 = np.mean((xs_r - theta) ** 2), np.mean((xn_ - theta) ** 2)
+dn_ = np.mean((xs_r - theta) * (np.tanh(xs_r) - alpha)); qn_ = np.mean((ys_r - alpha) ** 2)
+check("notes: b_{n+1} - b_n = -2 a_n d_n + a_n^2 q_n (Monte Carlo, x_n ~ N(theta, 0.7^2), a_n = 0.3)", np.isclose(bn1 - bn_, -2 * an_ * dn_ + an_ ** 2 * qn_, atol=3e-3), f"{bn1 - bn_:.4f} vs {-2 * an_ * dn_ + an_ ** 2 * qn_:.4f}")
+check("notes: d_n >= 0 for nondecreasing M and q_n <= (C + |alpha|)^2 with C = 2 (|y| < 2)", dn_ >= 0 and qn_ <= (2 + alpha) ** 2)
+check("notes: mean step a_n (alpha - M(x_n)) points toward theta", all(np.sign(alpha - np.tanh(x)) == np.sign(theta - x) for x in [-2, 0, .5, .6, 3]))
+# primer: theta, noise sd, averaging, Markov bound, the three gain schedules (B from the simulation above)
+check("primer: theta = artanh 0.5 ~ 0.549; U(-1, 1) sd = 1/sqrt 3 ~ 0.577; /sqrt 100 ~ 0.058",
+      np.isclose(theta, .549, atol=5e-4) and np.isclose(1 / np.sqrt(3), .577, atol=5e-4) and np.isclose(1 / np.sqrt(3) / 10, .058, atol=5e-4))
+check("primer: b_n = 1e-4, eps = 0.1 -> P <= 0.01", np.isclose(1e-4 / .1 ** 2, .01))
+check("primer: a_n = 2/n: b ~ 0.0077, 0.00075, 0.00003 at n = 100, 1000, 20000",
+      np.isclose(B["2/n"][99], .0077, atol=5e-4) and np.isclose(B["2/n"][999], .00075, atol=1e-4) and np.isclose(B["2/n"][-1], .00003, atol=5e-6))
+check("primer: a_n = 0.2 stays near 0.05; a_n = 2/n^2 stays near 0.51",
+      all(abs(B["0.2"][k] - .05) < .01 for k in (99, 999, N - 1)) and all(abs(B["2/n^2"][k] - .51) < .01 for k in (99, 999, N - 1)))
 done()

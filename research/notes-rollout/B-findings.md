@@ -1,7 +1,7 @@
 # Session B findings — in-page notes rollout (branch `notes-B`)
 
 ## Shared changes needed
-- None so far.
+- None. Everything in these 18 notes PDFs could be expressed with the current renderer (no figures in this batch).
 
 Conventions used on every page of this session (the notes PDFs of this batch share one layout, unlike Lee's):
 - The opening box (Problem / Method / Reported results, or similar) is the notes' one-minute summary: it goes into
@@ -244,3 +244,68 @@ Conventions used on every page of this session (the notes PDFs of this batch sha
 - Primer ideas: (1) almost surely vs finite time (ten tails: 1/1024); (2) Robbins–Monro step conditions (H₁₀₀₀ ≈ 7.49,
   π²/6); (3) x⁴/4 with η = 0.1 blows up from 5 (→ −7.5 → 34.7) while the teaching tamed step goes to 4.07, and the
   paper tames with a deterministic r(x) (Remark 2); (4) noise leaves the stable manifold, |y| = 0.01 → 1 in 49 steps.
+
+## [16] nesterov2004introductory — Introductory Lectures on Convex Optimization
+- Checked against: the book is not openly available (Kluwer 2004, doi 10.1007/978-1-4419-8853-9), so the notes were
+  checked as mathematics: descent lemma, f(x − η∇f) ≤ f(x) − η(1 − Lη/2)‖∇f‖², the η = 1/L decrease, the telescoped
+  bound min‖∇f‖² ≤ 2LΔ/T and T ≥ 2LΔ/ε², the convexity inequality, the x³ counterexample, and the description of the
+  book (nonlinear / smooth convex / nonsmooth convex / structural optimization = its four chapters). "Our Ref. [10]"
+  is correct in the current survey numbering (Jin, Netrapalli, Jordan 2018, accelerated saddle escape).
+- Fixes to the notes: none. No discrepancies found. The notes themselves say the book text was not available and label
+  the derivations as pedagogical reconstructions; that section stays verbatim.
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, the "What this reference contributes"
+  box, Sec. 7 key lesson), labels Role / What this reference contributes to the survey / Key lesson.
+- Numbers checked in `scripts/check-math/nesterov2004introductory.py`: descent lemma and step inequality on an L = 1
+  non-convex function (500 random cases), the per-step decrease and min‖g‖² ≤ 2LΔ/T along a run, x³.
+- Unverified: theorem/section numbers of the book (the notes give none).
+- Primer ideas: (1) L for the non-convex x²/4 − cos(2y)/4 is 1; (2) telescoping (10, 7, 5, 4.5 → 5.5); (3) min ≤
+  average and counting (L = 1, Δ = 10, ε = 0.01 → 200,000; from (3, 1): bound 0.26 after 20 steps, run ≈ 10⁻¹¹).
+
+## [17] carmon2020lower — Lower Bounds for Finding Stationary Points I
+- Checked against: arXiv 1710.11606 (Math. Program. 184): abstract (oracle returns the value and all derivatives;
+  any, potentially randomized, algorithm needs ε^{−(p+1)/p} queries for Lipschitz p-th derivatives; sharp to within
+  constants; GD, cubic-regularized Newton and p-th order regularization are worst-case optimal), zero-respecting
+  algorithms, Definition 3 (zero-chains), high-dimensional construction.
+- Fixes to the notes: none. No discrepancies found.
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 3 key result and the sharpness
+  sentence, the "Avoid conflation" box), labels Problem / Key result / Avoid conflation.
+- Numbers checked in `scripts/check-math/carmon2020lower.py`: the exponent table (2, 3/2, 4/3) and the GD bound on a
+  chain instance.
+- Unverified: none.
+- Primer ideas: (1) upper vs lower bounds (guessing 1..1024: 10 questions both ways); (2) a quadratic chain
+  ½(x₁ − 1)² + ½Σ(x_{i+1} − x_i)² reveals one coordinate per gradient step from 0 (checked for d = 5); (3) exponents as
+  counts at ε = 0.01 (10⁴, 10³, ≈ 464).
+
+## [18] robbins1951stochastic — A Stochastic Approximation Method
+- Checked against: the JSTOR scan linked in the notes (columbia.edu RM51.pdf, Ann. Math. Statist. 22(3) 400–407):
+  Sec. 1 problem M(θ) = α, Sec. 3 conditions (4) bounded responses, (5) sign condition, (6) Σa_n² < ∞, rule (7),
+  b_n (9), "(10) implies the convergence in probability of x_n to θ", Eqs. (11)–(14) b_{n+1} − b_n = a_n²e_n − 2a_n d_n,
+  d_n ≥ 0 and the bound on e_n, Theorems 1–2 and the 1/n gains.
+- Fixes to the notes: none. No discrepancies found. (Notation only: the notes call the paper's e_n "q_n" and use e_n
+  for the error x_n − θ.)
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 2, the "Actual result" box, the
+  "Terminology check" box), labels Problem / Method / Actual result / Terminology check.
+- Numbers checked in `scripts/check-math/robbins1951stochastic.py`: the b_n recursion (Monte Carlo), d_n ≥ 0 and the
+  q_n bound, the drift direction.
+- Unverified: none.
+- Primer ideas: (1) noisy root finding (θ = artanh 0.5 ≈ 0.549, noise sd 0.577, 100-sample average 0.058);
+  (2) mean-square ⇒ in probability via Markov (10⁻⁴/0.1² = 0.01), and why that is weaker than almost sure; (3) gains:
+  2/n gives b_n ≈ 0.0077 / 0.00075 / 0.00003 at n = 10², 10³, 2·10⁴, constant 0.2 stalls near 0.05, 2/n² stalls
+  near 0.51 (200 runs, from the existing script's simulation).
+
+## Summary for the coordinator
+- 18/18 pages done: notes.md (minute box, primer fold, divider, notes verbatim, source line), check scripts extended
+  and passing, page audit passing (0 KaTeX errors, `__atlasErrors` empty, section counts match the PDFs, 0 px
+  horizontal overflow at 375 px; some long equations scroll inside their own panel), word-level diff of every page
+  against its PDF text (only math tokens, running headers and the one logged fix differ).
+- Fixes to the notes: one. chizat2018global "Actual contribution": "the … gradient flow converges to global
+  minimizers" → "if the … gradient flow converges, its limit is a global minimizer" (Theorems 3.3/3.5, Sec. 1.2).
+- Silent artefact fix: saxe2014exact quick-reference table's stray "Source:" column.
+- Kept verbatim although odd: duplicate "5." section numbers in saxe2014exact, foret2021sharpness, kalra2024warmup;
+  the notes' own "Source blocker" (nesterov2006cubic), "Verification scope" (apidopoulos2026taming) and "Scope and
+  source limitation" (nesterov2004introductory) statements, although the papers were read for this round.
+- No one-minute box in the notes (built from the notes' sentences, logged per paper): dinh2017sharp, chizat2018global,
+  damian2023self, nesterov2006cubic, zhang2020gradient, li2023convergence, apidopoulos2026taming,
+  nesterov2004introductory, carmon2020lower, robbins1951stochastic.
+- research/findings.md (not touched): its galli2026flatland line gives Prop. 2.5 as "η_k ≥ 2(1 − c)/ℓ(w_k, 2η_k)"; the
+  paper (and the notes) state η_k ≥ 2δ(1 − c)/ℓ(w_k, η_{w_k}).
