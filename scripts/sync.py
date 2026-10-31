@@ -122,6 +122,7 @@ def main():
             "scholar": "https://scholar.google.com/scholar?q=" + quote_plus(r["title"] or r["text"][:120]),
             "notes": f"public/notes/{key}.pdf" if os.path.exists(os.path.join(ROOT, "public", "notes", f"{key}.pdf")) else None,
             "notes_title": nmap.get(key, {}).get("file"),
+            "notes_page": os.path.exists(os.path.join(ROOT, "papers", key, "notes.md")),
             "visual": os.path.exists(os.path.join(ROOT, "papers", key, "visual.js")),
             "tags": meta.get("tags", []), "result": meta.get("result_plain") or "", "tabs": meta.get("tabs", []), "tag_tabs": meta.get("tag_tabs", {}),
             "thumb": next((f"public/thumbs/{key}.{e}" for e in ("webp", "png") if os.path.exists(os.path.join(ROOT, "public", "thumbs", f"{key}.{e}"))), None),

@@ -1,8 +1,9 @@
 // Paper page shell. Renders the header from data/papers.json, then the paper's visual (papers/<key>/visual.js),
-// its math panel (papers/<key>/math.md) and the notes PDF (public/notes/<key>.pdf).
+// its math panel (papers/<key>/math.md) and the study notes (papers/<key>/notes.md in the page, else the PDF public/notes/<key>.pdf).
 import { Stage } from '../lib/atlas3d.js';
 import { Plot } from '../lib/charts.js';
 import { checkGrad2 } from '../lib/math.js';
+import { renderNotesArticle } from './notes.js';
 
 const $ = s => document.querySelector(s);
 const qs = new URLSearchParams(location.search);
@@ -83,8 +84,18 @@ function renderNav(P, db) {
   $('#foot').innerHTML = `<span>Survey Visual Atlas · MLR570 · survey reference [${P.n}] · key <b>${esc(P.key)}</b></span><span>Every surface is a real function; every ball runs a real optimizer. <a href="https://github.com/farisnasser/survey-visual-atlas/tree/main/scripts/check-math">Math checks</a></span>`;
 }
 
-function renderNotes(P) {
+async function renderNotes(P) {
   const sec = $('#notes');
+  if (P.notes_page) {
+    sec.classList.add('as-page');
+    sec.innerHTML = `<div class="sec-h"><h2>Study notes</h2><span class="sub">Our study notes, with a first-principles primer</span></div><div class="loading">Loading notes…</div>`;
+    try {
+      const md = await fetch(`papers/${P.key}/notes.md`).then(r => { if (!r.ok) throw new Error(`notes.md ${r.status}`); return r.text(); });
+      sec.querySelector('.loading').outerHTML = await renderNotesArticle(md);
+      if (location.hash.startsWith('#n-')) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+    } catch (err) { sec.querySelector('.loading').textContent = 'Could not load the notes.'; console.error(err); }
+    return;
+  }
   if (!P.notes) { sec.innerHTML = `<div class="sec-h"><h2>Study notes</h2></div><div class="nonotes">No notes PDF for this paper yet. When one lands in the Drive notes folder, the next sync adds it here.</div>`; return; }
   sec.innerHTML = `<div class="sec-h"><h2>Study notes</h2><span class="sub">${esc(P.notes_title || '')} · <a href="${esc(P.notes)}" download>Download PDF</a> · <a href="${esc(P.notes)}" target="_blank" rel="noopener">Open in new tab</a></span></div><div class="pdfview" id="pdfview"><div class="loading">Loading notes…</div></div>`;
   const io = new IntersectionObserver(async es => {

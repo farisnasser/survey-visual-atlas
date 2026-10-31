@@ -44,4 +44,23 @@ check("det Dg = (1-a)((1+a) - 3a y^2)", True)
 yfold = lambda a: np.sqrt((1 + a) / (3 * a))
 print(f"  fold line |y| = {yfold(.1):.2f} (a=0.1), {yfold(.4):.2f} (a=0.4)")
 check("no fold inside |y|<=1.6 for a=0.1; fold appears for a=0.4", yfold(.1) > 1.6 and yfold(.4) < 1.6)
+
+# in-page notes (papers/lee2016gradient/notes.md): worked example on f = x^2/2 - y^2/2, alpha = 0.2
+q, traj = np.array([.40, .01]), []
+for k in range(10):
+    q = q - .2 * np.array([q[0], -q[1]])
+    traj.append(q.copy())
+print(f"  notes example: z1 = {traj[0]}, z2 = {traj[1]}, z10 = {traj[9]}")
+check("notes example z1 = (0.320, 0.012), z2 = (0.256, 0.0144)", np.allclose(traj[0], [.32, .012]) and np.allclose(traj[1], [.256, .0144]))
+check("notes example z10 ~ (0.043, 0.062)", np.allclose(traj[9], [.043, .062], atol=5e-4))
+# g^{-1}(y) = argmin_x 1/2||x - y||^2 - a f(x) inverts g(x) = x - a grad f(x) when a < 1/L (paper's f, L = 2 on |y| <= 1)
+a = .2
+for q in rand_pts(5, -.9, .9, seed=3):
+    y = q - a * g(q)
+    xs = y.copy()
+    for _ in range(200):          # stationarity x - y - a grad f(x) = 0, a contraction since a L < 1
+        xs = y + a * g(xs)
+    H = np.eye(2) - a * np.diag([1, 3 * xs[1] ** 2 - 1])
+    assert np.all(np.linalg.eigvalsh(H) > 0) and np.allclose(xs, q, atol=1e-9), (q, xs)
+check("proximal step on -f inverts the GD map (Prop. 8 construction)", True)
 done()
