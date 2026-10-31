@@ -247,7 +247,8 @@
   "aka": [
    "$\\nabla^2 f$",
    "$H$"
-  ]
+  ],
+  "sec": "n-2-the-hessian-all-the-second-derivatives-at-once"
  },
  "eigen": {
   "term": "Eigenvalue / eigenvector",
@@ -257,7 +258,8 @@
   "aka": [
    "$\\lambda_{\\min}$, $\\lambda_{\\max}$",
    "spectrum"
-  ]
+  ],
+  "sec": "n-3-eigenvalues-the-principal-curvatures"
  },
  "psd": {
   "term": "Positive semidefinite",
@@ -267,13 +269,15 @@
   "aka": [
    "PSD",
    "$\\succeq$"
-  ]
+  ],
+  "sec": "n-6-convex-strongly-convex-positive-semidefinite"
  },
  "convex": {
   "term": "Convex function",
   "ch": "curvature",
   "def": "A function whose graph never rises above a chord between two of its points. For twice-differentiable $f$: the Hessian is PSD everywhere. Every local minimum of a convex function is global.",
-  "tex": "f\\big(\\lambda x + (1-\\lambda) y\\big) \\le \\lambda f(x) + (1-\\lambda) f(y), \\quad 0 \\le \\lambda \\le 1"
+  "tex": "f\\big(\\lambda x + (1-\\lambda) y\\big) \\le \\lambda f(x) + (1-\\lambda) f(y), \\quad 0 \\le \\lambda \\le 1",
+  "sec": "n-6-convex-strongly-convex-positive-semidefinite"
  },
  "strongly-convex": {
   "term": "Strongly convex",
@@ -281,7 +285,8 @@
   "def": "Convex with curvature at least $\\mu > 0$ in every direction, $\\nabla^2 f \\succeq \\mu I$. It has exactly one minimizer, and GD converges to it geometrically fast.",
   "aka": [
    "$\\mu$-strongly convex"
-  ]
+  ],
+  "sec": "n-6-convex-strongly-convex-positive-semidefinite"
  },
  "condition-number": {
   "term": "Condition number",
@@ -291,7 +296,8 @@
   "aka": [
    "$\\kappa$",
    "ill-conditioning"
-  ]
+  ],
+  "sec": "n-5-the-condition-number-why-narrow-valleys-are-slow"
  },
  "quadratic-model": {
   "term": "Quadratic model",
@@ -300,7 +306,8 @@
   "tex": "f(x + \\Delta) \\approx f(x) + \\nabla f(x) \\cdot \\Delta + \\tfrac12\\, \\Delta^\\top \\nabla^2 f(x)\\, \\Delta",
   "aka": [
    "second-order Taylor approximation"
-  ]
+  ],
+  "sec": "n-2-the-hessian-all-the-second-derivatives-at-once"
  },
  "hvp": {
   "term": "Hessian-vector product",
@@ -309,7 +316,8 @@
   "tex": "\\nabla^2 f(x)\\, v \\approx \\frac{\\nabla f(x + h v) - \\nabla f(x)}{h}",
   "aka": [
    "HVP"
-  ]
+  ],
+  "sec": "n-7-hessian-vector-products-curvature-without-the-matrix"
  },
  "critical-point": {
   "term": "Critical point",
