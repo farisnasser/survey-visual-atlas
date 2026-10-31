@@ -1,7 +1,7 @@
 # Session A notes: stops 4 curvature, 5 critical, 6 escape
 
 ## Shared changes needed
-- `src/paper/notes.js`: inside `:::` boxes a LaTeX line break `\` reaches KaTeX as `\ ` (the annotation shows `\ &`), so multi-line
+- `src/paper/notes.js`: inside `:::` boxes a LaTeX line break `\\` reaches KaTeX as `\ ` (the annotation shows `\ &`), so multi-line
   `aligned`/matrix displays cannot be used in def/idea/theorem boxes (they render on one line and scroll at 375 px). Worked around in
   stop 6 by moving the cubic model to inline math. Displays outside boxes are fine.
 - Wide display equations scroll horizontally at 375 px in every stop (stops 1–3 included: up to 264 px of scroll in stop 3). Not a
