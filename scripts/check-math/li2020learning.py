@@ -93,4 +93,34 @@ t10 = int(np.argmax(hist < .1 * hist[0])); t1 = int(np.argmax(hist < .01 * hist[
 print(f"  steps to 10% of the initial loss: {t10}, to 1%: {t1}")
 save_json("li2020learning", "data.json", {"hist": sig(hist[::20], 4), "frames": frames, "rf": float(f"{rf:.4g}"), "mass": round(float(mass), 4), "a": a.tolist(),
                                           "eta": eta, "lam": lam, "t10": t10, "t1": t1, "m0": round(float(m0), 4)})
+# in-page notes (papers/li2020learning/notes.md): d = 2, a = (1/2, 1/2): second moment I/2; fourth-order tensor; |z| = relu(z) + relu(-z)
+zz = np.linspace(-3, 3, 61)
+check("notes: |z| = ReLU(z) + ReLU(-z)", np.allclose(np.abs(zz), np.maximum(zz, 0) + np.maximum(-zz, 0)))
+e1_, e2_ = np.eye(2)
+check("notes: (e1 e1^T + e2 e2^T)/2 = I/2", np.allclose((np.outer(e1_, e1_) + np.outer(e2_, e2_)) / 2, np.eye(2) / 2))
+# notes worked comparison (fixed: Q must satisfy 0 < Q < 1/100 in Theorem 1): Q = 0.005, d = 1e4 -> d^-0.005 = 10^-0.02 ~ 0.95
+check("notes (fixed): Q = 0.005 is inside 0 < Q < 1/100; d^-0.005 at d = 1e4 = 10^-0.02 ~ 0.95", 0 < .005 < .01 and np.isclose(1e4 ** -.005, 10 ** -.02) and abs(10 ** -.02 - .95) < .005)
+check("original notes value Q = 0.05 lies outside Theorem 1's range (0 < Q < 1/100)", not (.05 < .01))
+# primer idea 2: |z|: mean sqrt(2/pi), var 1 - 2/pi; best a + b(z^2 - 1): b = sqrt(2/pi)/2, explains 2 b^2 = 1/pi; residual ~0.045 (~12%)
+Rz2 = np.random.default_rng(12).normal(size=2000000)
+Eabs, Vabs = np.mean(np.abs(Rz2)), np.var(np.abs(Rz2)); b_ = np.mean(np.abs(Rz2) * (Rz2 ** 2 - 1)) / 2
+check("primer: E|z| = sqrt(2/pi) ~ 0.798, Var|z| = 1 - 2/pi ~ 0.363 (Monte Carlo + closed form)", abs(Eabs - np.sqrt(2 / np.pi)) < 2e-3 and abs(Vabs - (1 - 2 / np.pi)) < 2e-3 and abs(np.sqrt(2 / np.pi) - .798) < 5e-4 and abs(1 - 2 / np.pi - .363) < 5e-4)
+check("primer: b = sqrt(2/pi)/2 ~ 0.399, explained 2b^2 = 1/pi ~ 0.318, residual ~0.045 (~12%)", abs(b_ - np.sqrt(2 / np.pi) / 2) < 3e-3 and abs(2 * (np.sqrt(2 / np.pi) / 2) ** 2 - 1 / np.pi) < 1e-12
+      and abs((1 - 2 / np.pi) - 1 / np.pi - .045) < 5e-4 and abs(((1 - 2 / np.pi) - 1 / np.pi) / (1 - 2 / np.pi) - .12) < .01, f"b = {b_:.4f}")
+A_ = np.column_stack([np.ones_like(Rz2), Rz2, Rz2 ** 2 - 1])
+cf_, *_ = np.linalg.lstsq(A_, np.abs(Rz2), rcond=None)
+check("primer (Monte Carlo): best quadratic fit of |z| leaves ~0.045 mean squared error", abs(np.mean((A_ @ cf_ - np.abs(Rz2)) ** 2) - .0451) < 1.5e-3, f"{np.mean((A_ @ cf_ - np.abs(Rz2)) ** 2):.4f}")
+# primer idea 3: rotated basis has the same second moment but a different 4th-order tensor: T(e1,e1,e1,e1) = 1/2 vs 1/4
+u1, u2 = np.array([1, 1]) / np.sqrt(2), np.array([1, -1]) / np.sqrt(2)
+T4 = lambda vs, x: np.mean([(v @ x) ** 4 for v in vs])
+check("primer: second moments equal (I/2), fourth-order at e1: 1/2 vs 1/4", np.allclose((np.outer(u1, u1) + np.outer(u2, u2)) / 2, np.eye(2) / 2) and np.isclose(T4([e1_, e2_], e1_), .5) and np.isclose(T4([u1, u2], e1_), .25))
+# primer idea 4: cubing a ratio 1.1 -> 1.331 -> 2.358 -> 13.1 -> ~2.3e3
+rs = [1.1]
+for _ in range(4):
+    rs.append(rs[-1] ** 3)
+check("primer: ratio 1.1 cubed repeatedly: 1.33, 2.36, 13.1, ~2.3e3", abs(rs[1] - 1.331) < 1e-9 and abs(rs[2] - 2.358) < 1e-3 and abs(rs[3] - 13.1) < .05 and abs(rs[4] - 2.3e3) < 60, f"{rs}")
+x_ = np.array([1.1, 1.]) / np.linalg.norm([1.1, 1.])
+for _ in range(4):
+    x_ = x_ ** 3; x_ /= np.linalg.norm(x_)
+check("primer: tensor power iteration on e1^4 + e2^4 cubes the coordinate ratio", np.isclose(x_[0] / x_[1], rs[4]))
 done()

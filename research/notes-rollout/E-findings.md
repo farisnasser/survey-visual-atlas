@@ -1,7 +1,15 @@
 # Session E — in-page notes findings
 
 ## Shared changes needed
-None so far.
+None required. Every notes PDF in this batch rendered with the existing syntax (no figures in these 14 PDFs).
+
+Optional, for the coordinator to decide once across all sessions:
+- **Old "Ref NN" numbers inside the notes' prose** (e.g. "NEON2 (Ref 77)", "SSRGD (Ref 83)", "Nguyen (Ref 88)") use the notes' old list, not the survey numbering shown in the page header. Kept verbatim on all 14 pages; each entry below gives the survey numbers.
+- **Untitled boxes.** These PDFs use light-blue boxes whose title is an inline bold label ("Important:", "Read:", "Key distinction:"). They are written as untitled `:::warn` / `:::key` / `:::plain` boxes with the bold label kept inline, so the wording stays verbatim.
+- **Closing source line.** These notes end with "Verified source: …" or "Source: …" (not "Primary source"); kept verbatim with the PDF's link. A grey "Read …" line under a box is written as a `>` line (it is grey in the PDF too).
+
+## Summary
+14/14 pages done. Fixes to the notes: 4 in 3 papers — wang2019spiderboost (reading-priority section numbers), mei2019mean ("Theorem 3" → "Theorem 1", twice), li2020learning (illustrative $Q = 0.05$ outside the theorem's $0 < Q < 1/100$ → $Q = 0.005$). Two findings of the earlier round were re-checked and are **not** errors in the notes for the PDFs they link: zou2019improved's "Theorem 3.10" (correct, SGD two-layer) and li2020learning's "Theorem 2" (COLT numbering). One slip in a paper, not in the notes: chen2022faster Remark 5.2's $\epsilon_H \ge \epsilon^{3/5}$.
 
 ## [1] zhang2021escape — Escape Saddle Points by a Simple Gradient-Descent Based Algorithm
 - **Checked against:** NeurIPS 2021 proceedings PDF (the copy the notes link), pp. 1–10: Eq. (1), Table 1, Algorithm 1 + Proposition 3 (p. 5), Eq. (5)–(6), Remark 4, Algorithm 2 + Proposition 5 (p. 7), Lemma 6 + Theorem 7 (p. 8), Algorithm 3 + Theorem 9 (p. 9), Sec. 4 and Figures 1–2 (p. 10).
@@ -98,3 +106,21 @@ None so far.
 - **Observations (no change made):** the notes write the ODE's initial condition as $X(0) = x$; the paper's analysis model (Eq. 3) starts at $X_\rho(x, 0) = \langle w_2, x\rangle$ with a fixed linear map $w_2$, and its practical scheme (Eq. 16) uses $X_0 = x$. A simplification of notation, not a wrong statement; kept. Theorem numbers follow ICML (arXiv: 2.3, 3.1, 3.2, 3.9). Old reference numbers (Refs 88, 89) kept (survey [92], [93]).
 - **Unverified:** nothing.
 - **Primer ideas:** (1) Euler's method and its $O(1/L)$ error ($0.124$ vs $0.0135$ for $L = 10, 100$); (2) mixtures of distributions and the first variation (Theorem 2's form), $E = (\text{mean} - 2)^2$ example with slope $-4$; (3) two-layer mean-field loss is convex in $\rho$, the ResNet's is not, hence Theorem 3's explicit descent direction; (4) the adjoint as backprop through an ODE ($\dot X = aX$: $\partial E/\partial X(0) = (e - 2)e \approx 1.95$) and Lemma 1's lower bound on it.
+
+## [13] li2020learning — Learning Over-Parametrized Two-Layer ReLU Networks beyond NTK
+- **Checked against:** COLT 2020 PMLR PDF (the copy the notes link, 70 pages): abstract, Sec. 1.1 Eq. (1)–(2), Theorem 1 (main result, $0 < Q < 1/100$, $L(\widehat W) \le O(1/d^{1+Q})$), Algorithm 1 (two-stage truncated GD, init $N(0, I/d)$) (pp. 2–3), Theorem 2 (lower bound $\Omega(1/d)$ for poly-size feature maps / kernels) (p. 4), Sec. 2 Eq. (4) Hermite/tensor expansion, Sec. 3 stage-wise overview, Sec. 5 simulations.
+- **Fix to the notes (1):**
+  - §2 "Worked comparison for intuition". Original: "With $Q = 0.05$ (illustrative), $d^{-1-Q}/d^{-1} = d^{-0.05}$. At $d = 10^4$ this ratio is $10^{-0.2} \approx 0.63$". Fixed: "With $Q = 0.005$ (illustrative), $d^{-1-Q}/d^{-1} = d^{-0.005}$. At $d = 10^4$ this ratio is $10^{-0.02} \approx 0.95$". Paper, Theorem 1 (p. 3): "$0 < Q < 1/100$ be a sufficiently small absolute constant that does not depend on $\kappa$". The notes' own previous display states $0 < Q < 1/100$; $Q = 0.05$ lies outside the theorem's range and overstated the illustrated gap tenfold in the exponent. The rest of the sentence is unchanged. (If the coordinator prefers to keep the notes' number, the alternative is to add "outside the theorem's range" — but the illustration would then not be of the theorem.)
+- **Observations (no change made):**
+  - The earlier round (research/findings.md) says the notes call the lower bound "Theorem 2" while the paper has "Theorem 1.2". That is the arXiv numbering; the COLT PDF the notes link labels it **"Theorem 2 (Lower bound)"** (p. 4) and the main result "Theorem 1 (Main result)". The notes are correct for their source; kept.
+  - The notes' title omits "Neural" from the COLT title ("…Two-Layer ReLU Neural Networks beyond NTK"); kept as the notes' own title (the page header shows the official title).
+  - Old reference numbers (Refs 87, 89, 92) kept (survey [91], [93], [96]).
+- **Unverified:** nothing.
+- **Primer ideas:** (1) fixed-feature / kernel / NTK methods only fit coefficients on fixed features; (2) Hermite expansion: the best $a + b(z^2 - 1)$ fit of $|z|$ leaves $0.045$ ($\approx 12\%$) of its variance in orders $\ge 4$ (closed form + Monte Carlo); (3) second moments are rotation-blind ($I/2$ for $e_i$ and for the $45°$ basis), the fourth-order tensor is not ($1/2$ vs $1/4$); (4) tensor power steps cube the coordinate ratio ($1.1 \to 1.33 \to 2.36 \to 13.1 \to 2.3\times10^3$): plateau then sudden progress, as the paper notes for its second stage.
+
+## [14] xu2023over — Over-Parameterization Exponentially Slows Down GD for a Single Neuron
+- **Checked against:** COLT 2023 PMLR PDF (the copy the notes link, 44 pages): abstract, Eq. (1)–(3), Figure 1, Theorems 1–2 (informal) (pp. 1–3), Sec. 2 technical overview (three phases; gradient lower bound improved from $\Omega(L)$ to $\Omega(L^{2/3})$; potential $Z(t)$), Sec. 4 Lemma 3, Theorems 4–7, Theorem 9, Corollary 12, Sec. 5 Definition 13, Theorem 14.
+- **Fixes to the notes:** none. No discrepancies found.
+- **Observations (no change made):** the notes' "Phase 2: alignment and radial correction" matches the paper's Phase 2 ($\theta_i$ stays small while $H = \|v\| - \sum_i\langle w_i, v\rangle$ decays exponentially; the paper itself calls $\theta_i$ "radial" and $H$ "tangential", which reads swapped, but the notes' wording describes the quantities correctly). The notes' title shortens the paper's ("…Gradient Descent for Learning a Single Neuron"); kept as the notes' title. Old reference number "Li–Ma–Zhang (Ref 91)" kept (survey [95]).
+- **Unverified:** nothing.
+- **Primer ideas:** (1) exponential vs algebraic decay (time to $10^{-6}$: 13.8 vs 100; to $10^{-12}$: 27.6 vs $10^4$); (2) $\|\nabla L\|^2 \ge cL^\alpha$ gives $t^{-1/(\alpha-1)}$: the paper's Theorem 7 ($\alpha = 4/3$) gives $t^{-3}$, Zhou et al.'s $\Omega(L)$ ($\alpha = 2$) only $t^{-1}$ (numerical ODE slopes checked); (3) positive homogeneity makes $(\alpha v, (1-\alpha)v)$ a continuum of global minima (flat direction, no PL bowl); (4) the paper's potential $Z$ with $L \ge \Omega(Z^3)$, $Z = \Omega(t^{-1})$, and the caricature $L = |b|^3$ ($301^{-3} \approx 3.7\times10^{-8}$ at $t = 100$ vs $e^{-400}$ for a quadratic).
