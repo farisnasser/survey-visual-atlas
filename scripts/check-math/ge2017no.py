@@ -45,4 +45,33 @@ check_grad("balanced", fb, gb, rand_pts(20, -2, 2))
 check("without the regularizer the minimizers form the hyperbola uv = 1 (a zero eigenvalue)", abs(eig(fd_hess(fa, [2, .5]))[0]) < 1e-6)
 check("with it the minima are isolated: (1,1), (-1,-1), positive definite", eig(fd_hess(fb, [1, 1]))[0] > .1 and abs(fb([1, 1])) < 1e-15)
 check("origin stays a strict saddle with the regularizer", eig(fd_hess(fb, [0, 0]))[0] < -.5)
+
+# in-page notes (papers/ge2017no/notes.md): Sec. 2 example, Sec. 4 identity (H = I) and the primer's numbers
+Fg = lambda p: .5 * ((p[0] ** 2 - 1) ** 2 + 2 * p[0] ** 2 * p[1] ** 2 + p[1] ** 4)
+Gg = lambda p: np.array([2 * p[0] * (p[0] ** 2 + p[1] ** 2 - 1), 2 * p[1] * (p[0] ** 2 + p[1] ** 2)])
+check("notes Sec. 2: the two expansions of F agree", all(np.isclose(Fg(q), .5 * ((q[0] ** 2 + q[1] ** 2) ** 2 - 2 * q[0] ** 2 + 1)) for q in rand_pts(20, -2, 2)))
+check_grad("notes Sec. 2: dF/da = 2a(a^2+b^2-1), dF/db = 2b(a^2+b^2)", Fg, Gg, rand_pts(20, -2, 2))
+check_hess_at("notes Sec. 2: Hessian at the origin diag(-2, 0)", Fg, [0, 0], [[-2, 0], [0, 0]])
+check("notes Sec. 2: F(0,0) = 0.5, F(0.5,0) = 0.28125, F(1,0) = 0; stationary at (0,0), (+-1,0)",
+      Fg([0, 0]) == .5 and np.isclose(Fg([.5, 0]), .28125) and Fg([1, 0]) == 0 and all(np.allclose(Gg(q), 0) for q in ([0, 0], [1, 0], [-1, 0])))
+# Lemma 7 with H = I, Q = 0 (f = 1/2||UU^T - M*||^2) at stationary points of a random symmetric instance
+Rg = np.random.default_rng(60)
+Us = Rg.normal(size=(4, 2)); Ms = Us @ Us.T
+fU = lambda U: .5 * np.sum((U @ U.T - Ms) ** 2)
+def align(U):
+    W, _, Zt = np.linalg.svd(Us.T @ U); return U - Us @ (W @ Zt)
+ok = True
+for _ in range(20):
+    U = Rg.normal(size=(4, 2)); D = align(U)
+    lhs = (fU(U + 1e-4 * D) - 2 * fU(U) + fU(U - 1e-4 * D)) / 1e-8
+    gU = 2 * (U @ U.T - Ms) @ U
+    rhs = np.sum((D @ D.T) ** 2) - 3 * np.sum((U @ U.T - Ms) ** 2) + 4 * np.sum(gU * D)
+    ok &= abs(lhs - rhs) < 1e-3 * (1 + abs(rhs)) and np.sum((D @ D.T) ** 2) <= 2 * np.sum((U @ U.T - Ms) ** 2) + 1e-9
+check("notes Sec. 4: Lemma 7 identity (H = I, no regularizer) and Lemma 6 ||DD^T||^2 <= 2||M - M*||^2", ok)
+check("primer idea 1: at U = 0, curvature along Delta = (1,0) is -2 = 1 - 3 <= -1",
+      np.isclose((Fg([1e-4, 0]) - 2 * Fg([0, 0]) + Fg([-1e-4, 0])) / 1e-8, -2, atol=1e-4) and 1 - 3 == -2 and -2 <= -1)
+check("primer idea 2: (1,2) pays 9/8, (sqrt2, sqrt2) pays 0", np.isclose((1 - 4) ** 2 / 8, 9 / 8) and np.isclose((2 - 2) ** 2 / 8, 0) and np.isclose(np.sqrt(2) ** 2, 2))
+check("primer idea 3: 10% sampling misses the single nonzero entry with probability 0.9", np.isclose(1 - .1, .9) and 100 * 100 == 10000)
+xx = np.linspace(-3, 3, 6001)
+check("primer idea 4: |x| <= x^2/2 + 1/2 with equality at +-1", np.all(np.abs(xx) <= xx ** 2 / 2 + .5 + 1e-12) and np.isclose(1, .5 + .5))
 done()

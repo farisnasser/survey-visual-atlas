@@ -219,3 +219,67 @@ started 30 Oct); requests to :8573 reached that server. This session audited on 
   · one Gaussian measurement set preserves ‖Z‖_F² on average (sd √(2/m) = 0.1 at m = 200); RIP demands it for all
   low-rank Z · first- and second-order necessary conditions and how Theorems 3.1/4.1 + 3.2 combine · worst-case
   NP-hardness vs the structured RIP class (points to the §8 correction).
+
+## [13] bhojanapalli2016dropping — Dropping Convexity for Faster Semi-definite Optimization
+- **Checked against:** PMLR 49 (COLT 2016) PDF (53 pp.): abstract, Sec. 1 problem (1)–(2), Algorithm 1 (FGD) with step
+  (8) η = 1/(16(M‖X₀‖₂ + ‖∇f(X₀)‖₂)), DIST(U, U*) up to rotation, Theorem 4.1 (smooth: O(1/k)), Theorem 4.2 /
+  Corollary 4.3 (restricted strongly convex: linear), Sec. 5 initialization (first-order oracle), "for several problem
+  instances … global convergence guarantees" (abstract).
+- **Notes verified:** the factor gradient (checked by finite differences), rotation symmetry, the local/global
+  distinction and the two rates.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** no one-minute summary; built from §1 (question), the "Paper result" box and the "Do not overstate" box.
+  The notes write X_* (subscript) in the teaching example; kept. Header "Ref. [52]" (survey [59]) dropped.
+- **Primer (4 ideas):** chain rule through the product (scalar g(u) = f(u²); g′(1) = −6; a new stationary point at 0)
+  · what O(1/k) and linear rates mean (0.9⁵⁰ ≈ 0.0052, 0.9²⁰⁰ ≈ 7·10⁻¹⁰) · local = within a radius measured up to
+  rotation (g″ = 16 at u = 2, −8 at u = 0) · curvature of g grows like 4a², so a fixed step 0.2 diverges at a = 2 —
+  why the paper's step uses ‖X₀‖.
+
+## [14] ge2017no — When Non-Convexity Has No Bad Minima
+- **Checked against:** PMLR 70 (ICML 2017) PDF + arXiv 1704.00708: Definition 6 (aligned Δ), Lemma 6 (‖ΔΔᵀ‖²_F ≤ 2‖M − M*‖²_F),
+  Lemma 7 / Eq. (9), Theorem 3 ((2r, 1/20)-RIP, balancing penalty ⅛‖UᵀU − VᵀV‖²_F), Theorem 4 (completion, μ-incoherence,
+  w.h.p.), Theorem 5 (robust PCA, pseudo strict saddle).
+- **Notes verified:** the 2 × 2 example (both expansions, gradient, Hessian diag(−2, 0), F(0.5, 0) = 0.28125); Lemma 7
+  with H = I and no regularizer checked numerically at random U (the identity holds everywhere, including the
+  4⟨∇f, Δ⟩ term) together with Lemma 6.
+- **Fixes:** none. No discrepancies found. Note: the paper's Eq. (9) has "+ 4⟨∇f(U), Δ⟩ + [Δ:∇²Q:Δ − 4⟨∇Q, Δ⟩]" with f
+  the full objective; the notes write "+ 4⟨∇F_data(U), Δ⟩ + regularizer correction", which is the same identity regrouped.
+- **Layout:** minute box verbatim. §1's three-row table has no header in the PDF; rendered with an empty header row.
+  "Keep the scope straight", "What this teaches", "Idealized case H = I …", "Survey takeaway" → `:::key`; §10 Papers
+  Master note → `:::plain`. The notes have no source line; built from the PMLR link. Title block dropped.
+- **Primer (4 ideas):** curvature along a direction = second derivative on a line (U = 0: −2 = 1 − 3 ≤ −1, Lemma 7 in
+  numbers) · rescaling symmetry and the balancing penalty ((1, 2) pays 9/8, (√2, √2) pays 0) · incoherence (e₁e₁ᵀ is
+  missed by 10 % sampling with probability 0.9) · a touching smooth upper bound (|x| ≤ x²/2 + 1/2) — the "pseudo" in
+  Theorem 5.
+
+## [15] anandkumar2016efficient — Escaping Higher-Order Saddle Points
+- **Checked against:** PMLR 49 (COLT 2016) PDF: abstract ("first efficient algorithm guaranteed to converge to a third
+  order local optimum … NP-hard to extend this further to finding fourth order local optima"), Definition 1 (p-th order
+  local minimum), Definition 4 (third-order necessary condition), Theorems 8–9 / Corollary 1 (algorithm), Theorem 10
+  (fourth order NP-hard) via Theorem 11 (nonnegativity of quartic forms).
+- **Notes verified:** x² − y⁴ (Hessian diag(2, 0)), x² + y³, the deep-linear toy (gradient and Hessian vanish at 0,
+  L(t, t, t) = ½ − t³ + ½t⁶) — all checked in the script; the algorithmic and hardness statements match the paper.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** no one-minute summary; built from §1 (question), the "Paper result" box and the "Scope" box. The
+  underbraced "⇏" display kept as `\underbrace` with `\not\Rightarrow`. Header "Ref. [54]" (survey [61]) dropped.
+- **Primer (4 ideas):** p-th order local minimum (Definition 1; x² + y³ passes order 2, fails order 3) · third
+  derivatives along a line, odd so the sign flips (±6) · fourth order is even and quartic-form nonnegativity is
+  NP-hard ((u₁² − u₂²)² vs u₁⁴ + u₂⁴ − 3u₁²u₂² = −1) · deep products push escape to higher order (3 layers: −6;
+  4 layers: −t⁴).
+
+## [16] li2018visualizing — Visualizing Loss Landscapes
+- **Checked against:** arXiv 1712.09913 (NeurIPS 2018): Secs. 3–4 (slices, filter normalization; BN parameters held
+  fixed, footnote 2), Sec. 5 + Figs. 2–3 (batch 128 vs 8192; with weight decay 6.00 % vs 10.19 %, without 7.37 % vs
+  11.07 %), Sec. 6 + Fig. 5 (ResNet-110 5.79 % vs no-short 16.44 %), Fig. 6 (Wide-ResNet-56 k = 1…8), Fig. 7
+  (|λ_min/λ_max| via Lanczos), "A note of caution: Are we really seeing convexity?" (Sec. 6).
+- **Notes verified:** every reported number and section/figure reference; the scalar rescaling example (1.05 / 1.005,
+  5 % relative → 1.05 both) and the hidden-saddle example checked in the script.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** minute box (one paragraph with four inline labels in the PDF) split into the four labelled paragraphs.
+  "The key warning", "Connections to papers we have already studied" → `:::key`; "Read the result precisely" →
+  `:::warn`; "One–three lines for Papers Master" → `:::plain`; "Source:" line verbatim with the PDF's link. Title block
+  (Papers Master key, tags) dropped.
+- **Primer (4 ideas):** random Gaussian directions are nearly orthogonal (sd of cosine ≈ 1/√D = 0.01 at D = 10⁴) · slice
+  curvature uᵀHu is a weighted average of eigenvalues (−0.5 vs +1 on diag(1, 1, −2)) · random slices see the mean
+  eigenvalue and hide rare negative ones (0.997 with one −2 among 999 +1) · Hessian–vector products and Lanczos
+  (10¹² entries = 4 TB; Hv from two gradients).
