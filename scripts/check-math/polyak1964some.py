@@ -46,4 +46,26 @@ a_, al, be = .3, .1, .9
 p1 = 1 - (1 + be + al * a_) + be
 check("notes: at negative curvature -a, p(1) = -alpha a < 0, so a root exceeds 1 (escape)", abs(p1 + al * a_) < 1e-12 and max(np.roots([1, -(1 + be + al * a_), be]).real) > 1)
 save_json("polyak1964some", "data.json", {"alpha": round(float(A_), 5), "beta": round(float(B_), 5), "ngd": ng, "nhb": nh})
+
+# in-page notes (papers/polyak1964some/notes.md): Sec. 3 tuning and rate (Polyak 1964, Theorem 9(3), p. 800 of the Russian
+# original: q2 = (sqrt M - sqrt m)/(sqrt M + sqrt m) at alpha = 4/(sqrt M + sqrt m)^2, beta = q2^2), and the primer's numbers
+for kap in (4., 25., 100.):
+    Lk, mk = kap, 1.
+    et = 4 / (np.sqrt(Lk) + np.sqrt(mk)) ** 2; bt = ((np.sqrt(Lk) - np.sqrt(mk)) / (np.sqrt(Lk) + np.sqrt(mk))) ** 2
+    rad = max(max(abs(np.roots([1, -(1 + bt - et * lam), bt]))) for lam in np.linspace(mk, Lk, 2001))
+    check(f"notes Sec. 3: kappa={kap:.0f}: worst root modulus = (sqrt k - 1)/(sqrt k + 1) = sqrt(beta)",
+          abs(rad - (np.sqrt(kap) - 1) / (np.sqrt(kap) + 1)) < 1e-6 and abs(rad - np.sqrt(bt)) < 1e-6)
+    gd_rad = max(abs(1 - 2 / (Lk + mk) * lam) for lam in np.linspace(mk, Lk, 2001))
+    check(f"primer idea 1: kappa={kap:.0f}: GD with 2/(L+mu) has worst multiplier (k-1)/(k+1)", abs(gd_rad - (kap - 1) / (kap + 1)) < 1e-9)
+q_gd, q_hb = 99 / 101, 9 / 11
+n_gd, n_hb = np.log(1e-6) / np.log(q_gd), np.log(1e-6) / np.log(q_hb)
+print(f"  kappa = 100: GD multiplier {q_gd:.4f} -> {n_gd:.1f} steps; heavy ball {q_hb:.4f} -> {n_hb:.1f} steps for a factor 1e6")
+check("primer: kappa=100 -> 0.980 / ~690 steps (GD) vs 0.818 / ~69 steps (heavy ball)",
+      round(q_gd, 3) == .980 and round(q_hb, 3) == .818 and abs(n_gd - 690) < 2 and abs(n_hb - 69) < 1)
+check("primer idea 2: r^2 - 0.9 r + 0.2 has roots 0.5, 0.4", np.allclose(sorted(np.roots([1, -.9, .2])), [.4, .5]))
+# idea 3: complex roots have modulus sqrt(b) whatever a is (a^2 < 4b)
+check("primer idea 3: complex roots have |r| = sqrt(b)", all(np.allclose(abs(np.roots([1, -a3, .5])), np.sqrt(.5)) for a3 in np.linspace(-1.4, 1.4, 15)))
+rts = np.roots([1, -(1 + .9 + .1 * 1), .9])
+check("primer idea 5: eta=0.1, beta=0.9, curvature -1: roots 1 +- sqrt(0.1), growth ~1.316 vs GD 1.1",
+      np.allclose(sorted(rts), [1 - np.sqrt(.1), 1 + np.sqrt(.1)]) and round(max(rts), 3) == 1.316 and np.isclose(1 + .1 * 1, 1.1))
 done()
