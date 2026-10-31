@@ -97,7 +97,7 @@ The momentum variant keeps three related sequences $x_k, y_k, z_k$. It forms a c
 
 ## Why it matters alongside escape papers
 
-**SSRGD (Ref 83)** and **Stabilized SVRG (Ref 82)** augment variance-reduced estimators with carefully designed perturbation/super-epoch mechanisms to seek second-order stationarity. **NEON2 (Ref 77)** instead supplies an explicit gradient-only negative-curvature detector. SpiderBoost supplies a fast first-order building block, *not* a completed saddle-escape mechanism.
+**SSRGD (Ref 87)** and **Stabilized SVRG (Ref 86)** augment variance-reduced estimators with carefully designed perturbation/super-epoch mechanisms to seek second-order stationarity. **NEON2 (Ref 33)** instead supplies an explicit gradient-only negative-curvature detector. SpiderBoost supplies a fast first-order building block, *not* a completed saddle-escape mechanism.
 
 ## Quick reference
 

@@ -1,5 +1,5 @@
 {
- "synced": "2026-10-31 06:29",
+ "synced": "2026-10-31 11:43",
  "source": "NonConvex_Survey_Final.pdf",
  "survey": {
   "title": "Non-Convex Optimization in Neural Networks: Saddles, Escape Methods and Practical Dynamics",
@@ -118,7 +118,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Some+NP-complete+problems+in+quadratic+and+nonlinear+programming",
    "notes": "public/notes/murty1987some.pdf",
    "notes_title": "Ref_02_Murty_Kabadi_1987_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "computational hardness",
@@ -175,7 +175,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Training+a+3-node+neural+network+is+NP-complete",
    "notes": "public/notes/blum1992training.pdf",
    "notes_title": "Ref_03_Blum_Rivest_1992_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "computational hardness",
@@ -263,7 +263,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Neural+networks+and+principal+component+analysis%3A+Learning+from+examples+without+local+minima",
    "notes": "public/notes/baldi1989neural.pdf",
    "notes_title": "baldi1989-NOTES.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -364,7 +364,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Identifying+and+attacking+the+saddle+point+problem+in+high-dimensional+non-convex+optimization",
    "notes": "public/notes/dauphin2014identifying.pdf",
    "notes_title": "Dauphin_2014_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "strict saddle",
@@ -658,7 +658,7 @@
    "scholar": "https://scholar.google.com/scholar?q=How+to+escape+saddle+points+efficiently",
    "notes": "public/notes/jin2017escape.pdf",
    "notes_title": "Jin_2017_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "strict saddle",
@@ -831,7 +831,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Accelerated+gradient+descent+escapes+saddle+points+faster+than+gradient+descent",
    "notes": "public/notes/jin2018accelerated.pdf",
    "notes_title": "Ref_10_Jin_Netrapalli_Jordan_2018_Detailed_Notes (1).pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -927,7 +927,7 @@
    "scholar": "https://scholar.google.com/scholar?q=SPIDER%3A+Near-optimal+non-convex+optimization+via+stochastic+path-integrated+differential+estimator",
    "notes": "public/notes/fang2018spider.pdf",
    "notes_title": "Ref_11_Fang_SPIDER_2018_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "variance reduction",
@@ -1014,7 +1014,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Second-order+information+in+non-convex+stochastic+optimization%3A+Power+and+limitations",
    "notes": "public/notes/arjevani2020second.pdf",
    "notes_title": "Ref_12_Arjevani_etal_2020_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "variance reduction",
@@ -1179,7 +1179,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+finds+global+minima+of+deep+neural+networks",
    "notes": "public/notes/du2019gradient.pdf",
    "notes_title": "Du_2019_Study_Guide_Fresh.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -1275,7 +1275,7 @@
    "scholar": "https://scholar.google.com/scholar?q=A+convergence+theory+for+deep+learning+via+over-parameterization",
    "notes": "public/notes/allenzhu2019convergence.pdf",
    "notes_title": "Allen_Zhu_2019_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -1371,7 +1371,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+on+neural+networks+typically+occurs+at+the+edge+of+stability",
    "notes": "public/notes/cohen2021gradient.pdf",
    "notes_title": "Ref_16_Cohen_Edge_of_Stability_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -1467,7 +1467,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+large+learning+rate+phase+of+deep+learning%3A+The+catapult+mechanism",
    "notes": "public/notes/lewkowycz2020large.pdf",
    "notes_title": "Ref_17_Lewkowycz_Catapult_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "catapult",
@@ -1577,7 +1577,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Saddle-to-saddle+dynamics+explains+a+simplicity+bias+across+neural+network+architectures",
    "notes": "public/notes/zhang2026saddle.pdf",
    "notes_title": "Zhang_2026_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle-to-saddle",
@@ -1632,7 +1632,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Optimization+methods+for+large-scale+machine+learning",
    "notes": "public/notes/bottou2018optimization.pdf",
    "notes_title": "Ref_19_Bottou_Curtis_Nocedal_Survey_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "stochastic gradients",
@@ -1681,7 +1681,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Non-convex+optimization+for+machine+learning",
    "notes": "public/notes/jain2017non.pdf",
    "notes_title": "Ref_20_Jain_Kar_Nonconvex_Monograph_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "low-rank recovery",
@@ -1747,7 +1747,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+nonconvex+optimization+for+machine+learning%3A+Gradients%2C+stochasticity%2C+and+saddle+points",
    "notes": "public/notes/jin2021nonconvex.pdf",
    "notes_title": "Ref_21_Jin_Netrapalli_Ge_JACM_Detailed_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -1800,7 +1800,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Optimization+for+deep+learning%3A+An+overview",
    "notes": "public/notes/sun2020optimization.pdf",
    "notes_title": "22_Sun_Optimization_Overview.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "initialization",
@@ -1847,7 +1847,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+global+landscape+of+neural+networks%3A+An+overview",
    "notes": "public/notes/sun2020global.pdf",
    "notes_title": "23_Sun_Global_Landscape_Overview.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "spurious local minimum",
@@ -1894,7 +1894,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Recent+theoretical+advances+in+non-convex+optimization",
    "notes": "public/notes/danilova2022recent.pdf",
    "notes_title": "24_Danilova_Recent_Advances.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "convergence rate",
@@ -1941,7 +1941,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Flat+minima",
    "notes": "public/notes/hochreiter1997flat.pdf",
    "notes_title": "25_Hochreiter_Schmidhuber_Flat_Minima.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "sharp vs flat minima",
@@ -1988,7 +1988,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+large-batch+training+for+deep+learning%3A+Generalization+gap+and+sharp+minima",
    "notes": "public/notes/keskar2017large.pdf",
    "notes_title": "26_Keskar_Large_Batch_Sharp_Minima.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "sharp vs flat minima",
@@ -2046,7 +2046,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Sharp+minima+can+generalize+for+deep+nets",
    "notes": "public/notes/dinh2017sharp.pdf",
    "notes_title": "27_Dinh_Sharp_Minima.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "sharp vs flat minima",
@@ -2249,7 +2249,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Exact+solutions+to+the+nonlinear+dynamics+of+learning+in+deep+linear+neural+networks",
    "notes": "public/notes/saxe2014exact.pdf",
    "notes_title": "saxe2014-NOTES.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "plateau",
@@ -2454,7 +2454,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+the+global+convergence+of+gradient+descent+for+over-parameterized+models+using+optimal+transport",
    "notes": "public/notes/chizat2018global.pdf",
    "notes_title": "29_Chizat_Bach_Optimal_Transport.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -2547,7 +2547,7 @@
    "scholar": "https://scholar.google.com/scholar?q=NEON2%3A+Finding+local+minima+via+first-order+oracles",
    "notes": "public/notes/allenzhu2018neon2.pdf",
    "notes_title": "Ref77_Allen_Zhu_Li_2018.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "negative curvature",
@@ -2622,7 +2622,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Sharpness-aware+minimization+for+efficiently+improving+generalization",
    "notes": "public/notes/foret2021sharpness.pdf",
    "notes_title": "Ref100_Foret_Kleiner_Mobahi_Neyshabur_2021.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "sharpness",
@@ -2713,7 +2713,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Self-stabilization%3A+The+implicit+bias+of+gradient+descent+at+the+edge+of+stability",
    "notes": "public/notes/damian2023self.pdf",
    "notes_title": "30_Damian_Self_Stabilization.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -2802,7 +2802,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Why+warmup+the+learning+rate%3F+underlying+mechanisms+and+improvements",
    "notes": "public/notes/kalra2024warmup.pdf",
    "notes_title": "Ref99_Kalra_Barkeshli_2024.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "warmup",
@@ -2887,7 +2887,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Universal+sharpness+dynamics+in+neural+network+training%3A+Fixed+point+analysis%2C+edge+of+stability%2C+and+route+to+chaos",
    "notes": "public/notes/kalra2025universal.pdf",
    "notes_title": "Kalra_2025_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -3041,7 +3041,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Flatland%3A+The+adventures+of+gradient+descent+with+large+step+sizes",
    "notes": "public/notes/galli2026flatland.pdf",
    "notes_title": "Galli_2026_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -3129,7 +3129,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Cubic+regularization+of+Newton+method+and+its+global+performance",
    "notes": "public/notes/nesterov2006cubic.pdf",
    "notes_title": "32_Nesterov_Polyak_Cubic.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "cubic regularization",
@@ -3191,7 +3191,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Why+gradient+clipping+accelerates+training%3A+A+theoretical+justification+for+adaptivity",
    "notes": "public/notes/zhang2020gradient.pdf",
    "notes_title": "33_Zhang_Gradient_Clipping.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "generalized smoothness",
@@ -3283,7 +3283,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Convergence+of+Adam+under+relaxed+assumptions",
    "notes": "public/notes/li2023convergence.pdf",
    "notes_title": "34_Li_Rakhlin_Jadbabaie_Adam.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -3351,7 +3351,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Taming+stochastic+gradient+descent%3A+Almost+sure+convergence+and+saddle-point+avoidance+under+%28l0%2C+l1%29-smoothness",
    "notes": "public/notes/apidopoulos2026taming.pdf",
    "notes_title": "35_Apidopoulos_Lytras_Mertikopoulos_Tamed_SGD.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle avoidance",
@@ -3409,7 +3409,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Introductory+Lectures+on+Convex+Optimization%3A+A+Basic+Course",
    "notes": "public/notes/nesterov2004introductory.pdf",
    "notes_title": "36_Nesterov_Introductory_Lectures.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "step size",
@@ -3473,7 +3473,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Lower+bounds+for+finding+stationary+points+I",
    "notes": "public/notes/carmon2020lower.pdf",
    "notes_title": "37_Carmon_Duchi_Hinder_Sidford_Lower_Bounds_I.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "lower bound",
@@ -3526,7 +3526,7 @@
    "scholar": "https://scholar.google.com/scholar?q=A+stochastic+approximation+method",
    "notes": "public/notes/robbins1951stochastic.pdf",
    "notes_title": "38_Robbins_Monro_Stochastic_Approximation.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "stochastic gradients",
@@ -3599,7 +3599,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Stochastic+first-+and+zeroth-order+methods+for+nonconvex+stochastic+programming",
    "notes": "public/notes/ghadimi2013stochastic.pdf",
    "notes_title": "ghadimi2013-NOTES.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "SGD",
@@ -3684,7 +3684,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Lower+bounds+for+non-convex+stochastic+optimization",
    "notes": "public/notes/arjevani2023lower.pdf",
    "notes_title": "40_Arjevani_Lower_Bounds_Stochastic.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "lower bound",
@@ -3744,7 +3744,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Some+methods+of+speeding+up+the+convergence+of+iteration+methods",
    "notes": "public/notes/polyak1964some.pdf",
    "notes_title": "41_Polyak_Heavy_Ball.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "momentum",
@@ -3795,7 +3795,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Adaptive+subgradient+methods+for+online+learning+and+stochastic+optimization",
    "notes": "public/notes/duchi2011adaptive.pdf",
    "notes_title": "42_Duchi_Hazan_Singer_AdaGrad.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -3848,7 +3848,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Adam%3A+A+method+for+stochastic+optimization",
    "notes": "public/notes/kingma2015adam.pdf",
    "notes_title": "43_Kingma_Ba_Adam.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -3920,7 +3920,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Deep+linear+networks+with+arbitrary+loss%3A+All+local+minima+are+global",
    "notes": "public/notes/laurent2018deep.pdf",
    "notes_title": "Laurent2018-NOTES.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -3992,7 +3992,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+loss+surface+of+deep+and+wide+neural+networks",
    "notes": "public/notes/nguyen2017loss.pdf",
    "notes_title": "Nguyen_Hein_2017_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -4059,7 +4059,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Global+optimality+in+neural+network+training",
    "notes": "public/notes/haeffele2017global.pdf",
    "notes_title": "47_Haeffele_Vidal_Global_Optimality.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -4142,7 +4142,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Spurious+local+minima+are+common+in+two-layer+ReLU+neural+networks",
    "notes": "public/notes/safran2018spurious.pdf",
    "notes_title": "Safran_Shamir_2018_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "spurious local minimum",
@@ -4236,7 +4236,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Loss+landscape+of+shallow+ReLU-like+neural+networks%3A+Stationary+points%2C+saddle+escape%2C+and+network+embedding",
    "notes": "public/notes/wu2025loss.pdf",
    "notes_title": "49_Wu_Simsek_Ged_ReLU_Stationarity.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "nonsmooth activation",
@@ -4318,7 +4318,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Loss+landscape+characterization+of+neural+networks+without+over-parametrization",
    "notes": "public/notes/islamov2024loss.pdf",
    "notes_title": "50_Islamov_Alpha_Beta_Landscapes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle",
@@ -4394,7 +4394,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Global+optimality+of+local+search+for+low+rank+matrix+recovery",
    "notes": "public/notes/bhojanapalli2016global.pdf",
    "notes_title": "Bhojanapalli_2016_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -4456,7 +4456,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Dropping+convexity+for+faster+semi-definite+optimization",
    "notes": "public/notes/bhojanapalli2016dropping.pdf",
    "notes_title": "52_Bhojanapalli_Factored_GD.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "low-rank recovery",
@@ -4532,7 +4532,7 @@
    "scholar": "https://scholar.google.com/scholar?q=No+spurious+local+minima+in+nonconvex+low+rank+problems%3A+A+unified+geometric+analysis",
    "notes": "public/notes/ge2017no.pdf",
    "notes_title": "Ge_Jin_Zheng_2017_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "no spurious minima",
@@ -4604,7 +4604,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Efficient+approaches+for+escaping+higher+order+saddle+points+in+non-convex+optimization",
    "notes": "public/notes/anandkumar2016efficient.pdf",
    "notes_title": "54_Anandkumar_Ge_Higher_Order.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "degenerate saddle",
@@ -4664,7 +4664,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Visualizing+the+loss+landscape+of+neural+nets",
    "notes": "public/notes/li2018visualizing.pdf",
    "notes_title": "Li_2018_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "loss landscape visualization",
@@ -4730,7 +4730,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Qualitatively+characterizing+neural+network+optimization+problems",
    "notes": "public/notes/goodfellow2015qualitatively.pdf",
    "notes_title": "56_Goodfellow_Vinyals_Saxe_Loss_Paths.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "loss landscape visualization",
@@ -4791,7 +4791,7 @@
    "scholar": "https://scholar.google.com/scholar?q=First-order+methods+almost+always+avoid+saddle+points%3A+The+case+of+vanishing+step-sizes",
    "notes": "public/notes/panageas2019first.pdf",
    "notes_title": "57_Panageas_Vanishing_Step_Sizes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle avoidance",
@@ -4854,7 +4854,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+the+almost+sure+convergence+of+stochastic+gradient+descent+in+non-convex+problems",
    "notes": "public/notes/mertikopoulos2020almost.pdf",
    "notes_title": "58_Mertikopoulos_Hallak_Kavis_Cevher_SGD.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle avoidance",
@@ -4938,7 +4938,7 @@
    "scholar": "https://scholar.google.com/scholar?q=AdaGrad+avoids+saddle+points",
    "notes": "public/notes/antonakopoulos2022adagrad.pdf",
    "notes_title": "59_Antonakopoulos_AdaGrad_Saddles.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle avoidance",
@@ -5006,7 +5006,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+provably+escapes+saddle+points+in+the+training+of+shallow+ReLU+networks",
    "notes": "public/notes/cheridito2024gradient.pdf",
    "notes_title": "60_Cheridito_Jentzen_Rossmannek_ReLU.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle avoidance",
@@ -5081,7 +5081,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+can+take+exponential+time+to+escape+saddle+points",
    "notes": "public/notes/du2017gradient.pdf",
    "notes_title": "61_Du_Jin_Lee_Exponential_Escape.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -5163,7 +5163,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Escaping+saddles+with+stochastic+gradients",
    "notes": "public/notes/daneshmand2018escaping.pdf",
    "notes_title": "Daneshmand_2018_Study_Notes.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -5245,7 +5245,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Sharp+analysis+for+nonconvex+SGD+escaping+from+saddle+points",
    "notes": "public/notes/fang2019sharp.pdf",
    "notes_title": "41_fang2019sharp.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -5325,7 +5325,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+heavy-tail+phenomenon+in+SGD",
    "notes": "public/notes/gurbuzbalaban2021heavy.pdf",
    "notes_title": "42_gurbuzbalaban2021heavy.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "noise",
@@ -5402,7 +5402,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+global+convergence+time+of+stochastic+gradient+descent+in+non-convex+landscapes%3A+Sharp+estimates+via+large+deviations",
    "notes": "public/notes/azizian2025global.pdf",
    "notes_title": "43_azizian2025global.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "global convergence",
@@ -5534,7 +5534,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Stochastic+cubic+regularization+for+fast+nonconvex+optimization",
    "notes": "public/notes/tripuraneni2018stochastic.pdf",
    "notes_title": "44_tripuraneni2018stochastic.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "cubic regularization",
@@ -5612,7 +5612,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Analysis+of+Krylov+subspace+solutions+of+regularized+non-convex+quadratic+problems",
    "notes": "public/notes/carmon2018analysis.pdf",
    "notes_title": "45_carmon2018analysis.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "cubic regularization",
@@ -5677,7 +5677,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Gradient+descent+finds+the+cubic-regularized+nonconvex+Newton+step",
    "notes": "public/notes/carmon2019gradient.pdf",
    "notes_title": "Ref71_Carmon_Duchi_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "cubic regularization",
@@ -5740,7 +5740,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Cubic+regularization+with+momentum+for+nonconvex+optimization",
    "notes": "public/notes/wang2020cubic.pdf",
    "notes_title": "Ref72_Wang_2020.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "cubic regularization",
@@ -5849,7 +5849,7 @@
    "scholar": "https://scholar.google.com/scholar?q=A+generic+approach+for+escaping+saddle+points",
    "notes": "public/notes/reddi2018generic.pdf",
    "notes_title": "Ref74_Reddi_2018.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -5979,7 +5979,7 @@
    "scholar": "https://scholar.google.com/scholar?q=First-order+stochastic+algorithms+for+escaping+from+saddle+points+in+almost+linear+time",
    "notes": "public/notes/xu2018first.pdf",
    "notes_title": "Ref76_Xu_Jin_Yang_2018.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "negative curvature",
@@ -6062,7 +6062,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Escape+saddle+points+by+a+simple+gradient-descent+based+algorithm",
    "notes": "public/notes/zhang2021escape.pdf",
    "notes_title": "Ref78_Zhang_Li_2021.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -6192,7 +6192,7 @@
    "scholar": "https://scholar.google.com/scholar?q=SpiderBoost+and+momentum%3A+Faster+variance+reduction+algorithms",
    "notes": "public/notes/wang2019spiderboost.pdf",
    "notes_title": "Ref80_Wang_Ji_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "variance reduction",
@@ -6262,7 +6262,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Natasha+2%3A+Faster+non-convex+optimization+than+SGD",
    "notes": "public/notes/allenzhu2018natasha.pdf",
    "notes_title": "Ref81_Allen_Zhu_2018.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "saddle escape",
@@ -6336,7 +6336,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Stabilized+SVRG%3A+Simple+variance+reduction+for+nonconvex+optimization",
    "notes": "public/notes/ge2019stabilized.pdf",
    "notes_title": "Ref82_Ge_Li_Wang_Wang_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "variance reduction",
@@ -6411,7 +6411,7 @@
    "scholar": "https://scholar.google.com/scholar?q=SSRGD%3A+Simple+stochastic+recursive+gradient+descent+for+escaping+saddle+points",
    "notes": "public/notes/li2019ssrgd.pdf",
    "notes_title": "Ref83_Li_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "variance reduction",
@@ -6483,7 +6483,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Faster+perturbed+stochastic+gradient+methods+for+finding+local+minima",
    "notes": "public/notes/chen2022faster.pdf",
    "notes_title": "Ref84_Chen_Zhou_Gu_2022.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "perturbation",
@@ -6552,7 +6552,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Escaping+saddle+points+with+adaptive+gradient+methods",
    "notes": "public/notes/staib2019escaping.pdf",
    "notes_title": "Ref85_Staib_Reddi_Kale_Kumar_Sra_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -6627,7 +6627,7 @@
    "scholar": "https://scholar.google.com/scholar?q=An+improved+analysis+of+training+over-parameterized+deep+neural+networks",
    "notes": "public/notes/zou2019improved.pdf",
    "notes_title": "Ref86_Zou_Gu_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -6701,7 +6701,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Fine-grained+analysis+of+optimization+and+generalization+for+overparameterized+two-layer+neural+networks",
    "notes": "public/notes/arora2019fine.pdf",
    "notes_title": "Ref87_Arora_Du_Hu_Li_Wang_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -6776,7 +6776,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+the+proof+of+global+convergence+of+gradient+descent+for+deep+ReLU+networks+with+linear+widths",
    "notes": "public/notes/nguyen2021proof.pdf",
    "notes_title": "Ref88_Nguyen_2021.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -6851,7 +6851,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Mean-field+theory+of+two-layers+neural+networks%3A+Dimension-free+bounds+and+kernel+limit",
    "notes": "public/notes/mei2019mean.pdf",
    "notes_title": "Ref89_Mei_Misiakiewicz_Montanari_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "mean-field",
@@ -6921,7 +6921,7 @@
    "scholar": "https://scholar.google.com/scholar?q=A+mean+field+analysis+of+deep+ResNet+and+beyond%3A+Towards+provable+optimization+via+overparameterization+from+depth",
    "notes": "public/notes/lu2020mean.pdf",
    "notes_title": "Ref90_Lu_Ma_Lu_Lu_Ying_2020.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "mean-field",
@@ -7001,7 +7001,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Learning+over-parametrized+two-layer+neural+networks+beyond+NTK",
    "notes": "public/notes/li2020learning.pdf",
    "notes_title": "Ref91_Li_Ma_Zhang_2020.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -7085,7 +7085,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Over-parameterization+exponentially+slows+down+gradient+descent+for+learning+a+single+neuron",
    "notes": "public/notes/xu2023over.pdf",
    "notes_title": "Ref92_Xu_Du_2023.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "overparameterization",
@@ -7150,7 +7150,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Lookahead+optimizer%3A+k+steps+forward%2C+1+step+back",
    "notes": "public/notes/zhang2019lookahead.pdf",
    "notes_title": "Ref94_Zhang_Lucas_Hinton_Ba_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "momentum",
@@ -7217,7 +7217,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Analyzing+sharpness+along+GD+trajectory%3A+Progressive+sharpening+and+edge+of+stability",
    "notes": "public/notes/wang2022analyzing.pdf",
    "notes_title": "Ref95_Li_Wang_Li_2022.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -7289,7 +7289,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Beyond+the+edge+of+stability+via+two-step+gradient+updates",
    "notes": "public/notes/chen2023beyond.pdf",
    "notes_title": "Ref96_Chen_Bruna_2023.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "edge of stability",
@@ -7367,7 +7367,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Special+properties+of+gradient+descent+with+large+learning+rates",
    "notes": "public/notes/mohtashami2023special.pdf",
    "notes_title": "Ref97_Mohtashami_Jaggi_Stich_2023.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "large learning rate",
@@ -7444,7 +7444,7 @@
    "scholar": "https://scholar.google.com/scholar?q=SAM+operates+far+from+home%3A+Eigenvalue+regularization+as+a+dynamical+phenomenon",
    "notes": "public/notes/agarwala2023sam.pdf",
    "notes_title": "Ref101_Agarwala_Dauphin_2023.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "sharpness-aware minimization",
@@ -7516,7 +7516,7 @@
    "scholar": "https://scholar.google.com/scholar?q=SASSHA%3A+Sharpness-aware+adaptive+second-order+optimization+with+stable+hessian+approximation",
    "notes": "public/notes/shin2025sassha.pdf",
    "notes_title": "Ref102_Shin_Lee_Chung_Lee_2025.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "second-order method",
@@ -7601,7 +7601,7 @@
    "scholar": "https://scholar.google.com/scholar?q=ADOPT%3A+Modified+Adam+can+converge+with+any+%CE%B22+with+the+optimal+rate",
    "notes": "public/notes/taniguchi2024adopt.pdf",
    "notes_title": "Ref103_Taniguchi_et_al_2024.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -7669,7 +7669,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Shampoo%3A+Preconditioned+stochastic+tensor+optimization",
    "notes": "public/notes/gupta2018shampoo.pdf",
    "notes_title": "Ref104_Gupta_Koren_Singer_2018.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -7732,7 +7732,7 @@
    "scholar": "https://scholar.google.com/scholar?q=The+road+less+scheduled",
    "notes": "public/notes/defazio2024road.pdf",
    "notes_title": "Ref105_Defazio_et_al_2024.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "schedule-free",
@@ -7811,7 +7811,7 @@
    "scholar": "https://scholar.google.com/scholar?q=General+framework+for+online-to-nonconvex+conversion%3A+Schedule-free+SGD+is+also+effective+for+nonconvex+optimization",
    "notes": "public/notes/ahn2025general.pdf",
    "notes_title": "Ref106_Ahn_Magakyan_Cutkosky_2025.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "schedule-free",
@@ -7881,7 +7881,7 @@
    "scholar": "https://scholar.google.com/scholar?q=An+exploration+of+non-euclidean+gradient+descent%3A+Muon+and+its+many+variants",
    "notes": "public/notes/crawshaw2026exploration.pdf",
    "notes_title": "Ref107_Crawshaw_Modi_Liu_Gower_2026.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "adaptive methods",
@@ -7934,7 +7934,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Deep+residual+learning+for+image+recognition",
    "notes": "public/notes/he2016deep.pdf",
    "notes_title": "Ref108_He_Zhang_Ren_Sun_2016.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "architecture",
@@ -7987,7 +7987,7 @@
    "scholar": "https://scholar.google.com/scholar?q=Global+Stability+of+Dynamical+Systems",
    "notes": "public/notes/shub1987global.pdf",
    "notes_title": "Ref109_Shub_1987.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "stable manifold",
@@ -8053,7 +8053,7 @@
    "scholar": "https://scholar.google.com/scholar?q=On+lazy+training+in+differentiable+programming",
    "notes": "public/notes/chizat2019lazy.pdf",
    "notes_title": "Ref110_Chizat_Oyallon_Bach_2019.pdf",
-   "notes_page": false,
+   "notes_page": true,
    "visual": true,
    "tags": [
     "lazy training",

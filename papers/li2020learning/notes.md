@@ -97,7 +97,7 @@ With $Q = 0.005$ (illustrative), $d^{-1-Q}/d^{-1} = d^{-0.005}$. At $d = 10^4$ t
 
 ## Cross-paper connections
 
-**Mei et al. (Ref 89)** describes moving neuron distributions, with kernel regression as a limiting regime. **Arora et al. (Ref 87)** explains optimization in a nearly frozen NTK regime; Li et al. prove why that regime can be insufficient. **Saxe (2014)** provides another stage-like mode-learning explanation in deep linear networks, though the mathematical models differ. **Xu–Du (Ref 92)** cautions that feature freedom and extra neurons do not necessarily speed convergence.
+**Mei et al. (Ref 93)** describes moving neuron distributions, with kernel regression as a limiting regime. **Arora et al. (Ref 91)** explains optimization in a nearly frozen NTK regime; Li et al. prove why that regime can be insufficient. **Saxe (2014)** provides another stage-like mode-learning explanation in deep linear networks, though the mathematical models differ. **Xu–Du (Ref 96)** cautions that feature freedom and extra neurons do not necessarily speed convergence.
 
 ## Quick reference
 

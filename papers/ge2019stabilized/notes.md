@@ -107,7 +107,7 @@ when other problem-dependent constants (e.g., smoothness, initial gap, Hessian-L
 
 ## Cross-paper interpretation
 
-**NEON2 (Ref 77)** can be appended as a gradient-based curvature detector to existing optimizers; Stabilized SVRG avoids such a separate detector by changing the optimization trajectory itself. **SSRGD (Ref 83)** uses a related perturbation/super-epoch idea but with a recursive SPIDER/SARAH-style estimator, improving the $n$ dependence for first-order accuracy. **Jin (2017)** supplies the foundational perturbed-GD escape paradigm.
+**NEON2 (Ref 33)** can be appended as a gradient-based curvature detector to existing optimizers; Stabilized SVRG avoids such a separate detector by changing the optimization trajectory itself. **SSRGD (Ref 87)** uses a related perturbation/super-epoch idea but with a recursive SPIDER/SARAH-style estimator, improving the $n$ dependence for first-order accuracy. **Jin (2017)** supplies the foundational perturbed-GD escape paradigm.
 
 ## Quick reference
 

@@ -103,7 +103,7 @@ finite-sum stochastic gradients (again suppressing problem-dependent constants).
 
 ## Cross-paper comparison
 
-**Stabilized SVRG (Ref 82)** uses an explicit gradient *shift* inside super epochs; SSRGD instead uses recursive SPIDER/SARAH gradient differences and a perturbation. **SpiderBoost (Ref 80)** has a related recursive estimator but its main theorems are first-order. **NEON2 (Ref 77)** employs a separate negative-curvature finder; SSRGD directly modifies its existing optimizer. **Jin (2017)** motivates why a random kick can prevent stagnation at strict saddles.
+**Stabilized SVRG (Ref 86)** uses an explicit gradient *shift* inside super epochs; SSRGD instead uses recursive SPIDER/SARAH gradient differences and a perturbation. **SpiderBoost (Ref 84)** has a related recursive estimator but its main theorems are first-order. **NEON2 (Ref 33)** employs a separate negative-curvature finder; SSRGD directly modifies its existing optimizer. **Jin (2017)** motivates why a random kick can prevent stagnation at strict saddles.
 
 ## Quick reference
 

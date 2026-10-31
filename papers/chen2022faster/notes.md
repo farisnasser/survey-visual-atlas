@@ -105,7 +105,7 @@ with objective-gap, noise, gradient/Hessian smoothness and confidence factors su
 
 ## Connections to other papers
 
-**Jin (2017)** introduced explicit perturbations for deterministic GD. **SSRGD (Ref 83)** also perturbs a recursive estimator but with a different analysis and $\widetilde{O}(\varepsilon^{-3.5})$ classical tolerance rate. **SpiderBoost (Ref 80)** focuses primarily on first-order convergence; LENA adds second-order escape. **NEON2 (Ref 77)** detects negative curvature explicitly, whereas LENA avoids an additional curvature-finding module.
+**Jin (2017)** introduced explicit perturbations for deterministic GD. **SSRGD (Ref 87)** also perturbs a recursive estimator but with a different analysis and $\widetilde{O}(\varepsilon^{-3.5})$ classical tolerance rate. **SpiderBoost (Ref 84)** focuses primarily on first-order convergence; LENA adds second-order escape. **NEON2 (Ref 33)** detects negative curvature explicitly, whereas LENA avoids an additional curvature-finding module.
 
 ## Quick reference
 

@@ -84,7 +84,8 @@ For a master's-level ML student who knows calculus, linear algebra and basic pro
 ## notes.md syntax (src/paper/notes.js)
 `##` = numbered section (gets a contents entry; write the notes' numbering into the heading: `## 3. …`) · `###` sub-head ·
 `$$…$$` display (may span lines) · `$…$` inline (must stay on one line; no `$` signs as currency) · `**b**` `*i*` `` `c` `` `[t](url)` ·
-lists `- ` / `1. ` with continuation lines (including `$$` blocks) indented 3 spaces · pipe tables (header, `|---|:-:|` row) ·
+lists `- ` / `1. ` with continuation lines (including `$$` blocks) indented 3 spaces · pipe tables (header, `|---|:-:|` row;
+a table without a header in the PDF gets an all-empty header row `| | |`, which renders as no header) ·
 `:::kind Title … :::` (minute, key, theorem, warn, ours, plain) · `:::cols`/`:::col` · `:::figure Caption` (raw SVG) ·
 `:::divider Label` · `:::fold Title | subtitle` · `> source line`. Fences nest; every opener needs its own `:::`.
 **Inside table cells never write a bare `|`** (it splits the cell): use `\lVert x\rVert`, `\lvert x\rvert`, `\mid`.

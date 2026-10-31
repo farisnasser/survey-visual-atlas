@@ -101,7 +101,7 @@ The convergence claim concerns a Wasserstein gradient flow with a positively hom
 
 ## Survey connections
 
-**Mei et al. (Ref 89)** gives mean-field dynamics for wide shallow networks; Lu et al. build a depth-based analogue. **Du (2019)** proves GD reaches zero training loss under finite-architecture width and smooth-activation assumptions rather than a continuum-depth limit. **Nguyen (Ref 88)** explains convergence from a well-conditioned finite feature layer. **Ge (2017)** likewise illustrates how favorable nonconvex geometry depends on structure.
+**Mei et al. (Ref 93)** gives mean-field dynamics for wide shallow networks; Lu et al. build a depth-based analogue. **Du (2019)** proves GD reaches zero training loss under finite-architecture width and smooth-activation assumptions rather than a continuum-depth limit. **Nguyen (Ref 92)** explains convergence from a well-conditioned finite feature layer. **Ge (2017)** likewise illustrates how favorable nonconvex geometry depends on structure.
 
 ## Quick reference
 

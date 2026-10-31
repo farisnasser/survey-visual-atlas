@@ -82,7 +82,7 @@ The deterministic NEON2 uses a different first-order construction based on Cheby
 Combine any suitable first-order stationary-point finder with NEON2. When the gradient is large, the base optimizer makes progress. When the gradient is small, call NEON2: either curvature is approximately nonnegative, or use the found direction to decrease the loss. The improvement in the oracle complexity is the *negative-curvature detector*, not a new proof that all nonconvex functions lack spurious local minima.
 
 :::plain Read carefully
-Section 1.1 and its Theorems 1–7 (informal overview), Section 3 Algorithms 1–2 / Theorem 1, Section 4 (deterministic), Section 5 (finite-sum). Compare Figure 1 with the independent NEON paper, Ref 76.
+Section 1.1 and its Theorems 1–7 (informal overview), Section 3 Algorithms 1–2 / Theorem 1, Section 4 (deterministic), Section 5 (finite-sum). Compare Figure 1 with the independent NEON paper, Ref 81.
 :::
 
 ## 3. Contribution, assumptions, and limits
@@ -91,7 +91,7 @@ Section 1.1 and its Theorems 1–7 (informal overview), Section 3 Algorithms 1�
 
 ### Connections to earlier papers
 
-**NEON (Xu–Jin–Yang, Ref 76)** also amplifies negative Hessian eigenmodes using gradients, but NEON2 develops a different stochastic estimator and deterministic Chebyshev-based formulation. **Reddi et al. (Ref 74)** provides a generic first/second-order hybrid architecture that can benefit from cheaper negative-curvature routines. **Daneshmand (2018)** instead assumes stochastic gradients have energy along negative-curvature directions (CNC).
+**NEON (Xu–Jin–Yang, Ref 81)** also amplifies negative Hessian eigenmodes using gradients, but NEON2 develops a different stochastic estimator and deterministic Chebyshev-based formulation. **Reddi et al. (Ref 79)** provides a generic first/second-order hybrid architecture that can benefit from cheaper negative-curvature routines. **Daneshmand (2018)** instead assumes stochastic gradients have energy along negative-curvature directions (CNC).
 
 ### Quick reference
 

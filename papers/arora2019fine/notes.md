@@ -97,7 +97,7 @@ For $y = (1, 0)$ it is only $0.5$. Placing energy in a low-eigenvalue direction 
 
 ## Cross-paper connections
 
-**Du and Allen-Zhu (2019)** establish that sufficiently wide networks can fit training data; Arora et al. clarify *which directions fit first* and what controls a particular generalization bound. **Saxe (2014)** likewise decomposes learning into data modes, but in deep linear rather than wide ReLU kernel dynamics. **Zou–Gu (Ref 86)** sharpens worst-case convergence requirements, while Arora et al. add mode-specific predictions.
+**Du and Allen-Zhu (2019)** establish that sufficiently wide networks can fit training data; Arora et al. clarify *which directions fit first* and what controls a particular generalization bound. **Saxe (2014)** likewise decomposes learning into data modes, but in deep linear rather than wide ReLU kernel dynamics. **Zou–Gu (Ref 90)** sharpens worst-case convergence requirements, while Arora et al. add mode-specific predictions.
 
 ## Quick reference
 

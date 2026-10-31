@@ -95,7 +95,7 @@ The paper’s Section 3 shows several ways to satisfy these conditions. Carefull
 
 ## Connections across the survey
 
-**Nguyen–Hein (2017)** uses wide features to characterize favorable stationary points; **Nguyen (2021)** adds a GD trajectory theorem. **Allen-Zhu (2019)** and **Zou–Gu (Ref 86)** require sufficiently broad overparameterization throughout the deep architecture; this paper explores a different structural simplification. **Du (2019)** studies selected deep and residual networks under other activation and width assumptions.
+**Nguyen–Hein (2017)** uses wide features to characterize favorable stationary points; **Nguyen (2021)** adds a GD trajectory theorem. **Allen-Zhu (2019)** and **Zou–Gu (Ref 90)** require sufficiently broad overparameterization throughout the deep architecture; this paper explores a different structural simplification. **Du (2019)** studies selected deep and residual networks under other activation and width assumptions.
 
 ## Quick reference
 

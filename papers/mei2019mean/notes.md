@@ -103,7 +103,7 @@ This is linear kernel dynamics, and an associated limit recovers kernel regressi
 
 ## Survey connections
 
-**Lu et al. (Ref 90)** transports distributional reasoning from two-layer networks into a special continuous-depth ResNet. **Li–Ma–Zhang (Ref 91)** shows that networks that actually move their features can learn targets inaccessible to polynomial-size fixed kernels. **Arora et al. (Ref 87)** studies a frozen-kernel spectrum; this paper clarifies where that description arises.
+**Lu et al. (Ref 94)** transports distributional reasoning from two-layer networks into a special continuous-depth ResNet. **Li–Ma–Zhang (Ref 95)** shows that networks that actually move their features can learn targets inaccessible to polynomial-size fixed kernels. **Arora et al. (Ref 91)** studies a frozen-kernel spectrum; this paper clarifies where that description arises.
 
 ## Quick reference
 

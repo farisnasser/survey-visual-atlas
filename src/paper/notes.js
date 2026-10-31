@@ -6,7 +6,7 @@
 //   $$ ... $$               display math (may span lines)                         $..$          inline math
 //   **bold**  *italic*  `code`  [text](url)
 //   - item / 1. item        lists; indent continuation lines (incl. $$ blocks) by 3 spaces
-//   | a | b |               tables (first row = header, second row = --- separator)
+//   | a | b |               tables (first row = header, second row = --- separator; an all-empty header row = no header)
 //   :::kind Title  ...  ::: callout; kinds: minute, key, theorem, warn, ours, plain
 //   :::cols / :::col ... ::: side-by-side columns (stack on phones)
 //   :::figure Caption ... ::: raw HTML/SVG figure with a caption
@@ -47,9 +47,10 @@ function takeFence(lines, i) {
 function table(rows) {
   const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
   const head = cells(rows[0]), aligns = cells(rows[1]).map(c => c.endsWith(':') ? (c.startsWith(':') ? 'center' : 'right') : 'left');
+  const bare = head.every(c => !c);   // an all-empty header row = a table without a header
   const label = j => esc(head[j].replace(/\$|\*\*/g, ''));
-  const td = (tag, c, j) => `<${tag} style="text-align:${aligns[j] || 'left'}"${tag === 'td' ? ` data-label="${label(j)}"` : ''}>${inline(c)}</${tag}>`;
-  return `<div class="nt-table"><table><thead><tr>${head.map((c, j) => td('th', c, j)).join('')}</tr></thead><tbody>${
+  const td = (tag, c, j) => `<${tag} style="text-align:${aligns[j] || 'left'}"${tag === 'td' && !bare ? ` data-label="${label(j)}"` : ''}>${inline(c)}</${tag}>`;
+  return `<div class="nt-table"><table>${bare ? '' : `<thead><tr>${head.map((c, j) => td('th', c, j)).join('')}</tr></thead>`}<tbody>${
     rows.slice(2).map(r => `<tr>${cells(r).map((c, j) => td('td', c, j)).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 

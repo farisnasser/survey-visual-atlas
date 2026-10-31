@@ -21,6 +21,10 @@ agarwala2023sam
   [PASS] MLP rho = 0.05: late sharpness within 5% of lam_SAM  (5.271 vs 5.275)
     MLP eta 0.3 rho 0.1: S0 4.05, max 5.60, late 4.571, threshold 4.574, final loss 2.15e-05
   [PASS] MLP rho = 0.1: late sharpness within 5% of lam_SAM  (4.571 vs 4.574)
+  [PASS] primer 1: normalized perturbation to x = 1.2: loss 2.16, gradient 3.6
+  [PASS] primer 1: unnormalized perturbation rho g = 0.6 -> x = 1.6, gradient 4.8 = (lam + rho lam^2) x
+  [PASS] primer 3: SAM residual map z -> (I - eta JJ^T (I + rho JJ^T)) z (linear model)
+  [PASS] primer 4: normalized SAM from 0.05 -> -0.325, then bounces at +-0.6  (-0.600000, 0.600000)
   wrote papers/agarwala2023sam/data.json (19 KB)
 all checks passed
 
@@ -34,6 +38,9 @@ ahn2025general
     SF-SGD (gamma 0.1, beta 0.9): late |mean of true gradients at y| = 0.019, mean |gradient| = 1.411, spread E|y - mean y|^2 = 0.0008, |x_T| = 0.019
   [PASS] near the kink: individual gradients stay large but their local average is small (Definition 1 intuition)  (0.019 vs 1.411)
   [PASS] x (EMA of z) is much steadier than the base iterate z  (std |x| 0.015 vs std |z| 0.071)
+  [PASS] primer 1: F = |x|, w in {-0.01, 0.03}: mean location 0.01, mean gradient 0, spread 0.0004
+  [PASS] primer 2: online gradient descent regret <= D G sqrt(T) = 100 (random +-1 losses)  (regret 75.5)
+  [PASS] primer 3: 2^3.5 ~ 11.3; sqrt(L^2/eps) eps^-3.5 = L eps^-4
   wrote papers/ahn2025general/data.json (0 KB)
 all checks passed
 
@@ -49,6 +56,15 @@ allenzhu2018natasha
   GD iterates within 0.15 of the saddle: 280 of 300
   [PASS] with delta = eps^(1/4): 1/delta^5 + 1/(delta eps^3) = eps^-1.25 + eps^-3.25
   wrote papers/allenzhu2018natasha/data.json (4 KB)
+  [PASS] Hessian notes example: H(0) = diag(-1, 1)  (fd=[[-1.0, 0.0], [0.0, 1.0]] err 2.0e-08)
+  [PASS] Hessian notes example: H at u = 0.6 is diag(0.08, 1)  (fd=[[0.08, 0.0], [0.0, 1.0]] err 2.1e-08)
+  [PASS] notes: F = f + sigma||x - x^||^2 has Hessian >= sigma I where Hess f >= -sigma I
+  [PASS] notes: 13/4 = 3.25; delta = eps^(1/4) makes delta^-5 + delta^-1 eps^-3 ~ eps^-13/4
+  [PASS] primer: eps^-4 = 1e16, eps^-3.25 = 1e13 at eps = 1e-4
+  [PASS] primer: (1.1/0.9)^30 ~ 412  (411.6)
+  [PASS] primer: Oja with one sampled Hessian per step aligns with the negative eigenvector  (median |w1| = 1.0000)
+  [PASS] primer: f is 1-nonconvex, f + ||x - x^||^2 has eigenvalues >= 1
+  [PASS] primer: safe zone of radius delta/L2 keeps lambda_min >= -2 delta (Weyl)
 all checks passed
 
 allenzhu2018neon2
@@ -85,6 +101,13 @@ allenzhu2018neon2
   [PASS] lambda_min >= -delta/2: NEON2 returns bottom (>= 95%)
   [PASS] returned v have v^T H v <= -delta/2 except with small probability (Theorem 1 holds w.p. >= 1 - p)  (1 of 1448 returns violate)
   wrote papers/allenzhu2018neon2/data.json (4 KB)
+  [PASS] notes: grad f_i(u) - grad f_i(0) = Hu = (0.2, -0.1) for both samples
+  [PASS] notes: centered step of size 0.2 gives u+ = (0.06, 0.12)  ([0.06 0.12])
+  [PASS] primer: x^2 - y^2 has zero gradient and eigenvalue -2 at 0
+  [PASS] gradient primer: f = x^2/2 - y^2/2 + y^3/3  (max rel err 3.40e-11)
+  [PASS] primer: gradient difference (0.1, -0.09) vs Hu = (0.1, -0.1), error 0.01
+  [PASS] primer: multipliers 0.6, 1.2; after 10 steps relative growth 2^10 = 1024
+  [PASS] primer: (1/3)^10 ~ 1.7e-5
 all checks passed
 
 allenzhu2019convergence
@@ -106,6 +129,16 @@ allenzhu2019convergence
   slice: F(W_t)=1.897, min along -grad 0.514, F along curvature dir at +-max 1.914/1.895
   [PASS] moving along -grad decreases F a lot
   wrote papers/allenzhu2019convergence/data.json (87 KB)
+  [PASS] notes: K = J J^T = [[2,1],[1,2]] with eigenvalues 1 and 3
+  [PASS] notes: ||J^T e||^2 = e^T K e >= ||e||^2 = 2F for all e
+  [PASS] notes: eta = 1/4, e = (1,-1): e+ = 3/4 e, F0 = 1, F1 = 0.5625
+  [PASS] notes: phi(-0.1) = 0, phi(0.2) = 0.2
+  [PASS] primer: F = x^2 + 3 sin^2 x has min F'' = 2 + 6 cos 2x = -4 (non-convex)
+  [PASS] primer: F'(x)^2 / (2F(x)) >= ~0.17 (PL with mu ~ 0.17)  (0.1755)
+  [PASS] primer: ReLU slope change 1 over 0.2 -> 5, over 0.002 -> 500
+  [PASS] primer: P(|z| < 0.01) ~ 2(0.01)/sqrt(2 pi) ~ 0.8%
+  [PASS] primer: log(1e6)/(-log 0.99) ~ 1375 steps
+  [PASS] primer: 1/(1 - sqrt(0.99)) ~ 200
 all checks passed
 
 anandkumar2016efficient
@@ -129,6 +162,15 @@ anandkumar2016efficient
   f4, GD from y0 = 0.1: reaches |y| = 0.5 at step 256 (1/(8 eta y0^2) = 250)
   f4, GD from y0 = 0.2: reaches |y| = 0.5 at step 63 (1/(8 eta y0^2) = 62)
   [PASS] f4: GD escape time ~ 1/(8 eta y0^2) (within 3%)
+  [PASS] Hessian notes Sec. 2: x^2 - y^4 has Hessian diag(2, 0) at 0  (fd=[[2.0, 0.0], [0.0, -0.0]] err 8.0e-08)
+  [PASS] notes Sec. 2: f(0, y) = -y^4 < 0
+  [PASS] notes Sec. 4: gradient and Hessian of 1/2(1-abc)^2 vanish at 0
+  [PASS] notes Sec. 4: L(t,t,t) = 1/2 - t^3 + t^6/2
+  [PASS] primer idea 1: -t^3 >= -C t^3 with C = 1, but -t^3 >= -C t^4 needs C >= 10 at t = 0.1
+  [PASS] primer idea 2: third derivative of h along (0,1) = 6, along (0,-1) = -6
+  [PASS] primer idea 3: (u1^2-u2^2)^2 >= 0; u1^4+u2^4-3u1^2u2^2 = -1 at (1,1)
+  [PASS] primer idea 4: third derivative of L(t,t,t) at 0 is -6
+  [PASS] primer idea 4: L(t,t,t,t) = 1/2 - t^4 + t^8/2
 all checks passed
 
 antonakopoulos2022adagrad
@@ -152,6 +194,13 @@ antonakopoulos2022adagrad
   [PASS] AdaGrad-diag: its stable set is elsewhere (|d*| > 0.01): the preconditioner is not aligned with the curvature
   [PASS] every start off a method's stable set escapes, in time growing like log(1/d) (no uniform bound)
   wrote papers/antonakopoulos2022adagrad/data.json (0 KB)
+  primer: eig H = [-1.  3.], eig DH = [-0.44300047  1.69300047]
+  [PASS] primer: H = [[1,2],[2,1]] has eigenvalues -1 and 3
+  [PASS] primer: DH (D = diag(1, 0.25)) has eigenvalues ~1.693 and ~-0.443
+  [PASS] notes: DH has the spectrum of D^1/2 H D^1/2 (similar), same sign count as H (Sylvester)
+  [PASS] notes: for random D > 0 the number of negative eigenvalues of DH equals that of H
+  primer ADANORM steps: [0.7071 0.6924 0.6911 0.6909] ... limit 0.690928
+  [PASS] primer: ADANORM steps 0.707, 0.692, 0.691, settling at ~0.691 (> 0)
 all checks passed
 
 apidopoulos2026taming
@@ -173,6 +222,13 @@ apidopoulos2026taming
   TSGD from 200 starts on the stable manifold x = 0: near the saddle at the end 0.000, near a minimum 1.000
   [PASS] TSGD started on the saddle's stable manifold still leaves it (Theorem 3)
   wrote papers/apidopoulos2026taming/data.json (0 KB)
+  [PASS] notes: |eta g / (1 + eta |g|)| < 1 for any g, eta > 0
+  [PASS] notes: along v (curvature -gamma) a GD step multiplies the displacement by 1 + eta gamma
+  [PASS] primer: ten tails in a row has probability 1/1024
+  [PASS] primer: H_1000 ~ 7.49, sum 1/t^2 = pi^2/6 ~ 1.645
+  [PASS] primer: plain step eta = 0.1 on x^4/4: |x| > sqrt(20) ~ 4.47 moves away; 5 -> -7.5 -> ~34.7  ([5.0, -7.5, 34.6875])
+  [PASS] primer: tamed teaching step from 5 lands at ~4.07  (4.0741)
+  [PASS] primer: |y| = 0.01 grows by 1.1 per step and passes 1 after ~49 steps
 all checks passed
 
 arjevani2020second
@@ -196,6 +252,13 @@ arjevani2020second
   [PASS] HVP-integral MSE shrinks ~ 1/K at fixed |dx| (variance part)
   [PASS] E|(Z+Z^T)/2 v|^2 = 1.5 |v|^2 in 2D (used for the page's predicted line)
   [PASS] elbow: stochastic exponent drops 4 -> 3 at p = 2, then flat; deterministic (p+1)/p
+  [PASS] gradient primer: F = x^2 y has gradient (2xy, x^2)  (max rel err 1.24e-10)
+  [PASS] Hessian primer: Hessian of x^2 y at (1,2) = [[4,2],[2,0]]  (fd=[[4.0, 2.0], [2.0, 0.0]] err 1.1e-08)
+  [PASS] primer: HVP (4, 2); finite difference (4, 2.001)  ([4.    2.001])
+  [PASS] notes: grad F(x + dv) - grad F(x) - d H v = O(d^2)  ([np.float64(0.010000000000000175), np.float64(0.00010000000000000633), np.float64(9.999999996974235e-07)])
+  [PASS] primer: x^3/3 from 1 to 1.2: exact 0.44, K=1 -> 0.40, K=4 -> 0.43
+  [PASS] primer: K-point HVP sums converge to the gradient difference
+  [PASS] primer: eps = 0.01: eps^-4 = 1e8, eps^-3 = 1e6, ratio 100
 all checks passed
 
 arjevani2023lower
@@ -213,6 +276,13 @@ arjevani2023lower
   p = 0.05, T = 16: mean queries until all T coordinates are non-zero = 336.4  (T/p = 320)
   [PASS] Lemma 1: queries to activate all T coordinates >= about (T - log(1/delta))/(2p), and grow like T/p
   wrote papers/arjevani2023lower/data.json (0 KB)
+  [PASS] notes Sec. 2: (1/T) sum E||grad F||^2 <= 2 Delta/(eta T) + L eta sigma^2  (0.2697 <= 0.4100)
+  [PASS] notes Sec. 2: eta - L eta^2/2 >= eta/2 for eta <= 1/L
+  [PASS] primer: eps=0.1 -> eps^-4 = 1e4, eps^-3 = 1e3; eps=0.01 -> 1e8, 1e6; halving eps: x16 vs x8
+  [PASS] primer: T = 10 discoveries at p = 0.1 take ~100 queries; z/p has mean 1, variance (1-p)/p = 9  (99.9, 1.003, 9.02)
+  [PASS] primer: (Delta L/eps^2)(sigma^2/eps^2) = Delta L sigma^2/eps^4 at eps=0.1
+  [PASS] primer: (Delta L/eps^2)(sigma^2/eps^2) = Delta L sigma^2/eps^4 at eps=0.05
+  [PASS] primer: same-sample difference has zero noise, independent samples variance 2 sigma^2
 all checks passed
 
 arora2019fine
@@ -228,6 +298,14 @@ arora2019fine
   max neuron movement / kappa: structured 0.292, random 0.462
   slice span alpha in [-3.59, 3.59], beta in [-10.78, 10.78]
   wrote papers/arora2019fine/data.json (17 KB)
+  [PASS] notes example: multipliers 0.5 and 0.95
+  [PASS] notes example: e1 = (-0.5, -0.95), e2 = (-0.25, -0.9025)
+  [PASS] notes example: ||e_t||^2 = 0.5^(2t) + 0.95^(2t)
+  [PASS] notes: y^T H^-1 y = 5.5 for y = (1, 1), 0.5 for y = (1, 0)
+  [PASS] primer: H12 = 1/6 (closed form and Monte Carlo), H11 = 1/2  (MC 0.1667)
+  [PASS] primer: eigenvalues 1/3 along (1,-1)/sqrt2 and 2/3 along (1,1)/sqrt2
+  [PASS] primer: with eta = 1 the residual shrinks by 1/3 (y = (1,1)) and by 2/3 (y = (1,-1)) per step
+  [PASS] primer: y^T H^-1 y = 3 and 6
 all checks passed
 
 azizian2025global
@@ -271,6 +349,13 @@ azizian2025global
   [PASS] log E[tau] slope within 25% of E (iteration count)
   [PASS] log(eta E[tau]) slope within 5% of E
   wrote papers/azizian2025global/data.json (0 KB)
+  [PASS] notes Sec. 3: forest costs 7, 10, 11; pruning costs 3, 5, 8; E(G|A) = 7 - 3 = 4
+  [PASS] notes Sec. 3: minimum-path closure leaves the exponent 4 unchanged  (closed costs {('A', 'G'): 2, ('A', 'B'): 3, ('B', 'A'): 5, ('B', 'G'): 7})
+  [PASS] notes Sec. 3: T_A closed form = linear solve at eta = 0.5
+  [PASS] notes Sec. 3: T_A closed form = linear solve at eta = 0.25
+  [PASS] primer: e^4 ~ 54.6, e^8 ~ 2981, mixture mean 0.99*10 + 0.01*1e6 ~ 10,010
+  [PASS] primer: coin rate I ~ 0.131; -log P/n ~ 0.151, 0.138, 0.133 for n = 100, 400, 1600  ([0.1508 0.1375 0.1329])
+  [PASS] notes Sec. 7: L(v) - L(-v) = 2 v.grad f / sigma^2; L(-grad f) = 0, L(grad f) = 2|grad f|^2/sigma^2
 all checks passed
 
 baldi1989neural
@@ -291,6 +376,22 @@ baldi1989neural
   [PASS] gradient untied  (max rel err 2.78e-10)
   [PASS] random starts all reach E=1 (tied)  (max final 1.00000)
   [PASS] random starts all reach E=1 (untied)  (max final 1.00000)
+  [PASS] gradient notes: L(a,b) = (1-ab)^2 gradient  (max rel err 1.25e-10)
+  [PASS] notes: L = 1 - 2ab + a^2 b^2
+  [PASS] notes: L(0,0) = 1, L = 0 on ab = 1
+  [PASS] notes: L(e,e) < 1 < L(e,-e) for 0 < e < 1
+  [PASS] Hessian notes: H(0,0) = [[0,-2],[-2,0]]  (fd=[[0.0, -2.0], [-2.0, 0.0]] err 9.4e-09)
+  [PASS] notes: eigenvalues of H(0,0) are 2 and -2
+  [PASS] notes: u^T x = 3, uu^T = [[1,0],[0,0]], Px = (3,0)
+  [PASS] notes: (1/N) sum ||x - uu^T x||^2 = tr(Sigma) - u^T Sigma u
+  [PASS] notes: E(theta) = 10 - (9cos^2 + sin^2) = 1 + 8 sin^2 theta
+  [PASS] notes: E(0) = 1, E(pi/2) = 9
+  [PASS] notes: AB = (AC)(C^-1 B)
+  [PASS] primer: [[5,4],[4,5]] = 9 u1u1^T + 1 u2u2^T
+  [PASS] primer: u = (1,0): c1^2 = c2^2 = 1/2 and u^T Sigma u = 5
+  [PASS] primer: tr = 5 + 5 = 9 + 1 = 10
+  [PASS] primer: keeping u1 loses 1, keeping u2 loses 9
+  [PASS] primer: (1 - 2b)^2 is minimised at b = 1/2
 all checks passed
 
 bhojanapalli2016dropping
@@ -313,6 +414,12 @@ bhojanapalli2016dropping
   a = 2: Theorem 4.2 factor rho = 0.987500; measured per-step ratio 0.880049; eta(8) = 0.00619
   [PASS] Cor. 4.3 bound Dist^2 <= rho^k Dist0^2 holds for 400 steps from an (A2) start
   [PASS] measured contraction is much faster than the bound (bound is conservative)
+  [PASS] notes Sec. 2: grad of f(UU^T) = 1/2||UU^T - X*||^2 is 2(UU^T - X*)U
+  [PASS] notes Sec. 2: U and UQ give the same PSD matrix
+  [PASS] primer idea 1: g'(1) = -6, minima at +-2, stationary at 0 with f'(0) = -4
+  [PASS] primer idea 2: 0.9^50 ~ 0.0052, 0.9^200 ~ 7e-10
+  [PASS] primer idea 3: g'' = 6u^2 - 8: 16 at u = 2, -8 at u = 0
+  [PASS] primer idea 4: curvature 4a^2; eta = 0.2 diverges near a = 2 (needs < 0.125) but converges for a = 1
 all checks passed
 
 bhojanapalli2016global
@@ -342,6 +449,16 @@ bhojanapalli2016global
   m = 2000: median RIP constant 0.059
   [PASS] RIP constant decreases with m and drops below 1/10 only for large m
   wrote papers/bhojanapalli2016global/data.json (0 KB)
+  [PASS] notes Sec. 2: f(a,b) = ||UU^T - X*||_F^2 expands as (a^2-1)^2 + 2a^2b^2 + b^4
+  [PASS] gradient notes Sec. 2: gradient 4a(a^2+b^2-1), 4b(a^2+b^2)  (max rel err 1.20e-10)
+  [PASS] Hessian notes Sec. 2: Hessian at the origin diag(-4, 0)  (fd=[[-4.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] notes Sec. 2: f(0,0) = 1, f(0.1,0) = 0.9801, f(+-1,0) = 0
+  [PASS] notes Sec. 8 (paper Example 1): f(diag(1,0)) = 0, f(diag(0,1)) = 1
+  [PASS] notes Sec. 8 correction: rank-one PSD neighbours of diag(0,1) have loss 1 - s^2 < 1 (not a local min)
+  [PASS] paper Example 2 fails too: rank-2 PSD neighbours of diag(0,1/2,1/2) have loss 1 - s < 1 = f there
+  [PASS] primer idea 1: n=100, r=5: nr = 500 vs n(n+1)/2 = 5050
+  [PASS] primer idea 1: U = (1,0), (-1,0) zero loss; midpoint U = 0 has loss 1
+  [PASS] primer idea 2: (1/m) sum <A_i,Z>^2 / ||Z||_F^2 has mean 1 and sd sqrt(2/m) = 0.1 at m = 200  (mean 1.001, sd 0.101)
 all checks passed
 C:\Users\Asus\faris-brain\university\courses\fall-2026\MLR570\survey-atlas\scripts\check-math\bhojanapalli2016global.py:48: RuntimeWarning: invalid value encountered in subtract
   U = U - .02 * 4 / len(A) * np.einsum("nm,mij,nj->ni", r_, A, U)
@@ -359,6 +476,12 @@ blum1992training
   [PASS] no single plane separates '+' from '-' (grid search; also follows from 3 inequalities)
   [PASS] XOR separable with the pairwise product feature
   [PASS] XOR not separable in the raw inputs
+  [PASS] primer: AND = 1{x1 + x2 >= 2}
+  [PASS] primer: no single threshold unit computes XOR (grid search)
+  [PASS] primer: h1 = 1{x1+x2>=1}, h2 = 1{x1+x2>=2}, y = 1{h1-h2>=1} gives 0,1,1,0 on 00,10,01,11
+  [PASS] primer: a = (-1, 3, -1), b = (3, -1, 3)
+  [PASS] primer: every positive has a.x >= 0 and b.x >= 0
+  [PASS] primer: every negative has a.x < -1/2 or b.x < -1/2
 all checks passed
 
 bottou2018optimization
@@ -378,6 +501,11 @@ bottou2018optimization
   [PASS] Theorem 4.10: the weighted average keeps decreasing (K >= 300) with diminishing steps
   [PASS] Corollary 4.12: the last iterate's E|grad F|^2 goes toward 0, below the a = 0.05 running average
   wrote papers/bottou2018optimization/data.json (2 KB)
+  [PASS] notes: E[F(w+)] <= F - a|grad|^2 + (L a^2/2)(|grad|^2 + s^2) <= F - (a/2)|grad|^2 + L a^2 s^2/2 for a <= 1/L
+  [PASS] notes: (1/T) sum E|grad F|^2 <= 2 Delta/(a T) + L a s^2 (one SG run, F_inf = 0)  (0.0487 <= 0.1100)
+  [PASS] primer: g in {1, 5}: E g = 3, E g^2 = 13 = 9 + 4
+  [PASS] primer: Delta = L = s^2 = 1, T = 1e4: alpha* ~ 0.0141, bound ~ 0.0283
+  [PASS] primer: 4x the steps halves the optimised bound
 all checks passed
 
 carmon2018analysis
@@ -393,6 +521,15 @@ carmon2018analysis
   [PASS] perturbed hard case converges (gap < 1e-6 by t = 120)
   [PASS] generic instance converges
   wrote papers/carmon2018analysis/data.json (7 KB)
+  [PASS] notes Sec. 3: A^j b = b, so the Krylov space stays span{(0,1)}
+  [PASS] notes Sec. 3: on x = 0, min of y^2/2 + y over |y| <= 1 is -1/2 at y = -1
+  [PASS] notes Sec. 3: s* = (+-2sqrt2/3, -1/3) satisfies (A + 2I)s* = -b, |s*| = 1, A + 2I = diag(0,3) PSD, q(s*) = -7/6
+  [PASS] notes Sec. 3: brute-force global min over the unit disk is -7/6; restricted gap 2/3
+  [PASS] primer: 1-D trust region A = -1, b = 0.5, R = 1: s* = -1, q = -1 (q(1) = 0), lambda* = 1.5
+  [PASS] primer: [b, Ab, A^2 b] for A = diag(1,2,3), b = 1 has det 2 (full rank)
+  [PASS] primer: 36 e^(-4t/sqrt(100)) ~ 0.66 at t = 10, ~2.2e-4 at t = 30
+  [PASS] primer: log^2(2 sqrt(1e6)/0.1) = log^2(20000) ~ 98
+  [PASS] primer: P(|u^T v|^2 >= delta^2/d) >= 1 - delta (d = 1000, delta = 0.1, Monte Carlo)  (0.9192)
 all checks passed
 
 carmon2019gradient
@@ -425,6 +562,15 @@ carmon2019gradient
   [PASS] |b| = 0.001: |x_t| non-decreasing
   [PASS] a small-|b| instance stalls (gap > 1e-3 for > 1000 iterations) before converging
   wrote papers/carmon2019gradient/data.json (21 KB)
+  [PASS] notes Sec. 1: q'(s) = -s + s|s| has zeros 0, +-1; q(+-1) = -1/6; q''(0) = -1
+  [PASS] notes Sec. 1: s1 = 0.24, s2 = 0.2856 (eta = 0.25, s0 = 0.2), and (0.24)^2 = 0.0576
+  [PASS] notes Sec. 1: GD from 0.2 with eta = 0.25 converges to +1
+  [PASS] primer: grad of |s|^3/3 is |s| s (finite differences)
+  primer critical points (lambda, s): [(np.float64(0.15), [0.1176, -0.093], np.float64(-0.004)), (np.float64(0.8869), [0.8842, -0.0693], np.float64(-0.079)), (np.float64(1.0918), [-1.0898, -0.0647], np.float64(-0.2778))]
+  [PASS] primer: exactly one critical point has shift >= 1: lambda* ~ 1.092, s* ~ (-1.090, -0.065), q ~ -0.278, and it is the lowest
+  [PASS] primer: R ~ 2.106, eta <= 0.061; GD from 0 reaches s*
+  [PASS] primer: 1-D example (beta = 1, b = 0): R = 1, Assumption A bound 0.125 < 0.25
+  [PASS] primer: hard case b = (0, 0.2): GD stays on the axis at (0, -0.095), q ~ -0.0097; true min ~ -0.173 (lambda* = 1)
 all checks passed
 
 carmon2020lower
@@ -439,6 +585,12 @@ carmon2020lower
   [PASS] iterations grow linearly with T (one coordinate per stage)  (about 6.4 iterations per coordinate)
   [PASS] T = 2: x_2 stays exactly 0 until x_1 passes 1/2  (x_2 first moves at step 8 with x_1 = 0.624)
   wrote papers/carmon2020lower/data.json (0 KB)
+  [PASS] notes: (p + 1)/p = 2, 3/2, 4/3 for p = 1, 2, 3
+  [PASS] gradient primer: chain f = (x1 - 1)^2/2 + sum (x_{i+1} - x_i)^2/2  (max rel err 2.47e-10)
+  [PASS] primer: from 0, after k gradient steps exactly the first k coordinates are nonzero (d = 5)  ([1, 2, 3, 4, 5])
+  [PASS] notes: GD with eta = 1/L: min |g|^2 <= 2 L (f(x0) - f_inf)/T (chain instance, T = 40)
+  [PASS] primer: guessing 1..1024 takes 10 halvings, 2^10 = 1024
+  [PASS] primer: eps = 0.01: 1e4, 1e3, ~464
 all checks passed
 
 chen2022faster
@@ -451,6 +603,15 @@ chen2022faster
   [PASS] SPIDER estimator error stays O(eps) along the run (Eq. 4.1 keeps it small)  (95th pct 0.0565)
   [PASS] notes' shrink example: sqrt(0.003 - 0.03^2 - 0.04^2) = 0.0224
   wrote papers/chen2022faster/data.json (0 KB)
+  [PASS] notes example: f_i'(1.8) - f_i'(2) = -0.2 for both, d1 = 1.8 = F'(1.8); sample gradients differ by 2
+  [PASS] notes: 0.03^2 + 0.04^2 + 0.05^2 = 0.005
+  [PASS] notes: shrunken last step sqrt(0.003 - 0.03^2 - 0.04^2) ~ 0.0224  (0.02236)
+  [PASS] notes: eps_H = sqrt(eps) makes eps_H^-6 = eps^-3
+  [PASS] primer: normalized step (0.006, 0.008) of length 0.01
+  [PASS] primer: B = sigma^2/eps^2 = 1e4 averages to error ~ eps = 1e-2  (rms error 0.0099)
+  [PASS] primer: eps^-1.5 * eps^-2 = eps^-3.5
+  [PASS] primer: STORM with a = 1 is SGD, with a = 0 is SARAH
+  [PASS] primer: eps_H >= sqrt(eps) gives eps_H^-6 <= eps^-3; eps_H = eps^(3/5) gives eps^-3.6 > eps^-3
 all checks passed
 
 chen2023beyond
@@ -478,6 +639,12 @@ chen2023beyond
   [PASS] 2-D, K = 1.1: |x - y| -> 0 on the xy > mu iterates (Theorem 3)  (0.492 -> 1.1e-15)
   [PASS] 2-D, K = 1.1: converges to the 1-D period-2 orbit on the diagonal (Prop. 3)  (orbit [0.8146 1.1161])
   [PASS] 2-D, K = 0.9 < 1: converges to a minimum with sharpness (x - y)^2 + 2 < 2/eta  (end [1.182  0.8461], sharpness 2.113 < 2.222)
+  [PASS] primer 1: multiplier at the minimum 1 - 1.05*2 = -1.1; 0.01 -> -0.011 -> 0.0121
+  [PASS] primer 2: f''(0.8) = 0.92, f''(1.1024) ~ 2.646
+  [PASS] primer 3: from x0 = 0.8 the iterates settle on {0.8729, 1.0911}  (0.87287, 1.09109)
+  [PASS] primer 3: loss alternates ~0.0142 / ~0.0091  (0.01417, 0.00907)
+  [PASS] primer 3: two-step multiplier ~0.595
+  [PASS] primer 4: 2-cycle lasts until eta ~ 1.237 (first period 4)  (1.237)
   wrote papers/chen2023beyond/data.json (93 KB)
 all checks passed
 
@@ -498,6 +665,11 @@ cheridito2024gradient
   [PASS] every run that ends below the threshold is (numerically) at loss 0 (Theorem 1.2)
   [PASS] runs above the threshold sit at one of the critical levels L_0, L_2, L_4 (within 5%) or are still moving  ([])
   wrote papers/cheridito2024gradient/data.json (25 KB)
+  [PASS] primer: L(b) = b^2 (b>=0), b^2 + 2b^3/3 (-1<=b<=0), 1/3 (b<=-1) matches the integral
+  primer: at b=0: L'=3.33e-09, L'' right 2.000 left 1.996; at b=-1: L'=-5.00e-05, L'' right -1.996 left 0.000
+  [PASS] primer: at b = 0, L = L' = 0 and L'' = 2 from both sides (kink smoothed to second order)
+  [PASS] primer: at b = -1, L' = 0 from both sides but L'' = -2 from the right and 0 from the left (C^1, not C^2)
+  [PASS] primer: max(x,0) maps (-inf,0] to {0} (preimage of a null set has positive length)
 all checks passed
 
 chizat2018global
@@ -513,6 +685,11 @@ chizat2018global
   [PASS] m = 20 and m = 100 reach the global minimum within optimization error (loss < 2e-6)
   [PASS] loss curves saved
   wrote papers/chizat2018global/data.json (254 KB)
+  [PASS] notes: integral of phi against mu_m = sum_j a_j delta_theta_j equals sum_j a_j phi(theta_j)
+  [PASS] primer: Hessian of (ab - 1)^2 at 0 is [[0, -2], [-2, 0]], eigenvalues -2, 2
+  [PASS] primer: predictions 0 and 2 have loss 1 each, their mixture predicts 1 with loss 0
+  [PASS] primer: J is convex along mixtures of particle measures (predictor linear in mu)
+  [PASS] primer: duplicating neurons keeps the predictor; m-scaled velocities of the copies equal the originals
 all checks passed
 
 chizat2019lazy
@@ -533,6 +710,11 @@ chizat2019lazy
   [PASS] tau = 5 (lazy): fits the data with a relative weight change < 0.15
   [PASS] tau = 0.1 (non-lazy): fits the data and the weights move far from init (relative change > 2)
   [PASS] lazy regime: relative weight change ~ tau^-2 for tau >= 1 (slope ~ -2)  (slope -1.94)
+  [PASS] notes: w* = (-1 + sqrt 1.04)/2 ~ 0.00990195; difference to 0.01 ~ 9.8e-5; alpha w*^2 ~ 0.0098
+  [PASS] primer 1: linearization error of w + w^2 is Delta^2: 0.01 at 0.1, 1e-4 at 0.01
+  [PASS] primer 2: e^-4 ~ 0.018, e^-1 ~ 0.37
+  [PASS] primer 2: gradient flow on a linear model: residual = exp(-K0 t) r0
+  [PASS] primer 3: kappa_(alpha h) = 2/alpha = 0.02 at alpha = 100 for h = w + w^2, y* = 1
   wrote papers/chizat2019lazy/data.json (95 KB)
 all checks passed
 
@@ -559,6 +741,13 @@ cohen2021gradient
   [PASS] MLP: losses decrease overall
   [PASS] MLP: loss is non-monotone at large eta  (increasing 10-step windows: {0.1: 0, 0.3: 73, 0.36: 42, 0.42: 96})
   wrote papers/cohen2021gradient/data.json (26 KB)
+  [PASS] notes: e_t = (1 - eta a)^t e0; shrinks iff 0 < eta a < 2, flips sign and grows if eta a > 2
+  [PASS] primer: power iteration on diag(20,1) from (1,1): 19.95 then 19.9999  ([np.float64(19.95261845386533), np.float64(19.999881250742177)])
+  [PASS] primer: one GD step decreases L by at least eta(1 - l eta/2)|grad|^2 (l = 20)
+  [PASS] primer: Fig. 2 example: eta = 0.11, 2/eta ~ 18.2, multipliers -1.2 and 0.89
+  [PASS] primer: (uv-1)^2/2 on uv = 1 has Hessian eigenvalues 0 and u^2 + v^2: 4.25 at (2, 0.5), 2 at (1, 1)
+  [PASS] primer: eta = 0.6 (2/eta ~ 3.33): GD leaves the sharp minimum (2, 0.5), stays near (1, 1)  ([1.38989451 0.71947906], [1.01014894 0.98995302])
+  [PASS] primer: eta lambda = 2.02 -> multiplier -1.02 (2% growth per step)
 all checks passed
 
 crawshaw2026exploration
@@ -572,6 +761,12 @@ crawshaw2026exploration
   [PASS] CSD (fixed-length steps) stalls at a level set by eta: never below ~eta^2 scale  (late min 1.5e-03)
   [PASS] RSD (steps scaled by the dual norm) keeps converging (loss 1e-9 after 400 steps)  (5.7e-10)
   [PASS] Muon/CSD moves both coordinates by exactly eta per step
+  [PASS] primer 1: I_2 has spectral norm 1, Frobenius norm sqrt 2
+  [PASS] primer 2: g = (3, -1): Euclidean decrease sqrt 10, max-norm step -sign(g) = (-1, 1) gives 4 = |g|_1
+  [PASS] primer 2: no step in the max-norm ball beats -sign(g)
+  [PASS] primer 3: singular values 1.618, 0.618; polar = [[0.894, 0.447], [-0.447, 0.894]]; <G, polar G> = 2.236
+  [PASS] primer 3: cubic Newton-Schulz iteration converges to the polar factor
+  [PASS] primer 4: eta = 0.1, g = (3, 4): CSD moves 0.1, RSD moves 0.5
 all checks passed
 
 damian2023self
@@ -592,6 +787,14 @@ damian2023self
   [PASS] GD: time-averaged sharpness = 2/eta within 1%  (mean S = 1.9992, range [1.939, 2.053])
     GD cycle lengths: [105, 109, 113] steps; max |x| = 0.126, delta = 0.063
   [PASS] smaller initial oscillation -> larger sharpness swings (Cor. 1)  (max |S - 2/eta|: {0.05: np.float64(0.02405919404659644), 0.02: np.float64(0.08474434634450202), 0.005: np.float64(0.1447479051020312)})
+  [PASS] notes: |1 - eta lambda| < 1 exactly when 0 < eta lambda < 2
+  [PASS] gradient notes/primer: toy L = (2 + y) x^2 / 2, dL/dy = x^2/2  (max rel err 4.50e-11)
+  [PASS] primer: eta = 1, x = 1 moves y by -0.5
+  [PASS] primer: lambda = 1.8: 0.1, -0.08, 0.064; lambda = 2.2: 0.1, -0.12, 0.144
+  [PASS] primer: Eq. 3: x = 0 -> y += 0.01; |x| = 0.5 -> y += -0.115; threshold sqrt(2 alpha/beta) ~ 0.14
+  [PASS] primer: y > 0 grows |x|, y < 0 shrinks it
+  [PASS] primer: one loop: y crosses 0 upward, |x| peaks above sqrt(2 alpha/beta), y crosses back, |x| shrinks, y rises again  (crossings [  4  44 105], peak |x| 0.658, |x| at the restart 9.31e-11)
+  [PASS] primer: in the two-number map the cycles grow (not a closed orbit)  (|x| exceeds 10 at step 191)
 all checks passed
 C:\Users\Asus\faris-brain\university\courses\fall-2026\MLR570\survey-atlas\scripts\check-math\damian2023self.py:15: RuntimeWarning: overflow encountered in scalar multiply
   G = lambda z: np.array([(2 / ETA + B * z[1]) * z[0], B * z[0] ** 2 / 2 - AL / B])
@@ -621,6 +824,15 @@ daneshmand2018escaping
   [PASS] isotropic kick: escape time grows with d (projection ~ r/sqrt(d))
   [PASS] CNC-aligned noise: escape time independent of d
   wrote papers/daneshmand2018escaping/data.json (1 KB)
+  [PASS] notes Sec. 3: E[g_z] = 0, E<v_min, g_z>^2 = 4
+  [PASS] notes Sec. 4 / primer: sphere radius 1 in R^10: E<u,v>^2 = r^2/d and E[uu^T] = (r^2/d) I
+  [PASS] notes Sec. 4 / primer: sphere radius 1 in R^1000: E<u,v>^2 = r^2/d and E[uu^T] = (r^2/d) I
+  [PASS] notes Sec. 4 / primer: sphere radius 2 in R^50: E<u,v>^2 = r^2/d and E[uu^T] = (r^2/d) I
+  [PASS] notes Sec. 4: r = 1, d = 1000 gives 0.001; +-0.5 projections give second moment 0.25
+  [PASS] primer: eps = 0.01 -> eps^(1/2) = 0.1, eps^(2/5) ~ 0.158, eps^(1/4) ~ 0.316
+  [PASS] primer: origin of x^2/2 - y^2/2 has zero gradient, lambda_min = -1
+  [PASS] primer: y0 = 0.2, 20 steps of multiplier 1.1 -> y ~ 1.35, loss change ~ -0.88  (y = 1.3455, dloss = -0.8852)
+  [PASS] primer: 30 bad of 1000 -> success >= 0.97
 all checks passed
 
 danilova2022recent
@@ -633,6 +845,14 @@ danilova2022recent
   [PASS] every run satisfies f(x_k) - f* <= exp(-mu k / L) (f(x_0) - f*) for 400 steps
   [PASS] all 200 runs reach the global minimum despite non-convexity
   wrote papers/danilova2022recent/data.json (1 KB)
+  [PASS] notes: GD with step 1/L: f(x+) <= f(x) - |grad|^2/(2L)
+  [PASS] notes: (1/T) sum |grad|^2 <= 2L[f(x0) - f*]/T
+  [PASS] notes: under PL, f(x+) - f* <= (1 - mu/L)(f(x) - f*) along GD
+  [PASS] primer: x^2/2 at 0.1: gradient 0.1, gap 0.005
+  [PASS] primer: eps = 1e-2: eps^-2 = 1e4, eps^-4 = 1e8
+  [PASS] primer: x^2 + 3 sin^2 x: f'' min -4, max L = 8, PL mu ~ 0.176 on [-6, 6]  (0.1755)
+  [PASS] primer: guarantee ~623 steps for a 1e6 reduction; GD from x0 = 5 needs 10  (622.7, 10)
+  [PASS] primer: forward difference of x^2 at 1 with delta 1e-3 = 2.001
 all checks passed
 
 dauphin2014identifying
@@ -658,6 +878,22 @@ dauphin2014identifying
   P(all eigenvalues > 0): {1: np.float64(0.498), 2: np.float64(0.145), 3: np.float64(0.02715), 4: np.float64(0.0024), 5: np.float64(5e-05), 6: np.float64(0.0), 8: np.float64(0.0)}
   [PASS] P(min) shrinks fast with N
   [PASS] GOE spectrum ~ semicircle on [-2, 2]
+  [PASS] gradient notes: grad f = (x, -eps y)  (max rel err 8.61e-11)
+  [PASS] Hessian notes: H = diag(1, -eps)  (fd=[[1.0, 0.0], [0.0, -0.01]] err 1.8e-11)
+  [PASS] notes: grad f(0,1) = (0, -0.01)
+  [PASS] notes: H^-1 = diag(1, -100), |H|^-1 = diag(1, 100)
+  [PASS] notes: GD step -> (0, 1.01)
+  [PASS] notes: Newton step -> (0, 0), the saddle
+  [PASS] notes: SFN step -> (0, 2)
+  [PASS] notes: f(0,1) = -0.005, f(0,1.01) ~ -0.00510, f(0,2) = -0.020  (-0.0051005)
+  [PASS] notes: GD factor (1 - eta lam) = 1 + eta|lam| > 1 for lam < 0
+  [PASS] notes: |s^T H s| <= s^T |H| s (Lemma 1)
+  [PASS] notes: -|H|^-1 g is a descent direction (g^T d < 0)
+  [PASS] notes: SFN = Newton when H is positive definite
+  [PASS] primer: Newton on 2(x-3)^2 from 0: g = -12, H = 4, step 3
+  [PASS] primer: [[0,2],[2,0]] has eigenvalues -2, 2 and |H| = 2I
+  [PASS] primer: 2^-10 = 1/1024
+  [PASS] primer: argmin g^T s on s^T diag(1,4) s <= 1 is (-0.894, -0.224) = -M^-1 g rescaled  ([-0.89442719 -0.2236068 ])
 all checks passed
 
 defazio2024road
@@ -670,6 +906,11 @@ defazio2024road
     T=4000: linear decay (tuned for T, gamma 0.04) 7.421e-04 | schedule-free (one run, gamma 0.08) at T 4.245e-04 | constant SGD (gamma 0.01) at T 2.875e-03
   [PASS] schedule-free, one run without knowing T, is within 2x of linear decay tuned for each T  (ratios [1.54 0.56 0.57])
   [PASS] schedule-free beats constant-step SGD at the longest horizon  (4.25e-04 vs 2.88e-03)
+  [PASS] primer 1: stationary variance gamma/(2 - gamma): 1/3 at 0.5, ~0.026 at 0.05
+  [PASS] primer 1: Monte Carlo variance at gamma = 0.5 ~ 1/3  (0.3308)
+  [PASS] primer 2: mean of 100 iid unit-variance draws has variance 0.01
+  [PASS] primer 2: iterates 10, 0, 0, ... -> uniform average 1 after 10, 0.1 after 100
+  [PASS] primer 3: (D^2 + gamma^2 G^2 T)/(2 gamma T) = DG/sqrt(T) = 0.01 at gamma = D/(G sqrt T)
   wrote papers/defazio2024road/data.json (11 KB)
   [PASS] gradient 3D toy 1/2 w^T diag(2, 0.25) w  (max rel err 6.81e-11)
 all checks passed
@@ -695,6 +936,12 @@ dinh2017sharp
   [PASS] Theorem 3: H(T_a theta) = D_a H(theta) D_a, D_a = diag(1/a, a)
   [PASS] Theorem 2: every point of the hyperbola has L = 0 < eps, and the arc length to a = 1000 already exceeds 999
   wrote papers/dinh2017sharp/data.json (0 KB)
+  [PASS] notes: f(x; cW1, W2/c) = f(x; W1, W2) for c = 0.1, 7
+  [PASS] notes: Hessian at (c, 1/c) is 2[[c^-2, 1], [1, c^2]], eigenvalues 0 and 2(c^2 + c^-2)
+  [PASS] primer: (1,1), (2,0.5), (4,0.25) give the same w1 w2 relu(x)
+  [PASS] primer: theta^2 has curvature 2; (phi/10)^2 has curvature 0.02
+  [PASS] primer: theta = D phi turns H into D^T H D
+  [PASS] primer: eps = 0.1 ball sharpness ~0.021 at (1,1), ~0.161 at (4,0.25)  (0.0214, 0.1612)
 all checks passed
 
 du2017gradient
@@ -719,6 +966,16 @@ du2017gradient
   [PASS] PGD clears all 6 saddles in every run
   [PASS] d = 6, L = 2: GD needs > 5x the steps of PGD, or never clears the last saddle within 400 000 steps
   wrote papers/du2017gradient/data.json (0 KB)
+  [PASS] gradient notes toy  (max rel err 8.40e-11)
+  [PASS] Hessian notes toy saddle (0,0)  (fd=[[1.0, 0.0], [0.0, -1.0]] err 2.0e-08)
+  [PASS] notes toy: minima at (0, +-1) (zero gradient, Hessian diag(1, 2))
+  [PASS] notes toy: GD map x <- (1-eta)x, y <- y + eta(y - y^3)
+  [PASS] notes toy: T_esc ~ log(r/delta)/log(1+eta) (delta = 0.001, r = 0.5: 67 steps vs 65.2)
+  [PASS] notes toy: T_esc ~ log(r/delta)/log(1+eta) (delta = 1e-09, r = 0.5: 212 steps vs 210.2)
+  [PASS] primer: 2^10 = 1024, 2^30 ~ 1.07e9
+  primer Eq. (3) chain: t1 = 26, x2(t1) = 0.00151, extra 36, t2 = 62, bound (L+g)/g t1 = 52
+  [PASS] primer: t1 = 26, x2(t1) ~ 0.0015, 36 more steps, t2 = 62 >= (L+gamma)/gamma t1 = 52
+  [PASS] primer: P(|u1| < w r) ~ w sqrt(2d/pi); d = 100, w = 1e-6 gives ~8e-6  (7.999e-06)
 all checks passed
 
 du2019gradient
@@ -736,6 +993,14 @@ du2019gradient
   m=4: max |actual residual - (I - eta G0)^k r0| / |r0| = 0.1365
   m=4096: max |actual residual - (I - eta G0)^k r0| / |r0| = 0.0003
   [PASS] wide net follows the linear Gram dynamics; narrow net does not
+  [PASS] notes: r1 = (0,-1/2), r2 = (0,-1/4), r3 = (0,-1/8)
+  [PASS] notes: losses 1.00000, 0.12500, 0.03125, 0.00781
+  [PASS] notes: smallest eigenvalue of K is 0.5
+  [PASS] notes: 2^10 = 1024 and (1 + 1/10)^10 ~ 2.59 -> e
+  [PASS] primer: G = [[1,1],[1,2]], eigenvalues (3 -+ sqrt5)/2 ~ 0.382, 2.618
+  [PASS] primer: eta = 1/lambda_max ~ 0.382; factors 0 and 1 - 0.382^2 ~ 0.854
+  [PASS] primer: linear model, one GD step: r1 = (I - eta G) r0
+  [PASS] primer: average of 100 fair +-1 coins has std ~0.1 (1/sqrt(m))
 all checks passed
 
 duchi2011adaptive
@@ -751,6 +1016,12 @@ duchi2011adaptive
   [PASS] AdaGrad reaches lower excess loss than tuned 1/sqrt(t) SGD on the rare-feature problem
   [PASS] AdaGrad gets the rare-feature weight closer to optimal  (|w2 - w2*|: AdaGrad 0.53, SGD 1.37)
   wrote papers/duchi2011adaptive/data.json (61 KB)
+  [PASS] notes Sec. 3: argmin of the proximal surrogate is x_t - eta H_t^{-1} g_t
+  [PASS] primer idea 1: average regret sqrt(T)/T = 0.01 at T = 10000
+  [PASS] primer idea 2: every g in [-1,1] is a subgradient of |x| at 0
+  [PASS] primer idea 3: G = 10000 vs 100 -> effective steps eta/100 vs eta/10
+  [PASS] primer idea 4: sum_j sqrt(p_j) = H_d: 2.93 (d=10), 9.79 (d=1e4); sqrt d = 3.16, 100
+  [PASS] primer idea 4: E sum_j sqrt(sum_t g^2) ~ sqrt(T) sum_j sqrt(p_j) (Jensen upper bound, close for frequent features)  (278.5 vs 284.6)
 all checks passed
 
 fang2018spider
@@ -763,6 +1034,15 @@ fang2018spider
   [PASS] plain minibatch SGD estimator error is much larger than SPIDER's  (SGD 1.323 vs SPIDER 0.0008)
   [PASS] SPIDER-SFO reaches a minimum neighbourhood (|grad f| ~ eta)  (x = [-1.018 -0.   ])
   wrote papers/fang2018spider/data.json (4 KB)
+  [PASS] notes: g_i(x_t) - g_i(x_{t-1}) = h(x_t) - h(x_{t-1}) exactly for g_i = h + xi_i
+  [PASS] primer: sigma^2 = 4, b = 16 -> minibatch variance 0.25
+  [PASS] primer: Monte Carlo minibatch variance ~ 0.25  (0.2496)
+  [PASS] primer: Var(c_i (x_t - x_{t-1})) = Var(c) * 0.01^2 = 1e-4  (9.967e-05)
+  [PASS] primer: Lemma 1 bound k L^2 eps1^2 / S2 = 1e-3 (std ~ 0.032) for L=1, eps1=0.01, S2=10, k=100
+  [PASS] primer: estimator error variance after k steps <= k L^2 eps1^2 / S2 (L^2 = E c^2 = 2)  (9.87e-04 <= 2.00e-03)
+  [PASS] primer: eps = 0.01, n = 100: SPIDER 1e5 vs GD 1e6
+  [PASS] primer: eps = 0.01, n = 1e6: SPIDER 1e6 (online term) vs GD 1e10
+  [PASS] primer: sqrt(n) eps^-2 = eps^-3 at n = eps^-2
 all checks passed
 
 fang2019sharp
@@ -773,6 +1053,14 @@ fang2019sharp
   example output [1.    0.023], |grad f| = 0.023
   [PASS] quadratic: gradient at the average = average gradient
   [PASS] notes: coupled paths separate as 0.002*1.1^k; first exceed 2B = 0.02 at k = 25  (k = 25, distance 0.0216694)
+  [PASS] notes Sec. 3: ceil(log 10 / log 1.1) = 25 and both starts lie inside B = 0.01
+  [PASS] notes Sec. 5: 2^(7/2) ~ 11.31
+  [PASS] notes Sec. 5: B = eps^1/2, eta = eps^3/2, K0 = eps^-2 give decrease ~eps^1.5 per exit and eps^-3.5 total
+  [PASS] primer: eps = 0.01 -> eps^-4 = 1e8, eps^-3.5 = 1e7
+  [PASS] primer: with eta = eps^2/(L sigma^2) the net per-step gain is ~eps^4/2 (order eps^4)  (4.950e-05)
+  [PASS] primer: K = 1e4 unit-size noises: average ~0.01, sum ~100 (sqrt K)
+  [PASS] primer: eta sigma sqrt(K0) = eps^1/2 sigma when eta = eps^1.5, K0 = eps^-2
+  [PASS] primer: cos x at 0.1: quadratic-model gradient error 1.7e-4 <= rho r^2/2 = 0.005
 all checks passed
 
 foret2021sharpness
@@ -799,6 +1087,9 @@ foret2021sharpness
   [PASS] notes example: max_|e|<=0.1 of 20/2 e^2 = 0.1
   [PASS] first-order inner max: eps_hat = rho g/|g| maximizes g.e on the ball
   wrote papers/foret2021sharpness/data.json (11 KB)
+  [PASS] notes: max over |eps| <= 0.1 of (2/2) eps^2 = 0.01 and of (20/2) eps^2 = 0.10
+  [PASS] notes/primer: eps_hat = rho g/|g| = (0.06, 0.08) maximizes eps^T g, max = rho |g| = 0.5
+  [PASS] primer: F(w) = (|w| + 0.1)^2 and F'(1) = 2.2 = L'(1.1)
 all checks passed
 
 galli2026flatland
@@ -819,6 +1110,14 @@ galli2026flatland
   K=8: smallest lambda_max over random weights 2.0793 >= 2/K = 0.2500
   [PASS] K=8: lambda_max >= 2/K
   [PASS] K=8: flat point is stationary with top-K eigenvalues = 2/K and a negative eigenvalue  (lam_min -0.060)
+  [PASS] notes: lambda = 4: eta = 0.40 -> -0.6, 0.50 -> -1, 0.55 -> -1.2
+  [PASS] notes: x+ = -1.1, f = 0.605 > 0.5; R - c eta |g|^2 = 0.70 - 0.021 = 0.679 >= 0.605
+  [PASS] notes: Hessian of K^-1 sum (z_j + b_j - y_j)^2 in b is (2/K) I; 2/10 = 0.2, 2/100 = 0.02
+  [PASS] notes: lambda_max(H) >= lambda_max of a diagonal block (Rayleigh quotient)
+  [PASS] primer: f = x^2/2 at x = 1 passes Armijo exactly for eta <= 2(1 - c) = 1.98
+  [PASS] primer: halving/doubling equality search on a quadratic gives (1 - c)/lambda <= eta <= 2(1 - c)/lambda
+  [PASS] primer: Zhang-Hager reference with xi = 0.85 after losses 1.0, 0.5 is 1.35/1.85 ~ 0.73  (0.7297)
+  [PASS] primer: H = [[0.2, 0.3], [0.3, -0.5]] has eigenvalues ~0.31, ~-0.61 (sharpness >= 0.2, a saddle)
 all checks passed
 
 ge2017no
@@ -835,6 +1134,15 @@ ge2017no
   [PASS] without the regularizer the minimizers form the hyperbola uv = 1 (a zero eigenvalue)
   [PASS] with it the minima are isolated: (1,1), (-1,-1), positive definite
   [PASS] origin stays a strict saddle with the regularizer
+  [PASS] notes Sec. 2: the two expansions of F agree
+  [PASS] gradient notes Sec. 2: dF/da = 2a(a^2+b^2-1), dF/db = 2b(a^2+b^2)  (max rel err 1.17e-10)
+  [PASS] Hessian notes Sec. 2: Hessian at the origin diag(-2, 0)  (fd=[[-2.0, 0.0], [0.0, 0.0]] err 4.0e-08)
+  [PASS] notes Sec. 2: F(0,0) = 0.5, F(0.5,0) = 0.28125, F(1,0) = 0; stationary at (0,0), (+-1,0)
+  [PASS] notes Sec. 4: Lemma 7 identity (H = I, no regularizer) and Lemma 6 ||DD^T||^2 <= 2||M - M*||^2
+  [PASS] primer idea 1: at U = 0, curvature along Delta = (1,0) is -2 = 1 - 3 <= -1
+  [PASS] primer idea 2: (1,2) pays 9/8, (sqrt2, sqrt2) pays 0
+  [PASS] primer idea 3: 10% sampling misses the single nonzero entry with probability 0.9
+  [PASS] primer idea 4: |x| <= x^2/2 + 1/2 with equality at +-1
 all checks passed
 
 ge2019stabilized
@@ -851,6 +1159,17 @@ ge2019stabilized
   [PASS] stabilized super epoch decreases f (Lemma 7: by ~gamma^3/rho^2 with constant probability)  (mean f(x_T) - f(x~) = -0.252)
   [PASS] after the super epoch the shift is dropped and the run ends at a minimum of f
   wrote papers/ge2019stabilized/data.json (4 KB)
+  [PASS] notes example: grad f(0) = (1, 0)
+  [PASS] notes example: f^ = 2x^2 - y^2/2 and grad f^(0) = 0
+  [PASS] Hessian notes example: Hess f^ = diag(4, -1)  (fd=[[4.0, 0.0], [0.0, -1.0]] err 6.7e-10)
+  [PASS] notes: after a small y-kick, GD on f^ grows y like (1 + eta gamma)^t and keeps x = 0
+  [PASS] primer: raw sample gradients 2.2, 0; SVRG estimates 1.2, 1.0; both average 1.1
+  [PASS] primer: SVRG error 0.1 <= 2 L |x - x~| = 0.4
+  [PASS] primer: slab fraction ~ w sqrt(2d/pi) ~ 0.008 (d = 100, w = 0.001)  (exact 0.00800)
+  [PASS] primer: Monte Carlo slab fraction agrees  (MC 0.0079)
+  [PASS] primer: 1 + (1000/100)^2 = 101
+  [PASS] primer: 1e10, 3.2e10, 1e12
+  [PASS] primer: (L D/(n^(1/3) eps^2)) n = n^(2/3) L D/eps^2
 all checks passed
 
 ghadimi2013stochastic
@@ -871,6 +1190,12 @@ ghadimi2013stochastic
   [PASS] empirical E||grad f(x_R)||^2 below the Corollary 2.2 bound for every N
   [PASS] empirical value decreases with N
   [PASS] RSGF estimator ~ grad f for small mu  ([-0.23  -0.486] vs [-0.23  -0.482])
+  [PASS] notes Sec. 3 bound holds on a noisy quadratic  (0.2916 <= 0.5667)
+  [PASS] primer: descent-lemma bound 0.625 >= sin 0.5 ~ 0.479
+  [PASS] primer: E[G]=2, E[G^2]=5=2^2+1
+  [PASS] primer: N=100: eta* ~ 0.141, bound ~ 0.283 (minimum of 2D/(eta N)+L eta s2)
+  [PASS] primer: N=10000: eta* ~ 0.0141, bound ~ 0.0283 (minimum of 2D/(eta N)+L eta s2)
+  [PASS] primer: uniform pick of (0.9,0.3,0.1,0.1) has mean 0.35
 all checks passed
 
 goodfellow2015qualitatively
@@ -895,6 +1220,11 @@ goodfellow2015qualitatively
   MLP: |theta_f - theta_0| = 18.777, max residual off the line 4.260
   [PASS] SGD does not follow the straight line (residual > 10% of the distance)
   wrote papers/goodfellow2015qualitatively/data.json (5 KB)
+  [PASS] notes Sec. 2: l'(alpha) = grad L(theta(alpha))^T (theta_T - theta_0)
+  [PASS] notes Sec. 4: x^2 - y^2 restricts to x^2 and -y^2
+  [PASS] primer idea 1: 9(1-a)^2 decreasing; segment (1,0)->(0,0) on x^2 - y^2 decreasing
+  [PASS] primer idea 2: line (1,1)->(-1,-1) peaks at loss 1 at the midpoint
+  [PASS] primer idea 3: GD (0.05) from (0.5,0.1) ends near (1.057, 0.946); line monotone 0.9025 -> 0; path deviates up to 0.062; length ~1.01  (end [1.0567 0.9463], dev 0.0625)
 all checks passed
 
 gupta2018shampoo
@@ -916,6 +1246,11 @@ gupta2018shampoo
     shampoo: best eta 4, final loss 1.237e-18
     full: best eta 4, final loss 1.654e-31
   [PASS] Shampoo beats diagonal AdaGrad and GD on Kronecker-structured curvature
+  [PASS] notes: 1000 x 1000 weight: flattened preconditioner 1e12 entries, two factors 2e6
+  [PASS] primer 1: regret 100 after T = 10 000 rounds is 0.01 per round (sqrt T = 100)
+  [PASS] primer 3: A = [[2,1],[1,2]] has eigenvalues 3, 1; A^(-1/2) = [[0.789, -0.211], [-0.211, 0.789]]
+  [PASS] primer 3: entrywise power gives [[0.707, 1], [1, 0.707]] instead
+  [PASS] primer 4: (L kron R)^p = L^p kron R^p for PSD L, R (p = -1/4)
   wrote papers/gupta2018shampoo/data.json (11 KB)
 all checks passed
 
@@ -935,6 +1270,14 @@ gurbuzbalaban2021heavy
   [PASS] alpha decreases with dimension (eta = 0.16, b = 2)  (d=5: 12.000 > d=20: 6.962)
   [PASS] scalar chain: Hill estimate near alpha  (Hill 1.102 vs alpha 1.089)
   wrote papers/gurbuzbalaban2021heavy/data.json (6 KB)
+  [PASS] notes Sec. 3: 4 int_0^1 (1-z^2) phi = 4 phi(1) ~ 0.967883 (quadrature)
+  [PASS] notes Sec. 3: F(x) = E(ax-y)^2/2 = (x^2+1)/2 (a, y ~ N(0,1) independent)
+  [PASS] notes Sec. 3: E x_k^2 = 2 E x_{k-1}^2 + 1 = 2^k - 1 from x0 = 0
+  [PASS] notes Sec. 3: Monte Carlo E x_4^2 ~ 15  (14.30)
+  [PASS] primer idea 1: x - eta a(ax - y) = (1 - eta a^2) x + eta a y
+  [PASS] primer: M in {0.2, 1.6}: E log|M| ~ -0.57, h(1) = 0.9, h(2) = E M^2 = 1.3, alpha ~ 1.35  (alpha = 1.3501)
+  [PASS] primer: simulation of x+ = Mx + 1: P(x>100) ~ 0.009, P(x>1000) ~ 0.0004, ratio ~ 22 ~ 10^1.35  (0.00883, 0.00040, ratio 22.0)
+  [PASS] primer: tail-integral moments: p = 1 finite (= 3), p = 2 diverges for alpha = 1.5
 all checks passed
 
 haeffele2017global
@@ -966,6 +1309,15 @@ haeffele2017global
   [PASS] ReLU: no run anywhere goes below that value (it is the global minimum)
   [PASS] ReLU: zero-neuron runs that fail the certificate sit higher (not local minima)
   wrote papers/haeffele2017global/data.json (2 KB)
+  [PASS] primer idea 1: v ReLU(u.x) = 6 at u=(1,1), v=2, x=(1,2); scaling (u,v) by 3 gives 54 = 3^2 * 6
+  [PASS] primer idea 1: bias-free ReLU unit is positively homogeneous of degree 2
+  [PASS] primer idea 2: min over ab = 4 of (a^2+b^2)/2 is |4| = 4, at a = b = 2
+  [PASS] Hessian primer idea 3: Hessian at the origin, lambda = 0.2  (fd=[[0.2, -1.0], [-1.0, 0.2]] err 5.3e-10)
+  [PASS] primer idea 3: convex form minimized at x = 1 - lambda = 0.8 with value lambda - lambda^2/2 = 0.18
+  [PASS] primer idea 3: GD-free check: min of f over u = v equals 0.18
+  [PASS] primer idea 4: s = 0.1 along u = v: loss falls by 0.00995, penalty rises by 0.03, objective rises
+  [PASS] primer idea 4: origin value 0.5, u = v = 1 gives 0.3
+  [PASS] primer idea 4: every small move from the origin raises the objective (spurious local min)
 all checks passed
 
 he2016deep
@@ -982,6 +1334,11 @@ he2016deep
   [PASS] residual gradient at init stays order one for every depth
   [PASS] depth 20: plain chain makes no progress (loss stays 2.0), residual reaches ~0
   [PASS] depth 2: both train (the shallow plain net is fine)
+  [PASS] notes: H = 1.05x -> residual F = 0.05x; block Jacobian 1.05
+  [PASS] primer 2: 0.9^50 ~ 0.005, 1.1^50 ~ 117
+  [PASS] primer 2: 20 layers at weight 0.1: plain factor 0.1^19 = 1e-19, residual 1.1^19 ~ 6.1
+  [PASS] primer 2: chain-rule derivatives w.r.t. the first layer match the products
+  [PASS] primer 3: batch norm of (2, 4, 6) ~ (-1.22, 0, 1.22)
   wrote papers/he2016deep/data.json (0 KB)
 all checks passed
 C:\Users\Asus\faris-brain\university\courses\fall-2026\MLR570\survey-atlas\scripts\check-math\he2016deep.py:24: RuntimeWarning: overflow encountered in scalar power
@@ -1007,6 +1364,10 @@ hochreiter1997flat
   noise s = 0.3: mean loss increase flat 0.2333, sharp 0.8641
   [PASS] the sharp minimum loses more than 3x as much under the same weight noise
   wrote papers/hochreiter1997flat/data.json (0 KB)
+  [PASS] notes example: L = delta at |a| = sqrt(delta) and at |b| = 10 sqrt(delta)
+  [PASS] primer: delta = 0.01 gives |u| <= 0.014 (lambda = 100) and 0.14 (lambda = 1)  (0.0141, 0.1414)
+  [PASS] primer: log2(200) ~ 7.6, log2(20) ~ 4.3, log2(10) ~ 3.3 bits
+  [PASS] primer: lambda_max of (ab - 1)^2 is 2(a^2 + b^2): 4 at (1, 1), ~32.1 at (4, 0.25), ~8x  (4.000, 32.125)
 all checks passed
 
 islamov2024loss
@@ -1028,6 +1389,13 @@ islamov2024loss
   SGD step 0.5: 0.983 of runs within 0.05 of a global minimizer, 0.018 still on the far plateau (f > 0.95)
   [PASS] SGD: most runs reach a global minimizer, none stay at the saddle
   wrote papers/islamov2024loss/data.json (24 KB)
+  [PASS] notes Sec. 3: ||x - g grad - x_p||^2 expansion
+  [PASS] primer idea 1: saddle at 0 with f = 0, f* = -1/4 at y = +-1 (PL fails there)
+  [PASS] primer idea 2: f = x^2/2, x = 2, step 0.5: squared distance 4 -> 4 - 2(0.5)(4) + 0.25(4) = 1
+  [PASS] primer idea 3: a(fx - fxp) - b(fx - f*) = (a - b)(fx - fxp) - b(fxp - f*)
+  [PASS] primer idea 3: alpha=3, beta=2, s2=0.5 allow a gap up to 1.0
+  [PASS] primer idea 4: f = (x^2+1)/2, f* = 0.5 at 0, sigma_int^2 = E[f* - f_i*] = 0.5
+  [PASS] primer idea 4: constant-step SGD (0.1) gap ~ gamma/(2(2-gamma)) ~ 0.026  (0.0265)
 all checks passed
 
 jain2017non
@@ -1040,6 +1408,14 @@ jain2017non
   good case contraction f_(t+1)/f_t ~ 0.053
   [PASS] good case: geometric decrease
   wrote papers/jain2017non/data.json (0 KB)
+  [PASS] notes/primer: sparse projection keeps the s largest |entries|: (0.3,-2,1.1,0.05), s=2 -> (0,-2,1.1,0)
+  [PASS] notes: truncated SVD is the best rank-1 approximation (beats 3000 random rank-1 matrices)
+  [PASS] primer: best rank-1 approximation of diag(3,1) is diag(3,0), distance 1
+  [PASS] primer: midpoint of (1,0,0) and (0,1,0) has 2 nonzeros
+  [PASS] primer: A^T A has eigenvalues 0, 1, 3 and null direction (1,1,-1)
+  [PASS] primer: over 2-sparse directions the Rayleigh quotient lies in [0.382, 2.618]
+  [PASS] primer: 50x200 Gaussian A: null space dim >= 150
+  [PASS] primer: |Aw|^2/|w|^2 over 20000 random 3-sparse w in [0.38, 1.97]; 98% in [0.60, 1.51]  (0.379 1.966 0.601 1.508)
 all checks passed
 
 jin2017escape
@@ -1067,6 +1443,18 @@ jin2017escape
   d=1000: median escape iterations 41
   d=10000: median escape iterations 47
   [PASS] escape iterations grow only ~log d  (26 -> 47)
+  [PASS] gradient notes: grad (x, -sin y)  (max rel err 9.91e-11)
+  [PASS] Hessian notes: Hessian at (0,0) = diag(1, -1)  (fd=[[1.0, 0.0], [0.0, -1.0]] err 6.1e-09)
+  [PASS] Hessian notes: Hessian diag(1, -cos y) at (0, 1.3)  (fd=[[1.0, 0.0], [0.0, -0.2675]] err 6.1e-09)
+  [PASS] notes: y1 = 0.02 + 0.2 sin(0.02) ~ 0.0240  (0.024000)
+  [PASS] notes: x+ = 0.8x and y+ ~ 1.2y near 0
+  [PASS] notes: l = rho = 1 (|cos y| <= 1, |sin y| <= 1) and f >= -2 (bounded below)
+  [PASS] primer: 2 l Delta / eps^2 = 20000 for l = 1, Delta = 1, eps = 0.01
+  [PASS] primer: f(x - grad/l) <= f(x) - |grad|^2/(2l) on the notes' f
+  [PASS] primer: gamma^3/rho^2 = eps gamma/rho at gamma = sqrt(rho eps); rho = 1, eps = 1e-4 -> 0.01
+  [PASS] primer: band |y| <= 0.05 holds ~0.064 of the disk (Monte Carlo)  (0.06364)
+  [PASS] primer: slab |z| <= 0.05 holds ~0.075 of the 3-ball (Monte Carlo)  (0.07494)
+  [PASS] primer: k = log(1/delta)/log(1/p) = 20 for p = 1/2, delta = 1e-6
 all checks passed
 
 jin2018accelerated
@@ -1086,6 +1474,14 @@ jin2018accelerated
   [PASS] f alone is not monotone along AGD
   [PASS] Hamiltonian E = f + |v|^2/(2 eta) never increases over a step (Lemma 4 without NCE, Lemma 5 with NCE); only kicks add energy
   wrote papers/jin2018accelerated/data.json (0 KB)
+  [PASS] Hessian notes: u^2 - v^2 at 0 has Hessian diag(2, -2), lambda_min = -2  (fd=[[2.0, 0.0], [0.0, -2.0]] err 0.0e+00)
+  [PASS] primer: kappa = 100, 1e6 reduction: ~1375 GD steps vs ~131 AGD steps  (1374.6, 131.1)
+  [PASS] primer: paper's eta = 1/(4l), theta = 1/(4 sqrt(kappa)), gamma = sqrt(rho eps), kappa = l/sqrt(rho eps) give theta = sqrt(eta gamma)/2
+  [PASS] primer: eta gamma = 1e-4: GD needs ~69 000 steps to grow 1000-fold
+  [PASS] primer: AGD core with theta = 0.005 grows ~1.0079 per step, ~940 steps  (root 1.00788, steps 941)
+  [PASS] primer: f(x_t) on x^2/2 goes 0.5, 0.281, 0.074, 0.0004 then 0.027  ([5.000e-01 2.812e-01 7.390e-02 4.000e-04 2.720e-02])
+  [PASS] primer: the energy f + v^2/(2 eta) decreases at each of the first 60 steps
+  [PASS] primer: eps = 1e-4: eps^-2 = 1e8, eps^-7/4 = 1e7, ratio 10
 all checks passed
 
 jin2021nonconvex
@@ -1104,6 +1500,14 @@ jin2021nonconvex
   [PASS] escape time grows linearly in log d (slope within 15% of 1/(2 log(1 + eta g)))
   [PASS] from d = 1 to d = 16384 the median escape time grows by less than a factor 3
   wrote papers/jin2021nonconvex/data.json (0 KB)
+  [PASS] notes: T_esc ~ log(r/|delta|)/log(1 + eta) on f = u^2/2 - v^2/2 (to within one step)
+  [PASS] primer: eta = 0.1, r = 1: ~72 steps from 1e-3, ~217 from 1e-9
+  [PASS] primer: N(0, r^2/d I) has E|xi|^2 = r^2 (r = 1, d = 1e4)
+  [PASS] primer: component along a fixed direction has std r/sqrt(d) = 0.01
+  [PASS] primer: P(|component| < 1e-4) ~ 0.008
+  [PASS] primer: 100x smaller start costs log(100)/log(1.1) ~ 48 extra steps
+  [PASS] primer: noise only along u never moves v off 0 (stuck on the saddle's stable line)
+  [PASS] primer: union bound K p = 1000 x 1e-6 = 1e-3
 all checks passed
 
 kalra2024warmup
@@ -1120,6 +1524,14 @@ kalra2024warmup
   wrote papers/kalra2024warmup/data.json (4 KB)
   [PASS] notes: P^{1/2} H P^{1/2} with H = diag(20, 1), P = diag(0.01, 1) has lambda_max 1
   [PASS] notes: 2/20 = 0.1 < 0.3 < 2/5 = 0.4
+  [PASS] notes: lambda = 20 -> eta < 0.1 (0.3 unstable); lambda = 5 -> 0.4 (0.3 stable)
+  [PASS] notes: P^1/2 H P^1/2 = diag(0.2, 1), largest eigenvalue 1 (raw 20)
+  [PASS] notes: P^1/2 H P^1/2 has the eigenvalues of P H (the preconditioned update's Jacobian)
+  [PASS] primer: eta_50 = 0.155; 2/eta from 200 to ~6.7
+  [PASS] primer: sharpness at the minimum (a, 1/a) is a^2 + 1/a^2, smallest (2) at (1, 1)
+  [PASS] primer: catapult from (2.2, 0.45), eta = 0.6: loss 0.00005, sharpness ~5.0 > 2/eta ~3.3, spike ~1.5, ends at sharpness ~2.0  (loss0 5.00e-05, S0 5.039, peak 1.549, S_end 2.0104)
+  [PASS] primer: Adam's first step is eta sign(g0) for gradients 10 and 0.001
+  [PASS] primer: GI-Adam (v0 = g0^2) first step is sqrt(1 - beta2) = 0.0316 times Adam's
 all checks passed
 
 kalra2025universal
@@ -1140,6 +1552,16 @@ kalra2025universal
   [PASS] eta > eta_c: keeps oscillating (edge of stability)
   bifurcation: first divergence at eta ~ 0.905
   [PASS] diagram extends to ~0.8 before divergence (paper Fig. 3b)
+  [PASS] notes: u = v = 0.1, eta = 0.2: residual -0.99, u+ = v+ = 0.1198, lambda 0.0200 -> 0.02870
+  [PASS] notes: u = v = 2, eta = 0.1: r = 3, u+ = v+ = 1.4, lambda 8 -> 3.92
+  [PASS] notes: Eqs. (1)-(2) in (r, lambda) match the parameter-space GD step exactly
+  [PASS] notes: (r, lambda) = (-y, 0) is a fixed point (all parameters zero)
+  [PASS] notes: eta_c = sqrt(16)/(1 * 2) = 2; eta = 1 below, eta = 2.5 above
+  [PASS] notes: z_{t+1} = z_t - eta F'(z_t) for F = (z^2 - 1)^2 / 4
+  [PASS] notes: multiplier at z* = 1 is 1 - 2 eta (-1 at eta = 1)
+  [PASS] primer: output change 0.004352 = 0.00396 (first order) + 0.000392 (Eq. 1 second-order term)
+  [PASS] primer: eta = 0.9 -> 1; 1.1 -> 2-cycle 0.815 / 1.116; 1.25 -> 4-cycle; 1.35 -> no cycle of length <= 32
+  [PASS] primer: n = 512, ||x|| = 1, y = 2: eta_c ~ 11.3 (p = 0), 0.5 (p = 1)
 all checks passed
 
 kawaguchi2016deep
@@ -1175,6 +1597,12 @@ keskar2017large
   [PASS] threshold in the batch size: B <= 2 ends in the sharp basin < 5% of the time, B >= 4 more than 15%
   [PASS] with B = 1 the noise is so large that most runs have not settled in either basin
   wrote papers/keskar2017large/data.json (1 KB)
+  [PASS] notes: max over the r-ball of u^T H u / 2 is r^2 lambda_max / 2 (sampled max <= bound, eigenvector attains it)
+  [PASS] notes: L1 = x^2 + 100 y^2 rises 100x faster than L2 = x^2 + y^2 along y
+  [PASS] primer: n = 50,000 -> 196 steps (b = 256), 10 steps (b = 5,000 = 10%)
+  [PASS] primer: per-example sd 1 -> minibatch sd 1, 0.25, 0.0625 (sampled)  ({1: 1.0, 16: 0.2498, 256: 0.0622})
+  [PASS] primer: shift 0.1 costs 0.01 (theta^2) vs 1 (100 theta^2)
+  [PASS] primer: half-widths 0.014 (lambda 100) / 0.14 (lambda 1); kicks 0.1 (b = 1), 0.006 (b = 256)  (0.0141, 0.1414, 0.00625)
 all checks passed
 
 kingma2015adam
@@ -1191,6 +1619,13 @@ kingma2015adam
     adam: best lr 0.03, late mean loss 0.0080
   [PASS] Adam reaches a lower late loss than tuned SGD on the badly scaled problem
   wrote papers/kingma2015adam/data.json (0 KB)
+  [PASS] notes Sec. 3: m_t = (1 - b1^t) g, m_hat = g, v_hat = g^2 for a constant gradient
+  [PASS] notes Sec. 3: m_2 = (1-b1)(1+b1) g
+  [PASS] primer idea 1: memory ~ 1/(1-beta) = 10 and 1000; 0.9^10 ~ 0.35
+  [PASS] primer idea 2: EMA noise variance sigma^2 (1-b)/(1+b) = sigma^2/19 at b = 0.9  (0.0530 vs 0.0526)
+  [PASS] primer idea 3: constant gradients 0.001 and 1000 both give step alpha
+  [PASS] primer idea 4: +-1 random gradients give a small step, constant +1 gives alpha
+  [PASS] primer idea 5: uncorrected step 3.16 alpha at t=1, peak ~6.57 alpha at t=12  (t=1: 3.162, max 6.569 at t=12)
 all checks passed
 
 laurent2018deep
@@ -1206,6 +1641,16 @@ laurent2018deep
   trapped end [0.001 0.143] F=0.001; good end [1.005 0.999] F=-0.999
   [PASS] start near the bad min stays at F~0
   [PASS] start near beta=1 reaches F~-1
+  [PASS] gradient notes F(w1,w2) = (w2 w1 - 4)^2  (max rel err 4.02e-10)
+  [PASS] notes Sec. 1: (2,2) and (1,4) give zero loss
+  [PASS] notes Sec. 3: grad F(0,0) = 0 while f'(0) = 2(0-4) = -8
+  [PASS] Hessian primer idea 3: Hessian of F at (0,0)  (fd=[[0.0, -8.0], [-8.0, 0.0]] err 4.9e-08)
+  [PASS] primer idea 3: eigenvalues +-8; F decreases along w1=w2, increases along w1=-w2
+  [PASS] primer idea 2: midpoint of (2,2) and (-2,-2) has loss 16 > 0
+  [PASS] primer idea 4: a 3x1 times 1x3 product has rank 1
+  [PASS] primer idea 5: f = 0 at W1=0, W2=(1,0); optimum -1; eps=0.1, delta=0.5 gives 0.05
+  [PASS] primer idea 5: every small perturbation of (W1, W2) = (0, (1,0)) has f >= 0 (bad local min)
+  [PASS] figure curve: exactly two local minima, at x = -1 and 1, both with value 0 (global)
 all checks passed
 
 lee2016gradient
@@ -1222,6 +1667,10 @@ lee2016gradient
   [PASS] det Dg = (1-a)((1+a) - 3a y^2)
   fold line |y| = 1.91 (a=0.1), 1.08 (a=0.4)
   [PASS] no fold inside |y|<=1.6 for a=0.1; fold appears for a=0.4
+  notes example: z1 = [0.32  0.012], z2 = [0.256  0.0144], z10 = [0.04294967 0.06191736]
+  [PASS] notes example z1 = (0.320, 0.012), z2 = (0.256, 0.0144)
+  [PASS] notes example z10 ~ (0.043, 0.062)
+  [PASS] proximal step on -f inverts the GD map (Prop. 8 construction)
 all checks passed
 
 lewkowycz2020large
@@ -1244,6 +1693,13 @@ lewkowycz2020large
   [PASS] n = 1, eta lambda0 = 2.6 and 3.4: loss spikes, ends flatter than 2/eta
   [PASS] n = 1, eta lambda0 = 4.2: diverges
   [PASS] Hessian notes toy L = (1 - w^2)^2/2: L'' = -2 + 6 w^2 at w = 0.7  (fd=[[0.94]] err 4.2e-08)
+  [PASS] notes: L(w) = (1 - w^2)^2 / 2 has L'' = -2 + 6 w^2
+  [PASS] primer: n = 1, u = 2, v = 0.35: f0 = 0.7, lambda0 = 4.1225, 2/lambda0 ~ 0.485
+  [PASS] primer: Eqs. (6)-(7) reproduce GD on (u, v) exactly
+  [PASS] primer: eta lambda0 = 2.6 -> eta ~ 0.631, loss 0.245 -> 0.484 after one step
+  [PASS] primer: kernel ends at ~1.21 < 2/eta ~ 3.17, loss -> 0
+  [PASS] primer: n = 1e4: eta lambda0 = 3.98 converges, 4.02 diverges
+  [PASS] primer: eta lambda0 = 3: loss peaks at steps 2, 6, 9 for n = 1e2, 1e4, 1e6  ([2, 6, 9])
 all checks passed
 
 li2018visualizing
@@ -1254,6 +1710,14 @@ li2018visualizing
   [PASS] un-normalized slice changes with the rescaling  (max diff 425.278)
   [PASS] hidden-saddle Hessian is diag(1,1,-2)
   wrote papers/li2018visualizing/data.json (2 KB)
+  [PASS] notes Sec. 2: (2,0.5) and (20,0.05) both predict 1; +0.1 gives 1.05 and 1.005
+  [PASS] notes Sec. 3: 5% relative change: 2 -> 2.1 and 20 -> 21 both give 1.05
+  [PASS] Hessian notes Sec. 4: Hessian diag(1, 1, -2)  (fd=[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, -2.0]] err 0.0e+00)
+  [PASS] primer idea 1: cosine of two Gaussian directions in D = 10000 has sd ~ 1/sqrt(D) = 0.01  (0.0099)
+  [PASS] primer idea 2: u^T H u = -0.5 for (1,0,1)/sqrt2 and +1 for (1,1,0)/sqrt2
+  [PASS] primer idea 3: mean eigenvalue 0.997; random slices almost never show negative curvature  (min 0.965)
+  [PASS] primer idea 4: 10^12 float32 entries = 4 TB
+  [PASS] primer idea 4: Hv from two gradients (central difference) equals H v
 all checks passed
 
 li2019ssrgd
@@ -1266,6 +1730,13 @@ li2019ssrgd
   SFO calls until |x| > 0.9: median 6160
   [PASS] the notes' 2-D example: x_10 = 0.01*0.9^10 = 0.00349, y_10 = 0.01*1.1^10 = 0.02594
   wrote papers/li2019ssrgd/data.json (4 KB)
+  [PASS] notes example: x1 = 1.8, both differences -0.2, v1 = 1.8 = f'(1.8)
+  [PASS] notes example: sample gradients at 1.8 are 0.8 and 2.8
+  [PASS] notes example: x10 ~ 0.00349, y10 ~ 0.02594  ([0.00348678 0.02593742])
+  [PASS] primer: delta = sqrt(rho eps) turns sqrt(n)/delta^4 into sqrt(n)/eps^2 and n/delta^3 into n/eps^1.5
+  [PASS] primer: 1e9 vs 1e10
+  [PASS] primer: ln 50 / ln 1.1 ~ 41 steps from 0.01 to 0.5  (41.05, first step beyond 0.5: 42)
+  [PASS] primer: per-iteration decrease delta^4/(L rho^2) at cost 2 sqrt(n) gives L rho^2 D sqrt(n)/delta^4
 all checks passed
 
 li2020learning
@@ -1281,6 +1752,16 @@ li2020learning
   [PASS] same-width fixed random features are clearly worse than the trained network (> 5x)
   steps to 10% of the initial loss: 24, to 1%: 785
   wrote papers/li2020learning/data.json (60 KB)
+  [PASS] notes: |z| = ReLU(z) + ReLU(-z)
+  [PASS] notes: (e1 e1^T + e2 e2^T)/2 = I/2
+  [PASS] notes (fixed): Q = 0.005 is inside 0 < Q < 1/100; d^-0.005 at d = 1e4 = 10^-0.02 ~ 0.95
+  [PASS] original notes value Q = 0.05 lies outside Theorem 1's range (0 < Q < 1/100)
+  [PASS] primer: E|z| = sqrt(2/pi) ~ 0.798, Var|z| = 1 - 2/pi ~ 0.363 (Monte Carlo + closed form)
+  [PASS] primer: b = sqrt(2/pi)/2 ~ 0.399, explained 2b^2 = 1/pi ~ 0.318, residual ~0.045 (~12%)  (b = 0.3984)
+  [PASS] primer (Monte Carlo): best quadratic fit of |z| leaves ~0.045 mean squared error  (0.0449)
+  [PASS] primer: second moments equal (I/2), fourth-order at e1: 1/2 vs 1/4
+  [PASS] primer: ratio 1.1 cubed repeatedly: 1.33, 2.36, 13.1, ~2.3e3  ([1.1, 1.3310000000000004, 2.3579476910000023, 13.10999419149997, 2253.240236044033])
+  [PASS] primer: tensor power iteration on e1^4 + e2^4 cubes the coordinate ratio
 all checks passed
 
 li2023convergence
@@ -1298,6 +1779,13 @@ li2023convergence
   [PASS] Adam's gradient norms stay bounded by their initial value  (max |g| = 167.23, start 167.23)
   [PASS] a smaller GD step (0.01) does converge from the same start
   wrote papers/li2023convergence/data.json (6 KB)
+  [PASS] notes: e^x has f' = f'' = e^x (no global L on R)
+  [PASS] primer: constant g = 2, beta1 = 0.9: m1 = 0.2, m10 ~ 1.30, bias-corrected m-hat = 2 every step  (m10 = 1.3026)
+  [PASS] primer: first Adam step is ~eta per coordinate whatever the gradient scale
+  [PASS] primer: eps = 0.01: eps^-4 = 1e8, eps^-3 = 1e6
+  [PASS] primer: |f''| = c |f'|^q with q = 1 (e^x), 2/3 (x^4/4), 3/2 (1/x, c = 2)
+  [PASS] primer: f = x^4/4: f' = x^3, f'' = 3x^2 = 3|f'|^{2/3}
+  [PASS] primer: L0 + L1 G^q = 1 + 3 * 10 = 31
 all checks passed
 
 lu2020mean
@@ -1312,6 +1800,11 @@ lu2020mean
   [PASS] continuum limit: loss curves for L = 16 and L = 64 nearly coincide (same 1/L scaling)
   [PASS] notes' Euler example: (1 + 1/2)^2 = 2.25, (1 + 1/10)^10 = 2.594 -> e
   wrote papers/lu2020mean/data.json (73 KB)
+  [PASS] notes example: (1 + 1/2)^2 = 2.25, (1 + 1/10)^10 ~ 2.594, limit e ~ 2.718
+  [PASS] notes analogy: E(0) = 4 and E decreases toward p = 2
+  [PASS] primer: Euler errors 0.124 (L = 10) and 0.0135 (L = 100)
+  [PASS] primer: E((1-lam) delta0 + lam delta1) = 4 - 4 lam + lam^2, slope -4
+  [PASS] primer: adjoint gives dE/dX(0) = (e - 2) e ~ 1.95
 all checks passed
 
 mei2019mean
@@ -1334,6 +1827,13 @@ mei2019mean
   [PASS] (r1, r2) = (0.4, 1.2): the finite-d formula tends to R_inf as d grows (d = 20000)  (d=400 0.8506, d=20000 0.8358, R_inf 0.8349)
   R_inf minimum on the grid: 0.0007 at (r1, r2) = (1.55, 0.70)
   wrote papers/mei2019mean/data.json (88 KB)
+  [PASS] notes example: (1*2 + 3*2)/2 = 4 = E_rho[2w]
+  [PASS] primer: sum/sqrt(N) std ~ 1, sum/N std ~ 0.01 (N = 1e4)
+  [PASS] primer: mean 0.399, variance 0.341, std 0.58
+  [PASS] primer: N = 400 neuron average errs by ~0.58/sqrt(N) at d = 10 and d = 1000
+  [PASS] primer: particles theta0 e^{-t} keep a normal law with std e^{-t} (0.368 at t = 1)
+  [PASS] primer: Ornstein-Uhlenbeck stationary variance = tau  (0.2995)
+  [PASS] primer: heat equation with coefficient c grows the variance by 2 c t  (2.010)
 all checks passed
 C:\Users\Asus\faris-brain\university\courses\fall-2026\MLR570\survey-atlas\scripts\check-math\mei2019mean.py:72: RuntimeWarning: divide by zero encountered in scalar divide
   Erelu = lambda s_, a_: s_ * phi(a_ / s_) - a_ * (1 - Phi(a_ / s_))
@@ -1358,6 +1858,14 @@ mertikopoulos2020almost
   Theorem 4, p = 1.0: E|X_n|^2 at n = 1e5: 1.38e-07, fitted slope over n in [1e3, 1e5]: -1.004 (theory -p = -1.0)
   [PASS] local rate slope ~ -p for p = 1.0
   wrote papers/mertikopoulos2020almost/data.json (2 KB)
+  [PASS] notes Sec. 2: E[f(x_{k+1}) | F_k] <= f - g(1 - Lg/2)||grad||^2 + L g^2 s^2/2  (0.1295 <= 0.1336)
+  [PASS] notes Sec. 4: noisy y_{k+1} = (1 + g)y_k - g z leaves y = 0 in every run  (min |y| 3.38e+01)
+  [PASS] primer idea 1: sum_{n<=1e5} 1/n ~ 12.1; sum 1/n^2 finite (~1.645)
+  [PASS] primer idea 1: ones among 1e5 draws with P = 1/n is around 12  (6)
+  [PASS] primer idea 2: 2/(q+2) = 1/2 (q=2), 1/3 (q=4), -> 0 (q -> inf)
+  [PASS] primer idea 3: with no y-noise, y stays exactly 0
+  [PASS] primer idea 4: phi'(r) = r(r-1)(r-2); phi''(1) = -1
+  [PASS] primer idea 4: on the circle r = 1 the Hessian has eigenvalues -1 and 0
 all checks passed
 
 mohtashami2023special
@@ -1375,6 +1883,13 @@ mohtashami2023special
   [PASS] GD diverges only beyond 2/lambda_global (bowl curvature 2B = 0.3 -> 6.67)
   wrote papers/mohtashami2023special/data.json (0 KB)
   [PASS] notes: 1 - 0.1*10 = 0 and 1 - 0.25*10 = -1.5
+  [PASS] primer 1: descent factor eta (1 - L eta / 2) = 0.05 at L = 10, eta = 0.1
+  [PASS] primer 1: descent lemma tight on f = 5x^2 (L = 10)
+  [PASS] primer 2: multipliers 1 - 0.25*0.3 = 0.925, 1 - 0.25*10 = -1.5
+  [PASS] primer 3: OPSC factor 1 - 2 eta mu + eta^2 L^2 = 0.75 at mu = 1, L = 2, eta = 0.25 = mu/L^2
+  [PASS] primer 3: f = x^2 + 0.5 sin^2 x is 1-OPSC and 3-smooth
+  [PASS] primer 3: one step at eta = mu/L^2 contracts |x - x*|^2 by at most 1 - 2 eta mu + eta^2 L^2
+  [PASS] primer 4: window 2/mu_dag < eta <= mu*/L^2 = (0.2, 0.25] for mu_dag = 10; needs mu_dag > 2L^2/mu* = 8
 all checks passed
 
 murty1987some
@@ -1417,6 +1932,14 @@ murty1987some
   [PASS] d0=8: min 0 iff a subset of {3,5} sums to d0
   [PASS] d0 = 4: no subset -> minimum stays positive
   [PASS] projected GD can land in non-global box minima (d0 = 5)
+  [PASS] Hessian notes: q = x^2 - y^2 has Hessian diag(2, -2)  (fd=[[2.0, 0.0], [0.0, -2.0]] err 0.0e+00)
+  [PASS] notes: grad q(0,0) = 0 and q(0,t) = -t^2 < 0
+  [PASS] primer: 2^20 = 1 048 576 and 2^60 ~ 1.15e18
+  [PASS] primer: d0 = 8 -> minimum 0 at y = (1, 1)
+  [PASS] primer: d0 = 4 -> minimum 5/32 at y = (1, 3/16)  (0.156250 at [1.     0.1875])
+  [PASS] primer: 5/32 = F(1, 3/16) exactly
+  [PASS] primer: [[1,2],[2,1]] has eigenvalues -1 and 3
+  [PASS] primer: ... yet x^T Q x >= 0 on the orthant (copositive)
 all checks passed
 
 nesterov2004introductory
@@ -1431,6 +1954,14 @@ nesterov2004introductory
   [PASS] h = 1/L run is monotone and ends at a minimum
   [PASS] h = 2.2/L > 2/L: f increases at some step (no descent guarantee; near a minimum the y-direction factor |1 - 2.2| > 1)
   wrote papers/nesterov2004introductory/data.json (1 KB)
+  [PASS] gradient primer/notes: f = x^2/4 - cos(2y)/4  (max rel err 1.22e-10)
+  [PASS] notes: descent lemma and f(x - eta g) <= f(x) - eta(1 - L eta/2)|g|^2 with L = 1 (500 random cases)
+  [PASS] notes: eta = 1/L gives f(x_{t+1}) <= f(x_t) - |g|^2/(2L), and min |g|^2 <= 2 L Delta / T
+  [PASS] notes: x^3 has f'(0) = 0 but 0 is not a local minimum
+  [PASS] primer: Hessian diag(1/2, cos 2y): eigenvalues within [-1, 1], cos 2y < 0 somewhere
+  [PASS] primer: decreases 3 + 2 + 0.5 = 10 - 4.5 = 5.5
+  [PASS] primer: L = 1, Delta = 10, eps = 0.01 -> T = 200,000
+  [PASS] primer: from (3, 1): Delta ~ 2.60, bound after 20 steps ~ 0.26, run reaches ~1e-11  (2.6040, 8.19e-12)
 all checks passed
 
 nesterov2006cubic
@@ -1462,6 +1993,10 @@ nesterov2006cubic
   f0 - f* = 1.0248
   [PASS] at the exact saddle the cubic step has length 2|lambda_min|/M  (s = [0.  0.2])
   wrote papers/nesterov2006cubic/data.json (3 KB)
+  [PASS] notes: the model's global minimizer solves g + Hs + (M/2)|s| s = 0 and (H + M|s|/2 I) s = -g
+  [PASS] primer: Newton from (1, 0.5) on x^2 - y^2: g = (2, -1), s = (-1, -0.5), lands on the saddle; f rises along y
+  [PASS] primer: f = x^3/6 at 0: f(2) = 8/6 ~ 1.33 equals the cap M|s|^3/6 with M = 1
+  [PASS] primer: m(s) = -s^2/2 + |s|^3/6 is minimized at |s| = 2 = 2|H|/M with value -2/3
 all checks passed
 
 nguyen2017loss
@@ -1484,6 +2019,13 @@ nguyen2017loss
   [PASS] width 1-2: every seed stalls at a near-critical point with positive loss (bad critical points)
   [PASS] N - 1 is sufficient, not necessary: width 3-6 also fit here
   wrote papers/nguyen2017loss/data.json (63 KB)
+  [PASS] notes Sec. 2: entries -.762, .762, .995 (tanh(-1), tanh(1), tanh(3)); det ~ -0.982
+  [PASS] notes Sec. 2 box: grad_beta 1/2||A b - y||^2 = A^T (A b - y)
+  [PASS] primer idea 1: 3x2 features without bias have rank 2 (< 3)
+  [PASS] primer idea 3: random tanh feature matrices [F,1] (3 samples, 2 units) are full rank
+  [PASS] primer idea 4: u^2 - v = 0 has u = +-0.1 at v = 0.01 and no real root at v = -0.01
+  [PASS] primer idea 5: [1;2] has full column rank, [1 2] sends (2,-1) to 0
+  [PASS] notes Sec. 7: widths [3,80,25,8,2] decrease after 80; [3,80,10,40,2] does not
 all checks passed
 
 nguyen2021proof
@@ -1497,6 +2039,15 @@ nguyen2021proof
   [PASS] ordinary run (no guarantee): loss -> 0 and the last-layer features stay full rank
   [PASS] notes' example: one step gives w = (0.1, 0.2), loss 0.585
   wrote papers/nguyen2021proof/data.json (24 KB)
+  [PASS] notes example: e = (-1,-1), grad = (-1,-2), W+ = (0.1, 0.2), outputs (0.1, 0.4)
+  [PASS] notes example: loss 1 -> 0.585
+  [PASS] notes: ||grad_WL Phi||_F^2 >= 2 sigma_min(F_{L-1})^2 Phi (N <= m)
+  [PASS] primer: N = 3 > 2 features leaves a residual with zero last-layer gradient
+  [PASS] primer: 0.99^459 < 0.01 <= 0.99^458
+  [PASS] primer: |relu(a) - relu(b)| <= |a - b|
+  [PASS] primer: sigma_min(diag(1,2) + E) >= 0.6 for ||E||_2 = 0.4 (Weyl)  (min 0.6002)
+  [PASS] primer: relu(beta z) = beta relu(z) for beta > 0
+  [PASS] primer: L = 3: alpha0^2 scales by 16 when beta doubles; the right side of (14) by at most 4
 all checks passed
 
 panageas2019first
@@ -1518,6 +2069,12 @@ panageas2019first
   [PASS] Omega(1/k) steps: every other start reaches a minimum
   [PASS] summable steps: a whole open band of starts converges to non-critical points (positive measure)
   wrote papers/panageas2019first/data.json (0 KB)
+  [PASS] notes Sec. 2: z_t = z_0 prod(1 + gamma alpha_k) on the unstable coordinate
+  [PASS] notes Sec. 4: log prod(1 + g a_k) ~ g sum a_k for small steps (ratio -> 1)
+  [PASS] primer idea 1: prod_{k=1}^t (1 + 1/k) = t + 1; prod (1 + 1/k^2) -> sinh(pi)/pi ~ 3.68
+  [PASS] primer idea 2: x_inf = 1.5 prod(1 - 0.8/(k+1)^2) ~ 0.174 (not 0)  (0.1738)
+  [PASS] primer idea 3: with alpha_k = 0.8/(k+1) the unstable coordinate keeps growing (~ t^0.8)  (7.8 -> 48.9 -> 308.3)
+  [PASS] primer idea 4: entropic mirror step from (0.5,0.5), grad (1,0), alpha 1 -> (0.269, 0.731)
 all checks passed
 
 polyak1964some
@@ -1532,6 +2089,17 @@ polyak1964some
   [PASS] heavy ball needs several times fewer steps than GD at kappa = 25
   [PASS] notes: at negative curvature -a, p(1) = -alpha a < 0, so a root exceeds 1 (escape)
   wrote papers/polyak1964some/data.json (0 KB)
+  [PASS] notes Sec. 3: kappa=4: worst root modulus = (sqrt k - 1)/(sqrt k + 1) = sqrt(beta)
+  [PASS] primer idea 1: kappa=4: GD with 2/(L+mu) has worst multiplier (k-1)/(k+1)
+  [PASS] notes Sec. 3: kappa=25: worst root modulus = (sqrt k - 1)/(sqrt k + 1) = sqrt(beta)
+  [PASS] primer idea 1: kappa=25: GD with 2/(L+mu) has worst multiplier (k-1)/(k+1)
+  [PASS] notes Sec. 3: kappa=100: worst root modulus = (sqrt k - 1)/(sqrt k + 1) = sqrt(beta)
+  [PASS] primer idea 1: kappa=100: GD with 2/(L+mu) has worst multiplier (k-1)/(k+1)
+  kappa = 100: GD multiplier 0.9802 -> 690.8 steps; heavy ball 0.8182 -> 68.8 steps for a factor 1e6
+  [PASS] primer: kappa=100 -> 0.980 / ~690 steps (GD) vs 0.818 / ~69 steps (heavy ball)
+  [PASS] primer idea 2: r^2 - 0.9 r + 0.2 has roots 0.5, 0.4
+  [PASS] primer idea 3: complex roots have |r| = sqrt(b)
+  [PASS] primer idea 5: eta=0.1, beta=0.9, curvature -1: roots 1 +- sqrt(0.1), growth ~1.316 vs GD 1.1
 all checks passed
 
 reddi2018generic
@@ -1545,6 +2113,12 @@ reddi2018generic
   SVRG step 1/(4 L n^(2/3)) = 0.0024, M = 9.0
   [PASS] SVRG alone from the saddle's stable set converges to the saddle
   [PASS] framework: HessianDescent steps leave the saddle; ends at a minimum  (x = [ 0. -1.], HFO moves 4, rounds 162)
+  [PASS] notes Sec. 1: grad f(0,0) = 0, Hessian diag(1,-1), v = (0,1) has v^T H v = -1
+  [PASS] notes Sec. 1: f(0, 0.1) = -0.005 + 0.000025 = -0.004975
+  [PASS] primer: f_i = (x - a_i)^2/2, a = +-1, x = 0.5: plain gradients -0.5/1.5 (variance 1), SVRG gives 0.5 every time
+  [PASS] primer: step gamma/M along v gives -gamma^3/(3M^2) (gamma = 1.0, M = 1.0) >= Lemma 2's gamma^3/(24 M^2)
+  [PASS] primer: step gamma/M along v gives -gamma^3/(3M^2) (gamma = 0.3, M = 2.0) >= Lemma 2's gamma^3/(24 M^2)
+  [PASS] primer: Delta = 10, theta = 0.01, T = 4000 -> Delta/(T theta) = 0.25
 all checks passed
 
 robbins1951stochastic
@@ -1559,6 +2133,13 @@ robbins1951stochastic
   [PASS] gradient F(x, y)  (max rel err 1.55e-10)
   [PASS] root of the 2-D gradient
   wrote papers/robbins1951stochastic/data.json (10 KB)
+  [PASS] notes: b_{n+1} - b_n = -2 a_n d_n + a_n^2 q_n (Monte Carlo, x_n ~ N(theta, 0.7^2), a_n = 0.3)  (-0.1370 vs -0.1371)
+  [PASS] notes: d_n >= 0 for nondecreasing M and q_n <= (C + |alpha|)^2 with C = 2 (|y| < 2)
+  [PASS] notes: mean step a_n (alpha - M(x_n)) points toward theta
+  [PASS] primer: theta = artanh 0.5 ~ 0.549; U(-1, 1) sd = 1/sqrt 3 ~ 0.577; /sqrt 100 ~ 0.058
+  [PASS] primer: b_n = 1e-4, eps = 0.1 -> P <= 0.01
+  [PASS] primer: a_n = 2/n: b ~ 0.0077, 0.00075, 0.00003 at n = 100, 1000, 20000
+  [PASS] primer: a_n = 0.2 stays near 0.05; a_n = 2/n^2 stays near 0.51
 all checks passed
 
 safran2018spurious
@@ -1578,6 +2159,13 @@ safran2018spurious
   slice: F at spurious 0.0240, barrier on the straight path max 0.0420, at global 0.0e+00
   [PASS] straight path from spurious to global min rises first (a barrier)
   wrote papers/safran2018spurious/data.json (63 KB)
+  [PASS] notes Sec. 3: E[x^2 1{x>0}] = 1/2, F(0.6) = 0.04, F(1) = 0
+  [PASS] notes Sec. 6: percentages = runs/1000 (0.3, 34.6, 80.3, 94.0, 10.1, 49.1)
+  [PASS] primer idea 1: kernel = 1/2 at theta = 0, 1/(2 pi) ~ 0.159 at theta = pi/2 (and matches Monte Carlo)
+  [PASS] primer idea 2: permuted students zero loss, midpoint loss ~ 0.091
+  [PASS] primer idea 3: Taylor lower bound ~ +5.4e-5 at t = 0.05, negative at t = 0.01
+  [PASS] primer idea 4: standard errors 0.17, 1.5, 0.75 percentage points
+  [PASS] primer idea 5: [w.x/2]_+ * 2 = [w.x]_+
 all checks passed
 
 saxe2014exact
@@ -1595,6 +2183,18 @@ saxe2014exact
   depth 32: gaussian sv median 1.55e-05 max 5.86 | orthogonal 1.0000..1.0000
   [PASS] orthogonal products keep all sv = 1
   [PASS] gaussian products: most sv tiny, a few large
+  [PASS] gradient notes: dL/dw1 = -(1 - w1 w2) w2, dL/dw2 = -(1 - w1 w2) w1  (max rel err 1.15e-10)
+  [PASS] notes: w1 = w2 = 0.01 -> prediction 0.0001, loss ~0.5, |gradient| ~0.01  (loss 0.49990, grad [-0.009999 -0.009999])
+  [PASS] gradient notes: dL/dw_i = (yhat - y) x prod_{j != i} w_j  (max rel err 3.08e-11)
+  [PASS] notes: dw/dt = w(1 - w^2) is ~0.01 at 0.01, 0.375 at 0.5, 0 at 1
+  [PASS] notes: with a = b, u = ab follows u(t) = 1 / (1 + ((1 - u0)/u0) e^{-2t})
+  [PASS] notes: d/dw of (1 - w^2)^2 / 2 is twice the one-layer rate
+  [PASS] notes: orthogonal Q preserves length
+  [PASS] primer: Hessian at the origin [[0, -1], [-1, 0]], eigenvalues -1, +1
+  [PASS] primer: a^2 - b^2 stays 0.08 from (0.3, 0.1), ends on ab = 1
+  [PASS] primer: mode s = 3 half-learned at t ~ 1.33 (Eq. 11 with u_f = s/2)  (simulated 1.3343, formula 1.3343)
+  [PASS] primer: mode s = 1 half-learned at t ~ 3.45 (Eq. 11 with u_f = s/2)  (simulated 3.4534, formula 3.4534)
+  [PASS] primer: 0.9^50 ~ 0.005, 1.1^50 ~ 117  (0.00515, 117.39)
 all checks passed
 
 shin2025sassha
@@ -1610,6 +2210,13 @@ shin2025sassha
   [PASS] square-root preconditioning alone (rho = 0) also leaves the sharp well here  (end [ 0.879 -0.44 ])
   [PASS] eta = 0.1: SASSHA stays in the sharp well for rho in {0, 0.05}
   [PASS] eta = 0.2: square root alone stays sharp, adding the SAM perturbation (rho = 0.05) reaches the flat well
+  [PASS] notes: H^-1 g = (100, 0.25), |H|^-1/2 g = (10, 0.5)
+  [PASS] primer 1: GD at eta = 0.5 on curvature 0.01: multiplier 0.995, ~139 steps to halve
+  [PASS] primer 1: one Newton step lands on the minimum of the quadratic
+  [PASS] primer 2: Newton on -x^2/2 from 0.5 -> 0 (the maximum); |H| version -> 1
+  [PASS] primer 3: Hutchinson probes (3, 4) and (1, 2) average to diag (2, 3)
+  [PASS] primer 3: E[z * Hz] over all sign vectors = diag(H)
+  [PASS] primer 4: sqrt preconditioner, eta = 0.5: multipliers 0 (h = 4) and 0.95 (h = 0.01); ~14 steps to halve
   [PASS] notes: H^-1 g = (100, 0.25), |H|^-1/2 g = (10, 0.5)
   wrote papers/shin2025sassha/data.json (0 KB)
 all checks passed
@@ -1628,6 +2235,15 @@ shub1987global
   [PASS] a start on the computed manifold comes within 1e-6 of the saddle
   escape steps from delta above the manifold: [[0.01, 40], [0.0001, 89], [1e-06, 137], [1e-08, 185], [1e-10, 233]]
   [PASS] escape time grows like log(1/delta) / log(1.1): about 24 more steps per factor 100
+  [PASS] notes: GD on (x^2 - y^2)/2 with eta = 0.2 is (0.8x, 1.2y)
+  [PASS] notes: (0.8^k x0, 1.2^k y0): y0 != 0 escapes
+  [PASS] primer 1: eigenvalues 0.8, 1.2 with eigenvectors (1, 0) and (0.6, 0.8)
+  [PASS] primer 1: start on the x-axis converges, start with a (0.6, 0.8) component does not
+  [PASS] primer 2: (1, 0.5) -> (0.8, 0.32) -> (0.64, 0.2048) -> (0.512, 0.131), all on y = 0.5 x^2
+  [PASS] primer 2: distance from the parabola, u = y - 0.5x^2, is multiplied by 1.2
+  [PASS] primer 2: Dg(0) = diag(0.8, 1.2)
+  [PASS] primer 4: x - x^3 from 0.5: after 100 steps ~0.069, close to 1/sqrt(2k)  (0.0689 vs 0.0707)
+  [PASS] primer 4: every start on y = 0 with |x| < 1 converges to 0
   wrote papers/shub1987global/data.json (1 KB)
 all checks passed
 
@@ -1643,6 +2259,14 @@ staib2019escaping
   [PASS] SGD with eta = 0.01 escapes about as fast as RMSProp with 0.001 (within 3x)
   [PASS] but SGD with eta = 0.01 ends higher (bounces in the noise) than RMSProp with 0.001  (-0.01014 vs -0.01241)
   wrote papers/staib2019escaping/data.json (5 KB)
+  [PASS] notes example: A = diag(1/3, 1), AGA^T = I, raw std 3 and 1
+  [PASS] notes example (Monte Carlo): preconditioned noise has identity covariance
+  [PASS] notes: G = E[gg^T] = Cov(g) + grad grad^T
+  [PASS] primer: eigenvalues 9 and 1, G^(-1/2) = [[2,-1],[-1,2]]/3, whitening gives I
+  [PASS] primer: with no noise along e and y0 = 0, y stays 0
+  [PASS] primer: nu(SGD) = 0.01, nu(RMSProp, eps = 1e-4) = 0.01/0.0101 ~ 0.990  (0.9901)
+  [PASS] primer: eta = 1e-3 -> eta^(2/3) = 0.01, beta = 0.99, memory ~ 100 steps
+  [PASS] primer: tau^-5 = 1e10 at tau = 1e-2
 all checks passed
 
 sun2020global
@@ -1656,6 +2280,17 @@ sun2020global
   [PASS] quadratic activation: a sizeable share of GD runs ends at the spurious level F = 1
   [PASS] tanh: the only grid start that stays at F = 1 is (0, 0), a critical point that is a saddle, not a minimum (Prop. IV.1)
   wrote papers/sun2020global/data.json (0 KB)
+  [PASS] Hessian notes: (ab-1)^2/2 at 0 has Hessian [[0,-1],[-1,0]]  (fd=[[0.0, -1.0], [-1.0, 0.0]] err 4.7e-09)
+  [PASS] notes: its eigenvalues are -1, +1
+  [PASS] Hessian notes: x^2 - y^4 at 0 has Hessian diag(2, 0)  (fd=[[2.0, 0.0], [0.0, -0.0]] err 8.0e-08)
+  [PASS] notes: g(0, y) < g(0, 0) for small y != 0
+  [PASS] primer: x^4 - 2x^2 + 0.5x critical points ~ -1.057, 0.127, 0.930
+  [PASS] primer: f(-1.057) ~ -1.515 (global), f(0.930) ~ -0.517 (local), both with f'' > 0
+  [PASS] primer: GD from x = 0.5 ends at the worse minimum 0.930
+  [PASS] Hessian primer: x^2 + y^4 at 0 also has Hessian diag(2, 0)  (fd=[[2.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] primer: (ab-1)^2/2 >= 0.5 wherever ab <= 0
+  [PASS] primer: {(x^2-1)^2 <= 0.5} = [-1.31,-0.54] U [0.54,1.31]; barrier f(0) = 1
+  [PASS] primer: (x^2 + y^2 - 1)^2 = 0 along the whole unit circle
 all checks passed
 
 sun2020optimization
@@ -1681,6 +2316,15 @@ sun2020optimization
   [PASS] L = 7: the start on the cliff leaves the box; the plateau start needs > 3x the steps it needs at L = 2
   [PASS] L = 2: all three starts converge
   wrote papers/sun2020optimization/data.json (1 KB)
+  [PASS] notes: d/dw_k prod w = prod_{l != k} w: 2^-(L-1) at 0.5, 2^(L-1) at 2
+  [PASS] notes: residual layer Jacobian = I + grad F
+  [PASS] notes (fixed): eta = 1/l gives min |grad|^2 <= 2 l (f0 - f*)/T
+  [PASS] notes: original 'eta <= 1/l' version fails (eta = 0.001, T = 2 on 2x^2)  (15.872 > 8.000)
+  [PASS] notes: general eta <= 1/l bound is 2 (f0 - f*)/(eta T)
+  [PASS] primer: 0.9^50 ~ 0.005, 1.1^50 ~ 117
+  [PASS] primer: diag(2, 0.5)^10 stretches 1024 and ~0.001; condition number 4^10
+  [PASS] primer: n = 256, 20 ReLU layers: mean square ~0.8 with 2/n, ~6e-7 with 1/n (0.5^20 ~ 1e-6)  (0.818, 5.94e-07)
+  [PASS] primer: 1.01^50 ~ 1.645 vs e^0.5 ~ 1.649
 all checks passed
 
 taniguchi2024adopt
@@ -1703,6 +2347,12 @@ taniguchi2024adopt
   [PASS] Adam with k = 10 succeeds at beta2 = 0.999 (paper Fig. 1)  (-0.998)
   [PASS] AMSGrad is slower than ADOPT at k = 50
   [PASS] notes: v = 0.9*1 + 0.1*16 = 2.5, 4/sqrt(2.5) = 2.53 vs 4/sqrt(1) = 4
+  [PASS] primer 1: constant gradient c -> bias-corrected m/sqrt(v) = sign(c)
+  [PASS] primer 2: Eq. 17 at k = 10: g = 100 w.p. 0.1, -10 w.p. 0.9, mean +1
+  [PASS] primer 2: same-step normalized values 3.16 / -3.03, average -2.41 (wrong sign)  (-2.4099)
+  [PASS] primer 2: past-scale average = +1
+  [PASS] primer 3: (E|x|^(4/3))^(3/2) = 1.414 < E|x|^2 = 2 for |x| in {0, 2}
+  [PASS] primer 3: Jensen: (E Y^(4/3))^(3/2) <= E Y^2 on random data
   wrote papers/taniguchi2024adopt/data.json (1 KB)
 all checks passed
 
@@ -1735,6 +2385,16 @@ tripuraneni2018stochastic
   [PASS] perturbed GD on the model reaches its global minimum up to the 1e-3 perturbation (trial 5)  (gap 1.1e-06)
   [PASS] gradient f  (max rel err 2.26e-10)
   [PASS] SCR escapes the saddle line and stops near a minimum y = +-pi  (median outer steps 163.5)
+  [PASS] notes Sec. 3: r solves r^2/2 - 0.9 r - 0.01 = 0, r ~ 1.811043; m(-r) ~ -0.504055
+  [PASS] notes Sec. 3: m is minimized at s = -r (global, on a grid)
+  [PASS] notes Sec. 3: q(-r) ~ -0.649939, cos r - 1 ~ -1.237943; q minimized at +-2 with q = -2/3
+  [PASS] notes Sec. 3: bound 0.01 r + 0.05 r^2 ~ 0.182104, exact |m - q| ~ 0.145883
+  [PASS] notes Sec. 3: F(s; zeta) components are unbiased (mean grad 0, mean Hessian -1) and can give g = 0.01, B = -0.9
+  [PASS] notes Sec. 3: eps * sqrt(eps/rho) = sqrt(rho eps) * (eps/rho) = eps^1.5/sqrt(rho)
+  [PASS] notes Sec. 5: eps^-1.5 * eps^-2 = eps^-3.5 and eps^-1.5 * eps^-1 * eps^-0.5 = eps^-3
+  [PASS] primer: cos s - 1 <= -s^2/2 + |s|^3/6 for all s (rho = 1 upper bound); at s = 2 true change ~ -1.416
+  [PASS] primer: f = x^2 y + y^3 at (1,2), v = (1,0): Hv = (4, 2); difference quotient matches to ~6 digits
+  [PASS] primer: sigma = rho = 1, eps = 0.01: n1 ~ 1/eps^2 = 1e4, n2 ~ 1/(rho eps) = 100
 all checks passed
 
 wang2019spiderboost
@@ -1750,6 +2410,13 @@ wang2019spiderboost
   [PASS] plain subgradient steps never make y exactly 0  (|y| ~ 1.1e-02)
   [PASS] soft-threshold example from the notes: prox of 0.3|x| at 0.8 with eta = 1 is 0.5
   wrote papers/wang2019spiderboost/data.json (4 KB)
+  [PASS] notes example: f_i'(2) - f_i'(1.5) = 0.5 for both samples, v_k = 2 = f'(2)
+  [PASS] notes example: raw sample gradients at x = 2 are 1 and 3
+  [PASS] notes: prox of 0.3|x| at z = 0.8 (eta = 1) is 0.5
+  [PASS] primer: n/eps^2 = 1e10, n + sqrt(n)/eps^2 = 1.1e7
+  [PASS] primer: sample gradients at 0 are -1, +1 with variance 1
+  [PASS] primer: epoch cost ~3.0e6 SFO, ~3 sqrt(n) per iteration
+  [PASS] primer: argmin Psi = 0.7, G(0.7) = 0, G(0) = -0.7
 all checks passed
 
 wang2020cubic
@@ -1777,6 +2444,13 @@ wang2020cubic
   [PASS] at a saddle with zero gradient the cubic step moves along the negative eigenvector (|s| = 2|lambda_min|/M = 1)
   [PASS] notes: f(0.8) = -0.2176, f(0.86) = -0.2330
   wrote papers/wang2020cubic/data.json (0 KB)
+  [PASS] notes Sec. 1: M = 2 cubic model -s^2/2 + |s|^3/3 has minima at +-1; f(1) = -1/4 < f(0) = 0; f'(0) = 0, f''(0) = -1
+  [PASS] notes Sec. 2: v = 0.8 + 0.2*0.3 = 0.86; f(0.8) = -0.2176, f(0.86) ~ -0.2330; monotone step keeps 0.86
+  [PASS] primer: overshoot y = 1 from 0.5 with beta = 0.5 -> v = 1.25, f(1.25) ~ -0.171 > f(1) = -0.25
+  [PASS] primer: eps = 1e-3 -> eps^-2 = 1e6, eps^-1.5 ~ 3.2e4
+  [PASS] primer: quadratic convergence 0.1 -> 1e-2 -> 1e-4 -> 1e-8
+  [PASS] primer: error bound for (x^2-1)^2/4 near 1: at 1.01 dist 0.01, grad ~0.0203; ratio -> 1/2
+  [PASS] primer: x^4 at 0.1: dist 0.1, grad 0.004; ratio 1/(4x^2) unbounded
 all checks passed
 
 wang2022analyzing (Li, Wang, Li)
@@ -1795,6 +2469,15 @@ wang2022analyzing (Li, Wang, Li)
   [PASS] discrete GD: |A|^2 increases exactly when D.F < 0 (to first order)  (agreement 1.00)
   wrote papers/wang2022analyzing/data.json (46 KB)
   [PASS] page readout: agreement over the first 300 stored steps  (0.910)
+  [PASS] notes: 1 - 0.3*5 = -0.5 (contracts), 1 - 0.3*8 = -1.4 (expands)
+  [PASS] Hessian primer toy at (1, 1)  (fd=[[2.0, 2.0], [2.0, 2.0]] err 1.6e-12)
+  [PASS] primer: eigenvalues 0 and 2(a^2 + w^2) = 4.0 at (1, 1)  ([0. 4.])
+  [PASS] primer: Gram M = 2 |(w, a)|^2 equals the top eigenvalue at (1, 1)
+  [PASS] Hessian primer toy at (2, 0.5)  (fd=[[0.5, 2.0], [2.0, 8.0]] err 1.8e-12)
+  [PASS] primer: eigenvalues 0 and 2(a^2 + w^2) = 8.5 at (2, 0.5)  ([0.  8.5])
+  [PASS] primer: Gram M = 2 |(w, a)|^2 equals the top eigenvalue at (2, 0.5)
+  [PASS] primer: gradient flow d a^2/dt = -4 D F in the toy (Eq. 2 with n = 1)
+  [PASS] primer: D F = -0.25 at aw = 0.5 and 0.75 at aw = 1.5
 all checks passed
 
 wu2025loss
@@ -1813,6 +2496,13 @@ wu2025loss
   [PASS] dead neurons sit in the paper's dead wedge (3.93, 5.67) rad
   largest neurons: angles [2.53 0.88 2.53 2.53 2.53 0.88], |h| [0.164 0.16  0.143 0.117 0.113 0.111]
   wrote papers/wu2025loss/data.json (589 KB)
+  [PASS] notes Sec. 2: dL/dw_j = (1/n) sum (f - y) a_j 1{w_j.x > 0} x (away from kinks)
+  [PASS] notes Sec. 4: a s(w.x) = a/2 s(w.x) + a/2 s(w.x)
+  [PASS] primer idea 1: one-sided slopes of |x| at 0 are |d|, of -|x| are -|d|
+  [PASS] primer idea 3: all one-sided slopes at (0,0) are 0; L(0.1, 0.1) = 0.49005 < 0.5
+  [PASS] primer idea 3: for w < 0 the loss is flat (dead neuron)
+  [PASS] primer idea 4: w.dL/dw = a dL/da and ||w||^2 - a^2 stays constant (step 1e-4)  (drift 9.98e-06)
+  [PASS] primer idea 5: ln(0.1/5e-6)/ln(1.001) ~ 9900 steps  (9908)
 all checks passed
 
 xu2018first
@@ -1830,6 +2520,12 @@ xu2018first
   [PASS] NEON iterations ~ 1/gamma (power method)  (slope -1.054)
   [PASS] NEON+ iterations ~ 1/sqrt(gamma) (accelerated)  (slope -0.577)
   wrote papers/xu2018first/data.json (0 KB)
+  [PASS] notes Sec. 1: u1 = (0.06, 0.12), u2 = (0.036, 0.144) for H = diag(2,-1), eta = 0.2
+  [PASS] notes Sec. 1: grad F(x+u) - grad F(x) ~ H u for small u
+  [PASS] primer: power iteration on I - H, H = diag(1,0,-gamma), u0 = 1/sqrt3: cos > 0.99 after 21 (gamma 0.1) and 196 (gamma 0.01) steps  ({0.1: 21, 0.01: 196})
+  [PASS] primer: Lemma 1 decrease c^3 gamma^3/(3 L2^2) = 3.3e-4 (c = 1, gamma = 0.1, L2 = 1); 1/that ~ 3000
+  [PASS] primer: step c gamma/L2 along v decreases f by >= c^3 gamma^3/(3 L2^2) (gamma 0.1, L2 1.0, c 1.0)
+  [PASS] primer: step c gamma/L2 along v decreases f by >= c^3 gamma^3/(3 L2^2) (gamma 0.3, L2 2.0, c 0.5)
 all checks passed
 
 xu2023over
@@ -1850,6 +2546,12 @@ xu2023over
   [PASS] the valley b = 0, 0 <= a <= 1 is all global minima (loss 0)
   [PASS] GD on the slice decays algebraically like t^-3  (slope -3.00)
   wrote papers/xu2023over/data.json (6 KB)
+  [PASS] notes example: [v.x]+ = 2 = [0.4 v.x]+ + [0.6 v.x]+ (0.8 + 1.2)
+  [PASS] notes: dL/dt = -c L^{4/3} integrates to L = (L0^{-1/3} + (c/3) t)^{-3}
+  [PASS] primer: e^{-t} = 1e-6 at t ~ 13.8, t^{-3} at t = 100; 1e-12: 27.6 vs 1e4
+  [PASS] primer: dL/dt = -L^alpha follows (1 + (alpha-1) t)^(-1/(alpha-1)): tail exponents -3 (alpha = 4/3) and -1 (alpha = 2)
+  [PASS] primer: (alpha v, (1 - alpha) v) is a global minimum for alpha = 0, 0.3, 1
+  [PASS] primer: |b|^3 flow from b0 = 1 gives L(100) = 301^-3 ~ 3.7e-8  (3.6668e-08)
 all checks passed
 
 zhang2019lookahead
@@ -1867,6 +2569,12 @@ zhang2019lookahead
   [PASS] Prop. 1 optimal alpha formula  (alpha* = 1.2329)
   [PASS] notes: phi1 = 10 + 0.5 (8 - 10) = 9, phi2 = 9 + 0.5 (7 - 9) = 8
   [PASS] notes: EMA of independent endpoints has variance alpha sigma^2 / (2 - alpha) = 1/3 at alpha = 1/2
+  [PASS] notes: phi_t = (1-a)^t phi_0 + a sum_j (1-a)^(t-1-j) theta_{j,k}
+  [PASS] primer 1: V = gamma^2 a^2 sigma^2 / (1 - (1 - gamma a)^2) = 1/3 at a = 1, gamma = 0.5, sigma^2 = 1
+  [PASS] primer 1: Monte Carlo SGD variance ~ 1/3  (0.3345)
+  [PASS] primer 3: (-0.9)^5 ~ -0.590 and round multiplier 0.5 + 0.5 (-0.9)^5 ~ 0.205
+  [PASS] primer 3: five GD steps on a = 1.9, gamma = 1 give -0.590
+  [PASS] primer 4: weights 0.5, 0.25, 0.125 sum to 0.875; start keeps 0.125
 all checks passed
 
 zhang2020gradient
@@ -1883,6 +2591,12 @@ zhang2020gradient
   [PASS] clipped GD with one setting stays fast for every start  ([4, 6, 8, 10, 14, 18])
   [PASS] clipping is >10x faster than the best fixed step from x0 = 8  (322 vs 18)
   wrote papers/zhang2020gradient/data.json (0 KB)
+  [PASS] notes: clipped direction has norm min(|g|, c) and leaves small gradients unchanged
+  [PASS] notes: e^x has f' = f'' (so (L0, L1) = (0, 1)) and a normalized step has length eta
+  [PASS] primer: f'' = 1 + 3x^2 <= 1 + 3|f'| on [-50, 50]; at x = 5: f'' = 76, f' = 130
+  [PASS] primer: descent lemma on (L/2) x^2 is an equality-or-better for eta < 2/L
+  [PASS] primer: 2/76 ~ 0.026, contraction 1 - 0.026 = 0.974 near the minimum
+  [PASS] primer: clipped h at x = 5 is 0.5/130 ~ 0.0038, h f''(5) ~ 0.29, move 0.5; near the minimum h = 1
 all checks passed
 
 zhang2021escape
@@ -1896,6 +2610,14 @@ zhang2021escape
   PGD paths with decrease <= 0.9: 44.0% (paper Fig. 1: over 40%); Alg 1: 0.7% (paper: under 5%)
   [PASS] PGD iterates also align with e1 but many are still short of the minima  (aligned 100.0%, |x1| < 1.5: 33.7%)
   wrote papers/zhang2021escape/data.json (10 KB)
+  [PASS] notes example u1 = (0.12, 0.02), u2 = (0.144, 0.004)
+  [PASS] notes example: direction aligns with (1, 0)
+  [PASS] gradient-difference error <= rho/2 ||u||^2 (f with rho = 1)  (max ratio 1.0000)
+  [PASS] primer: gradient difference (-0.095, 0), Hu = (-0.1, 0), error 0.005
+  [PASS] primer: cubic-model decrease gamma^3/(3 rho^2) = eps^1.5/(3 sqrt rho) at gamma = sqrt(rho eps)
+  [PASS] primer: ln(sqrt d)/ln(1.01) ~ 694 and ~ 1388  (694.2, 1388.4)
+  [PASS] primer: overlap of a random unit vector with e1 is of order 1/sqrt(d)  (median |u1| sqrt(d) = 0.717)
+  [PASS] primer: escape count x per-escape cost gives eps^-7/4
 all checks passed
 
 zhang2026saddle
@@ -1912,6 +2634,16 @@ zhang2026saddle
   [PASS] random small init: two drops (rank 1 then rank 2)
   quadratic net: final loss 3.21e-31; unit A grows at snapshot 34, unit B at 66; others final norm [0.017 0.019 0.07  0.194]
   [PASS] quadratic net: units grow one at a time; rest stay small
+  [PASS] notes: duplicating a unit with v/2 each leaves f unchanged
+  [PASS] notes: s1 = 3 mode reaches 1 at t = log(100)/3 ~ 1.535
+  [PASS] notes: a2(t1) = 0.01 e^1.535 ~ 0.0464
+  [PASS] notes: v' = v^2 solution 1/(1/v0 - t): v1(9) = 1, v2(9) ~ 0.091
+  [PASS] notes: Euler integration of v' = v^2 from 0.1 reaches ~1 at t = 9  (1.0000)
+  [PASS] primer: (1 - 0.01)^100 ~ 0.366 vs e^-1 ~ 0.368
+  [PASS] primer: two units with equal weights merge into one rank-one term
+  [PASS] primer: log(1/eps)/s = 6.9 (eps = 1e-3) and 13.8 (eps = 1e-6) for s = 1
+  [PASS] primer: L = (1 - a^2)^2/2 from a = 0.01: L(1.5) ~ 0.462, L(3) ~ 0.0017  ({15000: 0.46199092274794806, 30000: 0.001676140778391979})
+  [PASS] primer: halfway (a^2 = 1/2) at t = ln(9999)/4 ~ 2.3
 all checks passed
 
 zou2019improved
@@ -1931,4 +2663,11 @@ zou2019improved
   [PASS] m = 8192: slice value at (1, 0) equals the final training loss
   m = 8192: slice along the training direction convex: True, min second difference 1.43e-02
   wrote papers/zou2019improved/data.json (31 KB)
+  [PASS] notes: telescoped path length = C(sqrt L0 - sqrt LT) <= C sqrt L0 for any T
+  [PASS] primer: 0.99^t <= 1e-6 first at t = 1375
+  [PASS] primer: eta*mu ~ phi/(n^2 L^2), independent of the width m
+  [PASS] primer: quadrupling m halves the movement bound
+  [PASS] primer: movement <= tau exactly when m >= k n^8 L^12/phi^4
+  [PASS] primer: duplicate input with opposite labels has loss >= 1, minimum at u = 0
+  [PASS] primer: 1000^8 = 1e24, 1000^24 = 1e72, n^16 = 1e48
 all checks passed

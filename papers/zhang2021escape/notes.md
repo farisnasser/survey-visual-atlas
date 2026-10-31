@@ -109,7 +109,7 @@ Section 4 uses synthetic saddle landscapes and compares the proposed methods wit
 
 ## Connection to the running survey
 
-**Jin (2017)** obtains finite-time escape by adding random perturbations. **NEON/NEON2 (Refs 76–77)** also replace Hessian-vector information with first-order gradient differences; Zhang–Li sharpen the dimension dependence using a robust normalized power construction. **Daneshmand (2018)** instead relies on a property of intrinsic stochastic-gradient noise (CNC).
+**Jin (2017)** obtains finite-time escape by adding random perturbations. **NEON/NEON2 (Refs 81 and 33)** also replace Hessian-vector information with first-order gradient differences; Zhang–Li sharpen the dimension dependence using a robust normalized power construction. **Daneshmand (2018)** instead relies on a property of intrinsic stochastic-gradient noise (CNC).
 
 ## Quick reference
 

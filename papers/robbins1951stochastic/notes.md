@@ -85,7 +85,7 @@ This is the structural ancestor of stochastic gradient descent. In many dimensio
 
 ## 6. Limitations and survey relevance
 
-The original theorem is a *scalar monotone-root* problem with bounded observation variables and specific gain assumptions. Neither high-dimensional non-convex stationarity nor strict-saddle escape is proved. Ref. [38] belongs in the **Preliminaries/RQ2** historical lineage of stochastic optimization, not in a table of efficient SOSP-finding algorithms.
+The original theorem is a *scalar monotone-root* problem with bounded observation variables and specific gain assumptions. Neither high-dimensional non-convex stationarity nor strict-saddle escape is proved. Ref. [46] belongs in the **Preliminaries/RQ2** historical lineage of stochastic optimization, not in a table of efficient SOSP-finding algorithms.
 
 :::warn Terminology check
 "Convergence in probability" is weaker than "almost-sure convergence"; the latter must not be attributed to the original root-finding theorem without a separate argument.

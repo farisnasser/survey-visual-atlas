@@ -97,7 +97,7 @@ Taking $\delta \ge \varepsilon^{1/4}$ yields an overall $\widetilde{O}(\varepsil
 
 ## Connections to escape and variance reduction
 
-**NEON2 (Ref 77)** offers a way of replacing curvature-oracle components using gradient information. **Daneshmand (2018)** uses stochastic gradient alignment (CNC) instead of deliberate curvature detection. **SSRGD (Ref 83)** later aims for a much simpler perturbation-based second-order guarantee with recursive gradients. **SpiderBoost (Ref 80)** concerns efficient *first-order* variance reduction without a full saddle-escape theorem.
+**NEON2 (Ref 33)** offers a way of replacing curvature-oracle components using gradient information. **Daneshmand (2018)** uses stochastic gradient alignment (CNC) instead of deliberate curvature detection. **SSRGD (Ref 87)** later aims for a much simpler perturbation-based second-order guarantee with recursive gradients. **SpiderBoost (Ref 84)** concerns efficient *first-order* variance reduction without a full saddle-escape theorem.
 
 ## Quick reference
 

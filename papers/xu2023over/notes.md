@@ -99,7 +99,7 @@ This *pedagogical ODE*, not an equation asserted verbatim by the paper, illustra
 
 ## Cross-paper connections
 
-**Du and Allen-Zhu (2019)** prove successful training with enough width under different models; this paper cautions that successful global convergence does not imply a fast rate. **Li–Ma–Zhang (Ref 91)** uses width for richer feature learning in a structured teacher; here width creates a slow tail. **Safran–Shamir (2018)** shows extra neurons can empirically reduce bad local-minimum frequency, another distinct outcome.
+**Du and Allen-Zhu (2019)** prove successful training with enough width under different models; this paper cautions that successful global convergence does not imply a fast rate. **Li–Ma–Zhang (Ref 95)** uses width for richer feature learning in a structured teacher; here width creates a slow tail. **Safran–Shamir (2018)** shows extra neurons can empirically reduce bad local-minimum frequency, another distinct outcome.
 
 ## Quick reference
 

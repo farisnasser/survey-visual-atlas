@@ -75,3 +75,31 @@ Still without notes (13): [1], [6], [9], [13], [28], [29], [31], [38], [73], [78
 - li2020learning: says "Theorem 2", but it is Theorem 1.2.
 - agarwala2023sam: Theorems 2.2 and 2.3 are swapped.
 - polyak1964some: drops α in one remark (trivial).
+
+# In-page notes rollout (2026-10-31): notes PDFs -> papers/<key>/notes.md for all 98 papers
+
+Lee et al. 2016 was the approved test page. The other 97 were built by six parallel sessions (branches notes-A..F,
+brief `research/notes-rollout/BRIEF.md`, spec `.claude/skills/study-notes/SKILL.md`), merged into main and audited
+(98/98 pages: no KaTeX or runtime errors, no overflow at 375 px or 1280 px). Per-paper verification, including what
+each primer covers, is in `research/notes-rollout/{A..F}-findings.md`.
+
+## Changes made to the notes (each logged with the paper's wording and page in the findings files)
+- jin2021nonconvex §3: main PGD (Algorithm 1) adds Gaussian noise every step, not the 2017 occasional kick.
+- sun2020optimization §2: "if η ≤ 1/ℓ" → "if η = 1/ℓ" (the stated bound follows only there); dead source URL replaced.
+- chizat2018global: "the flow converges to global minimizers" → "if the flow converges, the limit is a global minimizer".
+- bhojanapalli2016global §8: the paper's Sec. 5 Examples 1–2 are false as printed; the notes now say so.
+- panageas2019first §3: qualified with the authors' v3 correction (invertible Hessian at the saddle).
+- wang2020cubic §3–4: inexact-Hessian assumption (Assumption 3) and solver-accuracy conditions made explicit.
+- zhang2019lookahead "Section 4" → "Section 5"; wang2019spiderboost reading-guide sections; mei2019mean "Theorem 3" →
+  "Theorem 1"; agarwala2023sam swapped theorem numbers; gurbuzbalaban2021heavy §3 heading; li2020learning §2 worked
+  number (Q = 0.005).
+- Cross-references: old draft "Ref NN" numbers inside the notes now use survey numbers (matched by the named authors),
+  e.g. NEON2 → Ref 33, SSRGD → Ref 87, SpiderBoost → Ref 84. Title-block metadata (tier, tags, old numbers) is dropped.
+
+## Survey statements to double-check (new)
+- [58] Bhojanapalli, Neyshabur & Srebro: do not cite the paper's Sec. 5 examples as proof that spurious minima exist without RIP.
+- fang2019sharp and tripuraneni2018stochastic notes follow the publisher numbering (COLT / NeurIPS), not the arXiv copy linked in the page header.
+
+## Renderer change from the rollout
+- Header-less tables (many notes' "Quick reference") are written with an all-empty header row; `src/paper/notes.js`
+  now renders those without a header (they used to show a thin empty strip on desktop).

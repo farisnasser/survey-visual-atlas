@@ -97,7 +97,7 @@ Near initialization, ReLU changes are controlled by a semi-smoothness estimate; 
 
 ## Connection to prior papers
 
-**Allen-Zhu (2019)** supplies the earlier semismoothness and gradient-lower-bound framework this work sharpens. **Du (2019)** proves zero training-loss convergence for selected sufficiently wide smooth-activation architectures. **Safran (2018)** finds spurious minima for smaller, different ReLU settings, so these conditional positive guarantees do not contradict it. **Nguyen (Ref 88)** will reduce a different assumption: how many layers must be wide.
+**Allen-Zhu (2019)** supplies the earlier semismoothness and gradient-lower-bound framework this work sharpens. **Du (2019)** proves zero training-loss convergence for selected sufficiently wide smooth-activation architectures. **Safran (2018)** finds spurious minima for smaller, different ReLU settings, so these conditional positive guarantees do not contradict it. **Nguyen (Ref 92)** will reduce a different assumption: how many layers must be wide.
 
 ## Quick reference
 

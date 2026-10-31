@@ -101,7 +101,7 @@ steps, with potentially substantial dependence on the preconditioner constants, 
 
 ## Connections across the survey
 
-**Daneshmand (2018)** requires natural SGD noise to be correlated with a negative-curvature direction (CNC); Staib et al. use *preconditioning* to make that excitation less direction-dependent. **Jin (2017)** adds external isotropic perturbations; here favorable noise geometry can arise from the optimizer’s own gradient statistics. **LENA (Ref 84)** instead controls noisy recursive-gradient estimation during occasional perturbation phases.
+**Daneshmand (2018)** requires natural SGD noise to be correlated with a negative-curvature direction (CNC); Staib et al. use *preconditioning* to make that excitation less direction-dependent. **Jin (2017)** adds external isotropic perturbations; here favorable noise geometry can arise from the optimizer’s own gradient statistics. **LENA (Ref 88)** instead controls noisy recursive-gradient estimation during occasional perturbation phases.
 
 ## Quick reference
 
