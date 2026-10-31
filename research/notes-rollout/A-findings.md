@@ -1,7 +1,26 @@
 # Session A — in-page notes findings
 
 ## Shared changes needed
-None so far.
+None. Every notes PDF was expressible with the current renderer (figures redrawn as SVG in `:::figure`, untitled
+boxes as `:::warn` with no title). One renderer quirk worked around, no change required: a link URL containing `)` must
+be percent-encoded (DOIs 10.1016/S0893-6080(05)80010-3 and 10.1016/0893-6080(89)90014-2).
+
+## Summary for the coordinator
+- 19/19 pages done: `papers/<key>/notes.md` + check-script additions under `# in-page notes …`, all scripts pass,
+  all pages audited at 375 px. `data/papers.json` restored before every commit (run `scripts/sync.py` after merging).
+- Fixes made to the notes (details in each section): **[16] jin2021nonconvex** Sec. 3 described the 2017 conditional
+  uniform-ball perturbation as "the basic mechanism"; the JACM paper's main PGD (Algorithm 1) adds Gaussian noise every
+  step, the conditional kick is its Algorithm 4 variant (x ← x − ηξ). **[17] sun2020optimization** "If η ≤ 1/ℓ … ≤
+  2ℓ(f(θ0) − f*)/T" → "If η = 1/ℓ …" (false for smaller η); dead source URL kept and followed by the DOI and arXiv links.
+- Silent artefact fixes: duplicated section numbers in the Baldi PDF; "Paper N —" prefixes dropped from titles.
+- Left unchanged but worth a look: [16] the "Our takeaway" sentence matches only the Algorithm 4 variant; [19] "PL is
+  weaker than convexity" (the chapter's own phrase; strictly, PŁ is weaker than *strong* convexity); [17] "not a
+  theorem quoted from Sun" (the example is the paper's own, after its Eq. (13)); [2] notes' {0,1}/≥ threshold-unit
+  convention vs the paper's ±1/> (equivalent on finite data).
+- Not verified line by line: nothing. Experimental numbers quoted by the notes (Dauphin MSE 1.0 / 0.57 / 0.69, etc.)
+  were checked against the papers' text, not recomputed.
+- Slow scripts: `allenzhu2019convergence.py` (~2–3 min), `cohen2021gradient.py` (~1 min, rewrites its unchanged
+  data.json).
 
 Audit method used by this session: the in-app browser pane was hidden (its viewport reported 0 px), so each page was
 loaded in a fixed 375 × 812 px iframe on `localhost:8571` and measured there (KaTeX errors, `__atlasErrors`, section
