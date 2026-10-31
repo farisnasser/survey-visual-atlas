@@ -48,5 +48,35 @@ for dl in [1e-2, 1e-4, 1e-6, 1e-8, 1e-10]:
     esc.append([dl, t])
 print(f"  escape steps from delta above the manifold: {esc}")
 check("escape time grows like log(1/delta) / log(1.1): about 24 more steps per factor 100", all(15 < esc[i + 1][1] - esc[i][1] < 70 for i in range(4)))
+# in-page notes (papers/shub1987global/notes.md): notes Sec. 3 example and primer numbers
+p_ = np.array([.7, .3])
+for _ in range(50):
+    p_ = np.array([.8 * p_[0], 1.2 * p_[1]])
+check("notes: GD on (x^2 - y^2)/2 with eta = 0.2 is (0.8x, 1.2y)", np.allclose(np.array([.7, .3]) - .2 * np.array([.7, -.3]), [.8 * .7, 1.2 * .3]))
+check("notes: (0.8^k x0, 1.2^k y0): y0 != 0 escapes", abs(p_[0] - .8 ** 50 * .7) < 1e-12 and abs(p_[1]) > 1e3)
+A_ = np.array([[.8, .3], [0, 1.2]])
+check("primer 1: eigenvalues 0.8, 1.2 with eigenvectors (1, 0) and (0.6, 0.8)", np.allclose(A_ @ [1, 0], [.8, 0]) and np.allclose(A_ @ [.6, .8], 1.2 * np.array([.6, .8])))
+check("primer 1: start on the x-axis converges, start with a (0.6, 0.8) component does not", np.linalg.norm(np.linalg.matrix_power(A_, 80) @ [1, 0]) < 1e-6 and np.linalg.norm(np.linalg.matrix_power(A_, 80) @ [1, 1e-3]) > 1)
+gq_ = lambda q: np.array([.8 * q[0], 1.2 * q[1] - .28 * q[0] ** 2])
+q_ = np.array([1., .5]); its = []
+for _ in range(3):
+    q_ = gq_(q_); its.append(q_.copy())
+check("primer 2: (1, 0.5) -> (0.8, 0.32) -> (0.64, 0.2048) -> (0.512, 0.131), all on y = 0.5 x^2", np.allclose(its, [[.8, .32], [.64, .2048], [.512, .131072]]) and all(abs(t[1] - .5 * t[0] ** 2) < 1e-12 for t in its))
+for q0 in rand_pts(5, -1, 1, seed=4):
+    u0 = q0[1] - .5 * q0[0] ** 2; q1 = gq_(q0)
+    assert abs((q1[1] - .5 * q1[0] ** 2) - 1.2 * u0) < 1e-12
+check("primer 2: distance from the parabola, u = y - 0.5x^2, is multiplied by 1.2", True)
+check("primer 2: Dg(0) = diag(0.8, 1.2)", np.allclose(np.column_stack([(gq_(e * 1e-6) - gq_(-e * 1e-6)) / 2e-6 for e in np.eye(2)]), np.diag([.8, 1.2])))
+x_ = .5
+for _ in range(100):
+    x_ = x_ - x_ ** 3
+check("primer 4: x - x^3 from 0.5: after 100 steps ~0.069, close to 1/sqrt(2k)", abs(x_ - .069) < 1e-3 and abs(x_ - 1 / np.sqrt(200)) < .003, f"{x_:.4f} vs {1 / np.sqrt(200):.4f}")
+ok4 = True
+for x0 in np.linspace(-.99, .99, 199):
+    x = x0
+    for _ in range(20000):
+        x = x - x ** 3
+    ok4 &= abs(x) < .01
+check("primer 4: every start on y = 0 with |x| < 1 converges to 0", ok4)
 save_json("shub1987global", "data.json", {"xs": r(xs, 4), "ys": [float(v) for v in ystar], "esc": esc, "fit": a[0]})
 done()

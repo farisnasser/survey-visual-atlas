@@ -88,5 +88,18 @@ scan = [(tau, train(tau, 24000)[2]) for tau in (.1, .25, .5, 1., 2., 5., 10.)]
 sl = np.polyfit(np.log([t for t, _ in scan[3:]]), np.log([v for _, v in scan[3:]]), 1)[0]
 check("lazy regime: relative weight change ~ tau^-2 for tau >= 1 (slope ~ -2)", abs(sl + 2) < .3, f"slope {sl:.2f}")
 out["scan"] = [[t, round(float(v), 5)] for t, v in scan]
+# in-page notes (papers/chizat2019lazy/notes.md): worked example and primer numbers
+ws_ = (-1 + np.sqrt(1.04)) / 2
+check("notes: w* = (-1 + sqrt 1.04)/2 ~ 0.00990195; difference to 0.01 ~ 9.8e-5; alpha w*^2 ~ 0.0098", abs(ws_ - .00990195) < 5e-9 and abs(ws_ + ws_ ** 2 - .01) < 1e-15 and abs(.01 - ws_ - 9.8e-5) < 1e-6 and abs(100 * ws_ ** 2 - .0098) < 1e-5)
+check("primer 1: linearization error of w + w^2 is Delta^2: 0.01 at 0.1, 1e-4 at 0.01", abs((.1 + .01) - .1 - .01) < 1e-15 and abs((.01 + 1e-4) - .01 - 1e-4) < 1e-15)
+check("primer 2: e^-4 ~ 0.018, e^-1 ~ 0.37", abs(np.exp(-4) - .018) < 5e-4 and abs(np.exp(-1) - .37) < 5e-3)
+J0 = np.random.default_rng(3).normal(size=(3, 6)); K0 = J0 @ J0.T; y0 = np.array([1., -1., .5]); w_ = np.zeros(6)
+dt = 1e-3
+for _ in range(3000):
+    w_ = w_ - dt * J0.T @ (J0 @ w_ - y0)
+lam_, Q_ = np.linalg.eigh(K0)
+r_pred = Q_ @ (np.exp(-lam_ * 3.0) * (Q_.T @ (-y0)))
+check("primer 2: gradient flow on a linear model: residual = exp(-K0 t) r0", np.allclose(J0 @ w_ - y0, r_pred, atol=5e-3))
+check("primer 3: kappa_(alpha h) = 2/alpha = 0.02 at alpha = 100 for h = w + w^2, y* = 1", abs((1 / 100) * abs(0 - 1) * 2 / 1 ** 2 - .02) < 1e-15)
 save_json("chizat2019lazy", "data.json", out)
 done()

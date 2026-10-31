@@ -232,3 +232,39 @@
   0.1: plain 10⁻¹⁹ vs residual 1.1¹⁹ ≈ 6.1), stated as the textbook mechanism, with the paper's own caveat that its BN
   plain nets do not have vanishing signals; (3) batch normalization ((2, 4, 6) → (−1.22, 0, 1.22)) and the paper's
   "not vanishing gradients" argument. All in `scripts/check-math/he2016deep.py`.
+
+## [13] shub1987global — Stable-Manifold Foundations (Shub, Global Stability of Dynamical Systems)
+
+- Checked against: the book's table of contents on Springer Link (Ch. 4 "Hyperbolic Sets" pp. 20–32, Ch. 5 "Stable
+  Manifolds" pp. 33–70, Ch. 6 "Stable Manifolds for Hyperbolic Sets" pp. 71–82: the notes' page ranges are right) and
+  a catalogue listing of Chapter 5's appendices (Appendix III = center and strong stable manifolds). The GD argument
+  (Sec. 6) checked against Lee et al. 2016, which cites Shub's center-stable manifold theorem as Theorem III.7.
+- **Not verified:** "Theorem 5.20" (stable/unstable manifolds of a hyperbolic fixed point) and "Appendix III
+  (pp. 61–70)". The book is not openly available: the notes' author-copy link
+  (shub.ccny.cuny.edu/articles/1986-Global_Stability_of_Dynamical_Systems.pdf) serves a TLS certificate for a different
+  host (hosting.ccny.cuny.edu), so browsers refuse it, and the plain-HTTP address returns 404. Kept verbatim. The link
+  is printed as in the notes; the coordinator may want to drop it if it stays unreachable.
+- No discrepancies found in what could be checked. Worked example (GD on ½(x² − y²) with η = 0.2 = (0.8x, 1.2y))
+  checked.
+- Box mapping: "Why this matters for gradient descent" → key; "Do not overstate measure-zero arguments" → warn;
+  "Proof intuition…" is a sub-heading. Quick reference: no header row; |λ| written with \lvert…vert.
+- Primer (four ideas; "the book stands on" instead of "the paper"): (1) powers of A = [[0.8, 0.3], [0, 1.2]] follow its
+  eigenvectors (1, 0) and (0.6, 0.8); (2) a curved stable manifold: g = (0.8x, 1.2y − 0.28x²) has stable set
+  y = 0.5x² tangent to the x-axis ((1, 0.5) → (0.8, 0.32) → (0.64, 0.2048) → (0.512, 0.131)); (3) measure zero,
+  countable unions, smooth (inverse) images, and why invertibility matters ((x, y) ↦ (x, 0)); (4) a neutral
+  eigenvalue: x − x³ from 0.5 reaches ≈ 0.069 after 100 steps (~1/√(2k)), stable set on y = 0 (center-stable).
+  All in `scripts/check-math/shub1987global.py`.
+
+## [14] chizat2019lazy — On Lazy Training in Differentiable Programming
+
+- Checked against: arXiv 1812.07956 (NeurIPS 2019, 20 pp.): Eq. (1) κ_h(w₀) and its 1/α scaling, Sec. 1.2, Theorem 2.2
+  (h(w₀) = 0, fixed T: O(1/α), O(1/α²), outputs O(1/α); constants exponential in T), Theorem 2.3 (square loss),
+  Theorem 2.4 (surjective Dh(w₀), strongly convex R), Theorem 2.5 (under-parameterized, local minimum), Fig. 1
+  ((a)–(b) 2-D trajectories, (c) generalization worsens with τ), Sec. 3 (two-layer nets and CIFAR-10 CNNs).
+- No discrepancies found. Worked example w* = (−1 + √1.04)/2 ≈ 0.00990195, gap 9.8 × 10⁻⁵, αw*² ≈ 0.0098 checked.
+- Box mapping: "Interpret the example carefully" and "Do not equate lazy convergence…" → warn; "Global and local
+  conclusions…" is a sub-heading. Bars (h̄, w̄) kept as \overline. Quick reference: no header row in the PDF.
+- Primer (three ideas): (1) linearization error is second order (Δ² for w + w²: 0.01 at 0.1, 10⁻⁴ at 0.01);
+  (2) gradient flow on a linear-in-parameters model is kernel regression, r(t) = e^{−K₀t}r₀ (e^{−4} ≈ 0.018,
+  e^{−1} ≈ 0.37; checked on a random J₀); (3) the paper's κ (Eq. 1) scales as 1/α: κ = 2/α = 0.02 at α = 100 for the
+  toy. All in `scripts/check-math/chizat2019lazy.py`.
