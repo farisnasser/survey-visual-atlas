@@ -118,7 +118,9 @@ A symmetric matrix $H$ is **[[psd|positive semidefinite]]** (PSD), written $H \s
 :::def Convex function
 $f$ is **[[convex]]** if the straight segment (chord) between any two points of its graph never lies below the graph:
 
-$$f\big(\theta x + (1 - \theta) y\big) \;\le\; \theta f(x) + (1 - \theta) f(y) \qquad \text{for all } x, y \text{ and } 0 \le \theta \le 1.$$
+$$f\big(\theta x + (1 - \theta) y\big) \;\le\; \theta f(x) + (1 - \theta) f(y)$$
+
+for all $x, y$ and all $0 \le \theta \le 1$.
 
 For a twice-differentiable $f$ this is equivalent to $\nabla^2 f(x) \succeq 0$ at every point: no direction ever bends down.
 :::
@@ -139,7 +141,11 @@ $$\lVert \nabla f(x) \rVert^2 \;\ge\; 2\mu\, \big(f(x) - f^\star\big) :$$
 
 far above the minimum, the gradient must be large. Plug this into stop 3's descent lemma with $\eta = 1/L$, $f(x_{t+1}) \le f(x_t) - \lVert \nabla f(x_t) \rVert^2/(2L)$, and subtract $f^\star$:
 
-$$f(x_{t+1}) - f^\star \;\le\; \Big(1 - \frac{\mu}{L}\Big)\big(f(x_t) - f^\star\big) \quad\Longrightarrow\quad f(x_t) - f^\star \;\le\; \Big(1 - \frac{1}{\kappa}\Big)^{t} \big(f(x_0) - f^\star\big).$$
+$$f(x_{t+1}) - f^\star \;\le\; \Big(1 - \frac{\mu}{L}\Big)\big(f(x_t) - f^\star\big),$$
+
+and repeating this $t$ times,
+
+$$f(x_t) - f^\star \;\le\; \Big(1 - \frac{1}{\kappa}\Big)^{t} \big(f(x_0) - f^\star\big).$$
 
 This is called **linear convergence** (the error shrinks by a constant factor per step): about $\kappa \ln(1/\varepsilon)$ steps, far fewer than the $O(\varepsilon^{-2})$ of stop 3, which is all that holds without convexity. The inequality $\lVert \nabla f \rVert^2 \ge 2\mu (f - f^\star)$ is useful on its own: it has a name, the Polyak–Łojasiewicz (PL) condition, and returns on stop 11, because it can hold without convexity.
 

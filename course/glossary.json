@@ -401,7 +401,8 @@
   "aka": [
    "stable manifold",
    "region of attraction"
-  ]
+  ],
+  "sec": "n-2-is-gradient-descent-ever-stuck-the-stable-set"
  },
  "measure-zero": {
   "term": "Measure zero",
@@ -409,7 +410,8 @@
   "def": "Having zero volume, like a line inside a plane or a plane inside 3-D space. A starting point drawn from any distribution with a density lands in a measure-zero set with probability zero.",
   "aka": [
    "null set"
-  ]
+  ],
+  "sec": "n-2-is-gradient-descent-ever-stuck-the-stable-set"
  },
  "almost-surely": {
   "term": "Almost surely",
@@ -417,7 +419,8 @@
   "def": "With probability one. GD almost surely avoids strict saddles means that the starting points ending at a strict saddle form a measure-zero set.",
   "aka": [
    "a.s."
-  ]
+  ],
+  "sec": "n-2-is-gradient-descent-ever-stuck-the-stable-set"
  },
  "whp": {
   "term": "With high probability",
@@ -425,7 +428,8 @@
   "def": "With probability at least $1 - \\delta$ for a small failure probability $\\delta$ that the user chooses; the complexity bound then usually grows like $\\log(1/\\delta)$.",
   "aka": [
    "w.h.p."
-  ]
+  ],
+  "sec": "n-4-perturbed-gradient-descent"
  },
  "perturbed-gd": {
   "term": "Perturbed gradient descent",
@@ -433,19 +437,22 @@
   "def": "Gradient descent that adds a small random kick when the gradient becomes small, so it cannot linger at a saddle. Jin et al. 2017 prove that it finds an $\\varepsilon$-SOSP in $\\tilde O(\\varepsilon^{-2})$ iterations, the same as GD's rate for first-order points up to log factors.",
   "aka": [
    "PGD"
-  ]
+  ],
+  "sec": "n-4-perturbed-gradient-descent"
  },
  "negative-curvature": {
   "term": "Negative curvature direction",
   "ch": "escape",
   "def": "A direction $v$ along which $f$ bends downward, $v^\\top \\nabla^2 f(x)\\, v < 0$. Moving along it lowers $f$ even where the gradient is zero, so many saddle-escape methods search for one.",
-  "tex": "v^\\top \\nabla^2 f(x)\\, v < 0"
+  "tex": "v^\\top \\nabla^2 f(x)\\, v < 0",
+  "sec": "n-1-near-a-saddle-every-step-multiplies-the-way-out"
  },
  "newton": {
   "term": "Newton's method",
   "ch": "escape",
   "def": "Jump to the critical point of the local quadratic model. Very fast near a minimum, but it is attracted to saddle points just as much as to minima, and it needs the Hessian.",
-  "tex": "x_{t+1} = x_t - \\big[\\nabla^2 f(x_t)\\big]^{-1} \\nabla f(x_t)"
+  "tex": "x_{t+1} = x_t - \\big[\\nabla^2 f(x_t)\\big]^{-1} \\nabla f(x_t)",
+  "sec": "n-6-using-the-hessian-newton-saddle-free-newton-cubic-regularization"
  },
  "cubic-reg": {
   "term": "Cubic regularization",
@@ -454,7 +461,28 @@
   "tex": "\\Delta_t = \\operatorname*{arg\\,min}_{\\Delta}\\; \\nabla f(x_t)\\cdot\\Delta + \\tfrac12 \\Delta^\\top \\nabla^2 f(x_t) \\Delta + \\tfrac{M}{6} \\lVert \\Delta \\rVert^3",
   "aka": [
    "cubic-regularized Newton"
-  ]
+  ],
+  "sec": "n-6-using-the-hessian-newton-saddle-free-newton-cubic-regularization"
+ },
+ "power-method": {
+  "term": "Power method",
+  "ch": "escape",
+  "def": "Find the eigenvector of the largest eigenvalue of a matrix by multiplying a vector by it again and again and rescaling. Applied to $I - \\eta H$ with Hessian-vector products (or differences of gradients), it finds the most negative curvature direction of $H$; the number of steps grows like $1/(\\eta\\gamma)$ for a negative eigenvalue $-\\gamma$.",
+  "tex": "v \\leftarrow \\frac{(I - \\eta H)\\, v}{\\lVert (I - \\eta H)\\, v \\rVert}",
+  "aka": [
+   "power iteration"
+  ],
+  "sec": "n-5-finding-the-way-down-with-gradients-only"
+ },
+ "saddle-free-newton": {
+  "term": "Saddle-free Newton",
+  "ch": "escape",
+  "def": "Newton's method with every Hessian eigenvalue replaced by its absolute value, so steps along negative curvature go downhill instead of toward the saddle (Dauphin et al. 2014). Supported by experiments, not by a convergence theorem.",
+  "tex": "\\Delta x = -\\lvert H \\rvert^{-1} \\nabla f(x)",
+  "aka": [
+   "SFN"
+  ],
+  "sec": "n-6-using-the-hessian-newton-saddle-free-newton-cubic-regularization"
  },
  "momentum": {
   "term": "Momentum",

@@ -1,7 +1,13 @@
 # Session A notes: stops 4 curvature, 5 critical, 6 escape
 
 ## Shared changes needed
-(none so far)
+- `src/paper/notes.js`: inside `:::` boxes a LaTeX line break `\` reaches KaTeX as `\ ` (the annotation shows `\ &`), so multi-line
+  `aligned`/matrix displays cannot be used in def/idea/theorem boxes (they render on one line and scroll at 375 px). Worked around in
+  stop 6 by moving the cubic model to inline math. Displays outside boxes are fine.
+- Wide display equations scroll horizontally at 375 px in every stop (stops 1–3 included: up to 264 px of scroll in stop 3). Not a
+  page-overflow bug (scrollWidth ≤ 0), but a `.katex-display` font-size step-down on narrow screens would help all stops.
+- Pipe tables: a `[[id|text]]` term link inside a table cell is split by the `|` (crashes the table renderer). Avoided in stop 5;
+  either document it in the skill or let the table splitter skip `|` inside `[[...]]`.
 
 ## Stop 4 `curvature`
 Sections: 1 second derivative · 2 Hessian (symmetry, $u^\top H u$, quadratic model) · 3 eigenvalues as principal curvatures
@@ -55,3 +61,35 @@ Paper claims:
 - Nesterov & Polyak 2006 Lemma 1 (cubic error bound of the quadratic model) — findings `nesterov2006cubic`.
 - Ge 2017 / Bhojanapalli 2016 (strict saddle + no spurious minima for matrix sensing, completion, robust PCA) — findings.
 Unverifiable: the $\sqrt{\rho\varepsilon}$ "units" explanation is ours (pedagogical), not a claim attributed to Jin et al.
+
+## Stop 6 `escape`
+Sections: 1 near a saddle every step multiplies the way out ($(1+\eta\gamma)^t$, time $\ln(c/\delta)/\ln(1+\eta\gamma)$) · 2 the stable set
+(Lee Thm 4, Prop 8, Cor 9, Thm 11; Shub; warn box: asymptotic only, Panageas 2019, Mertikopoulos 2020) · 3 exponential time (Du 2017) ·
+4 perturbed GD (Jin 2017 Alg 2, Thm 3, thin band; Jin 2021 every-step noise; Jin 2018 $\varepsilon^{-7/4}$) · 5 negative curvature from
+gradients (power method on $I-\eta H$; NEON, NEON+, NEON2 Thm 1) · 6 Newton / saddle-free Newton / cubic regularization (Dauphin Sec. 4,
+Nesterov–Polyak Lemma 6, Thm 1–2; Carmon–Duchi 2019, Tripuraneni 2018 subsolvers) · 7 scoreboard table.
+
+Visuals (check: `scripts/check-math/course_escape.py`):
+- `escape` (3D + chart): Lee's $\tfrac12x^2+\tfrac14y^4-\tfrac12y^2$, GD (η = 0.1) from $(1, \delta)$; steps to $|y| > 0.5$: 43/91/139/188/284 for δ = 1e-2…1e-12.
+- `stable` (2D): $\tfrac12y^2 + \cos(x - y^2/4) - 1$ (Jin's example, axes swapped and bent), η = 0.2 < 1/L (L ≈ 3.1 on the box);
+  basins, stable curve by bisection ($x^*(2) = 0.398$), draggable start; 2,000 seeded random starts, 0 at the saddle.
+- `pgd` (3D): Jin's $\tfrac12x^2 + \cos y - 1$; GD vs Algorithm 2 (η = 0.2, g_thres 1e-3, t_thres 80, f_thres 0.05, uniform-disk kick,
+  mulberry32 seeded); default: kicks at steps 33 and 114, stop at 194 with f = −2 (script reproduces exactly). Note t_thres = 80 is ours,
+  chosen so the default kick escapes; the paper's constants are not used.
+- `power` (2D): gradient-difference power iteration at a saddle in d = 30 (eigenvalues −γ and 29 values in [0, 1]); iterations to
+  $v^\top Hv \le -\gamma/2$: 5/24/195/1939 for γ = 1…0.001.
+- `newton` (3D): Nesterov–Polyak toy $\tfrac12x^2-\tfrac12y^2+\tfrac14y^4+0.3xy^2$ from (1.2, y₀): Newton → saddle (4 steps), SFN 7,
+  CR (M = 10, exact subproblem) 12, GD (1/8) 167 (findings: CR 12, GD 167 ✓); from y₀ = 0: Newton (1) and GD (105) → saddle, CR 13 → minimum.
+
+Paper claims:
+- Lee 2016 Thm 4, Prop 8, Cor 9, Thm 11 — findings `lee2016gradient`; Shub (center-stable manifold, via Lee Thm 4.4) — `shub1987global`.
+- Panageas 2019 (Ω(1/k) steps, v3 needs invertible Hessian) — `panageas2019first`; Mertikopoulos 2020 Thm 3 — `mertikopoulos2020almost`.
+- Du 2017 Thm 4.1, waits × (L+γ)/γ — `du2017gradient`.
+- Jin 2017 Alg 2, Thm 3 (formula), Sec. 5 thin band / Lemma 11 — `jin2017escape`; Jin 2021 Gaussian noise every step, Õ(ε⁻²) — `jin2021nonconvex`;
+  PSGD Õ(ε⁻⁴) taken from Zhang & Li 2021 Table 1 (findings `zhang2021escape`), not read in Jin 2021 itself.
+- Jin 2018 Thm 3 Õ(ε^{-7/4}) — `jin2018accelerated`. Tripuraneni 2018 Õ(ε^{-3.5}) — findings. Fang 2018 SPIDER-SFO+ (ε, O(√ε))-SOSP Õ(ε⁻³) online — findings.
+- NEON / NEON+ (Xu 2018), NEON2 Thm 1 (Õ(L²/δ²) stochastic gradients, either outcome) — findings.
+- Dauphin 2014 Sec. 4, Fig. 2 (5x² − y²), SFN Eq. 4–5, Krylov + damping, empirical only — findings.
+- Nesterov–Polyak 2006 Lemma 6, Thm 1 (O(k^{-2/3}) vs O(k^{-1/2})), Thm 2 — findings. "O(ε^{-3/2}) iterations to an ε-SOSP": follows
+  from Thm 1's measure μ (which includes λ_min); findings state Thm 1 only in terms of μ_L, so this translation is ours (standard in the literature).
+Unverifiable: none beyond the two notes above.
