@@ -1,7 +1,18 @@
 # Session C — in-page notes findings (branch notes-C)
 
 ## Shared changes needed
-- None so far.
+- **Renderer (optional):** pipe tables need a header row; the Ge et al. §1 table has none in the PDF, so it is written
+  with an empty header row (`| | |`), which renders an empty `<thead>`. A headerless-table option in `src/paper/notes.js`
+  would match the PDF exactly. Nothing else needed from `src/`.
+- **Survey text / coordinator decisions (not edited here):**
+  - [58] Bhojanapalli, Neyshabur & Srebro: the paper's Sec. 5 Examples 1–2 ("X = diag(0, 1) is a rank 1 local minimum")
+    are false as printed; notes §8 now say so (see [12] below). The survey should not cite them as proof that spurious
+    minima exist without RIP.
+  - [64] Panageas, Piliouras & Wang: the authors' arXiv v3 correction requires an invertible Hessian at the saddle, so
+    non-isolated strict saddles are not covered; notes §3 qualified (see [18]).
+  - [54] Haeffele & Vidal: the notes' supplement link is dead (404); an archived copy exists (see [8]).
+- **Convention used (from notes-F):** in-text "Ref. [NN]" cross-references in the old draft numbering were changed to
+  survey numbers and logged per paper; bold box labels became box titles.
 
 Dev server note: port 8573 was already taken by a stale `scripts/serve.py 8573` from the round-3 C worktree (PID 35136,
 started 30 Oct); requests to :8573 reached that server. This session audited on **:8583** instead and left the old process alone.
