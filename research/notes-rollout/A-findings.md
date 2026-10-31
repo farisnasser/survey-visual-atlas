@@ -87,3 +87,33 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   (p = 1/2, δ = 1e−6 → 20 kicks). All in `jin2017escape.py`, with the notes' example (Hessian diag(1, −1) and
   diag(1, −cos y), y1 ≈ 0.0240, ℓ = ρ = 1, bounded below).
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px.
+
+## [6] jin2018accelerated — Why Accelerated Descent Escapes Saddles Faster
+- Notes checked against: arXiv 1711.10456 (COLT 2018, PMLR 75): abstract (Õ(1/ε^{7/4}) vs Õ(1/ε²)), Sec. 1.1
+  (Hamiltonian Eq. (1) E_t = f(x_t) + ‖v_t‖²/(2η), "improve or localize"), Algorithms 1–3 (AGD core
+  y_t = x_t + (1 − θ)v_t, perturbation, Negative Curvature Exploitation), Eq. (3) parameters, Theorem 3.
+- Fixes to the notes: none. No discrepancies found. The notes write the momentum parameter as α where the paper writes
+  θ; the notes present the equations as a simplified core, so this was kept (the primer uses α and names θ once).
+- Minute box: the notes' summary box has no "paper in one minute" heading (labels Problem / Method / Main result);
+  the standard box title was used and the labels kept verbatim. The notes' "Source:" sentence (end of Sec. 5) moved
+  into the `>` source line.
+- Primer (4 ideas): κ vs √κ on a bowl (κ = 100, 10⁶ reduction: ≈ 1375 GD vs ≈ 131 AGD steps; the paper's Sec. 2);
+  momentum speeds escape (ηγ = 1e−4: GD ≈ 69 000 steps for 1000× growth, AGD core with the paper's θ = ½√(ηγ) =
+  0.005 grows ≈ 1.0079 per step, ≈ 940 steps; flagged as a one-direction simplification); an energy that falls while
+  f rises (x²/2, η = 0.25, α = 0.05: f = 0.5, 0.281, 0.074, 0.0004, 0.027; energy decreasing for 60 steps); reading
+  Õ(ε^{−7/4}) vs Õ(ε^{−2}) at ε = 1e−4 (10⁷ vs 10⁸). All in `jin2018accelerated.py`, plus the notes' u² − v² saddle.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [7] fang2018spider — SPIDER: Tracking Gradients with Less Noise
+- Notes checked against: arXiv 1807.01695 v4 (NeurIPS 2018): abstract (O(min(n^{1/2}ε⁻², ε⁻³)) for an ε-FOSP;
+  Õ(min(n^{1/2}ε⁻² + ε^{−2.5}, ε⁻³)) for an (ε, O(ε^{0.5}))-SOSP with SPIDER-SFO+), Sec. 2 estimator and Lemma 1,
+  Algorithm 1 (refresh every q steps, same S₂ at x_k and x_{k−1}, normalized step), Algorithm 2 (SFO+), Theorems 1–3.
+- Fixes to the notes: none. No discrepancies found.
+- Minute box: no "paper in one minute" heading in the notes (labels Problem / Contribution / Results); standard box
+  title used, labels verbatim. The notes' "Source:" sentence moved into the `>` line.
+- Primer (4 ideas): minibatch variance σ²/b (4/16 = 0.25, Monte Carlo); Var(X − Y) and same-sample differences
+  (f_i = c_i x²/2: variance Var(c)·Δx² = 1e−4 for Δx = 0.01); Lemma 1's linear error growth kL²ε₁²/S₂ (= 1e−3,
+  std ≈ 0.032, with a Monte Carlo of the running estimate); counting gradient evaluations (the paper's quoted GD/SGD
+  O(min(nε⁻², ε⁻⁴)); at ε = 0.01, n = 100: 1e5 vs 1e6; n = 1e6: 1e6 vs 1e10; crossover n = ε⁻²). All in
+  `fang2018spider.py`, plus the notes' exact cancellation in the g_i = h + ξ_i toy model.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.

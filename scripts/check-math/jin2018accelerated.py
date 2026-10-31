@@ -83,4 +83,30 @@ print(f"  f increased on {ups_f} steps; NCE fired {int(nc.sum())} times; E_(t+1)
 check("f alone is not monotone along AGD", ups_f > 0)
 check("Hamiltonian E = f + |v|^2/(2 eta) never increases over a step (Lemma 4 without NCE, Lemma 5 with NCE); only kicks add energy", ups_E == 0 and nce_ok)
 save_json("jin2018accelerated", "data.json", {"lams": lams, "gd": sg, "agd": sa, "slopes": [round(pg, 3), round(pa, 3)]})
+
+# in-page notes (papers/jin2018accelerated/notes.md): saddle example, primer numbers
+fuv = lambda p: p[0] ** 2 - p[1] ** 2
+check_hess_at("notes: u^2 - v^2 at 0 has Hessian diag(2, -2), lambda_min = -2", fuv, [0, 0], [[2, 0], [0, -2]])
+k_ = 100
+gd_n = np.log(1e6) / -np.log(1 - 1 / k_); agd_n = np.log(1e6) / -np.log(1 - 1 / np.sqrt(k_))
+check("primer: kappa = 100, 1e6 reduction: ~1375 GD steps vs ~131 AGD steps", abs(gd_n - 1375) < 1 and abs(agd_n - 131) < 1, f"{gd_n:.1f}, {agd_n:.1f}")
+eg = 1e-4; th_ = np.sqrt(eg) / 2
+check("primer: paper's eta = 1/(4l), theta = 1/(4 sqrt(kappa)), gamma = sqrt(rho eps), kappa = l/sqrt(rho eps) give theta = sqrt(eta gamma)/2",
+      all(abs(1 / (4 * np.sqrt(l / np.sqrt(r * e))) - np.sqrt(np.sqrt(r * e) / (4 * l)) / 2) < 1e-15 for l, r, e in [(1, 1, 1e-4), (3, .5, 1e-3)]))
+a_, b_ = (1 + eg) * (2 - th_), (1 + eg) * (1 - th_)
+root = (a_ + np.sqrt(a_ * a_ - 4 * b_)) / 2
+x_, xp_, t_ = 1e-3, 1e-3, 0
+while abs(x_) < 1:                     # AGD core on f = -(gamma/2) u^2: x+ = (1 + eta gamma) y
+    y_ = x_ + (1 - th_) * (x_ - xp_); xp_ = x_; x_ = (1 + eg) * y_; t_ += 1
+gd_esc = np.log(1e3) / np.log(1 + eg)
+check("primer: eta gamma = 1e-4: GD needs ~69 000 steps to grow 1000-fold", abs(gd_esc - 69081) < 1)
+check("primer: AGD core with theta = 0.005 grows ~1.0079 per step, ~940 steps", abs(root - 1.0079) < 5e-5 and abs(t_ - 940) < 5, f"root {root:.5f}, steps {t_}")
+eta_, thq = .25, .05; xq, vq, Eq, Fq = 1., 0., [], []
+for t in range(60):
+    Eq.append(xq * xq / 2 + vq * vq / (2 * eta_)); Fq.append(xq * xq / 2)
+    yq = xq + (1 - thq) * vq; xn = yq - eta_ * yq; vq = xn - xq; xq = xn
+Eq, Fq = np.array(Eq), np.array(Fq)
+check("primer: f(x_t) on x^2/2 goes 0.5, 0.281, 0.074, 0.0004 then 0.027", np.allclose(Fq[:5], [.5, .281, .074, .0004, .027], atol=6e-4), f"{Fq[:5].round(4)}")
+check("primer: the energy f + v^2/(2 eta) decreases at each of the first 60 steps", np.all(np.diff(Eq) < 0))
+check("primer: eps = 1e-4: eps^-2 = 1e8, eps^-7/4 = 1e7, ratio 10", abs(1e-4 ** -2 / 1e8 - 1) < 1e-12 and abs(1e-4 ** -1.75 / 1e7 - 1) < 1e-12)
 done()

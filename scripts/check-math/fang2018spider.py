@@ -50,4 +50,31 @@ check("plain minibatch SGD estimator error is much larger than SPIDER's", Es.mea
 err, xe = run(600, 0)
 check("SPIDER-SFO reaches a minimum neighbourhood (|grad f| ~ eta)", np.linalg.norm(g(xe)) < 5 * eta and abs(abs(xe[0]) - 1) < .1, f"x = {np.round(xe, 3)}")
 save_json("fang2018spider", "data.json", {"a": r(a, 5), "b": r(b, 5), "c": r(c, 5), "L": round(float(L), 4)})
+
+# in-page notes (papers/fang2018spider/notes.md): shared-noise cancellation (Sec. 3) and primer numbers
+rngN = np.random.default_rng(11)
+h_ = lambda x: np.sin(x) + x ** 2
+xi_ = rngN.normal(0, 3, 1000)
+gi = lambda x, i: h_(x) + xi_[i]
+check("notes: g_i(x_t) - g_i(x_{t-1}) = h(x_t) - h(x_{t-1}) exactly for g_i = h + xi_i",
+      all(abs((gi(.71, i) - gi(.70, i)) - (h_(.71) - h_(.70))) < 1e-12 for i in range(1000)))
+check("primer: sigma^2 = 4, b = 16 -> minibatch variance 0.25", abs(4 / 16 - .25) < 1e-15)
+mb = rngN.normal(0, 2, (200000, 16)).mean(1)
+check("primer: Monte Carlo minibatch variance ~ 0.25", abs(mb.var() - .25) < .005, f"{mb.var():.4f}")
+c_ = rngN.normal(1, 1, 400000)          # Var(c_i) = 1
+dif = c_ * (.51 - .50)
+check("primer: Var(c_i (x_t - x_{t-1})) = Var(c) * 0.01^2 = 1e-4", abs(dif.var() - 1e-4) < 3e-6, f"{dif.var():.3e}")
+check("primer: Lemma 1 bound k L^2 eps1^2 / S2 = 1e-3 (std ~ 0.032) for L=1, eps1=0.01, S2=10, k=100",
+      abs(100 * 1 * .01 ** 2 / 10 - 1e-3) < 1e-15 and abs(np.sqrt(1e-3) - .032) < 5e-4)
+# Monte Carlo of the running SPIDER estimate on f_i = c_i x^2/2 with steps of 0.01 and S2 = 10 (L^2 = E c^2 = 2 here)
+K, S2_, reps = 100, 10, 4000
+err = np.zeros(reps)
+for r in range(reps):
+    cs = rngN.normal(1, 1, (K, S2_))
+    err[r] = np.sum(cs.mean(1) * .01 - 1 * .01)   # sum of per-step estimator errors (true curvature mean 1)
+check("primer: estimator error variance after k steps <= k L^2 eps1^2 / S2 (L^2 = E c^2 = 2)", err.var() <= K * 2 * .01 ** 2 / S2_, f"{err.var():.2e} <= {K * 2 * 1e-4 / S2_:.2e}")
+e_ = 1e-2
+check("primer: eps = 0.01, n = 100: SPIDER 1e5 vs GD 1e6", abs(min(np.sqrt(100) * e_ ** -2, e_ ** -3) - 1e5) < 1e-6 and abs(100 * e_ ** -2 - 1e6) < 1e-6)
+check("primer: eps = 0.01, n = 1e6: SPIDER 1e6 (online term) vs GD 1e10", abs(min(np.sqrt(1e6) * e_ ** -2, e_ ** -3) - 1e6) < 1e-3 and abs(1e6 * e_ ** -2 - 1e10) < 1)
+check("primer: sqrt(n) eps^-2 = eps^-3 at n = eps^-2", abs(np.sqrt(e_ ** -2) * e_ ** -2 - e_ ** -3) < 1e-6)
 done()
