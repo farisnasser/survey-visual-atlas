@@ -117,3 +117,67 @@ Conventions used on every page of this session (the notes PDFs of this batch sha
 - Primer ideas: (1) training loss L_S vs population loss L_D; (2) Cauchy–Schwarz worst nudge (g = (3, 4), ρ = 0.1:
   ε = (0.06, 0.08), max 0.5); (3) Danskin: slope of the worst case is the slope at the worst point ((|w| + 0.1)²,
   slope 2.2 = L′(1.1)); (4) the Theorem 1 bound and the radius ρ as a dial.
+
+## [8] damian2023self — Self-Stabilization at the Edge of Stability
+- Checked against: arXiv 2209.15594 v2 (ICLR 2023): abstract (cubic Taylor term; "GD at the edge of stability implicitly
+  follows projected gradient descent (PGD) under the constraint S(θ) ≤ 2/η"; predictions for loss, sharpness,
+  deviation), Sec. 4.1 four stages and Eq. (3), Lemma 2 (∇S = ∇³L(u, u)), Theorem 1, App. B toy.
+- Fixes to the notes: none. No discrepancies found. (The notes' "constrained by S(θ) ≤ 2/η" matches the abstract; the
+  full constraint set of Eq. (2) also fixes ∇L·u = 0, but the notes say "resembling", so left as is.)
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1 problem, Sec. 3 mechanism sentence,
+  "Main result" box, Sec. 4 caveat), labels Problem / Mechanism / Main result / Caveat.
+- Numbers checked in `scripts/check-math/damian2023self.py`: |1 − ηλ| < 1 ⇔ 0 < ηλ < 2; the toy gradient x²/2·∇S.
+- Unverified: none.
+- Primer ideas: (1) zig-zag multipliers −0.8 vs −1.2 (η = 1, λ = 1.8 / 2.2); (2) curvature moves: L = ½(2 + y)x², a
+  swing x = 1 moves y by −0.5; (3) the paper's Eq. (3) with η = 1, α = 0.01, β = 1 (+0.01 per step, −0.115 at
+  |x| = 0.5, threshold √(2α/β) ≈ 0.14); one full loop checked; the primer says the two-number map's cycles grow (it
+  leaves |x| > 10 by step 191), consistent with Theorem 1 being finite-horizon.
+- Note for the coordinator: a first draft of the primer used α = 0.1; the check script showed the discrete map (3)
+  diverges within one cycle there, so the example was changed to α = 0.01 before commit.
+
+## [9] kalra2024warmup — Why Warmup the Learning Rate? Underlying Mechanisms and Improvements
+- Checked against: arXiv 2406.09405 (NeurIPS 2024): Sec. 1 (warmup's main benefit is tolerating a larger η_trgt; the
+  "estimate the moments" explanation), Sec. 3–4 (progressive sharpening vs natural sharpness reduction, catapults),
+  Sec. 4.3 / App. B.1 (preconditioned sharpness λ_max(P⁻¹H) in the paper's convention), Sec. 5 (catapult-based
+  η_init via line search), Sec. 6 GI-Adam (v₀ = g₀²; equivalent to an automatic warmup η_t = η_trgt √(1 − β₂ᵗ)),
+  Figures 1–4 (CIFAR-10/100, TinyImageNet, WikiText-2/103).
+- Fixes to the notes: none. No discrepancies found. The notes write the update as Δθ = −ηP_t g_t (their P is the
+  paper's P⁻¹); λ_max(P^{1/2}HP^{1/2}) is then the same quantity. Kept verbatim: two sections numbered "5.".
+- Numbers checked in `scripts/check-math/kalra2024warmup.py`: Sec. 2 thresholds (2/20 = 0.1, 2/5 = 0.4) and Sec. 5
+  P^{1/2}HP^{1/2} = diag(0.2, 1).
+- Unverified: none.
+- Primer ideas: (1) linear warmup η₅₀ = 0.155 (0.01 → 0.3 over 100 steps), 2/η from 200 to 6.7; (2) a catapult in
+  ½(uv − 1)² from (2.2, 0.45) with η = 0.6 (sharpness 5.04 > 3.33, loss spike 1.55, ends at sharpness 2.01);
+  (3) Adam's first step is η·sign(g₀); GI-Adam's is √(1 − β₂) = 0.0316 times smaller.
+
+## [10] kalra2025universal — Why Neural-Network Sharpness Changes During Training
+- Checked against: arXiv 2311.02076 (ICLR 2025 camera-ready; the proceedings PDF does not render in MuPDF past p. 4):
+  Sec. 2 UV model (f = vᵀUx/√n^{1−p}, p ∈ [0, 1], n_eff), Sec. 3 regimes T1–T4, Sec. 4 Eqs. (1)–(2) and fixed points,
+  Result 1 (η_c = √n_eff/(‖x‖y)), Corollary 5.1 (η_max < η_c ⇒ no EoS), Eq. (3) EoS-manifold map, Figure 3
+  (bifurcation, ‖x‖ = 1, y = 2, n_eff = 1, η_c = 0.5), Figure 4 (EoS phase diagram and test accuracy), Figure 5
+  (synthetic vs CIFAR-10 sharpness bands), Sec. 6.2 (weight norm near the saddle), Sec. 7 limitations (no
+  non-monotonic loss decrease at EoS, no loss catapult at n_eff = 1, no long-range correlations).
+- Fixes to the notes: none. No discrepancies found.
+- Numbers checked in `scripts/check-math/kalra2025universal.py`: the Sec. 4 worked example (0.1198, 0.02870; 1.4,
+  3.92), Eqs. (1)–(2) against a parameter-space GD step, η_c = 4/2 = 2, the cubic analogue's multiplier 1 − 2η.
+- Unverified: none.
+- Primer ideas: (1) (r, λ) summarize the weights (first-order change 0.00396 + Eq. 1's second-order term 0.000392 =
+  0.004352); (2) fixed-point stability and period doubling in the notes' cubic map (η = 0.9 fixed, 1.1 two-cycle
+  0.815/1.116, 1.25 four-cycle, 1.35 no short cycle); (3) η_c for n = 512: 11.3 (NTP, p = 0) vs 0.5 (µP, p = 1).
+
+## [11] galli2026flatland — Flatland: Large-Step GD
+- Checked against: PMLR 306 copy (galli26a.pdf): Def. 2.3 (large steps), Def. 2.4 and Eq. (2) (reference R_k,
+  Zhang–Hager), equality line search (halve/double), Prop. 2.5 (η_k ≥ 2δ(1 − c)/ℓ(w_k, η_{w_k})), Def. 2.6 /
+  Prop. 2.8 (Hölder), Theorem 2.9, Corollary 2.10, Sec. 3 (5000-image subsets; CIFAR10/100, SVHN, EMNIST; MLP, CNN,
+  resnet34, wide resnet50_2, densenet121, vgg11; MSE main, CE in App. H; c = 10⁻⁴, δ = 0.5 do not ensure (i)/(ii)),
+  Lemma 3.1 (bias block (2/K)I), "unsuccessfully-flat" vs "successfully-flat", saddles, Sec. 3.2 NLS-ub (η_k < K;
+  "larger experiments would be needed"), Sec. 5 (SGD convergence open).
+- Fixes to the notes: none. No discrepancies found. (research/findings.md records Prop. 2.5 as "2(1 − c)/ℓ(w_k, 2η_k)";
+  the paper's statement is the notes' 2δ(1 − c)/ℓ(w_k, η_{w_k}) — worth correcting in findings.md, which I did not
+  touch.)
+- Numbers checked in `scripts/check-math/galli2026flatland.py`: multipliers −0.6 / −1 / −1.2, the accepted increase
+  (0.605 ≤ 0.679), the (2/K)I bias block (K = 2, 10, 26, 100), the Rayleigh/block bound.
+- Unverified: none.
+- Primer ideas: (1) Armijo on ½x² accepts η ≤ 2(1 − c) = 1.98; halving/doubling lands in [(1 − c)/λ, 2(1 − c)/λ]
+  (Prop. 2.5's shape); (2) Zhang–Hager reference (ξ = 0.85, losses 1.0, 0.5 → 0.73); (3) small sharpness with a
+  negative eigenvalue: [[0.2, 0.3], [0.3, −0.5]] → 0.31, −0.61.
