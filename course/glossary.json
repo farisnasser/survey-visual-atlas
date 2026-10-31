@@ -595,7 +595,8 @@
   "term": "Sharpness",
   "ch": "sharpness",
   "def": "The largest Hessian eigenvalue at a point, the curvature of its steepest direction. GD is locally stable at a minimum only if the sharpness is below $2/\\eta$.",
-  "tex": "S(x) = \\lambda_{\\max}\\big(\\nabla^2 f(x)\\big)"
+  "tex": "S(x) = \\lambda_{\\max}\\big(\\nabla^2 f(x)\\big)",
+  "sec": "n-1-many-minima-different-shapes"
  },
  "flat-min": {
   "term": "Flat vs sharp minimum",
@@ -604,7 +605,8 @@
   "aka": [
    "flat minimum",
    "sharp minimum"
-  ]
+  ],
+  "sec": "n-1-many-minima-different-shapes"
  },
  "edge-of-stability": {
   "term": "Edge of stability",
@@ -612,12 +614,14 @@
   "def": "Cohen et al. 2021: in full-batch GD on neural networks the sharpness rises until it reaches about $2/\\eta$ and then hovers there, while the loss keeps decreasing over the long run, though not monotonically.",
   "aka": [
    "EoS"
-  ]
+  ],
+  "sec": "n-4-the-edge-of-stability"
  },
  "progressive-sharpening": {
   "term": "Progressive sharpening",
   "ch": "sharpness",
-  "def": "The tendency of the sharpness to increase during full-batch training while it is still below $2/\\eta$ (Cohen et al. 2021)."
+  "def": "The tendency of the sharpness to increase during full-batch training while it is still below $2/\\eta$ (Cohen et al. 2021).",
+  "sec": "n-4-the-edge-of-stability"
  },
  "sam": {
   "term": "Sharpness-aware minimization",
@@ -626,7 +630,8 @@
   "tex": "x_{t+1} = x_t - \\eta\\, \\nabla f\\Big(x_t + \\rho\\, \\tfrac{\\nabla f(x_t)}{\\lVert \\nabla f(x_t) \\rVert}\\Big)",
   "aka": [
    "SAM"
-  ]
+  ],
+  "sec": "n-7-sharpness-aware-minimization"
  },
  "warmup": {
   "term": "Learning-rate warmup",
@@ -634,7 +639,8 @@
   "def": "Starting training with a small learning rate and raising it over the first steps. Kalra & Barkeshli 2024 find that its main benefit is letting the network move to flatter, better-conditioned regions that tolerate the larger target rate.",
   "aka": [
    "warmup"
-  ]
+  ],
+  "sec": "n-8-warmup-start-small-end-large"
  },
  "generalization": {
   "term": "Generalization",
@@ -642,7 +648,8 @@
   "def": "How well a model trained on the training set performs on new data. The generalization gap is the test loss minus the training loss.",
   "aka": [
    "generalization gap"
-  ]
+  ],
+  "sec": "n-6-do-flat-minima-generalize-better"
  },
  "overparameterization": {
   "term": "Overparameterization",
