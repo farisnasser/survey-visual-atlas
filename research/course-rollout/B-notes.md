@@ -45,3 +45,49 @@ Paper claims and sources:
 
 Not verifiable / caveats: the heavy ball's lack of a global accelerated guarantee is phrased as "only guaranteed locally"
 (no counterexample paper cited). Sutskever 2013 and Carmon 2018 have no findings entries; claims limited to their abstracts.
+
+## Stop 8 — noise (`course/noise`, check `scripts/check-math/course_noise.py`)
+Sections: 1 A full gradient costs a pass over the data · 2 One random example is an unbiased guess · 3 Stochastic gradient
+descent · 4 The noise floor · 5 Shrinking steps: the Robbins–Monro conditions · 6 How many gradients? The ε⁻⁴ rate ·
+7 Variance reduction · 8 Noise near saddles: help, and its limits · atlas · problem (one step size for all coordinates →
+stop 9, using the line fit's curvatures 0.45 / 12.33, κ = 27.4).
+
+The check script ports mulberry32 + Box–Muller from `src/lib/math.js` exactly, so every random readout on the page is
+reproduced to the printed digits (cloud mean/spread, floor averages, schedule Monte Carlo, SVRG/SGD/GD, escape step).
+
+Dataset (all visuals but `escape`): n = 50, x_i = 4i/49, y_i = 0.8x_i − 0.5 + 0.6 sin(2.7i + 1); w* = 0.800, b* = −0.488,
+f* = 0.180, curvatures 0.450 / 12.33, σ*² = 4.81.
+
+Visuals:
+- `cloud` (2D contour, draggable): 400 minibatch steps (η = 0.08) around the full step at a point; B slider. Default
+  (1.8, −1.2), B = 5: measured spread 15.02 vs exact σ²/B = 15.05.
+- `floor` (3D): constant-step SGD (coral), decaying η/(1 + t/200) (violet), GD (white), 4000 steps from (1.8, −1.2);
+  averages over the last 1000 steps vs the small-step formula ησ*²/(4B). Default η = 0.02, B = 1: 0.0314 vs 0.0241,
+  decaying 7.9e-4, GD < 1e-12. Text: η = 0.005 → 0.0062 vs 0.0060.
+- `schedules` (2D log-log): f = x²/2 with N(0, 1) gradient noise, x₀ = 2, 100 runs, constant / 1/(t + 2) / 1/(t + 2)²
+  with the exact E x² recursion dashed. Closed forms checked: η/(2 − η), (x₀² + t)/(t + 1)², stall at 1.04.
+- `vr` (2D): f − f* per epoch for SGD, SVRG (m = n), GD (1/L) + estimator-error scatter. 60 epochs at η = 0.03: SGD
+  4.1e-2, GD 2.7e-3, SVRG < 1e-15 (strongly convex finite sum: linear convergence; stated in the text).
+- `escape` (3D): f = x²/2 + y⁴/4 − y²/2, two-example finite sum f ± s·y (or ± s·x), start (1.5, 0) on the stable line,
+  η = 0.1. Default s = 0.3, seed 31: escapes in 23 steps; along-x noise and GD never leave y = 0.
+
+Paper claims and sources:
+- Robbins & Monro 1951: Σa_n² < ∞ plus a condition implying Σa_n = ∞; Theorems 1–2; convergence in probability, a.s.
+  later — findings robbins1951stochastic.
+- Ghadimi & Lan 2013 Corollary 2.2 formula, random output x_R, first-order only — findings ghadimi2013stochastic. The
+  N ~ 8LΔσ²/ε⁴ reading with D̃ = D_f is my algebra (checked in the script).
+- Bottou, Curtis, Nocedal 2018 Theorem 4.8 (fixed step: floor ∝ ᾱ + 1/(Kᾱ) term) — findings bottou2018optimization.
+- Arjevani et al. 2023 Theorem 1 Ω(ΔLσ²ε⁻⁴), Theorem 2 ε⁻³ under mean-squared smoothness — findings arjevani2023lower.
+- Reddi et al. 2016 SVRG: Corollary 4, O(n + n^{2/3}/ε) for E‖∇f‖² ≤ ε; "faster than GD by n^{1/3}" — read in the arXiv
+  PDF (1603.06160), not in findings.
+- Fang et al. 2018 SPIDER: Theorems 1, 2, 3 (lower bound when n ≤ O(ε⁻⁴)), Lemma 1's mean-squared smoothness — findings.
+- Wang et al. 2019 SpiderBoost: Theorem 1 O(n + √n ε⁻²) with step 1/(2L), online ε⁻³, first-order only — findings.
+- Daneshmand et al. 2018 CNC: Assumption 1, Theorems 1–2 (ε, ε^{2/5})-SOSP, isotropic r²/d — findings.
+- Fang, Lin, Zhang 2019: plain SGD with restart/average, dispersive noise, Õ(ε^{-3.5}) — findings fang2019sharp.
+- Gürbüzbalaban et al. 2021: heavy tails; Theorems 2, 4; Proposition 5 η_crit = 2b/(σ²(d + b + 1)), α < 2 above it;
+  2/3 for d = b = σ² = 1 — findings.
+- Ge et al. 2019, Li 2019 named only as escape variants of VR methods — findings.
+
+Not verifiable / caveats: "networks are mostly trained with SGD with momentum or adaptive methods; VR mainly a theoretical
+benchmark" is a general observation, not a cited result. "Deep-learning schedules (step, cosine) do not satisfy RM
+literally" is a general statement about common practice. New glossary term added: `noise-floor` (stop 8 block).

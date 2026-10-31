@@ -500,21 +500,24 @@
   "tex": "x_{t+1} = x_t - \\eta\\, g_t, \\qquad \\mathbb{E}[g_t] = \\nabla f(x_t)",
   "aka": [
    "SGD"
-  ]
+  ],
+  "sec": "n-3-stochastic-gradient-descent"
  },
  "minibatch": {
   "term": "Minibatch",
   "ch": "noise",
-  "def": "A small random subset of $B$ training examples used to estimate the gradient. The estimate is unbiased and its variance shrinks like $1/B$.",
+  "def": "A small random subset of $B$ training examples used to estimate the gradient. The estimate is unbiased, and with independently drawn examples its variance is $\\sigma^2/B$: ten times the batch, ten times less variance.",
   "aka": [
    "batch size B"
-  ]
+  ],
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "unbiased": {
   "term": "Unbiased estimate",
   "ch": "noise",
   "def": "A random estimate whose average (expected value) equals the true quantity, such as $\\mathbb{E}[g] = \\nabla f(x)$ for a minibatch gradient.",
-  "tex": "\\mathbb{E}[g] = \\nabla f(x)"
+  "tex": "\\mathbb{E}[g] = \\nabla f(x)",
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "variance": {
   "term": "Variance",
@@ -523,27 +526,38 @@
   "tex": "\\mathbb{E}\\, \\lVert g - \\mathbb{E} g \\rVert^2 \\le \\sigma^2",
   "aka": [
    "$\\sigma^2$"
-  ]
+  ],
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "epoch": {
   "term": "Epoch",
   "ch": "noise",
-  "def": "One full pass over the training set; with minibatches of size $B$, about $n/B$ steps."
+  "def": "One full pass over the training set; with minibatches of size $B$, about $n/B$ steps.",
+  "sec": "n-3-stochastic-gradient-descent"
  },
  "robbins-monro": {
   "term": "Robbins–Monro conditions",
   "ch": "noise",
-  "def": "Step sizes that let stochastic methods converge despite noise: their sum is infinite (the steps can travel any distance), their squares have a finite sum (the noise they inject stays bounded). Example: $\\eta_t = c/t$. From Robbins and Monro (1951).",
-  "tex": "\\sum_t \\eta_t = \\infty, \\qquad \\sum_t \\eta_t^2 < \\infty"
+  "def": "Step sizes that let stochastic methods converge despite noise: their sum is infinite (the steps can travel any distance) and their squares have a finite sum (the noise they inject stays bounded). Example: $\\eta_t = c/t$; a constant step fails the second condition, $c/t^2$ the first. Named after Robbins and Monro (1951).",
+  "tex": "\\sum_t \\eta_t = \\infty, \\qquad \\sum_t \\eta_t^2 < \\infty",
+  "sec": "n-5-shrinking-steps-the-robbins-monro-conditions"
+ },
+ "noise-floor": {
+  "term": "Noise floor",
+  "ch": "noise",
+  "def": "The level SGD with a constant step size settles at instead of converging: the pull toward the minimum balances the random push of the noise. For small steps the excess loss is about $\\eta\\sigma^2/(4B)$, proportional to the step size.",
+  "tex": "\\mathbb{E}[f] - f^\\star \\approx \\frac{\\eta\\, \\sigma_\\star^2}{4B}",
+  "sec": "n-4-the-noise-floor"
  },
  "variance-reduction": {
   "term": "Variance reduction",
   "ch": "noise",
-  "def": "Making stochastic gradients less noisy by occasionally computing a full (or large-batch) gradient and correcting the cheap estimates with it (SVRG, SPIDER, SpiderBoost). It improves the rate for an $\\varepsilon$-stationary point from SGD's $O(\\varepsilon^{-4})$ stochastic gradients to $O(\\varepsilon^{-3})$.",
+  "def": "Making stochastic gradients less noisy near the solution by occasionally computing a full (or large-batch) gradient and correcting the cheap estimates with it (SVRG, SPIDER, SpiderBoost). For an $\\varepsilon$-stationary point it improves SGD's $O(\\varepsilon^{-4})$ stochastic gradients to $O(\\varepsilon^{-3})$, under a stronger smoothness assumption on the individual gradients.",
   "aka": [
    "SVRG",
    "SPIDER"
-  ]
+  ],
+  "sec": "n-7-variance-reduction"
  },
  "preconditioning": {
   "term": "Preconditioning",
