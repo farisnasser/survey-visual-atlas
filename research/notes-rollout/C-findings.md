@@ -141,3 +141,81 @@ started 30 Oct); requests to :8573 reached that server. This session audited on 
   decay the convex |x| (x = 4 at a = b = 2) · with matched degrees the origin is a saddle (eigenvalues λ ± 1; f* = 0.18 at
   λ = 0.2) · with mismatched degrees the origin traps (λ = 0.15, s = 0.1: −0.00995 vs +0.03; 0.5 vs 0.3) · a zero unit
   lets the local-min condition test every new unit (intuition for Theorem 1, flagged as such).
+
+## [9] safran2018spurious — When Bad Local Minima Really Exist
+- **Checked against:** PMLR 80 (ICML 2018) PDF: Eq. (2) population loss, Theorem 1 (n = k ∈ {6..20}; (8, 9) and (k, k+1)
+  for 10 ≤ k ≤ 19), Corollary 1 (d > k; probability ≥ 1 − exp(−Ω(d)) over Gaussian teacher vectors), Lemmas 1–2
+  (certificate), Sec. 4.2 closed-form kernel, experiments (1000 runs, step 0.1, Xavier init), Table 1 (6: 0.3 %,
+  10: 34.6 %, 15: 80.3 %, 20: 94 %), Table 2 ((15, 16): 10.1 %, (19, 20): 49.1 %), Example 1 certificate for n = k = 6
+  (λ_min ≥ 0.004699, r = 1.12·10⁻⁷, objective ≥ 0.02508), Figure 1.
+- **Notes verified:** every table value and certificate number against the paper; the one-neuron example
+  (E[x²1{x>0}] = 1/2, F(0.6) = 0.04) checked in the script.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** minute box verbatim. "The contrast with Lee (2016)", "A proof certificate from the paper (n = k = 6)",
+  "Survey-worthy contrast", "The narrative for the survey" → `:::key`; §13 Papers Master note → `:::plain` under its
+  heading; "Source:" line verbatim with the PDF's link. Five tables as pipe tables. W_* written with a subscript star as
+  in the rendered PDF.
+- **Check script runtime:** the existing GD replication makes `safran2018spurious.py` take ≈ 17 min; it passes.
+- **Primer (5 ideas):** closed-form Gaussian ReLU kernel (1/2 and 1/(2π)) · neuron permutations give k! global minima
+  and force non-convexity (k = 2 midpoint loss ≈ 0.091) · a sphere higher than its centre traps a local minimum
+  (ε = 0.001, λ = 0.1, B = 1: +5.4·10⁻⁵ at t = 0.05) · error bars on 1000-run frequencies (0.17, 1.5, 0.75 points) ·
+  splitting a neuron by homogeneity (why extra width adds room; observed, not proved).
+
+## [10] wu2025loss — Loss Landscape of Shallow ReLU-like Neural Networks
+- **Checked against:** ICLR 2025 proceedings PDF (= openreview ogKE7LcvW6): Eq. (1)–(2) model and squared loss,
+  Def. 3.5 (directional stationarity: all one-sided directional derivatives ≥ 0), Sec. 3 discussion of Clarke
+  stationarity (|x| vs −|x| example), Def. 4.1 escape neuron, Theorem 4.2 (no escape neuron ⇒ local min; necessary when
+  |J| = 1), Corollary 4.4 (second-order decrease Cδ², C < 0), Fact 4.5 (‖wᵢ‖² − h² conserved), Cor. 4.6 / Fact 4.7
+  (vanishing initialization), Prop. 4.8 (unit replication / embedding).
+- **Notes verified:** model, the smooth-region gradient formula (checked by finite differences), both directions of
+  the escape-neuron result, the splitting identity, the scope statements.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** no one-minute summary; built from §1 (question), the "Paper result" box and the "Do not conflate" box.
+  Bold box labels → box titles. Header "Ref. [49]" (survey [56]) dropped.
+- **Primer (5 ideas):** one-sided directional derivatives and the paper's stationarity · Clarke is weaker (|x| vs −|x|,
+  the paper's own example) · a stationary point can still drop at second order (one neuron: L(0.1, 0.1) = 0.49005 < 0.5;
+  dead half-plane) · the conservation law ‖w‖² − a² (Fact 4.5; checked under small-step GD) · plateaus from small
+  initialization (5·10⁻⁶ → 0.1 at ηλ = 0.001: ≈ 9900 steps; labelled a linearized estimate).
+
+## [11] islamov2024loss — Loss Landscape Characterization Without Over-Parametrization
+- **Checked against:** arXiv 2410.12455 (NeurIPS 2024): Definition 1 / Eq. (2) (for any x ∈ X some x_p ∈ Proj(x, S),
+  α > β > 0; reduces to QCvx when β = 0 and S is a singleton), Assumption 1 (each fᵢ L-smooth), Assumption 2
+  (σ²_int := Eᵢ[f* − fᵢ*]), Theorem 1 (SGD, γ ≤ (α − β)/2L, Eq. (9): O(K^{-1/2}) up to 2β/(α − β)·σ²_int), Theorems 2–3
+  (SPSmax, NGN), Sec. 5 (checks along training runs: MLP, CNN, ResNet, LSTM, GNN, Transformer).
+- **Notes verified:** the condition, the distance expansion (checked), the error-floor statement and the empirical caveat.
+- **Fixes:** none. No discrepancies found.
+- **Observation (not changed):** the "Paper result" box says the condition supports "meaningful" bounds. On the paper's
+  own saddle example (Example 2) the condition needs α ≈ 8.8·10⁶ and the floor is vacuous (see research/findings.md);
+  the paper says it does not aim for tight constants. Wording kept (it is the paper's claim, and §4/§5 state the floor).
+- **Layout:** no one-minute summary; built from §1 (question), the "Paper result" box and the "Critical distinction"
+  box. Bold box labels → box titles. Header "Ref. [50]" (survey [57]) dropped. Source line uses the paper's exact
+  title (*Loss Landscape Characterization of Neural Networks without Over-Parametrization*).
+- **Primer (4 ideas):** PL forces every stationary point to be global (Lee's quartic saddle: gap 1/4 at zero gradient)
+  · convex alignment ⟨∇f, x − x*⟩ ≥ f − f* and the distance expansion (4 → 1) · the β term rewritten as slack
+  (α − β)(fᵢ(x) − fᵢ(x_p)) − β(fᵢ(x_p) − fᵢ*); averaging shows saddles need σ²_int > 0 (derived here from the definition,
+  stated as such) · two disagreeing examples: σ²_int = 0.5 and a constant-step SGD floor ≈ 0.026 at γ = 0.1.
+
+## [12] bhojanapalli2016global — When Local Search Becomes Global
+- **Checked against:** NeurIPS 2016 proceedings PDF (and arXiv 1605.07221 for Sec. 5): Definition 2.1 (RIP), Theorem 3.1
+  (δ₄ᵣ < 1/10, ‖UUᵀ − X*‖_F ≤ 20√(log n/m)σ_w), Theorem 3.2 (strict saddle), Theorem 3.3 (projected perturbed update (4)),
+  Theorem 3.4 (approximately low rank), Theorem 4.1 (noiseless, δ₄ᵣ < 1/5), Lemma 4.2, Corollary 4.1, Lemma 4.4, m = O(nr),
+  Figure 1 (n = 100, transition near m = 2nr), Sec. 5 (NP-hardness, Examples 1–2).
+- **Notes verified:** the 2 × 2 example (expansion, gradient, f(0.1, 0) = 0.9801, Hessian diag(−4, 0)), all theorem
+  numbers and constants, Figure 1 description.
+- **Fix — error in the paper itself, repeated by the notes (§8):** the paper's Example 1 (Sec. 5), f(X) = (X₁₁ + X₂₂ − 1)²
+  + (X₁₁ − 1)² + X₁₂² + X₂₁² with a rank-1 constraint, says "X = diag(0, 1) is a rank 1 local minimum with f(X) = 1". It is
+  not: the rank-one PSD matrices [[s, √(s(1−s))], [√(s(1−s)), 1−s]] → diag(0, 1) as s → 0 and have f = 1 − s² < 1
+  (checked in the script). Example 2 fails the same way (rank-2 PSD neighbours of diag(0, ½, ½) with f = 1 − s). The
+  arXiv version's Example 1 (without the off-diagonal terms) fails even faster (f = 1 − 2ε + … along X₁₂ = X₂₁ = √ε).
+  Notes §8 original: "Section 5 constructs measurement operators … for which a rank-constrained recovery problem does
+  have a nonglobal local minimum. One example has … but X = diag(0, 1) is a suboptimal rank-one local minimum with loss
+  1." → now attributes both sentences to the paper ("the paper states") and adds a one-paragraph "Correction (our
+  check)" with the counter-path, keeping the NP-hardness argument of Sec. 5, which stands. The "Interpretation"
+  paragraph is kept. The existing visual page does not use this example. **Coordinator:** the survey text for [58]
+  should not cite Sec. 5's explicit examples as proof that spurious minima exist without RIP.
+- **Layout:** minute box verbatim; "What the paper is really asking", "Why 4r?", "Key implication", "Don't memorize the
+  constants in the lemmas" → `:::key`; "Papers Master note (copy)" → `:::plain`; "Source:" line verbatim (its link).
+- **Primer (4 ideas):** factorization saves parameters (500 vs 5050) but is non-convex (midpoint of ±(1, 0) has loss 1)
+  · one Gaussian measurement set preserves ‖Z‖_F² on average (sd √(2/m) = 0.1 at m = 200); RIP demands it for all
+  low-rank Z · first- and second-order necessary conditions and how Theorems 3.1/4.1 + 3.2 combine · worst-case
+  NP-hardness vs the structured RIP class (points to the §8 correction).

@@ -100,4 +100,30 @@ save_json("safran2018spurious", "data.json", {
               "spurious": [0, 0], "global": [1, 0], "F_spurious": float(F(Ws, V)), "lam_min": float(lam_min),
               "Ws": r(Ws, 8), "d1": r(d1.reshape(n, k), 8), "d2": r(d2.reshape(n, k), 8), "k": k},
 })
+
+# in-page notes (papers/safran2018spurious/notes.md): Sec. 3 example, table arithmetic and the primer's numbers
+Rs = np.random.default_rng(55)
+xg = Rs.normal(size=2_000_000)
+check("notes Sec. 3: E[x^2 1{x>0}] = 1/2, F(0.6) = 0.04, F(1) = 0", abs(np.mean(xg ** 2 * (xg > 0)) - .5) < 2e-3 and np.isclose(.25 * (.6 - 1) ** 2, .04))
+check("notes Sec. 6: percentages = runs/1000 (0.3, 34.6, 80.3, 94.0, 10.1, 49.1)",
+      all(np.isclose(a / 10, b) for a, b in [(3, .3), (346, 34.6), (803, 80.3), (940, 94.0), (101, 10.1), (491, 49.1)]))
+def Kp(a, b):
+    na, nb = np.linalg.norm(a), np.linalg.norm(b)
+    th = np.arccos(np.clip(a @ b / (na * nb), -1, 1))
+    return na * nb / (2 * np.pi) * (np.sin(th) + (np.pi - th) * np.cos(th))
+e1, e2 = np.eye(2)
+X2 = Rs.normal(size=(1_000_000, 2))
+mc = lambda a, b: np.mean(np.maximum(X2 @ a, 0) * np.maximum(X2 @ b, 0))
+check("primer idea 1: kernel = 1/2 at theta = 0, 1/(2 pi) ~ 0.159 at theta = pi/2 (and matches Monte Carlo)",
+      np.isclose(Kp(e1, e1), .5) and round(Kp(e1, e2), 3) == .159 and abs(mc(e1, e1) - .5) < 3e-3 and abs(mc(e1, e2) - Kp(e1, e2)) < 3e-3)
+F2 = lambda W, V: .5 * (sum(Kp(a, b) for a in W for b in W) - 2 * sum(Kp(a, b) for a in W for b in V) + sum(Kp(a, b) for a in V for b in V))
+mid = (e1 + e2) / 2
+import math
+check("primer idea 2: permuted students zero loss, midpoint loss ~ 0.091",
+      math.factorial(6) == 720 and abs(F2([e1, e2], [e1, e2])) < 1e-12 and abs(F2([e2, e1], [e1, e2])) < 1e-12 and round(F2([mid, mid], [e1, e2]), 3) == .091)
+gb = lambda t: -.001 * t + .05 * t * t - t ** 3 / 6
+check("primer idea 3: Taylor lower bound ~ +5.4e-5 at t = 0.05, negative at t = 0.01", round(gb(.05) * 1e5, 1) == 5.4 and gb(.01) < 0)
+se = lambda h: 100 * np.sqrt(h / 1000 * (1 - h / 1000) / 1000)
+check("primer idea 4: standard errors 0.17, 1.5, 0.75 percentage points", round(se(3), 2) == .17 and round(se(346), 1) == 1.5 and round(se(940), 2) == .75)
+check("primer idea 5: [w.x/2]_+ * 2 = [w.x]_+", np.allclose(2 * np.maximum(X2[:1000] @ (np.array([.3, -1.2]) / 2), 0), np.maximum(X2[:1000] @ np.array([.3, -1.2]), 0)))
 done()

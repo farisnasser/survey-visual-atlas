@@ -72,4 +72,25 @@ diag = np.linspace(-1.5, 3.5, 201); pl = [float(np.sum(g([t_, t_]) ** 2) / (2 * 
 save_json("islamov2024loss", "data.json", {"m1": r(m1, 6), "fstar": float(fstar), "alpha": round(amin, 2), "L": L, "floor": round(floor, 3),
                                            "req": {"dom": [-B, 2 + B], "z": r(np.log10(np.maximum(req[::4, ::4], 1e-3)), 3)},
                                            "pl": [[round(float(t_), 3), (None if v is None else float(f"{v:.4g}"))] for t_, v in zip(diag, pl)]})
+
+# in-page notes (papers/islamov2024loss/notes.md): Sec. 3 distance expansion and the primer's numbers
+Ri = np.random.default_rng(57)
+for _ in range(5):
+    xk, xp_, gg, gm = Ri.normal(size=4), Ri.normal(size=4), Ri.normal(size=4), Ri.uniform(.01, 1)
+    assert np.isclose(np.sum((xk - gm * gg - xp_) ** 2), np.sum((xk - xp_) ** 2) - 2 * gm * gg @ (xk - xp_) + gm ** 2 * gg @ gg)
+check("notes Sec. 3: ||x - g grad - x_p||^2 expansion", True)
+fl = lambda p: .5 * p[0] ** 2 + .25 * p[1] ** 4 - .5 * p[1] ** 2
+check("primer idea 1: saddle at 0 with f = 0, f* = -1/4 at y = +-1 (PL fails there)", fl([0, 0]) == 0 and fl([0, 1]) == -.25 and fl([0, -1]) == -.25)
+check("primer idea 2: f = x^2/2, x = 2, step 0.5: squared distance 4 -> 4 - 2(0.5)(4) + 0.25(4) = 1", (2 - .5 * 2) ** 2 == 1 and 4 - 2 * .5 * 4 + .25 * 4 == 1)
+al, be = Ri.uniform(2, 5), Ri.uniform(.1, 1.9)
+fx, fxp, fis = Ri.uniform(1, 3), Ri.uniform(.5, 1), Ri.uniform(0, .5)
+check("primer idea 3: a(fx - fxp) - b(fx - f*) = (a - b)(fx - fxp) - b(fxp - f*)", np.isclose(al * (fx - fxp) - be * (fx - fis), (al - be) * (fx - fxp) - be * (fxp - fis)))
+check("primer idea 3: alpha=3, beta=2, s2=0.5 allow a gap up to 1.0", np.isclose(2 * .5 / (3 - 2), 1.0))
+xx = np.linspace(-3, 3, 60001); fav = .5 * (.5 * (xx - 1) ** 2 + .5 * (xx + 1) ** 2)
+check("primer idea 4: f = (x^2+1)/2, f* = 0.5 at 0, sigma_int^2 = E[f* - f_i*] = 0.5", np.isclose(fav.min(), .5) and abs(xx[np.argmin(fav)]) < 1e-9 and np.allclose(fav, .5 * (xx ** 2 + 1)))
+xs_, acc = 0.0, []
+for k in range(400000):
+    xs_ = xs_ - .1 * (xs_ - Ri.choice([1.0, -1.0]))
+    if k > 1000: acc.append(.5 * xs_ ** 2)
+check("primer idea 4: constant-step SGD (0.1) gap ~ gamma/(2(2-gamma)) ~ 0.026", abs(np.mean(acc) - .1 / (2 * 1.9)) < 1.5e-3 and round(.1 / 3.8, 3) == .026, f"{np.mean(acc):.4f}")
 done()
