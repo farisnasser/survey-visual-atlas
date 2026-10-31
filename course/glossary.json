@@ -490,7 +490,8 @@
   "def": "Adding a fraction $\\beta$ of the previous step to the current one, so the optimizer keeps moving in consistent directions while back-and-forth zig-zags partly cancel.",
   "aka": [
    "$\\beta$"
-  ]
+  ],
+  "sec": "n-2-the-heavy-ball"
  },
  "ema": {
   "term": "Exponential moving average",
@@ -499,7 +500,8 @@
   "tex": "m_t = \\beta\\, m_{t-1} + (1 - \\beta)\\, g_t",
   "aka": [
    "EMA"
-  ]
+  ],
+  "sec": "n-3-momentum-is-an-average-of-past-gradients"
  },
  "heavy-ball": {
   "term": "Heavy-ball method",
@@ -508,7 +510,8 @@
   "tex": "x_{t+1} = x_t - \\eta \\nabla f(x_t) + \\beta\\, (x_t - x_{t-1})",
   "aka": [
    "Polyak momentum"
-  ]
+  ],
+  "sec": "n-2-the-heavy-ball"
  },
  "nesterov": {
   "term": "Nesterov's accelerated gradient",
@@ -518,18 +521,21 @@
   "aka": [
    "NAG",
    "Nesterov momentum"
-  ]
+  ],
+  "sec": "n-4-nesterov-s-look-ahead"
  },
  "acceleration": {
   "term": "Acceleration",
   "ch": "memory",
-  "def": "Converging faster than plain GD by changing how the condition number enters: on smooth strongly convex functions about $\\sqrt{\\kappa}\\log(1/\\varepsilon)$ steps instead of $\\kappa\\log(1/\\varepsilon)$. Non-convex accelerated methods improve GD's $\\varepsilon^{-2}$ to about $\\varepsilon^{-7/4}$ (e.g. Jin et al. 2018)."
+  "def": "Converging faster than plain GD by changing how the condition number enters: on quadratics and smooth strongly convex functions about $\\sqrt{\\kappa}\\log(1/\\varepsilon)$ steps instead of $\\kappa\\log(1/\\varepsilon)$. For non-convex problems, accelerated methods reach $\\varepsilon$-stationary points (Carmon et al. 2018) or $\\varepsilon$-SOSPs (Jin et al. 2018) in $\\tilde O(\\varepsilon^{-7/4})$ gradient steps instead of $\\varepsilon^{-2}$.",
+  "sec": "n-6-why-the-square-root-a-2-2-matrix"
  },
  "lookahead": {
   "term": "Lookahead",
   "ch": "memory",
   "def": "Zhang et al. 2019: let an inner optimizer take $k$ fast steps, then move the slow weights a fraction $\\alpha$ of the way toward where the fast weights ended, and restart the fast weights from there.",
-  "tex": "\\phi_{t+1} = \\phi_t + \\alpha\\,(\\theta_{t,k} - \\phi_t)"
+  "tex": "\\phi_{t+1} = \\phi_t + \\alpha\\,(\\theta_{t,k} - \\phi_t)",
+  "sec": "n-9-lookahead-averaging-the-trajectory"
  },
  "sgd": {
   "term": "Stochastic gradient descent",
@@ -538,21 +544,24 @@
   "tex": "x_{t+1} = x_t - \\eta\\, g_t, \\qquad \\mathbb{E}[g_t] = \\nabla f(x_t)",
   "aka": [
    "SGD"
-  ]
+  ],
+  "sec": "n-3-stochastic-gradient-descent"
  },
  "minibatch": {
   "term": "Minibatch",
   "ch": "noise",
-  "def": "A small random subset of $B$ training examples used to estimate the gradient. The estimate is unbiased and its variance shrinks like $1/B$.",
+  "def": "A small random subset of $B$ training examples used to estimate the gradient. The estimate is unbiased, and with independently drawn examples its variance is $\\sigma^2/B$: ten times the batch, ten times less variance.",
   "aka": [
    "batch size B"
-  ]
+  ],
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "unbiased": {
   "term": "Unbiased estimate",
   "ch": "noise",
   "def": "A random estimate whose average (expected value) equals the true quantity, such as $\\mathbb{E}[g] = \\nabla f(x)$ for a minibatch gradient.",
-  "tex": "\\mathbb{E}[g] = \\nabla f(x)"
+  "tex": "\\mathbb{E}[g] = \\nabla f(x)",
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "variance": {
   "term": "Variance",
@@ -561,27 +570,38 @@
   "tex": "\\mathbb{E}\\, \\lVert g - \\mathbb{E} g \\rVert^2 \\le \\sigma^2",
   "aka": [
    "$\\sigma^2$"
-  ]
+  ],
+  "sec": "n-2-one-random-example-is-an-unbiased-guess"
  },
  "epoch": {
   "term": "Epoch",
   "ch": "noise",
-  "def": "One full pass over the training set; with minibatches of size $B$, about $n/B$ steps."
+  "def": "One full pass over the training set; with minibatches of size $B$, about $n/B$ steps.",
+  "sec": "n-3-stochastic-gradient-descent"
  },
  "robbins-monro": {
   "term": "Robbins–Monro conditions",
   "ch": "noise",
-  "def": "Step sizes that let stochastic methods converge despite noise: their sum is infinite (the steps can travel any distance), their squares have a finite sum (the noise they inject stays bounded). Example: $\\eta_t = c/t$. From Robbins and Monro (1951).",
-  "tex": "\\sum_t \\eta_t = \\infty, \\qquad \\sum_t \\eta_t^2 < \\infty"
+  "def": "Step sizes that let stochastic methods converge despite noise: their sum is infinite (the steps can travel any distance) and their squares have a finite sum (the noise they inject stays bounded). Example: $\\eta_t = c/t$; a constant step fails the second condition, $c/t^2$ the first. Named after Robbins and Monro (1951).",
+  "tex": "\\sum_t \\eta_t = \\infty, \\qquad \\sum_t \\eta_t^2 < \\infty",
+  "sec": "n-5-shrinking-steps-the-robbins-monro-conditions"
+ },
+ "noise-floor": {
+  "term": "Noise floor",
+  "ch": "noise",
+  "def": "The level SGD with a constant step size settles at instead of converging: the pull toward the minimum balances the random push of the noise. For small steps the excess loss is about $\\eta\\sigma^2/(4B)$, proportional to the step size.",
+  "tex": "\\mathbb{E}[f] - f^\\star \\approx \\frac{\\eta\\, \\sigma_\\star^2}{4B}",
+  "sec": "n-4-the-noise-floor"
  },
  "variance-reduction": {
   "term": "Variance reduction",
   "ch": "noise",
-  "def": "Making stochastic gradients less noisy by occasionally computing a full (or large-batch) gradient and correcting the cheap estimates with it (SVRG, SPIDER, SpiderBoost). It improves the rate for an $\\varepsilon$-stationary point from SGD's $O(\\varepsilon^{-4})$ stochastic gradients to $O(\\varepsilon^{-3})$.",
+  "def": "Making stochastic gradients less noisy near the solution by occasionally computing a full (or large-batch) gradient and correcting the cheap estimates with it (SVRG, SPIDER, SpiderBoost). For an $\\varepsilon$-stationary point it improves SGD's $O(\\varepsilon^{-4})$ stochastic gradients to $O(\\varepsilon^{-3})$, under a stronger smoothness assumption on the individual gradients.",
   "aka": [
    "SVRG",
    "SPIDER"
-  ]
+  ],
+  "sec": "n-7-variance-reduction"
  },
  "preconditioning": {
   "term": "Preconditioning",
@@ -590,35 +610,42 @@
   "tex": "x_{t+1} = x_t - \\eta\\, P\\, \\nabla f(x_t)",
   "aka": [
    "preconditioner"
-  ]
+  ],
+  "sec": "n-2-preconditioning-reshaping-the-landscape"
  },
  "adagrad": {
   "term": "AdaGrad",
   "ch": "adaptive",
   "def": "Duchi et al. 2011: divide each coordinate's step by the square root of the sum of all its past squared gradients, so coordinates with large gradients get smaller steps and rare ones get larger steps.",
-  "tex": "x_{t+1,i} = x_{t,i} - \\frac{\\eta}{\\sqrt{\\sum_{s \\le t} g_{s,i}^2} + \\epsilon}\\; g_{t,i}"
+  "tex": "x_{t+1,i} = x_{t,i} - \\frac{\\eta}{\\sqrt{\\sum_{s \\le t} g_{s,i}^2} + \\epsilon}\\; g_{t,i}",
+  "sec": "n-3-adagrad-let-the-gradients-set-the-steps"
  },
  "rmsprop": {
   "term": "RMSProp",
   "ch": "adaptive",
-  "def": "Like AdaGrad, but with an exponential moving average of squared gradients instead of their full sum, so old gradients are forgotten and the step size does not shrink forever."
+  "def": "Like AdaGrad, but with an exponential moving average of squared gradients instead of their full sum, so old gradients are forgotten and the step size does not shrink forever. Proposed by Tieleman and Hinton (2012).",
+  "tex": "v_t = \\beta_2 v_{t-1} + (1 - \\beta_2)\\, g_t^2, \\qquad x_{t+1} = x_t - \\frac{\\eta}{\\sqrt{v_t} + \\epsilon}\\, g_t",
+  "sec": "n-4-rmsprop-forget-the-distant-past"
  },
  "adam": {
   "term": "Adam",
   "ch": "adaptive",
-  "def": "Kingma & Ba 2015: momentum (an EMA $m_t$ of the gradients) divided coordinate by coordinate by the square root of an EMA $v_t$ of the squared gradients, both bias-corrected. Defaults $\\beta_1 = 0.9$, $\\beta_2 = 0.999$.",
-  "tex": "x_{t+1} = x_t - \\eta\\, \\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}"
+  "def": "Kingma & Ba 2015: momentum (an EMA $m_t$ of the gradients) divided coordinate by coordinate by the square root of an EMA $v_t$ of the squared gradients, both bias-corrected. Defaults $\\alpha = 0.001$, $\\beta_1 = 0.9$, $\\beta_2 = 0.999$. It can fail to converge on some problems (Reddi et al. 2018); fixes include AMSGrad and ADOPT.",
+  "tex": "x_{t+1} = x_t - \\eta\\, \\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}",
+  "sec": "n-5-adam-momentum-plus-rmsprop-with-bias-correction"
  },
  "bias-correction": {
   "term": "Bias correction",
   "ch": "adaptive",
-  "def": "An EMA started at zero is too small during the first steps; Adam divides it by $1 - \\beta^t$ to undo this, for example $\\hat m_t = m_t / (1 - \\beta_1^t)$."
+  "def": "An EMA started at zero is too small during the first steps; Adam divides it by $1 - \\beta^t$ to undo this, for example $\\hat m_t = m_t / (1 - \\beta_1^t)$.",
+  "sec": "n-5-adam-momentum-plus-rmsprop-with-bias-correction"
  },
  "clipping": {
   "term": "Gradient clipping",
   "ch": "adaptive",
   "def": "Shrinking the gradient whenever it is longer than a threshold $\\gamma$, so that steps stay bounded where the landscape is steep.",
-  "tex": "g \\;\\mapsto\\; \\min\\Big\\{1, \\frac{\\gamma}{\\lVert g \\rVert}\\Big\\}\\, g"
+  "tex": "g \\;\\mapsto\\; \\min\\Big\\{1, \\frac{\\gamma}{\\lVert g \\rVert}\\Big\\}\\, g",
+  "sec": "n-7-gradient-clipping-and-l-0-l-1-smoothness"
  },
  "l0l1-smooth": {
   "term": "$(L_0, L_1)$-smooth",
@@ -627,13 +654,15 @@
   "tex": "\\lVert \\nabla^2 f(x) \\rVert \\le L_0 + L_1 \\lVert \\nabla f(x) \\rVert",
   "aka": [
    "relaxed smoothness"
-  ]
+  ],
+  "sec": "n-7-gradient-clipping-and-l-0-l-1-smoothness"
  },
  "shampoo": {
   "term": "Shampoo",
   "ch": "adaptive",
   "def": "Gupta et al. 2018: for a weight matrix $W$, keep one small statistics matrix for its rows and one for its columns, and precondition the gradient from both sides. Captures more than a diagonal at a fraction of the cost of a full $d \\times d$ matrix.",
-  "tex": "W_{t+1} = W_t - \\eta\\, L_t^{-1/4}\\, G_t\\, R_t^{-1/4}"
+  "tex": "W_{t+1} = W_t - \\eta\\, L_t^{-1/4}\\, G_t\\, R_t^{-1/4}",
+  "sec": "n-8-beyond-the-diagonal"
  },
  "sharpness": {
   "term": "Sharpness",
