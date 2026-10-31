@@ -58,4 +58,33 @@ for p_ in [.5, .75, 1.]:
     print(f"  Theorem 4, p = {p_}: E|X_n|^2 at n = 1e5: {out[-1, 1]:.3g}, fitted slope over n in [1e3, 1e5]: {slope:.3f} (theory -p = {-p_})")
     check(f"local rate slope ~ -p for p = {p_}", abs(slope + p_) < .05)
 save_json("mertikopoulos2020almost", "data.json", {"res": {str(k_): v for k_, v in res.items()}, "rates": rates, "sigma": SIG, "local": {"sigma": SL, "gamma": GL}})
+
+# in-page notes (papers/mertikopoulos2020almost/notes.md): Sec. 2 inequality, Sec. 4 toy and the primer's numbers
+Rm = np.random.default_rng(65)
+A_ = np.diag([2.0, -.5]); Lq_ = 2.0; sg = .3; gk = .2       # f = x^T A x / 2 is L-smooth with L = 2 (non-convex)
+fq = lambda v: .5 * v @ A_ @ v
+x0q = np.array([.7, .4])
+nxt = x0q - gk * (A_ @ x0q + Rm.normal(0, sg / np.sqrt(2), size=(400000, 2)))
+lhs = np.mean(.5 * np.einsum('ij,jk,ik->i', nxt, A_, nxt))
+rhs = fq(x0q) - gk * (1 - Lq_ * gk / 2) * np.sum((A_ @ x0q) ** 2) + Lq_ * gk ** 2 * sg ** 2 / 2
+check("notes Sec. 2: E[f(x_{k+1}) | F_k] <= f - g(1 - Lg/2)||grad||^2 + L g^2 s^2/2", lhs <= rhs + 1e-3, f"{lhs:.4f} <= {rhs:.4f}")
+yv, ok_y = np.zeros(2000), True
+for k in range(3000):
+    g_ = .5 / (k + 1) ** .75
+    yv = (1 + g_) * yv - g_ * Rm.choice([-1.0, 1.0], 2000)
+check("notes Sec. 4: noisy y_{k+1} = (1 + g)y_k - g z leaves y = 0 in every run", np.all(np.abs(yv) > 1e-3), f"min |y| {np.abs(yv).min():.2e}")
+check("primer idea 1: sum_{n<=1e5} 1/n ~ 12.1; sum 1/n^2 finite (~1.645)", round(np.sum(1 / np.arange(1, 10 ** 5 + 1)), 1) == 12.1 and round(np.sum(1 / np.arange(1, 10 ** 6) ** 2), 3) == 1.645)
+cnt = np.sum(Rm.random(10 ** 5) < 1 / np.arange(1, 10 ** 5 + 1))
+check("primer idea 1: ones among 1e5 draws with P = 1/n is around 12", 3 <= cnt <= 25, f"{cnt}")
+check("primer idea 2: 2/(q+2) = 1/2 (q=2), 1/3 (q=4), -> 0 (q -> inf)", np.isclose(2 / 4, .5) and np.isclose(2 / 6, 1 / 3) and 2 / (1e9 + 2) < 1e-8)
+yz = 0.0
+for k in range(3000):
+    yz = (1 + .5 / (k + 1) ** .75) * yz - 0.0
+check("primer idea 3: with no y-noise, y stays exactly 0", yz == 0.0)
+phi = lambda r: r ** 4 / 4 - r ** 3 + r ** 2
+fr = lambda v: phi(np.linalg.norm(v))
+check("primer idea 4: phi'(r) = r(r-1)(r-2); phi''(1) = -1", all(np.isclose((phi(r + 1e-6) - phi(r - 1e-6)) / 2e-6, r * (r - 1) * (r - 2), atol=1e-6) for r in np.linspace(.2, 2.5, 12))
+      and np.isclose((phi(1 + 1e-4) - 2 * phi(1) + phi(1 - 1e-4)) / 1e-8, -1, atol=1e-4))
+ev = [np.sort(eig(fd_hess(fr, [np.cos(t), np.sin(t)]))) for t in np.linspace(0, 2 * np.pi, 7)]
+check("primer idea 4: on the circle r = 1 the Hessian has eigenvalues -1 and 0", all(np.allclose(e, [-1, 0], atol=1e-3) for e in ev))
 done()

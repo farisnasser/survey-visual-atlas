@@ -283,3 +283,53 @@ started 30 Oct); requests to :8573 reached that server. This session audited on 
   curvature uᵀHu is a weighted average of eigenvalues (−0.5 vs +1 on diag(1, 1, −2)) · random slices see the mean
   eigenvalue and hide rare negative ones (0.997 with one −2 among 999 +1) · Hessian–vector products and Lanczos
   (10¹² entries = 4 TB; Hv from two gradients).
+
+## [17] goodfellow2015qualitatively — Qualitatively Characterizing Neural Network Optimization Problems
+- **Checked against:** arXiv 1412.6544 (ICLR 2015): Sec. 2 method ℓ(α) = J((1 − α)θ₀ + αθ_f), Secs. 3–4 (seven models,
+  mostly monotone; the paper's own exceptions: a shallow early barrier, conv maxout Fig. 6, and a secondary minimum on
+  the MP-DBM line, Fig. 7), Fig. 5 (two SGD solutions are separate minima on their joining line), Fig. 14 (factored model
+  (1 − w₁w₂)² with a saddle at the origin).
+- **Notes verified:** the method, the chain-rule slope (checked), the saddle example and the hedged statements ("often",
+  "several", "particular line") all match the paper.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** no one-minute summary; built from §1 (question, method), the "Paper result" box and the "Careful wording"
+  box. Header "Ref. [56]" (survey [63]) dropped. Source line built (authors, ICLR 2015, arXiv link); the notes' own link
+  (saxelab.org PDF) stays in §6.
+- **Primer (3 ideas):** convex ⇒ every line to the minimum goes down (9(1 − α)²), but non-convex functions can also give
+  monotone lines · symmetric solutions are separated by barriers (paper's Fig. 14 toy: peak 1 at the midpoint; Fig. 5) ·
+  the line is not the SGD path (GD from (0.5, 0.1): monotone line 0.9025 → 0, path deviates up to 0.062).
+
+## [18] panageas2019first — First-Order Methods Almost Always Avoid Saddle Points: Vanishing Step-Sizes
+- **Checked against:** arXiv 1906.07772**v3** (27 Sep 2025; NeurIPS 2019 paper with the authors' correction): Theorem 1.1
+  (informal; "isolated and non-isolated"), Sec. 2 (now: "We also assume that the Hessian matrix of the objective function
+  f is invertible"), Theorem 4.1 (stable manifold for time non-homogeneous systems, H invertible), Corollaries 4.2–4.3
+  (α_k → 0, α_k ∈ Ω(1/k)), Sec. 5 (GD, mirror descent, proximal point, manifold GD; "We also assume that the Hessian
+  ∇²f(x*) is invertible"), Remark 3.1 + Fig. 1 (summable steps, 1/k⁴ converges to a non-critical point), Acknowledgement
+  ("the proof of the main theorem to work requires the extra assumption that the Hessian of f is invertible").
+- **Fix (authors' own correction):** §3 original "including isolated and non-isolated strict-saddle sets, for suitably
+  controlled vanishing step sizes" → kept, with the inserted qualifier "(as stated in the NeurIPS version; the authors'
+  arXiv v3 correction adds the assumption that the Hessian at the saddle is invertible, which only isolated saddles
+  satisfy)". A critical point with an invertible Hessian is isolated, so non-isolated strict-saddle sets are not covered
+  by the corrected proof. The source line cites the v3 correction. **Coordinator/survey:** the survey's [64] text should
+  say "with an invertible Hessian at the saddle" if it mentions non-isolated saddles (round-3 finding says it does not).
+- **Notes verified:** the linearization, the ∑α_k argument (checked), Ω(1/k), the four method families, the limits.
+- **Layout:** no one-minute summary; built from §1 (question), the "Principal result" box and the "Do not conflate" box.
+  Header "Ref. [57]" (survey [64]) dropped.
+- **Primer (4 ideas):** products of growth factors are controlled by ∑α_k (∏(1 + 1/k) = t + 1 vs ∏(1 + 1/k²) =
+  sinh π/π ≈ 3.68) · summable steps freeze GD at non-critical points (x_∞ ≈ 0.174 with α_k = 0.8/(k+1)²; paper Fig. 1) ·
+  why a time-varying map needs Theorem 4.1 (diagonal example) · mirror descent with the entropy ((0.5, 0.5) → (0.269, 0.731)).
+
+## [19] mertikopoulos2020almost — On the Almost Sure Convergence of SGD in Non-Convex Problems
+- **Checked against:** NeurIPS 2020 PDF + arXiv 2006.11144: Assumptions 1–5 (Assumption 5: uniformly exciting noise,
+  E[⟨Z, u⟩₊] ≥ c for every unit u), Theorem 1 (bounded APTs), Theorem 2 (γ_n = Θ(1/n^p), p ∈ (2/(q+2), 1] ⇒ a.s. convergence
+  to a component of the critical set), Theorem 3 (γ_n ∝ 1/n^p, p ∈ (0, 1], q = ∞ ⇒ P(X_n → S) = 0 for every strict saddle
+  manifold S, any initial condition), Theorem 4 (local rate near regular minimizers).
+- **Notes verified:** the update, descent lemma and the conditional-expectation inequality (checked by Monte Carlo on a
+  non-convex quadratic), the saddle toy (checked), the result statements and limits.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** no one-minute summary; built from §1 (research problem), the "Principal result" box and the "Scope" box.
+  Header "Ref. [58]" (survey [65]) dropped.
+- **Primer (4 ideas):** expectation vs almost-sure (P = 1/n: E → 0 but ones recur, ≈ 12.1 expected in 10⁵ draws; 1/n²:
+  finitely many) · step sizes 1/n^p and the paper's p > 2/(q+2) (½, ⅓, → 0) · uniformly exciting noise (no y-noise ⇒ stuck
+  on y = 0) · saddle manifolds with a singular Hessian (radial φ, ridge r = 1 with eigenvalues −1, 0) — ties to the
+  Panageas v3 invertibility assumption.
