@@ -70,3 +70,74 @@ started 30 Oct); requests to :8573 reached that server. This session audited on 
 - **Primer (5 ideas):** online regret and sublinear growth (√T → 0.01 average at T = 10⁴) · subgradients (|x| at 0) ·
   one rate starves rare features (G = 10⁴ vs 10² → steps η/100 vs η/10) · the paper's §1.3 sparse example in numbers
   (harmonic H_d 2.93 / 9.79 vs √d 3.16 / 100) · online-to-batch conversion needs convexity.
+
+## [5] kingma2015adam — Adam: A Method for Stochastic Optimization
+- **Checked against:** arXiv 1412.6980v9 (ICLR 2015): Algorithm 1 (ε added after the square root), Sec. 2.1 (|Δ_t|
+  roughly bounded by α, "signal-to-noise ratio" m̂/√v̂ and automatic annealing, invariance to gradient scale), Sec. 3
+  (initialization bias correction), Sec. 4 (online convex regret analysis), abstract ("little memory requirements").
+- **Notes verified:** both moment recurrences, bias corrections, the update, the constant-gradient derivation
+  m_t = (1 − β₁ᵗ)g (checked), the claims of §4–§6 (regret analysis is online-convex; later work found flaws).
+- **Fixes (cross-reference numbers → survey numbering):** §6 "such as our Ref. [34]" → "our Ref. [42]" — old [34] is
+  Li, Rakhlin & Jadbabaie, *Convergence of Adam Under Relaxed Assumptions* (its notes header reads "Ref. [34]"), survey [42].
+- **Layout:** no one-minute summary; built from §1 (Goal), the "Main contribution" box and the "Accuracy note" box.
+  Bold box labels → box titles. Header "Ref. [43]" (survey [51]) dropped.
+- **Primer (5 ideas):** EMA memory ≈ 1/(1 − β) (10 and 1000 steps) · averaging shrinks noise variance by (1 − β)/(1 + β)
+  (= 1/19) · dividing by the RMS removes gradient scale (paper Sec. 2.1) · m̂/√v̂ as signal-to-noise and automatic
+  annealing (paper's terms) · uncorrected early steps are too large (3.16α at t = 1, peak 6.57α at t = 12).
+
+## [6] laurent2018deep — All Local Minima Are Global (Deep Linear Networks with Arbitrary Loss)
+- **Checked against:** PMLR 80 (ICML 2018) PDF, pp. 1–6: hypotheses (i) convex + differentiable loss, (ii) thinnest
+  layer is the input or output layer (structural condition (3)); Theorem 1 (local = global), Theorem 2 (convex,
+  Lipschitz, non-differentiable counterexample; Eq. (22)–(23) f(x, y) = |x| + (1 − y)₊ − 1), Theorem 3 (local minimizer
+  of (P2) ⇒ ∇f(Â) = 0), Sec. 3 remark (critical points ≠ local minima).
+- **Notes verified:** the scalar example (zero-loss settings, ∂F/∂w at (0, 0), f′(0) = −8), Theorem 3 and the width
+  condition, the role of differentiability. All numbers checked in the script.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** the notes' "Paper in one minute." box has no labels; kept as one paragraph with its bold sentence.
+  "The actual bridge … (Theorem 3)" box → `:::theorem`; "Limits / survey connection." → `:::warn`; "Takeaway:" →
+  `:::ours Takeaway`; the notes' own "Source:" line kept verbatim, with the PMLR link added.
+- **Figure (§2):** redrawn from the real function f(x) = (x² − 1)²(1 + 0.1x) on [−2, 2] (two minima of equal value 0 at
+  x = ±1, asymmetric walls like the PDF sketch; checked in the script), dashed amber line at the lowest loss, coral ball
+  in the left valley, green "global min" dots.
+- **Primer (5 ideas):** convexity + zero gradient ⇒ global minimum · the product breaks convexity (midpoint of (2, 2)
+  and (−2, −2) has loss 16) · (0, 0) is a saddle (Hessian eigenvalues ±8) · a width-1 layer limits the product to rank 1 ·
+  at a kink a linear cost beats a linear gain (the paper's counterexample; ε = 0.1, δ = 0.5 → 0.05 > 0).
+
+## [7] nguyen2017loss — Why Width Can Make Bad Minima Exceptional
+- **Checked against:** PMLR 70 (ICML 2017) PDF: Assumptions 3.2 (distinct samples; analytic, strictly increasing σ with
+  growth conditions; l ∈ C² with l′(a) = 0 ⇒ global min), Lemma 3.5, Theorem 3.8 (non-degenerate on a subset
+  I ⊆ {k+1, …, L} containing k+1; full column rank of W_{k+2..L}), Corollary 3.9, Lemmas 4.3–4.4 (measure zero),
+  Theorem 5.3 (separability, class-dependent loss), Sec. 6 discussion (sparse connectivity as future work).
+- **Notes verified:** every theorem/lemma number and condition; the 3-example matrix (entries tanh(−1), tanh(1),
+  tanh(3)), det ≈ −0.982 and β ≈ (3.339, −2.326, 1.772) reproduced in the script; the gradient identity in the box.
+- **Fixes:** none. No discrepancies found.
+- **Layout:** minute box verbatim (Question / Model/Method / Finding / Why we care). "Why this example matters" and
+  "Think of a locked door" → `:::key`; "Be precise about 'almost all'" and "Important limits" → `:::warn`;
+  "Papers Master — Our notes (copy)" → `:::plain`; its "Source:" line (with the PDF's own link) → source line.
+  Four tables as pipe tables. Title block (Paper 16, key, tags, tier) dropped.
+- **Primer (5 ideas):** full row rank ⇔ every target fittable (n_k + 1 ≥ N) · the loss enters only through l′(aᵢ) and
+  Assumption 3.2.3 · analytic functions vanish on measure-zero sets (Lemmas 4.3 → 4.4) · implicit function theorem
+  and what degeneracy breaks (u³/3 − vu example) · full column rank keeps backpropagated error (pyramidal tail).
+
+## [8] haeffele2017global — Global Optimality in Neural Network Training
+- **Checked against:** CVPR 2017 open-access PDF (pp. 7331–7339): abstract, contributions paragraph, Eq. (17), Theorem 1
+  (local minimizer with a zero subnetwork ⇒ global), Corollary 1, Theorem 2 (r > card(X) ⇒ non-increasing path),
+  limitations paragraph. The official supplement URL in the notes now returns 404; read from the Wayback Machine copy
+  (snapshot 2026-03-20, 8 pages): **Proposition 2** (convex ℓ with ∂ℓ(0) ≠ ∅, Φ of degree p, Θ of degree p′ < p ⇒
+  local minimum at the origin), proof Eqs. (20)–(22) = the notes' §4 inequality.
+- **Notes verified:** the model, matching-degree assumption, ReLU homogeneity, the supplement's counterexample and its
+  "Proposition 2" number, "eight-page" supplement.
+- **Fixes:** none. No discrepancies found.
+- **Observation (not changed):** Theorem 1 itself has no size condition; the notes' §3 and "Main result" say "sufficiently
+  large"/"sufficient model size". This follows the paper's own framing (contributions: "if the network size is large
+  enough …"; limitations: "large enough … is essential to prove that local minima are global"), and size is needed for
+  Theorem 2 — so it is not a discrepancy with the paper. The survey [54] sentence has the same framing.
+- **Dead link:** the notes' Supplement URL is 404 on openaccess.thecvf.com (kept verbatim; an archived copy exists at
+  web.archive.org/web/20260320233928/…/Haeffele_Global_Optimality_in_2017_CVPR_supplemental.pdf). Coordinator may want
+  to point the link there.
+- **Layout:** no one-minute summary; built from §1 (Problem), the "Main result" box and the "Scope" box. Bold box
+  labels → box titles. Header "Ref. [47]" (survey [54]) dropped.
+- **Primer (5 ideas):** bias-free ReLU units are homogeneous of degree 2 (6 → 54 under ×3) · balancing makes weight
+  decay the convex |x| (x = 4 at a = b = 2) · with matched degrees the origin is a saddle (eigenvalues λ ± 1; f* = 0.18 at
+  λ = 0.2) · with mismatched degrees the origin traps (λ = 0.15, s = 0.1: −0.00995 vs +0.03; 0.5 vs 0.3) · a zero unit
+  lets the local-min condition test every new unit (intuition for Theorem 1, flagged as such).

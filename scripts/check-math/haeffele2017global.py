@@ -107,4 +107,33 @@ check("ReLU: no run anywhere goes below that value (it is the global minimum)", 
 check("ReLU: zero-neuron runs that fail the certificate sit higher (not local minima)", len(bad) == 0 or bad[:, 1].min() > fstar + 1e-4)
 save_json("haeffele2017global", "data.json", {"relu": [[int(q[0]), float(f"{q[1]:.7g}"), int(q[3]), int(q[3] > 0 and q[4] <= LAM * 1.001)] for q in rows], "fstar": float(f"{fstar:.7g}"), "lam": LAM,
                                                "xs": r(xs, 4), "ys": r(ys, 4), "mis": {"a": float(ag), "f": float(fg), "trapped": int(n0)}})
+
+# in-page notes (papers/haeffele2017global/notes.md): the primer's numbers (the notes themselves state no numbers)
+relu = lambda z: np.maximum(z, 0)
+phi1 = lambda u, v, x: v * relu(u @ x)
+xh, uh = np.array([1., 2.]), np.array([1., 1.])
+check("primer idea 1: v ReLU(u.x) = 6 at u=(1,1), v=2, x=(1,2); scaling (u,v) by 3 gives 54 = 3^2 * 6",
+      phi1(uh, 2., xh) == 6 and phi1(3 * uh, 6., xh) == 54)
+Rh = np.random.default_rng(54)
+ok = all(np.isclose(phi1(c * u, c * v, xh), c ** 2 * phi1(u, v, xh)) for u, v, c in zip(Rh.normal(size=(50, 2)), Rh.normal(size=50), Rh.uniform(0, 4, 50)))
+check("primer idea 1: bias-free ReLU unit is positively homogeneous of degree 2", ok)
+tt = np.linspace(.05, 20, 200001)
+check("primer idea 2: min over ab = 4 of (a^2+b^2)/2 is |4| = 4, at a = b = 2",
+      np.isclose(min(.5 * (tt ** 2 + (4 / tt) ** 2)), 4, atol=1e-6) and abs(tt[np.argmin(.5 * (tt ** 2 + (4 / tt) ** 2))] - 2) < 1e-3)
+lam = .2
+fm = lambda w: .5 * (1 - w[0] * w[1]) ** 2 + lam / 2 * (w[0] ** 2 + w[1] ** 2)
+check_hess_at("primer idea 3: Hessian at the origin, lambda = 0.2", fm, [0, 0], [[lam, -1], [-1, lam]])
+xs3 = np.linspace(-1, 2, 300001); cv = .5 * (1 - xs3) ** 2 + lam * np.abs(xs3)
+check("primer idea 3: convex form minimized at x = 1 - lambda = 0.8 with value lambda - lambda^2/2 = 0.18",
+      abs(xs3[np.argmin(cv)] - .8) < 1e-4 and np.isclose(cv.min(), .18, atol=1e-8))
+best = min(fm(w) for w in [np.array([a, a]) for a in np.linspace(0, 1.5, 30001)])
+check("primer idea 3: GD-free check: min of f over u = v equals 0.18", np.isclose(best, .18, atol=1e-6))
+lm = .15
+fmm = lambda u, v: .5 * (1 - u * v) ** 2 + lm * (abs(u) + abs(v))
+dl = .5 * (1 - .01) ** 2 - .5
+check("primer idea 4: s = 0.1 along u = v: loss falls by 0.00995, penalty rises by 0.03, objective rises",
+      np.isclose(-dl, .00995) and np.isclose(lm * .2, .03) and fmm(.1, .1) > fmm(0, 0))
+check("primer idea 4: origin value 0.5, u = v = 1 gives 0.3", fmm(0, 0) == .5 and np.isclose(fmm(1, 1), .3))
+loc4 = all(fmm(e * a, e * b) >= .5 for a, b in Rh.normal(size=(5000, 2)) for e in [1e-3])
+check("primer idea 4: every small move from the origin raises the objective (spurious local min)", loc4)
 done()

@@ -93,7 +93,7 @@ A second-order recurrence can improve conditioning-dependent rates by carrying m
 
 ## 5. Assumptions, limitations, survey relevance
 
-The clean spectral rates above rely on a strongly convex quadratic with eigenvalues in a known interval and carefully tuned parameters. On general non-convex functions the method can oscillate or diverge, especially at large step sizes. It neither eliminates saddles nor proves second-order convergence. Include under RQ2 (momentum and curvature-dependent motion), with RQ4 warning that the quadratic local model is not a global prediction of practical deep training.
+The clean spectral rates above rely on a strongly convex quadratic with eigenvalues in a known interval and carefully tuned parameters. On general non-convex functions the method can oscillate or diverge, especially at large step sizes. It neither eliminates saddles nor proves second-order convergence. Include under **RQ2** (momentum and curvature-dependent motion), with **RQ4** warning that the quadratic local model is not a global prediction of practical deep training.
 
 :::warn Historical attribution
 This is a paper about acceleration of operator iterations, not the modern perturbed-accelerated-gradient proof of a finite-time $\epsilon$-SOSP bound (our Ref. [10]).

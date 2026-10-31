@@ -63,4 +63,32 @@ for kind, grid in [("sgd", [.01, .03, .06, .09]), ("mom", [.003, .01, .03, .06, 
     print(f"    {kind}: best lr {lr}, late mean loss {sc[lr]:.4f}")
 check("Adam reaches a lower late loss than tuned SGD on the badly scaled problem", best["adam"][1] < best["sgd"][1])
 save_json("kingma2015adam", "data.json", {"best": {k: v[0] for k, v in best.items()}, "late": {k: round(float(v[1]), 4) for k, v in best.items()}})
+
+# in-page notes (papers/kingma2015adam/notes.md): Sec. 3 bias-correction algebra and the primer's numbers
+b1, b2 = .9, .999
+for gc in (.3, -2.0):
+    m = v = 0.0
+    for t in range(1, 30):
+        m = b1 * m + (1 - b1) * gc; v = b2 * v + (1 - b2) * gc * gc
+        assert np.isclose(m, (1 - b1 ** t) * gc) and np.isclose(m / (1 - b1 ** t), gc) and np.isclose(v / (1 - b2 ** t), gc * gc)
+check("notes Sec. 3: m_t = (1 - b1^t) g, m_hat = g, v_hat = g^2 for a constant gradient", True)
+check("notes Sec. 3: m_2 = (1-b1)(1+b1) g", np.isclose(b1 * (1 - b1) + (1 - b1), (1 - b1) * (1 + b1)))
+check("primer idea 1: memory ~ 1/(1-beta) = 10 and 1000; 0.9^10 ~ 0.35", np.isclose(1 / (1 - b1), 10) and np.isclose(1 / (1 - b2), 1000) and round(.9 ** 10, 2) == .35)
+Rk = np.random.default_rng(51)
+noise = Rk.normal(0, 1, 400000); mm = 0.0; tail = []
+for i, e in enumerate(noise):
+    mm = .9 * mm + .1 * e
+    if i > 1000: tail.append(mm)
+check("primer idea 2: EMA noise variance sigma^2 (1-b)/(1+b) = sigma^2/19 at b = 0.9", abs(np.var(tail) - 1 / 19) < 3e-3 and np.isclose(.1 / 1.9, 1 / 19), f"{np.var(tail):.4f} vs {1 / 19:.4f}")
+def adam_step(gseq, a=1.0):
+    m = v = 0.0
+    for t, gg in enumerate(gseq, 1):
+        m = b1 * m + (1 - b1) * gg; v = b2 * v + (1 - b2) * gg * gg
+    return a * (m / (1 - b1 ** t)) / np.sqrt(v / (1 - b2 ** t))
+check("primer idea 3: constant gradients 0.001 and 1000 both give step alpha", np.isclose(adam_step([1e-3] * 50), 1) and np.isclose(adam_step([1e3] * 50), 1))
+signs = Rk.choice([-1.0, 1.0], 3000)
+check("primer idea 4: +-1 random gradients give a small step, constant +1 gives alpha", abs(adam_step(signs)) < .5 and np.isclose(adam_step([1.0] * 3000), 1))
+unc = [(1 - b1 ** t) / np.sqrt(1 - b2 ** t) for t in range(1, 200)]
+check("primer idea 5: uncorrected step 3.16 alpha at t=1, peak ~6.57 alpha at t=12",
+      round(unc[0], 2) == 3.16 and int(np.argmax(unc)) + 1 == 12 and round(max(unc), 2) == 6.57, f"t=1: {unc[0]:.3f}, max {max(unc):.3f} at t={int(np.argmax(unc)) + 1}")
 done()
