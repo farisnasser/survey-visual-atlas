@@ -82,3 +82,53 @@ Conventions used on this branch (for the coordinator's consistency pass):
   grow like $\sqrt K$, averages shrink like $1/\sqrt K$ — scale check that $\eta\sigma\sqrt{K_0} \approx B$ (labelled a scale
   check, not the proof); (3) a ρ-Lipschitz Hessian bounds the quadratic model's gradient error by $\rho r^2/2$ (cos x example).
   Checked in `scripts/check-math/fang2019sharp.py`.
+
+## [6] gurbuzbalaban2021heavy — How Gaussian data can produce heavy-tailed SGD iterates
+- Checked against: ICML 2021 PMLR version (v139, 12 pp.) and its 16-page supplement (the "publisher" copies the notes'
+  source line cites): Eq. (3.5)–(3.10), Theorems 2, 3, 4, 6, 8, Proposition 5, Corollaries 7, 9, 11, Section 4 experiments
+  (Figure 1 synthetic, Figure 2 FCN, Figure 3 VGG11, 10K iterations, average of last 1K, α > 2 truncated to 2), Section 5
+  (saddle-escape time listed as future work), supplement C.1–C.6, D.
+- **Fix (1):** heading of §3. Original: "3. Worked example: stable distribution, infinite variance". Fixed: "3. Worked
+  example: **stationary** distribution, infinite variance". The example (and Theorem 2) give a *stationary* law with a power-law
+  tail; the paper never claims the stationary law is α-stable (only centred sums are, Corollary 11), and the notes' own §2 warns
+  "A power-law stationary law need not itself be an exactly α-stable distribution."
+- Everything else verified: $h(2) = 1 - 2\eta\sigma^2 + \eta^2\sigma^4(d+b+1)/b$ equals Corollary 9's rate $1-2\eta\sigma^2(1-\eta/\eta_{\rm crit})$;
+  $\eta_{\rm crit} = 2b/(\sigma^2(d+b+1))$ (Prop. 5); Theorem 8 for $1 \le p < \alpha$ (with α > 1); Theorem 3's fixed-direction
+  identities vs the operator-norm bound (3.10). The notes' "several printed auxiliary formulas contain slips" is not checked
+  line by line; one visible example: below Theorem 4 the paper says the non-Gaussian $\hat\alpha$ is "strictly increasing in
+  stepsize η", which contradicts Theorem 4 (decreasing).
+- Scalar example: $4\varphi(1) = 0.967883$, $E M^2 = 2$, $E x_k^2 = 2^k - 1$ (the notes' "2k - 1" in the text layer is $2^k-1$
+  in the rendered page), $\eta_{\rm crit} = 2/3$; the script also finds $\alpha \in (1, 2)$.
+- PDF-generation artefacts fixed silently: missing spaces in the source line ("PDF1-9", "Theorems2-4/8", …).
+- Primer: (1) least-squares SGD is a random affine recursion; (2) typical vs average product growth, two-point M ∈ {0.2, 1.6}
+  (E log ≈ −0.57, h(1) = 0.9, h(2) = 1.3); (3) tail index ↔ finite moments via the tail integral; (4) Kesten heuristic
+  $\mathbb E|M|^\alpha = 1$ (labelled heuristic), α ≈ 1.35 with a simulated tail ratio ≈ 22 ≈ 10^1.35.
+
+## [7] azizian2025global — Why a rare detour can dominate global optimization time
+- Checked against: the ICML 2025 PMLR version (63 pp., from the PMLR v267 repository; the arXiv copy in data/papers.json has
+  the same results): Assumptions 1–3, Eq. (12)–(23), Theorem 1, Theorem 2, Fig. 2 caption (500 runs, σ = 50, δ = 1e-2,
+  modified three-hump camel), Definition 2 (B.14), Lemma D.7 / (D.42)–(D.46), Proposition D.1 (Appendix D.6), Appendix F
+  (Styblinski–Tang, Himmelblau).
+- No discrepancies found. The notes' tolerance "a" is the paper's ε in Theorem 1 (renamed by the notes on purpose, and the
+  notes say so). The proof flag is right for the ICML copy too: (D.44) $M_n = \sum_{k\le n}(1-\mu\eta)^{n-k}\langle u_k, p_k-y_k\rangle$
+  gives $E[M_n \mid \mathcal F_{n-1}] = (1-\mu\eta)M_{n-1}$, yet the text calls it a martingale before Doob (D.46). We keep the
+  notes' wording ("does not certify a repaired proof").
+- Three-state example re-derived in the script: forests 7, 10, 11; prunings 3, 5, 8; E = 4; closure (B→G becomes 7) leaves 4;
+  $T_A$ closed form = linear solve; detour and residence scales $e^{-1/\eta}$, $e^{5/\eta}$. Gaussian action identities checked.
+- Source line: artefact spaces fixed ("PDF1-9" → "PDF 1-9"); citation + arXiv link appended (no stable PMLR URL found for
+  the v267 PDF at the time of writing; the repository copy was used for checking).
+- Primer: (1) geometric waiting time, mean $1/p = e^{c/\eta}$; (2) large deviations with a coin (rate 0.131; −log P/n = 0.151,
+  0.138, 0.133); (3) deep traps cost $\exp(2\Delta f/(\sigma^2\eta))$ (uses the notes' §7 Gaussian action); (4) a mean ruled by
+  rare long runs (10 vs 10,010).
+
+## [8] tripuraneni2018stochastic — Cubic regularization when both derivatives are noisy
+- Checked against: the NeurIPS 2018 proceedings PDF (10 pp.) and supplement (15 pp., printed 11–25), which the notes follow:
+  Assumption 2, Definition 1, Algorithm 1, Condition 1, **Algorithm 2 = Cubic-Subsolver, Algorithm 3 = Cubic-Finalsolver**
+  (the arXiv copy in data/papers.json swaps them: Alg. 2 Finalsolver, Alg. 3 Subsolver — the notes are right for NeurIPS),
+  Theorem 1, Remark 1, Lemma 1, Corollary 1, supplement Lemma 2 (errors $c_1\varepsilon$, $c_2\sqrt{\rho\varepsilon}$), B.5,
+  D.1–D.2 (10 inner iterations, batch 100 / 10, 55,000/5,000 split, 2,000,000-call budget), Figures 1–3, Kohler & Lucchi remark.
+- No discrepancies found. Cosine example fully re-derived (r = 1.811043, m = −0.504055, q = −0.649939, cos r − 1 = −1.237943,
+  bound 0.182104 vs 0.145883; the perturbation family is unbiased and can produce g = 0.01, B = −0.9).
+- Source line: artefact spaces fixed; citation + NeurIPS PDF link appended.
+- Primer: (1) with exact derivatives the ρ/6 cubic model is an upper bound (cos example, s = ±2); (2) Hessian-vector
+  products from gradients (x²y + y³ example, Hv = (4, 2)); (3) averaging and the two accuracy scales (n₁ ≈ 10⁴, n₂ ≈ 100).

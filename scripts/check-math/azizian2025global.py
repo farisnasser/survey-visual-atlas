@@ -108,4 +108,36 @@ save_json("azizian2025global", "data.json", {
     "crit": [[float(c[0]), float(c[1]), float(f(c))] for c in crit], "kinds": kinds,
     "B": {f"{a}-{b}": float(v) for (a, b), v in B.items()}, "E": float(Ex),
     "sigma": sigma, "delta": delta, "ntraj": ntraj, "rows": [[r_[0], round(r_[1], 4), r_[2]] for r_ in rows], "slope": round(float(slope), 4), "slope_iter": round(float(slope_n), 4), "icpt": round(float(icpt), 4)})
+
+# in-page notes (papers/azizian2025global/notes.md): notes Sec. 3 graph enumeration, closure remark, primer numbers
+import itertools
+from math import comb
+def forest_prune(C):
+    out = {"A": [e for e in C if e[0] == "A"], "B": [e for e in C if e[0] == "B"]}
+    reach = lambda S, s0: (lambda nx: nx == "G" or (nx is not None and nx != s0 and reach_step(S, nx, {s0})))(S.get(s0))
+    def reach_step(S, n, seen):
+        if n == "G": return True
+        if n in seen or n not in S: return False
+        return reach_step(S, S[n], seen | {n})
+    forests = [C[(a, x)] + C[(b, y)] for (a, x), (b, y) in itertools.product(out["A"], out["B"]) if reach_step({"A": x, "B": y}, "A", set()) and reach_step({"A": x, "B": y}, "B", set())]
+    prunes = [C[e] for e in C if not reach_step({e[0]: e[1]}, "A", set())]
+    return sorted(forests), sorted(prunes)
+C3 = {("A", "G"): 2, ("A", "B"): 3, ("B", "A"): 5, ("B", "G"): 8}
+fo, pr = forest_prune(C3)
+check("notes Sec. 3: forest costs 7, 10, 11; pruning costs 3, 5, 8; E(G|A) = 7 - 3 = 4", fo == [7, 10, 11] and pr == [3, 5, 8] and min(fo) - min(pr) == 4)
+C3c = dict(C3); C3c[("B", "G")] = min(8, 5 + 2); C3c[("A", "G")] = min(2, 3 + 8)     # minimum-path closure
+fo2, pr2 = forest_prune(C3c)
+check("notes Sec. 3: minimum-path closure leaves the exponent 4 unchanged", min(fo2) - min(pr2) == 4, f"closed costs {C3c}")
+for et in [.5, .25]:
+    u, v, w, z = [np.exp(-c / et) for c in (2, 3, 5, 8)]
+    TA = (w + z + v) / (u * w + u * z + v * z)
+    TA_ls, TB_ls = np.linalg.solve([[u + v, -v], [-w, w + z]], [1, 1])
+    check(f"notes Sec. 3: T_A closed form = linear solve at eta = {et}", abs(TA / TA_ls - 1) < 1e-9 and abs(v / (u + v) / np.exp(-1 / et) - 1) < .2 and abs(1 / (w + z) / np.exp(5 / et) - 1) < .2)
+check("primer: e^4 ~ 54.6, e^8 ~ 2981, mixture mean 0.99*10 + 0.01*1e6 ~ 10,010", abs(np.exp(4) - 54.6) < .05 and abs(np.exp(8) - 2981) < 1 and abs(.99 * 10 + .01 * 1e6 - 10010) < 1)
+Irate = .75 * np.log(1.5) + .25 * np.log(.5)
+rates = [-np.log(sum(comb(n, k) for k in range((3 * n + 3) // 4, n + 1)) / 2 ** n) / n for n in (100, 400, 1600)]
+check("primer: coin rate I ~ 0.131; -log P/n ~ 0.151, 0.138, 0.133 for n = 100, 400, 1600", abs(Irate - .131) < 5e-4 and np.allclose(rates, [.151, .138, .133], atol=6e-4), f"{np.round(rates, 4)}")
+sg2 = 1.7; gvec = np.array([.4, -1.1]); vv = np.array([.3, .8])
+Lg = lambda v_: np.sum((v_ + gvec) ** 2) / (2 * sg2)
+check("notes Sec. 7: L(v) - L(-v) = 2 v.grad f / sigma^2; L(-grad f) = 0, L(grad f) = 2|grad f|^2/sigma^2", np.isclose(Lg(vv) - Lg(-vv), 2 * vv @ gvec / sg2) and np.isclose(Lg(-gvec), 0) and np.isclose(Lg(gvec), 2 * gvec @ gvec / sg2))
 done()
