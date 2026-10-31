@@ -132,3 +132,34 @@ Conventions used on this branch (for the coordinator's consistency pass):
 - Source line: artefact spaces fixed; citation + NeurIPS PDF link appended.
 - Primer: (1) with exact derivatives the ρ/6 cubic model is an upper bound (cos example, s = ±2); (2) Hessian-vector
   products from gradients (x²y + y³ example, Hv = (4, 2)); (3) averaging and the two accuracy scales (n₁ ≈ 10⁴, n₂ ≈ 100).
+
+## [9] carmon2018analysis — When a small Krylov space can solve a nonconvex model
+- Checked against: the NeurIPS 2018 proceedings PDF (main pp. 1–9) and its 12-page supplement (printed 12–23), which the notes
+  cite: optimality conditions (3), Theorem 1 (4)–(5), Corollaries 2–4 (13)–(18), Theorem 5 (19)–(21) and the resisting-oracle
+  remark (deterministic methods, d > 2t), Section 5 (5,000 instances, d = 10⁶, three condition numbers; hard-case comparison),
+  supplement E (diagonal instances justified by rotational invariance, unit initial gap, hard case b₁ = 0, eigen-gap γ figure).
+- No discrepancies found. Note on wording only: Theorem 1's sublinear bound is $(\lambda_{\max}-\lambda_{\min})\|s^*\|^2/(t-\tfrac12)^2$
+  times $[4 + \tfrac18\mathbb 1\{\lambda_{\min}<0\}\log^2(4\|b\|^2/(u_{\min}^\top b)^2)]$; the notes' "proportional to …/t², multiplied
+  in the nonconvex case by a logarithmic factor" is a correct scale description, left as is.
+- Hard-case example re-derived (A = diag(−2, 1), b = (0, 1), R = 1: Krylov value −1/2, global −7/6 at (±2√2/3, −1/3), gap 2/3;
+  brute-force disk minimum agrees).
+- Source line: artefact spaces fixed; citation + NeurIPS PDF link appended.
+- Primer: (1) trust-region optimality conditions with a 1-D example (λ* = 1.5); (2) Krylov space / Lanczos, Vandermonde example
+  (det 2); (3) the √κ rate with the paper's constants (36e⁻⁴ ≈ 0.66, 36e⁻¹² ≈ 2.2e-4 at κ = 100); (4) a random vector's
+  component, $|u^\top v|^2 \ge \delta^2/d$ w.p. ≥ 1 − δ (Corollary 2's proof), log factor ≈ 98 for d = 10⁶, δ = 0.1.
+
+## [10] carmon2019gradient — Gradient descent finds the cubic-regularized nonconvex Newton step
+- Checked against: arXiv 1612.00547 (= SIAM J. Optim. 29(3), 2019): model (1), bounds (7a)–(8), Eq. (9), Assumptions A–B,
+  Lemma 2.3, Proposition 2.5, Theorems 3.1–3.2 (rates O(1/ε) → O(1/√ε) gap-dependent → O(log 1/ε); τ_grow = 0 for convex
+  problems; perturbed b̃ = b + σq), Section 5 (line search), Section 6 / Algorithm 1 (outer method).
+- **Fix (1), numbering only:** "Wang et al. (2020), Ref 72" → "Ref 77". The notes use the old reference numbering; in the
+  current survey [72] is Azizian et al. 2025 and Wang et al. 2020 (CR with momentum) is [77], so the old number would send a
+  reader to the wrong paper on the Atlas. (The notes' "Ref 71" header for this paper is title-block metadata and is dropped.)
+- Otherwise no discrepancies. The notes' 1-D example (η = 0.25) is labelled pedagogical; it is outside Assumption A
+  (bound 1/(4(β + ρR)) = 0.125 for β = ρ = 1, b = 0), which the notes do not claim; GD still converges to +1 there (checked).
+  The primer says this explicitly.
+- Layout: the notes' blue sub-headings → `###`; "Important precision" → warn; "What to read" and "Papers Master note" → plain.
+  The "Survey tag" line is title-block metadata (dropped); arXiv link appended to the source line.
+- Primer: (1) the global-minimizer certificate $(A+\rho\|s^*\|I)s^*=-b$, $A+\rho\|s^*\|I\succeq0$, 2-D example
+  (λ* ≈ 1.092, s* ≈ (−1.090, −0.065), q ≈ −0.278; the other two critical points fail the shift test); (2) Assumption A step
+  (R ≈ 2.106, η ≤ 0.061, GD reaches s*); (3) the hard case b = (0, 0.2): GD stops at (0, −0.095), q ≈ −0.0097 vs −0.173.

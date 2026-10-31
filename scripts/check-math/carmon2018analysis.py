@@ -93,4 +93,23 @@ check("hard case: Krylov solutions never reach f* (gap stays > 1e-3)", out["hard
 check("perturbed hard case converges (gap < 1e-6 by t = 120)", out["perturbed"]["gap"][-1] < 1e-6)
 check("generic instance converges", out["generic"]["gap"][-1] < 1e-8)
 save_json("carmon2018analysis", "data.json", {"T": T, "d": d, "cases": out})
+
+# in-page notes (papers/carmon2018analysis/notes.md): notes Sec. 3 in full, primer numbers
+A_ = np.diag([-2., 1.]); b_ = np.array([0., 1.])
+q2 = lambda x_: .5 * x_ @ A_ @ x_ + b_ @ x_
+check("notes Sec. 3: A^j b = b, so the Krylov space stays span{(0,1)}", all(np.allclose(np.linalg.matrix_power(A_, j) @ b_, b_) for j in range(6)))
+ys_ = np.linspace(-1, 1, 200001)
+check("notes Sec. 3: on x = 0, min of y^2/2 + y over |y| <= 1 is -1/2 at y = -1", np.isclose(min(ys_ ** 2 / 2 + ys_), -.5) and np.isclose(ys_[np.argmin(ys_ ** 2 / 2 + ys_)], -1))
+sst = np.array([2 * np.sqrt(2) / 3, -1 / 3])
+check("notes Sec. 3: s* = (+-2sqrt2/3, -1/3) satisfies (A + 2I)s* = -b, |s*| = 1, A + 2I = diag(0,3) PSD, q(s*) = -7/6", np.allclose((A_ + 2 * np.eye(2)) @ sst, -b_) and np.isclose(np.linalg.norm(sst), 1) and np.isclose(q2(sst), -7 / 6) and np.isclose(q2(sst * [-1, 1]), -7 / 6) and np.isclose(-8 / 9 + 1 / 18 - 1 / 3, -7 / 6))
+th_ = np.linspace(0, 2 * np.pi, 200001); rr_ = np.linspace(0, 1, 401)
+grid_min = min(min(q2(r * np.array([np.cos(t), np.sin(t)])) for t in th_[::200]) for r in rr_[::10])
+check("notes Sec. 3: brute-force global min over the unit disk is -7/6; restricted gap 2/3", abs(grid_min + 7 / 6) < 2e-3 and np.isclose(-.5 + 7 / 6, 2 / 3))
+check("primer: 1-D trust region A = -1, b = 0.5, R = 1: s* = -1, q = -1 (q(1) = 0), lambda* = 1.5", np.isclose(-.5 * 1 - .5, -1) and np.isclose(-.5 + .5, 0) and np.isclose((-1 + 1.5) * -1, -.5) and -1 + 1.5 >= 0)
+V_ = np.column_stack([np.linalg.matrix_power(np.diag([1., 2., 3.]), j) @ np.ones(3) for j in range(3)])
+check("primer: [b, Ab, A^2 b] for A = diag(1,2,3), b = 1 has det 2 (full rank)", np.isclose(abs(np.linalg.det(V_)), 2))
+check("primer: 36 e^(-4t/sqrt(100)) ~ 0.66 at t = 10, ~2.2e-4 at t = 30", abs(36 * np.exp(-4) - .66) < .005 and abs(36 * np.exp(-12) - 2.2e-4) < 1e-5)
+check("primer: log^2(2 sqrt(1e6)/0.1) = log^2(20000) ~ 98", abs(np.log(2 * 1e3 / .1) ** 2 - 98) < .5)
+rng_k = np.random.default_rng(2); dk = 1000; Vk = rng_k.standard_normal((20000, dk)); c2 = (Vk[:, 0] / np.linalg.norm(Vk, axis=1)) ** 2
+check("primer: P(|u^T v|^2 >= delta^2/d) >= 1 - delta (d = 1000, delta = 0.1, Monte Carlo)", np.mean(c2 >= .01 / dk) >= .9, f"{np.mean(c2 >= .01 / dk):.4f}")
 done()
