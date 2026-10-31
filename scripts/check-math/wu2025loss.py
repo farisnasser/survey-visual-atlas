@@ -67,4 +67,35 @@ big = np.argsort(-np.abs(h))[:6]
 print(f"  largest neurons: angles {np.round(ang[big], 2)}, |h| {np.round(np.abs(h[big]), 3)}")
 save_json("wu2025loss", "data.json", {"x": xs.tolist(), "y": ys.tolist(), "loss": r(lc, 7), "snaps": snaps,
                                        "dead_wedge": [3.93, 5.67], "lr": lr, "init_std": 5e-6, "H": H})
+
+# in-page notes (papers/wu2025loss/notes.md): Sec. 2 gradient formula, Sec. 4 splitting identity and the primer's numbers
+Rw = np.random.default_rng(56)
+Xw, yw = Rw.normal(size=(7, 3)), Rw.normal(size=7)
+aw, Ww = Rw.normal(size=4), Rw.normal(size=(4, 3))
+Lw = lambda W: .5 * np.mean((np.maximum(Xw @ W.T, 0) @ aw - yw) ** 2)
+res = np.maximum(Xw @ Ww.T, 0) @ aw - yw
+gW = np.array([np.mean(res[:, None] * aw[j] * (Xw @ Ww[j] > 0)[:, None] * Xw, 0) for j in range(4)])
+fdW = np.array([[(Lw(Ww + 1e-6 * np.eye(12)[3 * j + c].reshape(4, 3)) - Lw(Ww - 1e-6 * np.eye(12)[3 * j + c].reshape(4, 3))) / 2e-6 for c in range(3)] for j in range(4)])
+check("notes Sec. 2: dL/dw_j = (1/n) sum (f - y) a_j 1{w_j.x > 0} x (away from kinks)", np.allclose(gW, fdW, atol=1e-6))
+z = Rw.normal(size=50)
+check("notes Sec. 4: a s(w.x) = a/2 s(w.x) + a/2 s(w.x)", np.allclose(1.7 * np.maximum(z, 0), .85 * np.maximum(z, 0) * 2))
+dd = lambda f, x, d, a=1e-8: (f(x + a * d) - f(x)) / a
+check("primer idea 1: one-sided slopes of |x| at 0 are |d|, of -|x| are -|d|",
+      all(np.isclose(dd(abs, 0., d), abs(d)) and np.isclose(dd(lambda x: -abs(x), 0., d), -abs(d)) for d in (-2., -.5, .5, 2.)))
+L1 = lambda a, w: .5 * (a * max(w, 0) - 1) ** 2
+slopes = [(L1(1e-7 * np.cos(t), 1e-7 * np.sin(t)) - L1(0, 0)) / 1e-7 for t in np.linspace(0, 2 * np.pi, 73)]
+check("primer idea 3: all one-sided slopes at (0,0) are 0; L(0.1, 0.1) = 0.49005 < 0.5",
+      max(abs(v) for v in slopes) < 1e-6 and np.isclose(L1(.1, .1), .49005) and L1(0, 0) == .5)
+check("primer idea 3: for w < 0 the loss is flat (dead neuron)", all(L1(a, w) == .5 for a in (-1, .3, 2) for w in (-.5, -.1)))
+# idea 4: w.dL/dw = a dL/da, so ||w||^2 - a^2 is conserved by gradient flow (small-step GD)
+aa, ww = .3, np.array([.2, -.4, .5]); x0 = Rw.normal(size=(5, 3)); y0 = Rw.normal(size=5)
+c0 = ww @ ww - aa ** 2
+for _ in range(20000):
+    r_ = aa * np.maximum(x0 @ ww, 0) - y0
+    ga = np.mean(r_ * np.maximum(x0 @ ww, 0)); gw = np.mean((r_ * aa * (x0 @ ww > 0))[:, None] * x0, 0)
+    assert np.isclose(ww @ gw, aa * ga)
+    aa, ww = aa - 1e-4 * ga, ww - 1e-4 * gw
+check("primer idea 4: w.dL/dw = a dL/da and ||w||^2 - a^2 stays constant (step 1e-4)", abs((ww @ ww - aa ** 2) - c0) < 1e-4, f"drift {abs((ww @ ww - aa ** 2) - c0):.2e}")
+nst = np.log(.1 / 5e-6) / np.log(1.001)
+check("primer idea 5: ln(0.1/5e-6)/ln(1.001) ~ 9900 steps", abs(nst - 9900) < 50, f"{nst:.0f}")
 done()

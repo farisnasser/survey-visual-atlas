@@ -73,4 +73,24 @@ check("width >= N-1 = 7: every seed reaches ~zero loss", all(max(rw[1]) < 1e-4 f
 check("width 1-2: every seed stalls at a near-critical point with positive loss (bad critical points)", all(min(rw[1]) > 1e-3 and max(rw[2]) < 1e-3 for rw in rows if rw[0] <= 2))
 check("N - 1 is sufficient, not necessary: width 3-6 also fit here", all(mins[n] < 1e-6 for n in range(3, 7)))
 save_json("nguyen2017loss", "data.json", {"X": r(X), "Y": r(Y), "N": N, "rows": rows, "curves": curves, "xs": r(np.linspace(-2.3, 2.3, 93)), "preds": preds, "every": 400})
+
+# in-page notes (papers/nguyen2017loss/notes.md): rounded matrix entries of Sec. 2 and the primer's examples
+t = np.tanh
+Fm = np.array([[t(-1), t(-1), 1], [0, t(1), 1], [t(1), t(3), 1]])
+check("notes Sec. 2: entries -.762, .762, .995 (tanh(-1), tanh(1), tanh(3)); det ~ -0.982",
+      np.allclose(np.round(Fm[:, :2], 3), [[-.762, -.762], [0, .762], [.762, .995]]) and round(np.linalg.det(Fm), 3) == -.982)
+check("notes Sec. 2 box: grad_beta 1/2||A b - y||^2 = A^T (A b - y)",
+      np.allclose(fd_grad(lambda b: .5 * np.sum((Fm @ b - np.array([1., 0, 2])) ** 2), np.array([.3, -.2, .5])), Fm.T @ (Fm @ np.array([.3, -.2, .5]) - np.array([1., 0, 2]))))
+check("primer idea 1: 3x2 features without bias have rank 2 (< 3)", np.linalg.matrix_rank(Fm[:, :2]) == 2)
+Rn = np.random.default_rng(53)
+check("primer idea 3: random tanh feature matrices [F,1] (3 samples, 2 units) are full rank",
+      all(abs(np.linalg.det(np.column_stack([t(np.outer([-1, 0, 1], w) + c), np.ones(3)]))) > 1e-9
+          for w, c in zip(Rn.normal(size=(2000, 2)), Rn.normal(size=(2000, 2)))))
+stat = lambda v: sorted(np.roots([1, 0, -v]).real) if v >= 0 else []
+check("primer idea 4: u^2 - v = 0 has u = +-0.1 at v = 0.01 and no real root at v = -0.01",
+      np.allclose(stat(.01), [-.1, .1]) and len(stat(-.01)) == 0 and np.all(np.iscomplex(np.roots([1, 0, .01]))))
+check("primer idea 5: [1;2] has full column rank, [1 2] sends (2,-1) to 0",
+      np.linalg.matrix_rank(np.array([[1], [2]])) == 1 and np.allclose(np.array([[1, 2]]) @ np.array([2, -1]), 0))
+check("notes Sec. 7: widths [3,80,25,8,2] decrease after 80; [3,80,10,40,2] does not",
+      all(a >= b for a, b in zip([80, 25, 8, 2], [25, 8, 2])) and not all(a >= b for a, b in zip([80, 10, 40, 2], [10, 40, 2])))
 done()

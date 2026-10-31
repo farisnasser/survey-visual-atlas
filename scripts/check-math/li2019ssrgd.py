@@ -57,4 +57,31 @@ print(f"  SFO calls until |x| > 0.9: median {np.median(sfo_hit):.0f}")
 check("the notes' 2-D example: x_10 = 0.01*0.9^10 = 0.00349, y_10 = 0.01*1.1^10 = 0.02594", abs(.01 * .9 ** 10 - .00349) < 5e-6 and abs(.01 * 1.1 ** 10 - .02594) < 5e-6)
 save_json("li2019ssrgd", "data.json", {"a": r(a, 5), "b": r(bb, 5), "c": r(c, 5), "L": round(L, 5), "eta": round(float(eta), 6), "m": m,
                                       "gthres": gthres, "r": r_, "Rstop": Rstop, "tthres": tthres, "sfo_med": float(np.median(sfo_hit))})
+# in-page notes (papers/li2019ssrgd/notes.md): f1 = (x-1)^2/2, f2 = (x+1)^2/2, x0 = 2, v0 = 2, step 0.1
+x1n = 2 - .1 * 2
+dd = [(x1n - 1) - (2 - 1), (x1n + 1) - (2 + 1)]
+check("notes example: x1 = 1.8, both differences -0.2, v1 = 1.8 = f'(1.8)", np.isclose(x1n, 1.8) and np.allclose(dd, -.2) and np.isclose(2 + dd[0], 1.8))
+check("notes example: sample gradients at 1.8 are 0.8 and 2.8", np.allclose([x1n - 1, x1n + 1], [.8, 2.8]))
+q = np.array([.01, .01])
+for _ in range(10):
+    q = q - .1 * np.array([q[0], -q[1]])
+check("notes example: x10 ~ 0.00349, y10 ~ 0.02594", abs(q[0] - .00349) < 5e-6 and abs(q[1] - .02594) < 5e-6, f"{q}")
+# primer idea 1: delta = sqrt(rho eps): sqrt(n)/delta^4 = sqrt(n)/(rho^2 eps^2), n/delta^3 = n/(rho eps)^1.5
+for rho_, e_ in [(1, 1e-3), (3, 1e-2)]:
+    dl = np.sqrt(rho_ * e_)
+    assert np.isclose(1 / dl ** 4, 1 / (rho_ ** 2 * e_ ** 2)) and np.isclose(1 / dl ** 3, (rho_ * e_) ** -1.5)
+check("primer: delta = sqrt(rho eps) turns sqrt(n)/delta^4 into sqrt(n)/eps^2 and n/delta^3 into n/eps^1.5", True)
+# primer idea 2: n = 1e6, eps = 1e-3: sqrt(n)/eps^2 = 1e9 vs n^(2/3)/eps^2 = 1e10
+check("primer: 1e9 vs 1e10", np.isclose(1e3 / 1e-6, 1e9) and np.isclose(1e6 ** (2 / 3) / 1e-6, 1e10))
+# primer idea 3: ln(50)/ln(1.1) ~ 41 steps from 0.01 to 0.5
+yy, kk = .01, 0
+while yy < .5:
+    yy *= 1.1; kk += 1
+check("primer: ln 50 / ln 1.1 ~ 41 steps from 0.01 to 0.5", round(np.log(50) / np.log(1.1)) == 41 and kk == 42, f"{np.log(50) / np.log(1.1):.2f}, first step beyond 0.5: {kk}")
+# primer idea 4 (paper Sec. 5.2): f_thres/t_thres = (delta^3/rho^2)/(1/(eta delta)) = delta^4/(L rho^2) at eta = 1/L; b + n/m = 2 sqrt(n)
+for L_, rho_, dl, n_ in [(1, 1, .1, 1e4), (5, 2, .3, 1e6)]:
+    assert np.isclose((dl ** 3 / rho_ ** 2) / (L_ / dl), dl ** 4 / (L_ * rho_ ** 2)) and np.isclose(np.sqrt(n_) + n_ / np.sqrt(n_), 2 * np.sqrt(n_))
+    D_ = 1.
+    assert np.isclose(2 * np.sqrt(n_) * D_ / (dl ** 4 / (L_ * rho_ ** 2)), 2 * L_ * rho_ ** 2 * D_ * np.sqrt(n_) / dl ** 4)
+check("primer: per-iteration decrease delta^4/(L rho^2) at cost 2 sqrt(n) gives L rho^2 D sqrt(n)/delta^4", True)
 done()

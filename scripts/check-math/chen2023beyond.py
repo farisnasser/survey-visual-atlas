@@ -91,5 +91,16 @@ for K in Ks:
     s = late(K, T=3000, keep=48)
     if s is None: continue
     pts += [[round(float(K), 4), round(float(v), 4)] for v in np.unique(np.round(s, 4))]
+# in-page notes (papers/chen2023beyond/notes.md): primer numbers (mu = 1, eta = 1.05)
+check("primer 1: multiplier at the minimum 1 - 1.05*2 = -1.1; 0.01 -> -0.011 -> 0.0121", abs(dF(1., 1.05) + 1.1) < 1e-12 and abs(.01 * 1.1 ** 2 - .0121) < 1e-12)
+check("primer 2: f''(0.8) = 0.92, f''(1.1024) ~ 2.646", abs(3 * .8 ** 2 - 1 - .92) < 1e-12 and abs(3 * 1.1024 ** 2 - 1 - 2.646) < 1e-3)
+x = .8
+for _ in range(4000):
+    x = F(x, 1.05)
+oa, ob = sorted([x, F(x, 1.05)])
+check("primer 3: from x0 = 0.8 the iterates settle on {0.8729, 1.0911}", abs(oa - .8729) < 1e-4 and abs(ob - 1.0911) < 1e-4, f"{oa:.5f}, {ob:.5f}")
+check("primer 3: loss alternates ~0.0142 / ~0.0091", abs(f1(oa) - .0142) < 1e-4 and abs(f1(ob) - .0091) < 1e-4, f"{f1(oa):.5f}, {f1(ob):.5f}")
+check("primer 3: two-step multiplier ~0.595", abs(dF(oa, 1.05) * dF(ob, 1.05) - .595) < 1e-3)
+check("primer 4: 2-cycle lasts until eta ~ 1.237 (first period 4)", abs(K_PD - 1.237) < 2e-3, f"{K_PD}")
 save_json("chen2023beyond", "data.json", {"bif": pts, "Kc": round(float(KC), 5), "Kpd": K_PD})
 done()

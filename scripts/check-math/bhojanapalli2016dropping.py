@@ -45,4 +45,29 @@ for k in range(1, 401):
 print(f"  a = 2: Theorem 4.2 factor rho = {rho:.6f}; measured per-step ratio {hist[200] / hist[199]:.6f}; eta(8) = {e8:.5f}")
 check("Cor. 4.3 bound Dist^2 <= rho^k Dist0^2 holds for 400 steps from an (A2) start", ok)
 check("measured contraction is much faster than the bound (bound is conservative)", hist[200] / hist[199] < rho)
+
+# in-page notes (papers/bhojanapalli2016dropping/notes.md): Sec. 2 factor gradient and the primer's numbers
+Rd2 = np.random.default_rng(59)
+Xst = (lambda B: B @ B.T)(Rd2.normal(size=(4, 2)))
+gfac = lambda U: .5 * np.sum((U @ U.T - Xst) ** 2)
+for _ in range(3):
+    U0 = Rd2.normal(size=(4, 2))
+    fd = np.array([[(gfac(U0 + 1e-6 * E) - gfac(U0 - 1e-6 * E)) / 2e-6 for E in [np.eye(8)[i].reshape(4, 2) for i in range(8)]]]).reshape(4, 2)
+    assert np.allclose(fd, 2 * (U0 @ U0.T - Xst) @ U0, atol=1e-5)
+check("notes Sec. 2: grad of f(UU^T) = 1/2||UU^T - X*||^2 is 2(UU^T - X*)U", True)
+Qr = np.linalg.qr(Rd2.normal(size=(2, 2)))[0]
+check("notes Sec. 2: U and UQ give the same PSD matrix", np.allclose(U0 @ U0.T, (U0 @ Qr) @ (U0 @ Qr).T))
+g1 = lambda u: .5 * (u * u - 4) ** 2
+check("primer idea 1: g'(1) = -6, minima at +-2, stationary at 0 with f'(0) = -4",
+      np.isclose((g1(1 + 1e-6) - g1(1 - 1e-6)) / 2e-6, -6) and g1(2) == 0 and g1(-2) == 0 and np.isclose((g1(1e-6) - g1(-1e-6)) / 2e-6, 0) and (0 - 4) == -4)
+check("primer idea 2: 0.9^50 ~ 0.0052, 0.9^200 ~ 7e-10", round(.9 ** 50, 4) == .0052 and round(.9 ** 200 * 1e10) == 7)
+check("primer idea 3: g'' = 6u^2 - 8: 16 at u = 2, -8 at u = 0", np.isclose(fd_hess(lambda p: g1(p[0]), [2.0])[0, 0], 16, atol=1e-3) and np.isclose(fd_hess(lambda p: g1(p[0]), [0.0])[0, 0], -8, atol=1e-3))
+def gd1(a, eta, u=None, steps=400):
+    u = a * 1.05 if u is None else u
+    for _ in range(steps):
+        u = u - eta * 2 * u * (u * u - a * a)
+        if abs(u) > 1e6: return np.inf
+    return u
+check("primer idea 4: curvature 4a^2; eta = 0.2 diverges near a = 2 (needs < 0.125) but converges for a = 1",
+      np.isclose(fd_hess(lambda p: .5 * (p[0] ** 2 - 4) ** 2, [2.0])[0, 0], 16, atol=1e-3) and not np.isclose(gd1(2, .2), 2) and np.isclose(gd1(1, .2), 1) and np.isclose(gd1(2, .12), 2))
 done()

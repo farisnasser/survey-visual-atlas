@@ -70,4 +70,24 @@ check("plain subgradient steps never make y exactly 0", all(y != 0 for y in ys),
 check("soft-threshold example from the notes: prox of 0.3|x| at 0.8 with eta = 1 is 0.5", abs(np.sign(.8) * max(.8 - .3, 0) - .5) < 1e-12)
 save_json("wang2019spiderboost", "data.json", {"a": r(a, 5), "b": r(b, 5), "c": r(c, 5), "L": round(L, 5), "q": q, "eps": EPS, "lam": lam,
                                               "xs": round(xs_, 5), "hb": float(hb), "hs": float(hs)})
+# in-page notes (papers/wang2019spiderboost/notes.md): f1 = (x-1)^2/2, f2 = (x+1)^2/2, x_{k-1} = 1.5, v_{k-1} = 1.5, x_k = 2
+d1 = lambda x: x - 1; d2 = lambda x: x + 1
+diffs = [d1(2) - d1(1.5), d2(2) - d2(1.5)]
+check("notes example: f_i'(2) - f_i'(1.5) = 0.5 for both samples, v_k = 2 = f'(2)", np.allclose(diffs, .5) and all(np.isclose(1.5 + q, 2) for q in diffs))
+check("notes example: raw sample gradients at x = 2 are 1 and 3", (d1(2), d2(2)) == (1, 3))
+soft = lambda z, t: np.sign(z) * max(abs(z) - t, 0)
+xs = np.linspace(-2, 2, 400001)
+check("notes: prox of 0.3|x| at z = 0.8 (eta = 1) is 0.5", np.isclose(soft(.8, .3), .5) and abs(xs[np.argmin(.3 * abs(xs) + (xs - .8) ** 2 / 2)] - .5) < 1e-4)
+# primer idea 1: n eps^-2 = 1e10 vs n + sqrt(n) eps^-2 = 1.1e7 (n = 1e6, eps = 1e-2)
+nn, ee = 1e6, 1e-2
+check("primer: n/eps^2 = 1e10, n + sqrt(n)/eps^2 = 1.1e7", np.isclose(nn / ee ** 2, 1e10) and np.isclose(nn + np.sqrt(nn) / ee ** 2, 1.1e7))
+# primer idea 2: at x = 0 the sample gradients are -1, +1 (variance 1), full gradient 0
+check("primer: sample gradients at 0 are -1, +1 with variance 1", (d1(0), d2(0)) == (-1, 1) and np.isclose(np.var([d1(0), d2(0)]), 1))
+# primer idea 3: epoch cost n + (q-1) 2|S| with q = |S| = sqrt(n) = 1000 -> ~3.0e6 over 1000 iterations ~ 3 sqrt(n)
+ep = nn + 999 * 2 * 1000
+check("primer: epoch cost ~3.0e6 SFO, ~3 sqrt(n) per iteration", np.isclose(ep, 2.998e6) and abs(ep / 1000 / np.sqrt(nn) - 3) < .01)
+# primer idea 4: Psi = (x-1)^2/2 + 0.3|x|, minimizer 0.7; G_1(x) = x - prox(x - f'(x))
+G = lambda x: x - soft(x - (x - 1), .3)
+Ps = (xs - 1) ** 2 / 2 + .3 * abs(xs)
+check("primer: argmin Psi = 0.7, G(0.7) = 0, G(0) = -0.7", abs(xs[np.argmin(Ps)] - .7) < 1e-4 and np.isclose(G(.7), 0) and np.isclose(G(0), -.7))
 done()

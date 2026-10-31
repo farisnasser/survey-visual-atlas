@@ -88,4 +88,27 @@ def scr(S1, S2, seed, T=200):
 
 ends = [scr(20, 20, s) for s in range(20)]
 check("SCR escapes the saddle line and stops near a minimum y = +-pi", all(abs(abs(e[0][1]) - np.pi) < .25 and abs(e[0][0]) < .2 for e in ends), f"median outer steps {np.median([e[1] for e in ends])}")
+
+# in-page notes (papers/tripuraneni2018stochastic/notes.md): notes Sec. 3 cosine example in full, primer numbers
+r_ = .9 + np.sqrt(.83)
+m_ = lambda s_: .01 * s_ - .45 * s_ ** 2 + abs(s_) ** 3 / 6
+q_ = lambda s_: -s_ ** 2 / 2 + abs(s_) ** 3 / 6
+check("notes Sec. 3: r solves r^2/2 - 0.9 r - 0.01 = 0, r ~ 1.811043; m(-r) ~ -0.504055", abs(r_ ** 2 / 2 - .9 * r_ - .01) < 1e-12 and abs(r_ - 1.811043) < 1e-6 and abs(m_(-r_) + .504055) < 1e-6)
+sg_ = np.linspace(-4, 4, 80001)
+check("notes Sec. 3: m is minimized at s = -r (global, on a grid)", abs(sg_[np.argmin(m_(sg_))] + r_) < 2e-4)
+check("notes Sec. 3: q(-r) ~ -0.649939, cos r - 1 ~ -1.237943; q minimized at +-2 with q = -2/3", abs(q_(-r_) + .649939) < 1e-6 and abs(np.cos(r_) - 1 + 1.237943) < 1e-6 and abs(sg_[np.argmin(q_(sg_))] ** 2 - 4) < 1e-3 and np.isclose(q_(2.), -2 / 3))
+check("notes Sec. 3: bound 0.01 r + 0.05 r^2 ~ 0.182104, exact |m - q| ~ 0.145883", abs(.01 * r_ + .05 * r_ ** 2 - .182104) < 1e-6 and abs(abs(m_(-r_) - q_(-r_)) - .145883) < 1e-6)
+Fz = lambda s_, zh, zg: (1 + zh) * np.cos(s_) + zg * np.sin(s_)
+gz = [(Fz(1e-6, zh, zg) - Fz(-1e-6, zh, zg)) / 2e-6 for zh in (-.1, .1) for zg in (-.01, .01)]
+hz = [(Fz(1e-4, zh, zg) - 2 * Fz(0, zh, zg) + Fz(-1e-4, zh, zg)) / 1e-8 for zh in (-.1, .1) for zg in (-.01, .01)]
+check("notes Sec. 3: F(s; zeta) components are unbiased (mean grad 0, mean Hessian -1) and can give g = 0.01, B = -0.9", abs(np.mean(gz)) < 1e-8 and abs(np.mean(hz) + 1) < 1e-4 and any(abs(a - .01) < 1e-8 and abs(b + .9) < 1e-4 for a, b in zip(gz, hz)))
+e_, rho_ = 1e-4, 2.
+check("notes Sec. 3: eps * sqrt(eps/rho) = sqrt(rho eps) * (eps/rho) = eps^1.5/sqrt(rho)", np.isclose(e_ * np.sqrt(e_ / rho_), e_ ** 1.5 / np.sqrt(rho_)) and np.isclose(np.sqrt(rho_ * e_) * e_ / rho_, e_ ** 1.5 / np.sqrt(rho_)))
+check("notes Sec. 5: eps^-1.5 * eps^-2 = eps^-3.5 and eps^-1.5 * eps^-1 * eps^-0.5 = eps^-3", np.isclose(e_ ** -1.5 * e_ ** -2, e_ ** -3.5) and np.isclose(e_ ** -1.5 * e_ ** -1 * e_ ** -.5, e_ ** -3))
+ss_ = np.linspace(-6, 6, 12001)
+check("primer: cos s - 1 <= -s^2/2 + |s|^3/6 for all s (rho = 1 upper bound); at s = 2 true change ~ -1.416", np.all(np.cos(ss_) - 1 <= q_(ss_) + 1e-12) and abs(np.cos(2) - 1 + 1.416) < 5e-4)
+gf = lambda p_: np.array([2 * p_[0] * p_[1], p_[0] ** 2 + 3 * p_[1] ** 2])
+hv = (gf(np.array([1 + 1e-6, 2.])) - gf(np.array([1., 2.]))) / 1e-6
+check("primer: f = x^2 y + y^3 at (1,2), v = (1,0): Hv = (4, 2); difference quotient matches to ~6 digits", np.allclose(np.array([[4, 2], [2, 12]]) @ [1, 0], [4, 2]) and np.allclose(hv, [4, 2], atol=1e-5))
+check("primer: sigma = rho = 1, eps = 0.01: n1 ~ 1/eps^2 = 1e4, n2 ~ 1/(rho eps) = 100", np.isclose(1 / .01 ** 2, 1e4) and np.isclose(1 / .01, 100))
 done()

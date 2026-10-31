@@ -82,4 +82,21 @@ for k in range(400):
     x = x - .05 * g(x)
 check("T = 2: x_2 stays exactly 0 until x_1 passes 1/2", first is not None and first[1] > .5, f"x_2 first moves at step {first[0]} with x_1 = {first[1]:.3f}")
 save_json("carmon2020lower", "data.json", {"counts": [[int(t), int(counts[t])] for t in counts], "slope": round(float(sl), 2), "first": [first[0], round(float(first[1]), 4)]})
+# in-page notes (papers/carmon2020lower/notes.md): Sec. 3 exponent table (p + 1)/p, Sec. 5 GD bound on an L-smooth f
+check("notes: (p + 1)/p = 2, 3/2, 4/3 for p = 1, 2, 3", [(p + 1) / p for p in (1, 2, 3)] == [2, 1.5, 4 / 3])
+fq5 = lambda x: .5 * (x[0] - 1) ** 2 + .5 * np.sum(np.diff(x) ** 2)
+def gq5(x):
+    g = np.zeros_like(x); g[0] += x[0] - 1; dx = np.diff(x); g[1:] += dx; g[:-1] -= dx
+    return g
+check_grad("primer: chain f = (x1 - 1)^2/2 + sum (x_{i+1} - x_i)^2/2", fq5, gq5, [np.random.default_rng(k).normal(size=5) for k in range(10)])
+Lc5 = eig(fd_hess(fq5, np.zeros(5)))[-1]
+x = np.zeros(5); xs5, gsq5 = [], []
+for k in range(1, 6):
+    gsq5.append(gq5(x) @ gq5(x)); x = x - gq5(x) / Lc5; xs5.append(int(np.sum(np.abs(x) > 1e-14)))
+check("primer: from 0, after k gradient steps exactly the first k coordinates are nonzero (d = 5)", xs5 == [1, 2, 3, 4, 5], str(xs5))
+x = np.zeros(5); D5 = fq5(x); gs = []
+for t in range(40): gs.append(gq5(x) @ gq5(x)); x = x - gq5(x) / Lc5
+check("notes: GD with eta = 1/L: min |g|^2 <= 2 L (f(x0) - f_inf)/T (chain instance, T = 40)", min(gs) <= 2 * Lc5 * D5 / 40)
+check("primer: guessing 1..1024 takes 10 halvings, 2^10 = 1024", 2 ** 10 == 1024 and int(np.ceil(np.log2(1024))) == 10)
+check("primer: eps = 0.01: 1e4, 1e3, ~464", np.isclose(.01 ** -2, 1e4) and np.isclose(.01 ** -1.5, 1e3) and np.isclose(.01 ** (-4 / 3), 464, atol=.5))
 done()

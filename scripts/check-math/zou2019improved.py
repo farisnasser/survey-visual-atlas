@@ -83,4 +83,27 @@ for m in (32, 8192):
     out[f"convex{m}"] = bool(np.all(sec > -1e-9))
     print(f"  m = {m}: slice along the training direction convex: {out[f'convex{m}']}, min second difference {sec.min():.2e}")
 save_json("zou2019improved", "data.json", out)
+# in-page notes (papers/zou2019improved/notes.md): telescoping with L_t = q^t L0 and steps C(sqrt L_t - sqrt L_{t+1})
+for q_, C_, L0_, T_ in [(.9, 1., 1., 50), (.5, 3., 2., 10), (.99, .2, 5., 2000)]:
+    Lt = L0_ * q_ ** np.arange(T_ + 1)
+    path = np.sum(C_ * (np.sqrt(Lt[:-1]) - np.sqrt(Lt[1:])))
+    assert np.isclose(path, C_ * (np.sqrt(L0_) - np.sqrt(Lt[-1]))) and path <= C_ * np.sqrt(L0_)
+check("notes: telescoped path length = C(sqrt L0 - sqrt LT) <= C sqrt L0 for any T", True)
+# primer idea 1: factor 0.99 per step -> ln(1e6)/(-ln 0.99) ~ 1375 steps; eta*mu = (k/(L^2 m)) (m phi/(k n^2)) = phi/(n^2 L^2)
+check("primer: 0.99^t <= 1e-6 first at t = 1375", int(np.ceil(np.log(1e6) / -np.log(.99))) == 1375 and .99 ** 1375 <= 1e-6 < .99 ** 1374)
+for k_, L_, m_, ph, n_ in [(1, 3, 1e6, .1, 50), (4, 10, 1e9, .5, 1000)]:
+    assert np.isclose((k_ / (L_ ** 2 * m_)) * (m_ * ph / (k_ * n_ ** 2)), ph / (n_ ** 2 * L_ ** 2))
+check("primer: eta*mu ~ phi/(n^2 L^2), independent of the width m", True)
+# primer idea 2: movement sqrt(k n^2 log n/(m phi)) halves when m quadruples; <= tau = phi^1.5 n^-3 L^-6 iff m >= k n^8 L^12/phi^4 (logs dropped)
+mv = lambda m_, k_=1, n_=100, ph=.3: np.sqrt(k_ * n_ ** 2 * np.log(n_) / (m_ * ph))
+check("primer: quadrupling m halves the movement bound", np.isclose(mv(4e6) / mv(1e6), .5))
+k_, n_, L_, ph = 2., 30., 3., .4
+mthr = k_ * n_ ** 8 * L_ ** 12 / ph ** 4
+mvn = lambda m_: np.sqrt(k_ * n_ ** 2 / (m_ * ph)); tau_ = ph ** 1.5 * n_ ** -3 * L_ ** -6
+check("primer: movement <= tau exactly when m >= k n^8 L^12/phi^4", np.isclose(mvn(mthr), tau_) and mvn(2 * mthr) < tau_ < mvn(mthr / 2))
+# primer idea 3: duplicated input with labels +1, -1: (1/2)((u-1)^2 + (u+1)^2) = u^2 + 1 >= 1
+uu = np.linspace(-3, 3, 6001)
+check("primer: duplicate input with opposite labels has loss >= 1, minimum at u = 0", np.isclose((.5 * ((uu - 1) ** 2 + (uu + 1) ** 2)).min(), 1) and np.isclose(uu[np.argmin((uu - 1) ** 2 + (uu + 1) ** 2)], 0))
+# primer idea 4: n = 1000: n^8 = 1e24, n^24 = 1e72, ratio 1e48
+check("primer: 1000^8 = 1e24, 1000^24 = 1e72, n^16 = 1e48", 1000 ** 8 == 10 ** 24 and 1000 ** 24 == 10 ** 72 and 1000 ** 16 == 10 ** 48)
 done()

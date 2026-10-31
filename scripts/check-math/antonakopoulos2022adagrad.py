@@ -92,4 +92,22 @@ check("GD: the stable set is the Hessian's stable manifold (d* = 0)", abs(dstar[
 check("AdaGrad-diag: its stable set is elsewhere (|d*| > 0.01): the preconditioner is not aligned with the curvature", abs(dstar["diag"]) > .01)
 check("every start off a method's stable set escapes, in time growing like log(1/d) (no uniform bound)", all(min(v) > 0 for v in esc.values()) and all(np.polyfit(np.log(1 / ds), esc[k], 1)[0] > 3 for k in esc))
 save_json("antonakopoulos2022adagrad", "data.json", {"ds": ds.tolist(), "esc": esc, "dstar": {k: float(v) for k, v in dstar.items()}, "d0": D0})
+# in-page notes (papers/antonakopoulos2022adagrad/notes.md): notes Sec. 2 (DH similar to D^1/2 H D^1/2, same inertia) and primer numbers
+H = np.array([[1., 2.], [2., 1.]]); Dm = np.diag([1., .25])
+eH, eDH = np.linalg.eigvalsh(H), np.sort(np.linalg.eigvals(Dm @ H).real)
+eSym = np.linalg.eigvalsh(np.sqrt(Dm) @ H @ np.sqrt(Dm))
+print(f"  primer: eig H = {eH}, eig DH = {eDH}")
+check("primer: H = [[1,2],[2,1]] has eigenvalues -1 and 3", np.allclose(eH, [-1, 3]))
+check("primer: DH (D = diag(1, 0.25)) has eigenvalues ~1.693 and ~-0.443", np.allclose(eDH, [-.443, 1.693], atol=5e-4))
+check("notes: DH has the spectrum of D^1/2 H D^1/2 (similar), same sign count as H (Sylvester)", np.allclose(eDH, eSym) and (np.sum(eSym < 0) == np.sum(eH < 0) == 1))
+rng = np.random.default_rng(0)
+for _ in range(200):     # random D > 0 and symmetric H: inertia always preserved
+    A = rng.standard_normal((4, 4)); Hr = A + A.T; Dr = np.diag(np.exp(rng.standard_normal(4)))
+    assert np.sum(np.linalg.eigvals(Dr @ Hr).real < 0) == np.sum(np.linalg.eigvalsh(Hr) < 0)
+check("notes: for random D > 0 the number of negative eigenvalues of DH equals that of H", True)
+xs, Ssum, Gam = 1.0, 1.0, []
+for t in range(300):     # ADANORM on f = x^2/2, delta0 = 1, x0 = 1
+    Ssum += xs * xs; Gam.append(1 / np.sqrt(Ssum)); xs = xs - Gam[-1] * xs
+print(f"  primer ADANORM steps: {np.round(Gam[:4], 4)} ... limit {Gam[-1]:.6f}")
+check("primer: ADANORM steps 0.707, 0.692, 0.691, settling at ~0.691 (> 0)", np.allclose(Gam[:3], [.707, .692, .691], atol=6e-4) and abs(Gam[-1] - .691) < 5e-4 and abs(Gam[-1] - Gam[5]) < 1e-5)
 done()

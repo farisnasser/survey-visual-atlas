@@ -136,4 +136,24 @@ save_json("allenzhu2019convergence", "data.json", {"widths": curves, "separation
           "slice": {"F": r(grid, 5), "a": [float(Agrid[0]), float(Agrid[-1])], "b": [float(Bgrid[0]), float(Bgrid[-1])], "n": 41,
                     "F0": float(F0), "lam_min": float(lam_min), "lam_max": float(lam_top)},
           "setup": {"L": Ld, "d": d, "n": 10}})
+
+# in-page notes (papers/allenzhu2019convergence/notes.md): linearized Jacobian example (Sec. 3), ReLU values, primer
+Jz = np.array([[1., 0, 1], [0, 1, 1]]); Kz = Jz @ Jz.T
+check("notes: K = J J^T = [[2,1],[1,2]] with eigenvalues 1 and 3", np.allclose(Kz, [[2, 1], [1, 2]]) and np.allclose(np.linalg.eigvalsh(Kz), [1, 3]))
+E_ = np.random.default_rng(2).normal(size=(1000, 2))
+check("notes: ||J^T e||^2 = e^T K e >= ||e||^2 = 2F for all e", all(abs(np.sum((Jz.T @ e) ** 2) - e @ Kz @ e) < 1e-12 and e @ Kz @ e >= e @ e - 1e-12 for e in E_))
+ez = np.array([1., -1]); ep = (np.eye(2) - .25 * Kz) @ ez
+check("notes: eta = 1/4, e = (1,-1): e+ = 3/4 e, F0 = 1, F1 = 0.5625", np.allclose(ep, .75 * ez) and .5 * ez @ ez == 1 and abs(.5 * ep @ ep - .5625) < 1e-15)
+relu = lambda z: max(z, 0.)
+check("notes: phi(-0.1) = 0, phi(0.2) = 0.2", relu(-.1) == 0 and relu(.2) == .2)
+# primer
+xs_ = np.linspace(-20, 20, 4000001); xs_ = xs_[np.abs(xs_) > 1e-4]
+Fp = xs_ ** 2 + 3 * np.sin(xs_) ** 2; gp_ = 2 * xs_ + 3 * np.sin(2 * xs_)
+check("primer: F = x^2 + 3 sin^2 x has min F'' = 2 + 6 cos 2x = -4 (non-convex)", abs((2 + 6 * np.cos(2 * xs_)).min() + 4) < 1e-9)
+check("primer: F'(x)^2 / (2F(x)) >= ~0.17 (PL with mu ~ 0.17)", abs((gp_ ** 2 / (2 * Fp)).min() - .17) < .01, f"{(gp_ ** 2 / (2 * Fp)).min():.4f}")
+check("primer: ReLU slope change 1 over 0.2 -> 5, over 0.002 -> 500", abs(1 / .2 - 5) < 1e-12 and abs(1 / .002 - 500) < 1e-9)
+zz = np.random.default_rng(0).normal(size=4000000)
+check("primer: P(|z| < 0.01) ~ 2(0.01)/sqrt(2 pi) ~ 0.8%", abs(np.mean(np.abs(zz) < .01) - .008) < 3e-4 and abs(2 * .01 / np.sqrt(2 * np.pi) - .008) < 1e-4)
+check("primer: log(1e6)/(-log 0.99) ~ 1375 steps", abs(np.log(1e6) / -np.log(.99) - 1375) < 1)
+check("primer: 1/(1 - sqrt(0.99)) ~ 200", abs(1 / (1 - np.sqrt(.99)) - 200) < 1)
 done()

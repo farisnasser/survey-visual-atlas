@@ -84,4 +84,35 @@ for n, c in curves.items():
     idx = np.unique(np.round(np.logspace(0, np.log10(len(c) - 1), 160)).astype(int))
     out[f"c{n}"] = [[float(c[i, 0]), float(f"{c[i, 1]:.4g}")] for i in idx]
 save_json("xu2023over", "data.json", out)
+# in-page notes (papers/xu2023over/notes.md): v = (1, 0), x = (2, -1): teacher 2; pair (0.4v, 0.6v) gives 0.8 + 1.2 = 2
+relu_ = lambda z: max(z, 0.)
+vn, xn = np.array([1., 0.]), np.array([2., -1.])
+check("notes example: [v.x]+ = 2 = [0.4 v.x]+ + [0.6 v.x]+ (0.8 + 1.2)", relu_(vn @ xn) == 2 and np.isclose(relu_(.4 * vn @ xn), .8) and np.isclose(relu_(.6 * vn @ xn), 1.2) and np.isclose(relu_(.4 * vn @ xn) + relu_(.6 * vn @ xn), 2))
+# surrogate dL/dt = -c L^{4/3} -> L(t) = (L0^{-1/3} + (c/3) t)^{-3} (numerical ODE check)
+for c_, L0_ in [(1., 1.), (.3, 5.)]:
+    Lc, dtc = L0_, 1e-4
+    for _ in range(int(20 / dtc)):
+        Lc -= dtc * c_ * Lc ** (4 / 3)
+    assert abs(Lc / (L0_ ** (-1 / 3) + c_ / 3 * 20) ** -3 - 1) < 1e-3, (Lc, c_, L0_)
+check("notes: dL/dt = -c L^{4/3} integrates to L = (L0^{-1/3} + (c/3) t)^{-3}", True)
+# primer idea 1: ln(1e6) ~ 13.8 vs 100; ln(1e12) ~ 27.6 vs 1e4
+check("primer: e^{-t} = 1e-6 at t ~ 13.8, t^{-3} at t = 100; 1e-12: 27.6 vs 1e4", abs(np.log(1e6) - 13.8) < .05 and np.isclose(100 ** -3, 1e-6) and abs(np.log(1e12) - 27.6) < .05 and np.isclose(1e4 ** -3, 1e-12))
+# primer idea 2: ||grad||^2 >= c L^alpha -> L ~ t^{-1/(alpha - 1)}: alpha = 4/3 -> t^-3, alpha = 2 -> t^-1
+for al, ex in [(4 / 3, -3.), (2., -1.)]:
+    Lc, dtc = 1., 1e-2
+    for _ in range(20000):                          # Euler on dL/dt = -L^alpha up to t = 200
+        Lc -= dtc * Lc ** al
+    closed = lambda t_: (1 + (al - 1) * t_) ** (-1 / (al - 1))
+    assert abs(Lc / closed(200) - 1) < 2e-2, (al, Lc, closed(200))
+    slope = (np.log(closed(2e6)) - np.log(closed(1e6))) / np.log(2)
+    assert abs(slope - ex) < 1e-3, (al, slope)
+check("primer: dL/dt = -L^alpha follows (1 + (alpha-1) t)^(-1/(alpha-1)): tail exponents -3 (alpha = 4/3) and -1 (alpha = 2)", True)
+# primer idea 3: w1 = alpha v, w2 = (1 - alpha) v reproduce the teacher for every alpha in [0, 1] (Monte Carlo inputs)
+Xg = np.random.default_rng(13).normal(size=(20000, 3)); v3 = np.array([.6, .8, 0.])
+check("primer: (alpha v, (1 - alpha) v) is a global minimum for alpha = 0, 0.3, 1", all(np.allclose(np.maximum(Xg @ (a_ * v3), 0) + np.maximum(Xg @ ((1 - a_) * v3), 0), np.maximum(Xg @ v3, 0)) for a_ in (0., .3, 1.)))
+# primer idea 4: L = |b|^3, b' = -3 b^2 -> b = 1/(1/b0 + 3t): L(100) = 301^-3 ~ 3.7e-8 from b0 = 1; quadratic gives e^{-400}
+bb_, dtb = 1., 1e-4
+for _ in range(int(100 / dtb)):
+    bb_ -= dtb * 3 * bb_ ** 2
+check("primer: |b|^3 flow from b0 = 1 gives L(100) = 301^-3 ~ 3.7e-8", abs(bb_ ** 3 / 301. ** -3 - 1) < 1e-3 and abs(301. ** -3 - 3.7e-8) < 5e-10, f"{bb_ ** 3:.4e}")
 done()

@@ -87,4 +87,40 @@ for bn in [1.0, .3, .15, .05, 1e-3]:
     out[str(bn)] = {"gap": sig(gap, 3), "norm": sig(nr, 4), "rstar": round(float(hi), 4)}
 check("a small-|b| instance stalls (gap > 1e-3 for > 1000 iterations) before converging", any(np.sum(np.array(v["gap"]) > 1e-3) > 50 for v in out.values()))
 save_json("carmon2019gradient", "data.json", {"every": 20, "T": T, "rho": rho2, "eta": eta2, "runs": out})
+
+# in-page notes (papers/carmon2019gradient/notes.md): notes Sec. 1 example in full, primer numbers
+q1 = lambda s_: -s_ ** 2 / 2 + abs(s_) ** 3 / 3
+check("notes Sec. 1: q'(s) = -s + s|s| has zeros 0, +-1; q(+-1) = -1/6; q''(0) = -1", all(abs(-s_ + s_ * abs(s_)) < 1e-12 for s_ in (0., 1., -1.)) and np.isclose(q1(1.), -1 / 6) and np.isclose((q1(1e-4) - 2 * q1(0) + q1(-1e-4)) / 1e-8, -1, atol=1e-3))
+s1_ = .2 - .25 * (-.2 + .04); s2_ = s1_ - .25 * (-s1_ + s1_ * abs(s1_))
+check("notes Sec. 1: s1 = 0.24, s2 = 0.2856 (eta = 0.25, s0 = 0.2), and (0.24)^2 = 0.0576", np.isclose(s1_, .24) and np.isclose(s2_, .2856) and np.isclose(.24 ** 2, .0576))
+sx = .2
+for _ in range(200): sx -= .25 * (-sx + sx * abs(sx))
+check("notes Sec. 1: GD from 0.2 with eta = 0.25 converges to +1", abs(sx - 1) < 1e-9)
+check("primer: grad of |s|^3/3 is |s| s (finite differences)", np.allclose([(np.linalg.norm(v + e) ** 3 - np.linalg.norm(v - e) ** 3) / 6e-6 for v in [np.array([.3, -.7])] for e in np.eye(2) * 1e-6], np.linalg.norm([.3, -.7]) * np.array([.3, -.7]), atol=1e-6))
+A2 = np.diag([-1., 2.]); b2 = np.array([.1, .2]); rh = 1.
+qq = lambda s_: b2 @ s_ + .5 * s_ @ A2 @ s_ + rh / 3 * np.linalg.norm(s_) ** 3
+lams = np.linspace(-1.9999, 4, 600001); crit = []
+fsec = np.array([rh * np.linalg.norm(b2 / np.array([-1 + l, 2 + l])) - l if abs(-1 + l) > 1e-9 else np.nan for l in lams])
+for i_ in np.where(np.sign(fsec[:-1]) * np.sign(fsec[1:]) < 0)[0]:
+    lo_, hi_ = lams[i_], lams[i_ + 1]
+    if abs(lo_ - 1) < 1e-3 or abs(hi_ - 1) < 1e-3: continue
+    for _ in range(80):
+        m_ = (lo_ + hi_) / 2
+        g_ = rh * np.linalg.norm(b2 / np.array([-1 + m_, 2 + m_])) - m_
+        if np.sign(g_) == np.sign(rh * np.linalg.norm(b2 / np.array([-1 + lo_, 2 + lo_])) - lo_): lo_ = m_
+        else: hi_ = m_
+    if m_ > 0: crit.append((m_, -b2 / np.array([-1 + m_, 2 + m_])))
+glob = [c for c in crit if c[0] >= 1]
+print(f"  primer critical points (lambda, s): {[(round(l, 4), np.round(v, 4).tolist(), round(qq(v), 4)) for l, v in crit]}")
+check("primer: exactly one critical point has shift >= 1: lambda* ~ 1.092, s* ~ (-1.090, -0.065), q ~ -0.278, and it is the lowest", len(glob) == 1 and abs(glob[0][0] - 1.092) < 1e-3 and np.allclose(glob[0][1], [-1.090, -.065], atol=1e-3) and abs(qq(glob[0][1]) + .278) < 1e-3 and all(qq(glob[0][1]) <= qq(v) for _, v in crit) and len(crit) >= 2)
+beta_ = 2.; R_ = beta_ / (2 * rh) + np.sqrt((beta_ / (2 * rh)) ** 2 + np.linalg.norm(b2) / rh); eta_ = 1 / (4 * (beta_ + rh * R_))
+xg_ = np.zeros(2)
+for _ in range(5000): xg_ = xg_ - eta_ * (A2 @ xg_ + b2 + rh * np.linalg.norm(xg_) * xg_)
+check("primer: R ~ 2.106, eta <= 0.061; GD from 0 reaches s*", abs(R_ - 2.106) < 1e-3 and abs(eta_ - .061) < 5e-4 and np.allclose(xg_, glob[0][1], atol=1e-6))
+check("primer: 1-D example (beta = 1, b = 0): R = 1, Assumption A bound 0.125 < 0.25", np.isclose(.5 + np.sqrt(.25), 1) and np.isclose(1 / (4 * (1 + 1)), .125))
+bh = np.array([0., .2]); xh = np.zeros(2)
+for _ in range(5000): xh = xh - eta_ * (A2 @ xh + bh + rh * np.linalg.norm(xh) * xh)
+qh = lambda s_: bh @ s_ + .5 * s_ @ A2 @ s_ + rh / 3 * np.linalg.norm(s_) ** 3
+yh = -.2 / 3; sh = np.array([np.sqrt(1 - yh ** 2), yh])
+check("primer: hard case b = (0, 0.2): GD stays on the axis at (0, -0.095), q ~ -0.0097; true min ~ -0.173 (lambda* = 1)", xh[0] == 0 and abs(xh[1] + .095) < 1e-3 and abs(qh(xh) + .0097) < 1e-4 and abs(qh(sh) + .173) < 1e-3 and np.allclose((A2 + np.eye(2)) @ sh, -bh) and np.isclose(np.linalg.norm(sh), 1))
 done()

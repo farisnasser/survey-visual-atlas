@@ -102,6 +102,16 @@ for meth, gr in grids.items():
     e = min(ok, key=lambda e: ok[e][-1]); best[meth] = (e, ok[e])
     print(f"    {meth}: best eta {e}, final loss {ok[e][-1]:.3e}")
 check("Shampoo beats diagonal AdaGrad and GD on Kronecker-structured curvature", best["shampoo"][1][-1] < best["diag"][1][-1] and best["shampoo"][1][-1] < best["sgd"][1][-1])
+# in-page notes (papers/gupta2018shampoo/notes.md): memory numbers and the primer
+check("notes: 1000 x 1000 weight: flattened preconditioner 1e12 entries, two factors 2e6", (1000 * 1000) ** 2 == 10 ** 12 and 2 * 1000 ** 2 == 2 * 10 ** 6)
+check("primer 1: regret 100 after T = 10 000 rounds is 0.01 per round (sqrt T = 100)", np.sqrt(10000) == 100 and 100 / 10000 == .01)
+A_ = np.array([[2., 1.], [1., 2.]])
+Ah = mpow(A_, -.5)
+check("primer 3: A = [[2,1],[1,2]] has eigenvalues 3, 1; A^(-1/2) = [[0.789, -0.211], [-0.211, 0.789]]", np.allclose(np.linalg.eigvalsh(A_), [1, 3]) and np.allclose(Ah, [[.789, -.211], [-.211, .789]], atol=5e-4) and np.allclose(Ah @ Ah @ A_, np.eye(2)))
+check("primer 3: entrywise power gives [[0.707, 1], [1, 0.707]] instead", np.allclose(A_ ** -.5, [[.7071, 1], [1, .7071]], atol=1e-4))
+rng_ = np.random.default_rng(9)
+P1 = rng_.normal(size=(3, 3)); P1 = P1 @ P1.T + np.eye(3); P2 = rng_.normal(size=(4, 4)); P2 = P2 @ P2.T + np.eye(4)
+check("primer 4: (L kron R)^p = L^p kron R^p for PSD L, R (p = -1/4)", np.allclose(mpow(np.kron(P1, P2), -.25), np.kron(mpow(P1, -.25), mpow(P2, -.25))))
 save_json("gupta2018shampoo", "data.json", {"m": m, "n": n, "curves": {k: {"eta": v[0], "loss": sig(v[1][::5], 4)} for k, v in best.items()},
                                             "mem": {"sgd": m * n, "diag": m * n, "shampoo": m * m + n * n, "full": (m * n) ** 2}})
 done()

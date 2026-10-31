@@ -41,4 +41,21 @@ check("E|(Z+Z^T)/2 v|^2 = 1.5 |v|^2 in 2D (used for the page's predicted line)",
 # elbow: exponents of eps^-1 for p-th order oracles (Fig. 1)
 sto = {1: 4, 2: 3, 3: 3, 4: 3}; det = {p: (p + 1) / p for p in range(1, 5)}
 check("elbow: stochastic exponent drops 4 -> 3 at p = 2, then flat; deterministic (p+1)/p", sto[1] == 4 and all(sto[p] == 3 for p in (2, 3, 4)) and det[1] == 2)
+
+# in-page notes (papers/arjevani2020second/notes.md): Taylor expansion of the gradient (Sec. 2) and primer numbers
+Fa = lambda p: p[0] ** 2 * p[1]
+gFa = lambda p: np.array([2 * p[0] * p[1], p[0] ** 2])
+check_grad("primer: F = x^2 y has gradient (2xy, x^2)", Fa, gFa, rand_pts(10, -2, 2))
+check_hess_at("primer: Hessian of x^2 y at (1,2) = [[4,2],[2,0]]", Fa, [1, 2], [[4, 2], [2, 0]])
+Hv = np.array([[4., 2], [2, 0]]) @ [1, 0]
+fdq = (gFa(np.array([1.001, 2])) - gFa(np.array([1., 2]))) / .001
+check("primer: HVP (4, 2); finite difference (4, 2.001)", np.allclose(Hv, [4, 2]) and np.allclose(fdq, [4, 2.001]), f"{fdq}")
+errs = [np.linalg.norm(gFa(np.array([1 + d, 2])) - gFa(np.array([1., 2])) - d * Hv) for d in [1e-1, 1e-2, 1e-3]]
+check("notes: grad F(x + dv) - grad F(x) - d H v = O(d^2)", errs[1] / errs[0] < .02 and errs[2] / errs[1] < .02, f"{errs}")
+ex = 1.2 ** 2 - 1
+left = lambda K: sum(2 * (1 + .2 * k / K) * (.2 / K) for k in range(K))
+check("primer: x^3/3 from 1 to 1.2: exact 0.44, K=1 -> 0.40, K=4 -> 0.43", abs(ex - .44) < 1e-12 and abs(left(1) - .40) < 1e-12 and abs(left(4) - .43) < 1e-12)
+check("primer: K-point HVP sums converge to the gradient difference", abs(left(1000) - .44) < 1e-4)
+e_ = 1e-2
+check("primer: eps = 0.01: eps^-4 = 1e8, eps^-3 = 1e6, ratio 100", abs(e_ ** -4 / 1e8 - 1) < 1e-12 and abs(e_ ** -3 / 1e6 - 1) < 1e-12)
 done()

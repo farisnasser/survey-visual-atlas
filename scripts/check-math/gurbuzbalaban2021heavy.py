@@ -93,4 +93,28 @@ kk = 400
 hill = 1 / np.mean(np.log(xs[:kk] / xs[kk]))
 check("scalar chain: Hill estimate near alpha", abs(hill - a1) < .35, f"Hill {hill:.3f} vs alpha {a1:.3f}")
 save_json("gurbuzbalaban2021heavy", "data.json", {"curves": curves, "scalar_alpha": round(float(a1), 3)})
+
+# in-page notes (papers/gurbuzbalaban2021heavy/notes.md): notes Sec. 3 exact values and primer numbers
+zq = np.linspace(0, 1, 200001); phz = np.exp(-zq ** 2 / 2) / np.sqrt(2 * np.pi)
+check("notes Sec. 3: 4 int_0^1 (1-z^2) phi = 4 phi(1) ~ 0.967883 (quadrature)", abs(4 * np.trapezoid((1 - zq ** 2) * phz, zq) - .967883) < 1e-6 and abs(4 * phz[-1] - .967883) < 1e-6)
+check("notes Sec. 3: F(x) = E(ax-y)^2/2 = (x^2+1)/2 (a, y ~ N(0,1) independent)", all(np.isclose(.5 * (xx ** 2 * 1 + 1), (xx ** 2 + 1) / 2) for xx in [0., .7, -2.]))
+mk = [0.]
+for _ in range(6): mk.append(2 * mk[-1] + 1)
+check("notes Sec. 3: E x_k^2 = 2 E x_{k-1}^2 + 1 = 2^k - 1 from x0 = 0", mk == [2 ** k - 1 for k in range(7)])
+rng_g = np.random.default_rng(5); xg = np.zeros(400000)
+for _ in range(4):
+    ag, yg = rng_g.standard_normal(xg.size), rng_g.standard_normal(xg.size); xg = (1 - ag ** 2) * xg + ag * yg
+check("notes Sec. 3: Monte Carlo E x_4^2 ~ 15", abs(np.mean(xg ** 2) / 15 - 1) < .1, f"{np.mean(xg ** 2):.2f}")
+check("primer idea 1: x - eta a(ax - y) = (1 - eta a^2) x + eta a y", np.isclose(.3 - .2 * 1.7 * (1.7 * .3 - .4), (1 - .2 * 1.7 ** 2) * .3 + .2 * 1.7 * .4))
+h2p = lambda s_: .5 * (.2 ** s_ + 1.6 ** s_)
+lo_, hi_ = 1., 2.
+for _ in range(80): lo_, hi_ = (((lo_ + hi_) / 2, hi_) if h2p((lo_ + hi_) / 2) < 1 else (lo_, (lo_ + hi_) / 2))
+check("primer: M in {0.2, 1.6}: E log|M| ~ -0.57, h(1) = 0.9, h(2) = E M^2 = 1.3, alpha ~ 1.35", abs(.5 * np.log(.32) + .57) < 5e-3 and np.isclose(h2p(1), .9) and np.isclose(h2p(2), 1.3) and abs(lo_ - 1.35) < 5e-3, f"alpha = {lo_:.4f}")
+rng_t = np.random.default_rng(0); Mt = np.where(rng_t.random(2000000) < .5, .2, 1.6); xt, xsim = 0., np.empty(Mt.size)
+for i_, m_ in enumerate(Mt): xt = m_ * xt + 1.; xsim[i_] = xt
+xsim = xsim[1000:]; p100, p1000 = np.mean(xsim > 100), np.mean(xsim > 1000)
+check("primer: simulation of x+ = Mx + 1: P(x>100) ~ 0.009, P(x>1000) ~ 0.0004, ratio ~ 22 ~ 10^1.35", abs(p100 - .009) < .001 and abs(p1000 - .0004) < .0001 and abs(p100 / p1000 - 22) < 4 and abs(10 ** 1.35 - 22.4) < .1, f"{p100:.5f}, {p1000:.5f}, ratio {p100 / p1000:.1f}")
+tt_ = np.logspace(0, 8, 400001)                # Pareto tail P(|X|>t) = t^-1.5 for t >= 1: E|X|^p finite iff p < 1.5
+mom = lambda p_: 1 + np.trapezoid(p_ * tt_ ** (p_ - 1) * tt_ ** -1.5, tt_)
+check("primer: tail-integral moments: p = 1 finite (= 3), p = 2 diverges for alpha = 1.5", abs(mom(1.) - 3) < .01 and mom(2.) > 1e3)
 done()

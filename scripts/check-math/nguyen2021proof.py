@@ -97,4 +97,36 @@ check("notes' example: one step gives w = (0.1, 0.2), loss 0.585", np.allclose(w
 save_json("nguyen2021proof", "data.json", {"beta": round(beta, 4), "a0": round(float(a0), 5), "eta": float(f"{eta:.4g}"), "L": sig(L[::10], 4), "A": sig(A[::10], 4),
                                           "B": sig(bound[::10], 4), "rate": float(f"{eta * a0 ** 2 / 8:.3g}"),
                                           "etap": round(float(etap), 5), "a0p": round(float(a0p), 5), "Lp": sig(np.maximum(Lp[::10], 1e-30), 4), "Ap": sig(Ap[::10], 4), "Fp": Fp, "Y": Y.ravel().tolist()})
+# in-page notes (papers/nguyen2021proof/notes.md): F = diag(1, 2), W = 0, Y = (1, 1), eta = 0.1
+Fn, Yn, Wn = np.diag([1., 2.]), np.array([1., 1.]), np.zeros(2)
+en = Fn @ Wn - Yn; gn = Fn.T @ en; Wp = Wn - .1 * gn; Phi = lambda W_: .5 * np.sum((Fn @ W_ - Yn) ** 2)
+check("notes example: e = (-1,-1), grad = (-1,-2), W+ = (0.1, 0.2), outputs (0.1, 0.4)", np.allclose(en, [-1, -1]) and np.allclose(gn, [-1, -2]) and np.allclose(Wp, [.1, .2]) and np.allclose(Fn @ Wp, [.1, .4]))
+check("notes example: loss 1 -> 0.585", np.isclose(Phi(Wn), 1) and np.isclose(Phi(Wp), .585))
+Rq = np.random.default_rng(10); okg = True
+for _ in range(300):
+    Nn, mm = Rq.integers(2, 6), Rq.integers(6, 10)
+    F_ = Rq.normal(size=(Nn, mm)); W_ = Rq.normal(size=(mm, 2)); Y_ = Rq.normal(size=(Nn, 2))
+    G_ = F_.T @ (F_ @ W_ - Y_); smin = np.linalg.svd(F_, compute_uv=False)[-1]
+    okg &= np.sum(G_ ** 2) >= 2 * smin ** 2 * .5 * np.sum((F_ @ W_ - Y_) ** 2) - 1e-9
+check("notes: ||grad_WL Phi||_F^2 >= 2 sigma_min(F_{L-1})^2 Phi (N <= m)", okg)
+# primer idea 1: 3 examples, 2 features -> some residual e != 0 has F^T e = 0
+F32 = Rq.normal(size=(3, 2)); e0 = np.linalg.svd(F32.T)[2][-1]
+check("primer: N = 3 > 2 features leaves a residual with zero last-layer gradient", np.linalg.norm(e0) > .99 and np.allclose(F32.T @ e0, 0))
+# primer idea 2: 0.99^t < 0.01 first at t = 459
+check("primer: 0.99^459 < 0.01 <= 0.99^458", .99 ** 459 < .01 <= .99 ** 458)
+# primer idea 3: ReLU 1-Lipschitz; Weyl: sigma_min(diag(1,2) + E) >= 0.6 when ||E||_2 = 0.4
+aa, bb = Rq.normal(size=1000), Rq.normal(size=1000)
+check("primer: |relu(a) - relu(b)| <= |a - b|", np.all(np.abs(np.maximum(aa, 0) - np.maximum(bb, 0)) <= np.abs(aa - bb) + 1e-15))
+smins = []
+for _ in range(2000):
+    E_ = Rq.normal(size=(2, 2)); E_ *= .4 / np.linalg.norm(E_, 2)
+    smins.append(np.linalg.svd(np.diag([1., 2.]) + E_, compute_uv=False)[-1])
+check("primer: sigma_min(diag(1,2) + E) >= 0.6 for ||E||_2 = 0.4 (Weyl)", min(smins) >= .6 - 1e-12, f"min {min(smins):.4f}")
+# primer idea 4: relu(beta z) = beta relu(z); L = 3: doubling beta multiplies alpha0^2 by 16 and a degree-2 polynomial with nonnegative coefficients by at most 4
+zz = Rq.normal(size=50)
+check("primer: relu(beta z) = beta relu(z) for beta > 0", np.allclose(np.maximum(2.7 * zz, 0), 2.7 * np.maximum(zz, 0)))
+X3 = Rq.normal(size=(4, 5)); W1, W2 = Rq.normal(size=(5, 6)), Rq.normal(size=(6, 7))
+a0 = lambda b_: np.linalg.svd(np.maximum(np.maximum(X3 @ (b_ * W1), 0) @ (b_ * W2), 0), compute_uv=False)[-1]
+rhs = lambda b_: (b_ * np.linalg.norm(W1, 2) + 1) * (b_ * np.linalg.norm(W2, 2) + 1)
+check("primer: L = 3: alpha0^2 scales by 16 when beta doubles; the right side of (14) by at most 4", np.isclose(a0(2.) ** 2 / a0(1.) ** 2, 16) and rhs(2.) / rhs(1.) <= 4)
 done()

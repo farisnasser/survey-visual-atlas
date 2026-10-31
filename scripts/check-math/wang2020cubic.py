@@ -77,4 +77,19 @@ check("at a saddle with zero gradient the cubic step moves along the negative ei
 f1 = lambda x: -x * x / 2 + x ** 4 / 4
 check("notes: f(0.8) = -0.2176, f(0.86) = -0.2330", abs(f1(.8) + .2176) < 1e-12 and abs(f1(.86) + .2330) < 1e-4)
 save_json("wang2020cubic", "data.json", {"iters": rows})
+
+# in-page notes (papers/wang2020cubic/notes.md): notes Secs. 1-2 examples, primer numbers
+fw = lambda x_: -x_ ** 2 / 2 + x_ ** 4 / 4
+m0 = lambda s_: -s_ ** 2 / 2 + 2 / 6 * abs(s_) ** 3
+sgw = np.linspace(-3, 3, 600001)
+check("notes Sec. 1: M = 2 cubic model -s^2/2 + |s|^3/3 has minima at +-1; f(1) = -1/4 < f(0) = 0; f'(0) = 0, f''(0) = -1", abs(abs(sgw[np.argmin(m0(sgw))]) - 1) < 1e-4 and np.isclose(fw(1.), -.25) and np.isclose((fw(1e-4) - 2 * fw(0) + fw(-1e-4)) / 1e-8, -1, atol=1e-3))
+check("notes Sec. 2: v = 0.8 + 0.2*0.3 = 0.86; f(0.8) = -0.2176, f(0.86) ~ -0.2330; monotone step keeps 0.86", np.isclose(.8 + .2 * .3, .86) and np.isclose(fw(.8), -.2176) and abs(fw(.86) + .2330) < 5e-5 and fw(.86) < fw(.8))
+check("primer: overshoot y = 1 from 0.5 with beta = 0.5 -> v = 1.25, f(1.25) ~ -0.171 > f(1) = -0.25", np.isclose(1 + .5 * .5, 1.25) and abs(fw(1.25) + .171) < 5e-4 and fw(1.25) > fw(1.))
+check("primer: eps = 1e-3 -> eps^-2 = 1e6, eps^-1.5 ~ 3.2e4", np.isclose(1e-3 ** -2, 1e6) and abs(1e-3 ** -1.5 / 3.2e4 - 1) < .02)
+ee = [.1]
+for _ in range(3): ee.append(ee[-1] ** 2)
+check("primer: quadratic convergence 0.1 -> 1e-2 -> 1e-4 -> 1e-8", np.allclose(ee, [.1, 1e-2, 1e-4, 1e-8]))
+gq = lambda x_: x_ * (x_ ** 2 - 1)
+check("primer: error bound for (x^2-1)^2/4 near 1: at 1.01 dist 0.01, grad ~0.0203; ratio -> 1/2", abs(gq(1.01) - .0203) < 5e-5 and abs(1e-6 / gq(1 + 1e-6) - .5) < 1e-5)
+check("primer: x^4 at 0.1: dist 0.1, grad 0.004; ratio 1/(4x^2) unbounded", np.isclose(4 * .1 ** 3, .004) and .001 / (4 * .001 ** 3) > 1e5)
 done()

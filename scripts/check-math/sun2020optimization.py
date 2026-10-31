@@ -56,4 +56,44 @@ for L in [2, 4, 7]:
 check("L = 7: the start on the cliff leaves the box; the plateau start needs > 3x the steps it needs at L = 2", slres[7][2] == "out" and slres[7][0] > 3 * slres[2][0])
 check("L = 2: all three starts converge", all(isinstance(v, int) for v in slres[2]))
 save_json("sun2020optimization", "data.json", {"traj": {"0.3": r(a[:3001:10], 6), "1.3": [float(f"{q:.4g}") for q in b[:6]]}, "k99": k99})
+
+# in-page notes (papers/sun2020optimization/notes.md): scalar depth-L example, residual Jacobian, the corrected GD bound, primer
+for L_ in [3, 7, 12]:
+    for wv in [.5, 2.]:
+        ws = np.full(L_, wv); k = 1
+        d = np.prod(np.delete(ws, k))                      # d h_L / d w_k at x = 1
+        assert abs(d - wv ** (L_ - 1)) < 1e-12
+check("notes: d/dw_k prod w = prod_{l != k} w: 2^-(L-1) at 0.5, 2^(L-1) at 2", True)
+Fr = lambda h: np.tanh(np.array([[.2, -.1], [.05, .3]]) @ h)
+h0 = np.array([.4, -.7]); Jres = np.column_stack([((h0 + e + Fr(h0 + e)) - (h0 - e + Fr(h0 - e))) / 2e-6 for e in np.eye(2) * 1e-6])
+Jf = np.column_stack([(Fr(h0 + e) - Fr(h0 - e)) / 2e-6 for e in np.eye(2) * 1e-6])
+check("notes: residual layer Jacobian = I + grad F", np.allclose(Jres, np.eye(2) + Jf, atol=1e-8))
+# corrected statement: with eta = 1/l the average/min squared gradient is <= 2 l (f0 - f*)/T; with eta < 1/l it can fail
+lq = 4.; fq_ = lambda x: lq / 2 * x * x; gq_ = lambda x: lq * x
+x, gs_ = 1., []
+for t in range(10):
+    gs_.append(gq_(x) ** 2); x -= gq_(x) / lq
+check("notes (fixed): eta = 1/l gives min |grad|^2 <= 2 l (f0 - f*)/T", min(gs_) <= 2 * lq * fq_(1.) / 10)
+x, gs_ = 1., []
+for t in range(2):
+    gs_.append(gq_(x) ** 2); x -= .001 * gq_(x)
+check("notes: original 'eta <= 1/l' version fails (eta = 0.001, T = 2 on 2x^2)", min(gs_) > 2 * lq * fq_(1.) / 2, f"{min(gs_):.3f} > {2 * lq * fq_(1.) / 2:.3f}")
+x, gs_, eta_s = 1., [], .05
+for t in range(50):
+    gs_.append(gq_(x) ** 2); x -= eta_s * gq_(x)
+check("notes: general eta <= 1/l bound is 2 (f0 - f*)/(eta T)", min(gs_) <= 2 * fq_(1.) / (eta_s * 50))
+# primer
+check("primer: 0.9^50 ~ 0.005, 1.1^50 ~ 117", abs(.9 ** 50 - .005) < 2e-4 and abs(1.1 ** 50 - 117) < .5)
+check("primer: diag(2, 0.5)^10 stretches 1024 and ~0.001; condition number 4^10", 2 ** 10 == 1024 and abs(.5 ** 10 - .001) < 3e-5 and np.isclose(np.linalg.cond(np.diag([2., .5]) ** 1 @ np.eye(2)) ** 10, 4 ** 10))
+rngU = np.random.default_rng(0); nU = 256; xU = rngU.normal(size=(2000, nU))
+hU = xU.copy()
+for l in range(20):
+    hU = np.maximum(hU @ rngU.normal(0, np.sqrt(2 / nU), (nU, nU)).T, 0)
+he = np.mean(hU ** 2)
+hU = xU.copy()
+for l in range(20):
+    hU = np.maximum(hU @ rngU.normal(0, np.sqrt(1 / nU), (nU, nU)).T, 0)
+lc = np.mean(hU ** 2)
+check("primer: n = 256, 20 ReLU layers: mean square ~0.8 with 2/n, ~6e-7 with 1/n (0.5^20 ~ 1e-6)", abs(he - .8) < .05 and abs(lc - 6e-7) < 1e-7 and abs(.5 ** 20 - 1e-6) < 5e-8, f"{he:.3f}, {lc:.2e}")
+check("primer: 1.01^50 ~ 1.645 vs e^0.5 ~ 1.649", abs(1.01 ** 50 - 1.645) < 5e-4 and abs(np.exp(.5) - 1.649) < 5e-4)
 done()

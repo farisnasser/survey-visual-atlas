@@ -65,4 +65,20 @@ check("lambda_min >= -delta/2: NEON2 returns bottom (>= 95%)", all(rw[1] <= .05 
 bad, tot = sum(rw[4] for rw in rows), sum(rw[5] for rw in rows)
 check("returned v have v^T H v <= -delta/2 except with small probability (Theorem 1 holds w.p. >= 1 - p)", bad <= .01 * tot, f"{bad} of {tot} returns violate")
 save_json("allenzhu2018neon2", "data.json", {"comp": [r(a, 5), r(b, 5), r(c, 5), r(e, 5)], "k": k, "rows": rows, "delta": delta, "eta": eta, "T": T, "d": d, "r": rad, "sigma": sig})
+# in-page notes (papers/allenzhu2018neon2/notes.md): Sec. 1 worked example (offsets cancel, one centered step)
+Hn = np.diag([2., -1.]); a1, a2 = np.array([2., -1.]), np.array([-2., 1.]); un = np.array([.1, .1])
+gfi = lambda u, a: Hn @ u + a
+check("notes: grad f_i(u) - grad f_i(0) = Hu = (0.2, -0.1) for both samples", all(np.allclose(gfi(un, a) - gfi(np.zeros(2), a), [.2, -.1]) for a in (a1, a2)))
+up = un - .2 * (gfi(un, a1) - gfi(np.zeros(2), a1))
+check("notes: centered step of size 0.2 gives u+ = (0.06, 0.12)", np.allclose(up, [.06, .12]), str(up))
+# primer: x^2 - y^2 saddle, gradient difference error ~ |u|^2, power-method growth, boosting
+check("primer: x^2 - y^2 has zero gradient and eigenvalue -2 at 0", np.allclose(eig(fd_hess(lambda p: p[0] ** 2 - p[1] ** 2, np.zeros(2))), [-2, 2], atol=1e-4))
+gp = lambda p: np.array([p[0], -p[1] + p[1] ** 2])           # f = x^2/2 - y^2/2 + y^3/3
+check_grad("primer: f = x^2/2 - y^2/2 + y^3/3", lambda p: .5 * p[0] ** 2 - .5 * p[1] ** 2 + p[1] ** 3 / 3, gp, rand_pts(10, -1, 1))
+dg = gp(un) - gp(np.zeros(2))
+check("primer: gradient difference (0.1, -0.09) vs Hu = (0.1, -0.1), error 0.01", np.allclose(dg, [.1, -.09]) and np.isclose(np.linalg.norm(dg - np.diag([1., -1.]) @ un), .01))
+v = np.array([1., 1.])
+for _ in range(10): v = (np.eye(2) - .2 * Hn) @ v
+check("primer: multipliers 0.6, 1.2; after 10 steps relative growth 2^10 = 1024", np.allclose(np.diag(np.eye(2) - .2 * Hn), [.6, 1.2]) and np.isclose(v[1] / v[0], 1024))
+check("primer: (1/3)^10 ~ 1.7e-5", np.isclose((1 / 3) ** 10, 1.7e-5, rtol=.01))
 done()

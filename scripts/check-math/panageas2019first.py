@@ -47,4 +47,23 @@ check("Omega(1/k) steps: starts that reach the saddle lie on y = 0 or on y = +-1
 check("Omega(1/k) steps: every other start reaches a minimum", frac[.5][2] == 0 and frac[1][2] == 0)
 check("summable steps: a whole open band of starts converges to non-critical points (positive measure)", frac[2][2] > .3)
 save_json("panageas2019first", "data.json", {"frac": {str(s): v for s, v in frac.items()}, "xinf": round(float(xlim), 4), "ends": {str(s): r(p, 5) for s, p in ends.items()}})
+
+# in-page notes (papers/panageas2019first/notes.md): Sec. 2/4 linearization and the primer's numbers
+gam, ak = .7, [.5 / (k + 1) for k in range(200)]
+z = 1e-3
+for a in ak:
+    z = z * (1 + gam * a)
+check("notes Sec. 2: z_t = z_0 prod(1 + gamma alpha_k) on the unstable coordinate", np.isclose(z, 1e-3 * np.prod([1 + gam * a for a in ak])))
+t_ = 1000
+check("notes Sec. 4: log prod(1 + g a_k) ~ g sum a_k for small steps (ratio -> 1)",
+      abs(np.sum(np.log1p(gam * .01 / np.arange(1, 10 ** 5))) / (gam * np.sum(.01 / np.arange(1, 10 ** 5))) - 1) < 1e-2)
+check("primer idea 1: prod_{k=1}^t (1 + 1/k) = t + 1; prod (1 + 1/k^2) -> sinh(pi)/pi ~ 3.68",
+      np.isclose(np.prod(1 + 1 / np.arange(1, t_ + 1)), t_ + 1) and abs(np.prod(1 + 1 / np.arange(1, 10 ** 6) ** 2) - np.sinh(np.pi) / np.pi) < 1e-5 and round(np.sinh(np.pi) / np.pi, 2) == 3.68)
+xinf = 1.5 * np.prod(1 - .8 / np.arange(1, 10 ** 6) ** 2)
+check("primer idea 2: x_inf = 1.5 prod(1 - 0.8/(k+1)^2) ~ 0.174 (not 0)", round(xinf, 3) == .174, f"{xinf:.4f}")
+grow = lambda T: .05 * np.prod(1 + .8 / np.arange(1, T + 1))
+check("primer idea 3: with alpha_k = 0.8/(k+1) the unstable coordinate keeps growing (~ t^0.8)",
+      grow(5000) / grow(500) > 6 and grow(50000) / grow(5000) > 6, f"{grow(500):.1f} -> {grow(5000):.1f} -> {grow(50000):.1f}")
+xm = np.array([.5, .5]) * np.exp(-1 * np.array([1., 0])); xm /= xm.sum()
+check("primer idea 4: entropic mirror step from (0.5,0.5), grad (1,0), alpha 1 -> (0.269, 0.731)", np.allclose(np.round(xm, 3), [.269, .731]))
 done()

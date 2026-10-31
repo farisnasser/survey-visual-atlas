@@ -106,4 +106,35 @@ for K in [2, 4, 8]:
     check(f"K={K}: flat point is stationary with top-K eigenvalues = 2/K and a negative eigenvalue",
           np.max(np.abs(fd_grad(fl, th))) < 1e-8 and np.allclose(ev[-K:], 2 / K, atol=1e-4) and ev[0] < -1e-3,
           f"lam_min {ev[0]:.3f}")
+# in-page notes (papers/galli2026flatland/notes.md): Sec. 1 multipliers, Sec. 2 accepted loss increase, Sec. 3 2/K bound
+check("notes: lambda = 4: eta = 0.40 -> -0.6, 0.50 -> -1, 0.55 -> -1.2", np.allclose([1 - 4 * .4, 1 - 4 * .5, 1 - 4 * .55], [-.6, -1, -1.2]))
+xp = 1 - 2.1
+check("notes: x+ = -1.1, f = 0.605 > 0.5; R - c eta |g|^2 = 0.70 - 0.021 = 0.679 >= 0.605", np.isclose(xp, -1.1) and np.isclose(.5 * xp ** 2, .605) and np.isclose(.7 - .01 * 2.1, .679) and .5 * xp ** 2 <= .679)
+for K in [2, 10, 26, 100]:
+    Rb = np.random.default_rng(K); z0, yk = Rb.normal(size=K), Rb.normal(size=K)
+    fb = lambda b: np.mean((z0 + b - yk) ** 2)
+    assert np.allclose(fd_hess(fb, np.zeros(K)), 2 / K * np.eye(K), atol=1e-5)
+check("notes: Hessian of K^-1 sum (z_j + b_j - y_j)^2 in b is (2/K) I; 2/10 = 0.2, 2/100 = 0.02", np.isclose(2 / 10, .2) and np.isclose(2 / 100, .02))
+Hf = np.array([[.2, .3, .1], [.3, -.5, .2], [.1, .2, .7]])
+check("notes: lambda_max(H) >= lambda_max of a diagonal block (Rayleigh quotient)", eig(Hf)[-1] >= eig(Hf[:2, :2])[-1] and eig(Hf)[-1] >= Hf[2, 2])
+# primer: Armijo boundary 2(1 - c)/lambda; halving/doubling lands at >= (1 - c)/lambda; Zhang-Hager average; saddle with small sharpness
+c = .01
+etas = np.linspace(1e-4, 2.5, 250001)
+ok = .5 * (1 - etas) ** 2 <= .5 - c * etas + 1e-15
+check("primer: f = x^2/2 at x = 1 passes Armijo exactly for eta <= 2(1 - c) = 1.98", np.isclose(etas[ok].max(), 1.98, atol=2e-5) and ok[etas <= 1.98].all())
+def equality_ls(lam, eta0, c=.01, x=1.):
+    acc = lambda e: .5 * lam * (x - e * lam * x) ** 2 <= .5 * lam * x * x - c * e * (lam * x) ** 2
+    e = eta0
+    if acc(e):
+        while acc(2 * e): e *= 2
+    else:
+        while not acc(e): e /= 2
+    return e
+res = [(lam, e0, equality_ls(lam, e0)) for lam in [.3, 1., 4., 37.] for e0 in [1e-3, .07, 1., 50.]]
+check("primer: halving/doubling equality search on a quadratic gives (1 - c)/lambda <= eta <= 2(1 - c)/lambda",
+      all((1 - c) / lam - 1e-12 <= e <= 2 * (1 - c) / lam + 1e-12 for lam, _, e in res))
+Q0, R0 = 1., 1.0; Q1 = .85 * Q0 + 1; R1 = (.85 * Q0 * R0 + .5) / Q1
+check("primer: Zhang-Hager reference with xi = 0.85 after losses 1.0, 0.5 is 1.35/1.85 ~ 0.73", np.isclose(Q1, 1.85) and np.isclose(R1, .73, atol=.005), f"{R1:.4f}")
+Hs = np.array([[.2, .3], [.3, -.5]])
+check("primer: H = [[0.2, 0.3], [0.3, -0.5]] has eigenvalues ~0.31, ~-0.61 (sharpness >= 0.2, a saddle)", np.allclose(eig(Hs), [-.61, .31], atol=.005) and eig(Hs)[-1] >= .2)
 done()

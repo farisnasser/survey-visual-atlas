@@ -77,4 +77,33 @@ save_json("kalra2024warmup", "data.json", DATA)
 # notes examples
 check("notes: P^{1/2} H P^{1/2} with H = diag(20, 1), P = diag(0.01, 1) has lambda_max 1", abs(eig(np.diag([.2, 1.]))[-1] - 1) < 1e-12)
 check("notes: 2/20 = 0.1 < 0.3 < 2/5 = 0.4", 2 / 20 < .3 < 2 / 5)
+# in-page notes (papers/kalra2024warmup/notes.md): Sec. 2 thresholds 2/20 = 0.1, 2/5 = 0.4; Sec. 5 P^1/2 H P^1/2
+check("notes: lambda = 20 -> eta < 0.1 (0.3 unstable); lambda = 5 -> 0.4 (0.3 stable)", np.isclose(2 / 20, .1) and abs(1 - .3 * 20) > 1 and np.isclose(2 / 5, .4) and abs(1 - .3 * 5) < 1)
+Pk, Hk = np.diag([.01, 1.]), np.diag([20., 1.])
+Mk = np.sqrt(Pk) @ Hk @ np.sqrt(Pk)
+check("notes: P^1/2 H P^1/2 = diag(0.2, 1), largest eigenvalue 1 (raw 20)", np.allclose(Mk, np.diag([.2, 1.])) and np.isclose(eig(Mk)[-1], 1) and np.isclose(eig(Hk)[-1], 20))
+check("notes: P^1/2 H P^1/2 has the eigenvalues of P H (the preconditioned update's Jacobian)", np.allclose(np.sort(np.linalg.eigvals(Pk @ Hk).real), eig(Mk)))
+# primer: linear warmup value, 2/eta range, catapult in L = (uv - 1)^2 / 2 with eta = 0.6, Adam / GI-Adam first step
+eta_t = lambda t, a=.01, b=.3, T=100: a + (b - a) * min(t, T) / T
+check("primer: eta_50 = 0.155; 2/eta from 200 to ~6.7", np.isclose(eta_t(50), .155) and np.isclose(2 / eta_t(0), 200) and np.isclose(2 / eta_t(100), 6.67, atol=.01))
+Luv = lambda p: .5 * (p[0] * p[1] - 1) ** 2
+gu = lambda p: (p[0] * p[1] - 1) * np.array([p[1], p[0]])
+for a in [.5, 1., 2.2]:
+    assert np.isclose(eig(fd_hess(Luv, np.array([a, 1 / a])))[-1], a * a + 1 / a ** 2, atol=1e-3)
+check("primer: sharpness at the minimum (a, 1/a) is a^2 + 1/a^2, smallest (2) at (1, 1)", True)
+p = np.array([2.2, .45]); l0, s0 = Luv(p), eig(fd_hess(Luv, p))[-1]; mx = 0
+for t in range(3000):
+    p = p - .6 * gu(p); mx = max(mx, Luv(p))
+s1 = eig(fd_hess(Luv, p))[-1]
+check("primer: catapult from (2.2, 0.45), eta = 0.6: loss 0.00005, sharpness ~5.0 > 2/eta ~3.3, spike ~1.5, ends at sharpness ~2.0",
+      np.isclose(l0, 5e-5, rtol=.01) and np.isclose(s0, 5.0, atol=.05) and s0 > 2 / .6 and np.isclose(2 / .6, 3.3, atol=.05)
+      and np.isclose(mx, 1.5, atol=.06) and np.isclose(s1, 2.0, atol=.02) and Luv(p) < 1e-20, f"loss0 {l0:.2e}, S0 {s0:.3f}, peak {mx:.3f}, S_end {s1:.4f}")
+b1, b2, lr = .9, .999, 1e-3
+g0 = np.array([10., .001])
+def adam_first(v0):
+    m = (1 - b1) * g0; v = b2 * v0 + (1 - b2) * g0 ** 2
+    return lr * (m / (1 - b1)) / np.sqrt(v / (1 - b2))
+s_adam, s_gi = adam_first(np.zeros(2)), adam_first(g0 ** 2)
+check("primer: Adam's first step is eta sign(g0) for gradients 10 and 0.001", np.allclose(s_adam, lr * np.sign(g0)))
+check("primer: GI-Adam (v0 = g0^2) first step is sqrt(1 - beta2) = 0.0316 times Adam's", np.allclose(s_gi / s_adam, np.sqrt(1 - b2)) and np.isclose(np.sqrt(1 - b2), .0316, atol=5e-5))
 done()

@@ -83,4 +83,34 @@ print(f"  GD iterates within 0.15 of the saddle: {nr} of 300")
 e = 1e-3; d_ = e ** .25
 check("with delta = eps^(1/4): 1/delta^5 + 1/(delta eps^3) = eps^-1.25 + eps^-3.25", abs((d_ ** -5 + 1 / (d_ * e ** 3)) / (e ** -1.25 + e ** -3.25) - 1) < 1e-9)
 save_json("allenzhu2018natasha", "data.json", {"a": r(a, 5), "b": r(b, 5), "c": r(c, 5), "L": round(L, 4), "L2": round(L2, 4), "delta": delta, "eps": EPS})
+# in-page notes (papers/allenzhu2018natasha/notes.md): f(u, v) = u^4/4 - u^2/2 + v^2/2
+fn = lambda p: p[0] ** 4 / 4 - p[0] ** 2 / 2 + p[1] ** 2 / 2
+check_hess_at("notes example: H(0) = diag(-1, 1)", fn, [0, 0], [[-1, 0], [0, 1]])
+check_hess_at("notes example: H at u = 0.6 is diag(0.08, 1)", fn, [.6, 0], [[.08, 0], [0, 1]])
+check("notes: F = f + sigma||x - x^||^2 has Hessian >= sigma I where Hess f >= -sigma I", all(
+    np.linalg.eigvalsh(np.diag([3 * u_ ** 2 - 1, 1.]) + 2 * 1. * np.eye(2)).min() >= 1. - 1e-12 for u_ in np.linspace(-3, 3, 61)))
+check("notes: 13/4 = 3.25; delta = eps^(1/4) makes delta^-5 + delta^-1 eps^-3 ~ eps^-13/4", np.isclose(13 / 4, 3.25) and np.isclose(-.25 - 3, -13 / 4) and -5 / 4 > -13 / 4)
+# primer idea 1: eps = 1e-4: eps^-4 = 1e16 vs eps^-3.25 = 1e13 (factor 1000)
+check("primer: eps^-4 = 1e16, eps^-3.25 = 1e13 at eps = 1e-4", np.isclose(1e-4 ** -4, 1e16) and np.isclose(1e-4 ** -3.25, 1e13))
+# primer idea 2: Oja average multipliers 1 - eta*lambda = 1.1, 0.9; ratio after 30 steps (1.1/0.9)^30 ~ 412
+check("primer: (1.1/0.9)^30 ~ 412", round((1.1 / .9) ** 30) == 412, f"{(1.1 / .9) ** 30:.1f}")
+Ro = np.random.default_rng(3); al = []
+for _ in range(200):                       # Oja with two components H1 = diag(-3, 1), H2 = diag(1, 1), mean diag(-1, 1)
+    w = Ro.normal(size=2); w /= np.linalg.norm(w)
+    for _ in range(60):
+        Hi = np.diag([-3., 1.]) if Ro.random() < .5 else np.diag([1., 1.])
+        w = w - .1 * Hi @ w; w /= np.linalg.norm(w)
+    al.append(abs(w[0]))
+check("primer: Oja with one sampled Hessian per step aligns with the negative eigenvector", np.median(al) > .99, f"median |w1| = {np.median(al):.4f}")
+# primer idea 3: Hess f = diag(3u^2 - 1, 1) >= -1 everywhere; + ||x - x^||^2 gives diag(3u^2 + 1, 3) >= 1
+us_ = np.linspace(-5, 5, 1001)
+check("primer: f is 1-nonconvex, f + ||x - x^||^2 has eigenvalues >= 1", (3 * us_ ** 2 - 1).min() >= -1 and (3 * us_ ** 2 + 1).min() >= 1)
+# primer idea 4: Hessian L2-Lipschitz, lambda_min(y) >= -delta -> lambda_min >= -2 delta within delta/L2
+Rz = np.random.default_rng(4); okz = True
+for _ in range(300):
+    L2_, dl = Rz.uniform(.5, 5), Rz.uniform(.01, .5)
+    A = Rz.normal(size=(4, 4)); A = (A + A.T) / 2; A += (-dl - np.linalg.eigvalsh(A).min()) * np.eye(4)   # lambda_min = -delta
+    E = Rz.normal(size=(4, 4)); E = (E + E.T) / 2; E *= dl / np.linalg.norm(E, 2)                         # Hessian change over distance delta/L2 has norm <= L2 * delta/L2 = delta
+    okz &= np.linalg.eigvalsh(A + E).min() >= -2 * dl - 1e-12
+check("primer: safe zone of radius delta/L2 keeps lambda_min >= -2 delta (Weyl)", okz)
 done()

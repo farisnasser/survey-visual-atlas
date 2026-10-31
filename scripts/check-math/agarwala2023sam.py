@@ -97,5 +97,21 @@ for rho in RHOS:
     R = np.array(rows); late = R[-100:, 2].mean(); thr = 2 / ETA if rho == 0 else lam_sam(ETA, rho)
     print(f"    MLP eta {ETA} rho {rho}: S0 {R[0, 2]:.2f}, max {R[:, 2].max():.2f}, late {late:.3f}, threshold {thr:.3f}, final loss {R[-1, 1]:.2e}")
     check(f"MLP rho = {rho}: late sharpness within 5% of {'2/eta' if rho == 0 else 'lam_SAM'}", abs(late - thr) / thr < .05, f"{late:.3f} vs {thr:.3f}")
+# in-page notes (papers/agarwala2023sam/notes.md): primer numbers on L = lam x^2 / 2, lam = 3, eta = 0.5, rho = 0.2
+lam_, eta_, rho_ = 3., .5, .2
+Lq = lambda x: .5 * lam_ * x * x
+check("primer 1: normalized perturbation to x = 1.2: loss 2.16, gradient 3.6", abs(Lq(1.2) - 2.16) < 1e-12 and abs(lam_ * 1.2 - 3.6) < 1e-12)
+check("primer 1: unnormalized perturbation rho g = 0.6 -> x = 1.6, gradient 4.8 = (lam + rho lam^2) x", abs(lam_ * (1 + rho_ * lam_) - 4.8) < 1e-12 and abs(lam_ * 1.6 - 4.8) < 1e-12)
+# primer 3: residual dynamics of unnormalized SAM on a linear model z = J th - y equal I - eta JJ^T (I + rho JJ^T)
+rng_ = np.random.default_rng(4)
+J_ = rng_.normal(size=(5, 8)) / 3; y_ = rng_.normal(size=5); th_ = rng_.normal(size=8)
+z0 = J_ @ th_ - y_
+th1 = th_ - eta_ * J_.T @ (J_ @ (th_ + rho_ * J_.T @ z0) - y_)
+K_ = J_ @ J_.T
+check("primer 3: SAM residual map z -> (I - eta JJ^T (I + rho JJ^T)) z (linear model)", np.allclose(J_ @ th1 - y_, (np.eye(5) - eta_ * K_ @ (np.eye(5) + rho_ * K_)) @ z0))
+x = .05; xs_ = [x]
+for _ in range(80):
+    x = x - eta_ * lam_ * (x + rho_ * np.sign(x)); xs_.append(x)
+check("primer 4: normalized SAM from 0.05 -> -0.325, then bounces at +-0.6", abs(xs_[1] + .325) < 1e-12 and abs(abs(xs_[-1]) - .6) < 1e-9 and abs(xs_[-1] + xs_[-2]) < 1e-9, f"{xs_[-2]:.6f}, {xs_[-1]:.6f}")
 save_json("agarwala2023sam", "data.json", {"eta": ETA, "curves": curves})
 done()

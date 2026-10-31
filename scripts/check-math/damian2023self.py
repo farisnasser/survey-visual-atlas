@@ -79,4 +79,34 @@ print(f"    GD cycle lengths: {period[:6].tolist()} steps; max |x| = {np.abs(x).
 # smaller x0 -> larger cycles (Corollary 1)
 amp = {x0: np.abs(gd([x0, 0], 300)[:, 1]).max() * B for x0 in [.05, .02, .005]}
 check("smaller initial oscillation -> larger sharpness swings (Cor. 1)", amp[.05] < amp[.02] < amp[.005], f"max |S - 2/eta|: {amp}")
+# in-page notes (papers/damian2023self/notes.md): Sec. 2 threshold |1 - eta lambda| < 1 <=> 0 < eta lambda < 2
+check("notes: |1 - eta lambda| < 1 exactly when 0 < eta lambda < 2", all((abs(1 - q) < 1) == (0 < q < 2) for q in np.linspace(-1, 3, 4001)))
+# Sec. 3: d/dtheta of x^2/2 S(theta) = x^2/2 grad S (toy S(y) = 2 + y), GD drift -eta x^2/2 grad S
+Lt = lambda p: .5 * (2 + p[1]) * p[0] ** 2
+check_grad("notes/primer: toy L = (2 + y) x^2 / 2, dL/dy = x^2/2", Lt, lambda p: np.array([(2 + p[1]) * p[0], .5 * p[0] ** 2]), rand_pts(10, -1, 1))
+check("primer: eta = 1, x = 1 moves y by -0.5", np.isclose(-1 * .5 * 1 ** 2, -.5))
+# primer: zig-zag multipliers
+seq = lambda lam, n=3: [.1 * (1 - lam) ** k for k in range(n)]
+check("primer: lambda = 1.8: 0.1, -0.08, 0.064; lambda = 2.2: 0.1, -0.12, 0.144", np.allclose(seq(1.8), [.1, -.08, .064]) and np.allclose(seq(2.2), [.1, -.12, .144]))
+# primer: Eq. (3) with eta = 1, alpha = 0.01, beta = 1
+ea, al, be = 1., .01, 1.
+step = lambda x, y: (-(1 + ea * y) * x, y + ea * (al - be * x * x / 2))
+check("primer: Eq. 3: x = 0 -> y += 0.01; |x| = 0.5 -> y += -0.115; threshold sqrt(2 alpha/beta) ~ 0.14",
+      np.isclose(step(0, 0)[1], .01) and np.isclose(step(.5, 0)[1], -.115) and np.isclose(np.sqrt(2 * al / be), .14, atol=.005))
+check("primer: y > 0 grows |x|, y < 0 shrinks it", abs(step(.1, .2)[0]) > .1 and abs(step(.1, -.2)[0]) < .1)
+# one full cycle of the four stages from a tiny x, then the outward drift of the discrete map
+x, y, ys, xs_ = 1e-3, -.05, [], []
+for t in range(150):
+    x, y = step(x, y); ys.append(y); xs_.append(abs(x))
+ys, xs_ = np.array(ys), np.array(xs_)
+cr = np.where(np.diff(np.sign(ys)) != 0)[0]                 # sign changes of y = S - 2/eta
+c1 = xs_[cr[0]:cr[2] + 1]
+check("primer: one loop: y crosses 0 upward, |x| peaks above sqrt(2 alpha/beta), y crosses back, |x| shrinks, y rises again",
+      len(cr) >= 3 and ys[cr[0] + 1] > 0 and c1.max() > np.sqrt(2 * al / be) and ys[cr[1] + 1] < 0 and xs_[cr[2]] < .1 * c1.max() and ys[cr[2] + 1] > 0,
+      f"crossings {cr[:3]}, peak |x| {c1.max():.3f}, |x| at the restart {xs_[cr[2]]:.2e}")
+x, y, pk = 1e-3, -.05, []
+for t in range(1000):
+    x, y = step(x, y); pk.append(abs(x))
+    if abs(x) > 10: break
+check("primer: in the two-number map the cycles grow (not a closed orbit)", max(pk) > 10 * c1.max(), f"|x| exceeds 10 at step {t}")
 done()

@@ -64,4 +64,20 @@ near_saddle = np.mean(np.linalg.norm(X, axis=1) < .15)
 print(f"  TSGD from 200 starts on the stable manifold x = 0: near the saddle at the end {near_saddle:.3f}, near a minimum {np.mean(np.minimum(np.linalg.norm(X - [1, 0], axis=1), np.linalg.norm(X + [1, 0], axis=1)) < .15):.3f}")
 check("TSGD started on the saddle's stable manifold still leaves it (Theorem 3)", near_saddle == 0)
 save_json("apidopoulos2026taming", "data.json", {"rows": r(rows, 4), "p": p_, "q": q_, "sigma": SIG})
+# in-page notes (papers/apidopoulos2026taming/notes.md): Sec. 3 tamed step length < 1, Sec. 5 multiplier 1 + eta gamma
+Rt = np.random.default_rng(6)
+check("notes: |eta g / (1 + eta |g|)| < 1 for any g, eta > 0", all(np.linalg.norm(e * g / (1 + e * np.linalg.norm(g))) < 1 for e, g in zip(10 ** Rt.uniform(-3, 3, 500), 10 ** Rt.uniform(-3, 6, (500, 1)) * Rt.normal(size=(500, 3)))))
+gam, eta = .7, .05; Hs_ = np.diag([2., -gam]); z = np.array([0., 1e-3]); z1 = z - eta * Hs_ @ z
+check("notes: along v (curvature -gamma) a GD step multiplies the displacement by 1 + eta gamma", np.isclose(z1[1] / z[1], 1 + eta * gam))
+# primer: coin, Robbins-Monro sums, x^4/4 blow-up vs taming, escape count from |y| = 0.01
+check("primer: ten tails in a row has probability 1/1024", .5 ** 10 == 1 / 1024)
+check("primer: H_1000 ~ 7.49, sum 1/t^2 = pi^2/6 ~ 1.645", np.isclose(np.sum(1 / np.arange(1, 1001)), 7.49, atol=.005) and np.isclose(np.pi ** 2 / 6, 1.645, atol=5e-4))
+x = 5.; seq = [x]
+for _ in range(2): x = x - .1 * x ** 3; seq.append(x)
+check("primer: plain step eta = 0.1 on x^4/4: |x| > sqrt(20) ~ 4.47 moves away; 5 -> -7.5 -> ~34.7",
+      np.isclose(np.sqrt(2 / .1), 4.47, atol=.005) and np.isclose(seq[1], -7.5) and np.isclose(seq[2], 34.7, atol=.05) and all(abs(xx - .1 * xx ** 3) > abs(xx) for xx in [4.5, 6., -9.]), str(seq))
+xt = 5 - .1 * 125 / (1 + .1 * 125)
+check("primer: tamed teaching step from 5 lands at ~4.07", np.isclose(xt, 4.07, atol=.005), f"{xt:.4f}")
+k = int(np.ceil(np.log(1 / .01) / np.log(1.1)))
+check("primer: |y| = 0.01 grows by 1.1 per step and passes 1 after ~49 steps", k == 49 and .01 * 1.1 ** 48 < 1 <= .01 * 1.1 ** 49)
 done()

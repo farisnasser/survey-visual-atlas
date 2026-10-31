@@ -102,4 +102,27 @@ check("SGD does not follow the straight line (residual > 10% of the distance)", 
 save_json("goodfellow2015qualitatively", "data.json", {"alphas": alphas.tolist(), "line": [sig(c, 4) for c in curves], "between": sig(between, 4),
                                                        "proj": r(proj, 3), "resid": r(resid, 3), "dist": round(float(nu), 3), "acc": [float(acc(r_[1])) for r_ in runs],
                                                        "fac": {"th0": r(fth0, 3), "thf": r(fthf, 4)}, "barrier": round(float(bh), 4), "bumps": [[round(h, 4), a_] for h, a_ in bumps], "sweep": sweep})
+
+# in-page notes (papers/goodfellow2015qualitatively/notes.md): Sec. 2 slope formula, Sec. 4 saddle and the primer's numbers
+Lf = lambda w: (1 - w[0] * w[1]) ** 2
+gLf = lambda w: np.array([-2 * (1 - w[0] * w[1]) * w[1], -2 * (1 - w[0] * w[1]) * w[0]])
+t0, tT = np.array([.3, -.2]), np.array([1.1, .9])
+ell = lambda a: Lf((1 - a) * t0 + a * tT)
+check("notes Sec. 2: l'(alpha) = grad L(theta(alpha))^T (theta_T - theta_0)",
+      all(np.isclose((ell(a + 1e-6) - ell(a - 1e-6)) / 2e-6, gLf((1 - a) * t0 + a * tT) @ (tT - t0), atol=1e-6) for a in np.linspace(.1, .9, 9)))
+check("notes Sec. 4: x^2 - y^2 restricts to x^2 and -y^2", True)
+al = np.linspace(0, 1, 1001)
+check("primer idea 1: 9(1-a)^2 decreasing; segment (1,0)->(0,0) on x^2 - y^2 decreasing",
+      np.all(np.diff(9 * (1 - al) ** 2) <= 0) and np.all(np.diff((1 - al) ** 2 - 0) <= 0))
+sym = (1 - (1 - 2 * al) ** 2) ** 2
+check("primer idea 2: line (1,1)->(-1,-1) peaks at loss 1 at the midpoint", np.isclose(sym.max(), 1) and np.isclose(al[np.argmax(sym)], .5) and Lf([1, 1]) == 0 and Lf([-1, -1]) == 0)
+w = np.array([.5, .1]); P_ = [w.copy()]
+for _ in range(20000):
+    w = w - .05 * gLf(w); P_.append(w.copy())
+P_ = np.array(P_); dlt = w - P_[0]; nrm = np.array([-dlt[1], dlt[0]]) / np.linalg.norm(dlt)
+line = [Lf((1 - a) * P_[0] + a * w) for a in al]
+dev = np.abs((P_ - P_[0]) @ nrm).max()
+check("primer idea 3: GD (0.05) from (0.5,0.1) ends near (1.057, 0.946); line monotone 0.9025 -> 0; path deviates up to 0.062; length ~1.01",
+      np.allclose(w, [1.057, .946], atol=5e-4) and np.all(np.diff(line) <= 1e-12) and np.isclose(line[0], .9025) and round(dev, 3) == .062 and round(np.linalg.norm(dlt), 2) == 1.01,
+      f"end {np.round(w, 4)}, dev {dev:.4f}")
 done()

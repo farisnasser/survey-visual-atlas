@@ -68,4 +68,22 @@ for d in [2, 10, 100, 1000, 10000]:
 check("isotropic kick: escape time grows with d (projection ~ r/sqrt(d))", rows[-1][1] > rows[0][1] + 20)
 check("CNC-aligned noise: escape time independent of d", max(r_[2] for r_ in rows) - min(r_[2] for r_ in rows) <= 2)
 save_json("daneshmand2018escaping", "data.json", {"a": r(a, 5), "c": r(c, 5), "dim": rows})
+
+# in-page notes (papers/daneshmand2018escaping/notes.md): notes Secs. 3-4 and primer numbers
+gz = np.array([[0., 2.], [0., -2.]]); vmin = np.array([0., 1.])
+check("notes Sec. 3: E[g_z] = 0, E<v_min, g_z>^2 = 4", np.allclose(gz.mean(0), 0) and np.isclose(np.mean((gz @ vmin) ** 2), 4))
+rng_n = np.random.default_rng(11)
+for dd, rr in [(10, 1.), (1000, 1.), (50, 2.)]:
+    U = rng_n.standard_normal((40000, dd)); U = rr * U / np.linalg.norm(U, axis=1, keepdims=True)
+    M2 = U.T @ U / len(U)
+    check(f"notes Sec. 4 / primer: sphere radius {rr:g} in R^{dd}: E<u,v>^2 = r^2/d and E[uu^T] = (r^2/d) I", abs(np.mean(U[:, 0] ** 2) / (rr ** 2 / dd) - 1) < .05 and np.allclose(np.trace(M2), rr ** 2) and np.max(np.abs(M2 - rr ** 2 / dd * np.eye(dd))) < .06 * rr ** 2 / dd + 6 * rr ** 2 / dd / np.sqrt(len(U)) * 3)
+check("notes Sec. 4: r = 1, d = 1000 gives 0.001; +-0.5 projections give second moment 0.25", np.isclose(1 / 1000, .001) and np.isclose(np.mean(np.array([.5, -.5]) ** 2), .25))
+e = .01
+check("primer: eps = 0.01 -> eps^(1/2) = 0.1, eps^(2/5) ~ 0.158, eps^(1/4) ~ 0.316", np.isclose(e ** .5, .1) and abs(e ** .4 - .158) < 5e-4 and abs(e ** .25 - .316) < 5e-4)
+check("primer: origin of x^2/2 - y^2/2 has zero gradient, lambda_min = -1", np.allclose(np.linalg.eigvalsh(np.diag([1., -1.])).min(), -1))
+y = .2
+for _ in range(20): y = y - .1 * (-1.) * y                  # GD on -y^2/2 with eta = 0.1
+dloss = -.5 * (y ** 2 - .2 ** 2)
+check("primer: y0 = 0.2, 20 steps of multiplier 1.1 -> y ~ 1.35, loss change ~ -0.88", abs(y - 1.35) < 5e-3 and abs(dloss + .88) < 6e-3, f"y = {y:.4f}, dloss = {dloss:.4f}")
+check("primer: 30 bad of 1000 -> success >= 0.97", 1 - 30 / 1000 == .97)
 done()

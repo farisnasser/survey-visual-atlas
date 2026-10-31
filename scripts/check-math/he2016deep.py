@@ -51,5 +51,15 @@ check("depth 20: plain gradient at init is vanishingly small (< 1e-15)", rows[-1
 check("residual gradient at init stays order one for every depth", all(r_[2] > .5 for r_ in rows))
 check("depth 20: plain chain makes no progress (loss stays 2.0), residual reaches ~0", rows[-1][3] > 1.99 and rows[-1][5] < 1e-10)
 check("depth 2: both train (the shallow plain net is fine)", rows[0][3] < 1e-6 and rows[0][5] < 1e-6)
+# in-page notes (papers/he2016deep/notes.md): notes' scalar example and primer numbers
+check("notes: H = 1.05x -> residual F = 0.05x; block Jacobian 1.05", abs((1 + .05) - 1.05) < 1e-12)
+check("primer 2: 0.9^50 ~ 0.005, 1.1^50 ~ 117", abs(.9 ** 50 - .00515) < 1e-4 and abs(1.1 ** 50 - 117.4) < .1)
+check("primer 2: 20 layers at weight 0.1: plain factor 0.1^19 = 1e-19, residual 1.1^19 ~ 6.1", abs(.1 ** 19 / 1e-19 - 1) < 1e-9 and abs(1.1 ** 19 - 6.116) < 1e-3)
+w20 = np.full(20, .1); xin = .7
+dplain = np.prod(w20[1:]) * xin                       # d/dw_1 of w_20 ... w_1 x
+dres = np.prod(1 + w20[1:]) * xin                     # d/da_1 of prod (1 + a_l) x
+check("primer 2: chain-rule derivatives w.r.t. the first layer match the products", abs(fd_grad(lambda v: np.prod(np.r_[v, w20[1:]]) * xin, [.1])[0] - dplain) < 1e-12 and abs(fd_grad(lambda v: np.prod(1 + np.r_[v, w20[1:]]) * xin, [.1])[0] - dres) < 1e-6)
+a3 = np.array([2., 4., 6.])
+check("primer 3: batch norm of (2, 4, 6) ~ (-1.22, 0, 1.22)", np.allclose((a3 - a3.mean()) / a3.std(), [-1.2247, 0, 1.2247], atol=1e-4))
 save_json("he2016deep", "data.json", {"rows": rows, "table2": {"plain": [27.94, 28.54], "resnet": [27.88, 25.03], "depth": [18, 34]}})
 done()

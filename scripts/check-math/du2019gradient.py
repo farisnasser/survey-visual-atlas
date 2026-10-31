@@ -90,4 +90,24 @@ for m in [4, 4096]:
     dev[m] = np.max(np.linalg.norm(o["res"] - lin, axis=1)) / np.linalg.norm(o["res"][0])
     print(f"  m={m}: max |actual residual - (I - eta G0)^k r0| / |r0| = {dev[m]:.4f}")
 check("wide net follows the linear Gram dynamics; narrow net does not", dev[4096] < .002 and dev[4] > .05)
+
+# in-page notes (papers/du2019gradient/notes.md): fixed-Gram teaching model (Sec. 5), depth factors (Sec. 7), primer
+Kt = np.diag([1., .5]); rk = np.array([1., -1]); rs, Ls_ = [rk], [.5 * rk @ rk]
+for k in range(3):
+    rk = (np.eye(2) - 1 * Kt) @ rk; rs.append(rk); Ls_.append(.5 * rk @ rk)
+check("notes: r1 = (0,-1/2), r2 = (0,-1/4), r3 = (0,-1/8)", np.allclose(rs[1:], [[0, -.5], [0, -.25], [0, -.125]]))
+check("notes: losses 1.00000, 0.12500, 0.03125, 0.00781", np.allclose(Ls_, [1, .125, .03125, .0078125]) and f"{Ls_[3]:.5f}" == "0.00781")
+check("notes: smallest eigenvalue of K is 0.5", np.isclose(np.linalg.eigvalsh(Kt).min(), .5))
+check("notes: 2^10 = 1024 and (1 + 1/10)^10 ~ 2.59 -> e", 2 ** 10 == 1024 and abs(1.1 ** 10 - 2.59) < .005 and abs((1 + 1e-6) ** 1e6 - np.e) < 1e-5)
+Jl = np.array([[1., 0], [1, 1]]); Gl = Jl @ Jl.T
+wl = np.linalg.eigvalsh(Gl)
+check("primer: G = [[1,1],[1,2]], eigenvalues (3 -+ sqrt5)/2 ~ 0.382, 2.618", np.allclose(Gl, [[1, 1], [1, 2]]) and np.allclose(wl, [(3 - np.sqrt(5)) / 2, (3 + np.sqrt(5)) / 2]) and np.allclose(wl, [.382, 2.618], atol=5e-4))
+eta_l = 1 / wl.max()
+check("primer: eta = 1/lambda_max ~ 0.382; factors 0 and 1 - 0.382^2 ~ 0.854", abs(eta_l - .382) < 5e-4 and abs(1 - eta_l * wl.max()) < 1e-12 and abs(1 - eta_l * wl.min() - .854) < 5e-4)
+# linear model: GD on theta moves predictions exactly by -eta G r
+th0 = np.array([.3, -.7]); yv = np.array([1., 2]); r0_ = Jl @ th0 - yv
+th1 = th0 - .1 * Jl.T @ r0_
+check("primer: linear model, one GD step: r1 = (I - eta G) r0", np.allclose(Jl @ th1 - yv, (np.eye(2) - .1 * Gl) @ r0_))
+coins = np.random.default_rng(5).choice([-1, 1], (20000, 100)).mean(1)
+check("primer: average of 100 fair +-1 coins has std ~0.1 (1/sqrt(m))", abs(coins.std() - .1) < .003 and abs(1 / np.sqrt(1e4) - .01) < 1e-15)
 done()

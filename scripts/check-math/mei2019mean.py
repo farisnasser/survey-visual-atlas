@@ -97,4 +97,29 @@ print(f"  R_inf minimum on the grid: {grid[j, i]:.4f} at (r1, r2) = ({G[i]:.2f},
 out["dev"] = {f"{d}_{N}": round(v, 5) for (d, N), v in dev.items()}
 out["consts"] = [DEL, T1, T2, S1, S2]
 save_json("mei2019mean", "data.json", out)
+# in-page notes (papers/mei2019mean/notes.md): sigma(x; w) = w x, w = 1, 3, x = 2 -> f = 4 = int 2w rho(dw)
+check("notes example: (1*2 + 3*2)/2 = 4 = E_rho[2w]", np.isclose((1 * 2 + 3 * 2) / 2, 4) and np.isclose(np.mean([2 * 1, 2 * 3]), 4))
+# primer idea 1: N = 1e4 coin flips: sum/sqrt(N) has std 1, sum/N has std 0.01
+Rc = np.random.default_rng(11); cf = Rc.choice([-1., 1.], size=(2000, 10000)).sum(1)
+check("primer: sum/sqrt(N) std ~ 1, sum/N std ~ 0.01 (N = 1e4)", abs(np.std(cf / 100) - 1) < .05 and abs(np.std(cf / 1e4) - .01) < 5e-4)
+# primer idea 2: relu(w.x), w ~ N(0, I_d), |x| = 1: mean 1/sqrt(2 pi) ~ 0.399, var 1/2 - 1/(2 pi) ~ 0.341, error ~ 0.58/sqrt(N) for any d
+mu_r, var_r = 1 / np.sqrt(2 * np.pi), .5 - 1 / (2 * np.pi)
+check("primer: mean 0.399, variance 0.341, std 0.58", abs(mu_r - .399) < 5e-4 and abs(var_r - .341) < 5e-4 and abs(np.sqrt(var_r) - .58) < 5e-3)
+for dd in (10, 1000):
+    xu = Rc.normal(size=dd); xu /= np.linalg.norm(xu)
+    errs = [abs(np.mean(np.maximum(Rc.normal(size=(400, dd)) @ xu, 0)) - mu_r) for _ in range(300)]
+    assert abs(np.sqrt(np.mean(np.square(errs))) * np.sqrt(400) - np.sqrt(var_r)) < .06, (dd, np.sqrt(np.mean(np.square(errs))) * 20)
+check("primer: N = 400 neuron average errs by ~0.58/sqrt(N) at d = 10 and d = 1000", True)
+# primer idea 3: theta' = -theta, N(0,1) -> N(0, e^{-2t}); std at t = 1 is e^{-1} ~ 0.368
+th0 = Rc.normal(size=200000)
+check("primer: particles theta0 e^{-t} keep a normal law with std e^{-t} (0.368 at t = 1)", abs(np.std(th0 * np.exp(-1)) - np.exp(-1)) < 3e-3 and abs(np.exp(-1) - .368) < 5e-4)
+# primer idea 4: d theta = -theta dt + sqrt(2 tau) dB settles at N(0, tau); pure diffusion variance grows by 2 c t
+tau_, dt_ = .3, 1e-3; th = np.zeros(20000)
+for _ in range(8000):
+    th = th - th * dt_ + np.sqrt(2 * tau_ * dt_) * Rc.normal(size=th.size)
+check("primer: Ornstein-Uhlenbeck stationary variance = tau", abs(np.var(th) - tau_) < .015, f"{np.var(th):.4f}")
+c_, t_ = .5, 2.; xb = np.zeros(20000)
+for _ in range(2000):
+    xb += np.sqrt(2 * c_ * t_ / 2000) * Rc.normal(size=xb.size)
+check("primer: heat equation with coefficient c grows the variance by 2 c t", abs(np.var(xb) - 2 * c_ * t_) < .06, f"{np.var(xb):.3f}")
 done()

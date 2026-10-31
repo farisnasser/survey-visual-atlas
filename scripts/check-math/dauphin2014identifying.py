@@ -81,4 +81,39 @@ print("  P(all eigenvalues > 0):", {k: round(v, 5) for k, v in fr.items()})
 check("P(min) shrinks fast with N", fr[1] > .45 and fr[4] < .05 and fr[8] < fr[4])
 ev = np.linalg.eigvalsh(goe(400))
 check("GOE spectrum ~ semicircle on [-2, 2]", abs(ev.min() + 2) < .15 and abs(ev.max() - 2) < .15)
+
+# in-page notes (papers/dauphin2014identifying/notes.md): f = x^2/2 - (eps/2) y^2, eps = 0.01, one step from (0, 1), eta = 1
+eps_n = .01
+fn = lambda p: .5 * p[0] ** 2 - eps_n / 2 * p[1] ** 2
+gn = lambda p: np.array([p[0], -eps_n * p[1]])
+check_grad("notes: grad f = (x, -eps y)", fn, gn, rand_pts(10, -2, 2))
+check_hess_at("notes: H = diag(1, -eps)", fn, [0, 1], [[1, 0], [0, -eps_n]])
+Hn = np.diag([1, -eps_n]); p0 = np.array([0., 1])
+check("notes: grad f(0,1) = (0, -0.01)", np.allclose(gn(p0), [0, -.01]))
+check("notes: H^-1 = diag(1, -100), |H|^-1 = diag(1, 100)", np.allclose(np.linalg.inv(Hn), np.diag([1, -100])) and np.allclose(np.linalg.inv(np.abs(Hn)), np.diag([1, 100])))
+check("notes: GD step -> (0, 1.01)", np.allclose(p0 - gn(p0), [0, 1.01]))
+check("notes: Newton step -> (0, 0), the saddle", np.allclose(p0 - np.linalg.solve(Hn, gn(p0)), [0, 0]))
+check("notes: SFN step -> (0, 2)", np.allclose(p0 - np.linalg.solve(np.abs(Hn), gn(p0)), [0, 2]))
+check("notes: f(0,1) = -0.005, f(0,1.01) ~ -0.00510, f(0,2) = -0.020",
+      abs(fn([0, 1]) + .005) < 1e-15 and abs(fn([0, 1.01]) + .00510) < 5e-6 and abs(fn([0, 2]) + .02) < 1e-15, f"{fn([0, 1.01]):.7f}")
+for lam in [-.01, -1, .5]:
+    v, eta = .3, .7
+    assert abs((v - eta * lam * v) - (1 - eta * lam) * v) < 1e-15
+check("notes: GD factor (1 - eta lam) = 1 + eta|lam| > 1 for lam < 0", (1 - .7 * -.01) == 1 + .7 * .01 > 1)
+Hr = np.array([[2., -1, .5], [-1, -3, .2], [.5, .2, .1]]); w, Q = np.linalg.eigh(Hr); Habs = Q @ np.diag(np.abs(w)) @ Q.T
+S_ = np.random.default_rng(3).normal(size=(200, 3))
+check("notes: |s^T H s| <= s^T |H| s (Lemma 1)", all(abs(s @ Hr @ s) <= s @ Habs @ s + 1e-12 for s in S_))
+gq = np.array([.3, -1, 2])
+check("notes: -|H|^-1 g is a descent direction (g^T d < 0)", gq @ (-np.linalg.solve(Habs, gq)) < 0)
+check("notes: SFN = Newton when H is positive definite", np.allclose(np.abs(np.diag([2., 5])), np.diag([2., 5])))
+# primer
+check("primer: Newton on 2(x-3)^2 from 0: g = -12, H = 4, step 3", (lambda g, h: (g, h, -g / h))(4 * (0 - 3), 4) == (-12, 4, 3.0))
+H2 = np.array([[0., 2], [2, 0]]); w2, Q2 = np.linalg.eigh(H2)
+check("primer: [[0,2],[2,0]] has eigenvalues -2, 2 and |H| = 2I", np.allclose(w2, [-2, 2]) and np.allclose(Q2 @ np.diag(np.abs(w2)) @ Q2.T, 2 * np.eye(2)))
+check("primer: 2^-10 = 1/1024", 2 ** -10 == 1 / 1024)
+M_ = np.diag([1., 4]); g_ = np.array([1., 1])
+d_ = -np.linalg.solve(M_, g_); s_ = d_ / np.sqrt(d_ @ M_ @ d_)
+th_ = np.linspace(0, 2 * np.pi, 200001); E_ = np.stack([np.cos(th_), np.sin(th_) / 2], 1)   # border of s^T M s = 1
+best = E_[np.argmin(E_ @ g_)]
+check("primer: argmin g^T s on s^T diag(1,4) s <= 1 is (-0.894, -0.224) = -M^-1 g rescaled", np.allclose(best, s_, atol=1e-4) and np.allclose(s_, [-.894, -.224], atol=5e-4), f"{s_}")
 done()

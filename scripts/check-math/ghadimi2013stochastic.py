@@ -79,4 +79,31 @@ mu, p = .05, np.array([.3, -.4])
 U = rng.normal(size=(200000, 2))
 est = np.mean([(f(p + mu * u) - f(p)) / mu * u for u in U[:200000:4]], axis=0)
 check("RSGF estimator ~ grad f for small mu", np.linalg.norm(est - g(p)) < .03, f"{np.round(est, 3)} vs {np.round(g(p), 3)}")
+
+# in-page notes (papers/ghadimi2013stochastic/notes.md): the notes' smooth-SGD bound and the primer's numbers
+# notes Sec. 3: (1/N) sum E||grad f(w_k)||^2 <= 2 Delta/(eta N) + L eta sigma^2 on a smooth quadratic with Gaussian noise
+Aq = np.diag([2.0, 0.5])           # f(w) = w^T A w / 2, L = 2, f_inf = 0
+Lq, sq, eta_q, Nq = 2.0, .5, .3, 50                       # eta <= 1/L
+w1 = np.array([1.0, -2.0]); Dq = .5 * w1 @ Aq @ w1
+acc = np.zeros(Nq)
+for run in range(4000):
+    w = w1.copy()
+    for k in range(Nq):
+        acc[k] += np.sum((Aq @ w) ** 2)
+        w = w - eta_q * (Aq @ w + rng.normal(0, sq, 2))
+avg = acc.mean() / 4000
+rhs = 2 * Dq / (eta_q * Nq) + Lq * eta_q * 2 * sq ** 2
+check("notes Sec. 3 bound holds on a noisy quadratic", avg <= rhs, f"{avg:.4f} <= {rhs:.4f}")
+# primer idea 1: sin w, L = 1, from 0 to 0.5
+check("primer: descent-lemma bound 0.625 >= sin 0.5 ~ 0.479", abs((0 + .5 + .125) - .625) < 1e-12 and round(np.sin(.5), 3) == .479)
+# primer idea 2: G in {1,3}: E G = 2, E G^2 = 5 = 4 + 1
+check("primer: E[G]=2, E[G^2]=5=2^2+1", np.mean([1, 3]) == 2 and np.mean([1, 9]) == 5)
+# primer idea 4: eta* = sqrt(2 Delta/(N L s2)), bound = 2 sqrt(2 Delta L s2 / N)
+for N, e_exp, b_exp in [(100, .141, .283), (10000, .0141, .0283)]:
+    es = np.sqrt(2 / N); b = 2 / (es * N) + es
+    grid = min(2 / (e * N) + e for e in np.linspace(es / 3, 3 * es, 20001))
+    check(f"primer: N={N}: eta* ~ {e_exp}, bound ~ {b_exp} (minimum of 2D/(eta N)+L eta s2)",
+          abs(es - e_exp) < 6e-4 * (e_exp / .141) and abs(b - b_exp) < 6e-4 * (b_exp / .283) and abs(b - 2 * np.sqrt(2 / N)) < 1e-12 and abs(grid - b) < 1e-6 and es <= 1)
+# primer idea 5: average of 0.9, 0.3, 0.1, 0.1
+check("primer: uniform pick of (0.9,0.3,0.1,0.1) has mean 0.35", abs(np.mean([.9, .3, .1, .1]) - .35) < 1e-12)
 done()
