@@ -101,4 +101,19 @@ save_json("wang2022analyzing", "data.json", {"eta": ETA, "rows": [[int(r[0]), fl
 rows = [[int(r[0]), float(f"{r[1]:.4g}"), round(float(r[2]), 4), round(float(r[3]), 4)] for r in R]
 Q = np.array(rows[:300]); a_ = np.mean([np.sign(Q[i + 10, 2] - Q[i, 2]) == np.sign(Q[i + 10, 3] - Q[i, 3]) for i in range(290)])
 check("page readout: agreement over the first 300 stored steps", a_ > .9, f"{a_:.3f}")
+# in-page notes (papers/wang2022analyzing/notes.md): notes Sec. 2 multipliers and the primer's toy f = a w, L = (aw - 1)^2
+check("notes: 1 - 0.3*5 = -0.5 (contracts), 1 - 0.3*8 = -1.4 (expands)", abs(1 - .3 * 5 + .5) < 1e-12 and abs(1 - .3 * 8 + 1.4) < 1e-12)
+Lt = lambda p: (p[0] * p[1] - 1) ** 2
+for (a_, w_), top in [((1, 1), 4.), ((2, .5), 8.5)]:
+    H = check_hess_at(f"primer toy at ({a_}, {w_})", Lt, [a_, w_], 2 * np.array([[w_ ** 2, 1], [1, a_ ** 2]]))
+    ev = np.linalg.eigvalsh(H)
+    check(f"primer: eigenvalues 0 and 2(a^2 + w^2) = {top} at ({a_}, {w_})", abs(ev[0]) < 1e-3 and abs(ev[1] - top) < 1e-3, f"{ev.round(4)}")
+    check(f"primer: Gram M = 2 |(w, a)|^2 equals the top eigenvalue at ({a_}, {w_})", abs(2 * (w_ ** 2 + a_ ** 2) - top) < 1e-12)
+# d|a|^2/dt = -2 a dL/da = -4 D F (n = 1)
+for a_, w_ in [(.5, 1.), (1.5, 1.), (.7, -1.3)]:
+    gda = fd_grad(Lt, [a_, w_])[0]
+    D_, F_ = a_ * w_ - 1, a_ * w_
+    assert abs(-2 * a_ * gda - (-4 * D_ * F_)) < 1e-6
+check("primer: gradient flow d a^2/dt = -4 D F in the toy (Eq. 2 with n = 1)", True)
+check("primer: D F = -0.25 at aw = 0.5 and 0.75 at aw = 1.5", abs((.5 - 1) * .5 + .25) < 1e-12 and abs((1.5 - 1) * 1.5 - .75) < 1e-12)
 done()
