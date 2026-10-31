@@ -122,8 +122,8 @@ Paper claims and sources:
   Theorem 2 (any β1 < √β2), Theorem 3 (stochastic), AMSGrad v̂ = max(v̂, v) — read in the arXiv PDF (1904.09237), not in
   findings.
 - Li, Rakhlin, Jadbabaie 2023 Theorem 4.1 (ρ < 2 relaxed smoothness, bounded noise, w.h.p., O(ε⁻⁴), no β2 condition,
-  momentum weight β = O(ε²)), VRAdam O(ε⁻³) — findings li2023convergence. "their β plays the role of 1 − β1" is my
-  reading of the paper's parameterization (findings only says "β, λ = O(ε²)"); worth a glance by the coordinator.
+  momentum weight β = O(ε²)), VRAdam O(ε⁻³) — findings li2023convergence. "their β plays the role of 1 − β1" checked in
+  the arXiv PDF (Algorithm 1: m_t = (1 − β)m_{t−1} + β∇f; Theorem 4.1: 0 ≤ β_sq ≤ 1, β ≤ … ε²).
 - Taniguchi et al. 2024: ADOPT normalization by v_{t−1}, momentum after normalization, Theorem 4.1 for any β2 — findings;
   our run vs the paper's Figure 1 (β2 = 0.99 succeeds here) noted on the page.
 - Staib et al. 2019 Theorem 4.4 / Corollary 4.2 (RMSProp, (τ, √(ρτ)), Õ(τ⁻⁵)) — findings.
