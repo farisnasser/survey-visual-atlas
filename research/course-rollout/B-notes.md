@@ -91,3 +91,49 @@ Paper claims and sources:
 Not verifiable / caveats: "networks are mostly trained with SGD with momentum or adaptive methods; VR mainly a theoretical
 benchmark" is a general observation, not a cited result. "Deep-learning schedules (step, cosine) do not satisfy RM
 literally" is a general statement about common practice. New glossary term added: `noise-floor` (stop 8 block).
+
+## Stop 9 — adaptive (`course/adaptive`, check `scripts/check-math/course_adaptive.py`)
+Sections: 1 One step size, many curvatures · 2 Preconditioning: reshaping the landscape · 3 AdaGrad · 4 RMSProp · 5 Adam:
+momentum plus RMSProp, with bias correction · 6 What is known about Adam's convergence · 7 Gradient clipping and
+(L0, L1)-smoothness · 8 Beyond the diagonal · atlas · problem (which minimum, and does it matter → stop 10, opened with
+SASSHA's reported sharpness table).
+
+Visuals:
+- `precond` (2D contour): rotated quadratic, κ ∈ {10, 100}, angle slider; GD, diagonal (Jacobi) preconditioner, Newton,
+  each with its best fixed step. κ = 100: diagonal κ_eff = 1 / 75.49 / 100 at 0 / 30 / 45°; steps GD 506 / 525 / 528,
+  diagonal 1 / 396 / 528, Newton 1.
+- `bias` (2D): uncorrected Adam step / α = (1 − 0.9ᵗ)/√(1 − β₂ᵗ) vs corrected (= 1). Peaks 2.131 (t = 13), 6.569 (12),
+  20.72 (12) for β₂ = 0.99 / 0.999 / 0.9999; first step 3.16α at 0.999 (matches findings kingma2015adam).
+- `race` (3D): κ = 100 valley along an axis or rotated 45°, GD best step / AdaGrad η = 0.5 / Adam α = 0.05, 400 steps:
+  aligned 8.2e-7 / 5.6e-123 / 1.2e-18, rotated 1.8e-6 / 2.1e-5 / 5.6e-5. Height drawn as √f.
+- `adamfail` (2D): Taniguchi et al.'s Eq. 17 toy, one mulberry32 stream (seed 1), 400 000 steps, Adam / AMSGrad / ADOPT,
+  k ∈ {10, 50}, β₂ ∈ {0.1 … 0.999}. k = 10: Adam +1 for β₂ ≤ 0.9, −0.992 / −0.994 for 0.99 / 0.999; AMSGrad −0.998;
+  ADOPT −0.98 … −0.994. k = 50: Adam ≥ 0.19 for all β₂, AMSGrad −0.052, ADOPT ≤ −0.966.
+- `clip` (3D): f = x²/2 + x⁴/4 + y²/2 from (x₀, 1): best fixed step 6 / 22 / 81 / 322 iterations vs clipped GD (η = 1,
+  γ = 0.5) 4 / 6 / 10 / 18 for x₀ = 1 / 2 / 4 / 8 (same as findings zhang2020gradient).
+
+Paper claims and sources:
+- Duchi et al. 2011: diagonal AdaGrad, Corollary 1 (best diagonal preconditioner in hindsight up to a factor), Sec. 1.3
+  sparse example O(log d √T) vs O(√(dT)); online convex — findings duchi2011adaptive.
+- Antonakopoulos et al. 2022 Theorem 2 (deterministic AdaGrad norm/diag/full avoid strict saddles) — findings.
+- Kingma & Ba 2015: Algorithm 1 defaults, bias correction, Sec. 2.1 step bound and scale invariance, Theorem 4.1 proof
+  flawed — findings kingma2015adam.
+- Reddi, Kale, Kumar 2018: Theorem 1 (online convex, non-zero average regret; the C-once-every-3-steps example on [−1, 1]),
+  Theorem 2 (any β1 < √β2), Theorem 3 (stochastic), AMSGrad v̂ = max(v̂, v) — read in the arXiv PDF (1904.09237), not in
+  findings.
+- Li, Rakhlin, Jadbabaie 2023 Theorem 4.1 (ρ < 2 relaxed smoothness, bounded noise, w.h.p., O(ε⁻⁴), no β2 condition,
+  momentum weight β = O(ε²)), VRAdam O(ε⁻³) — findings li2023convergence. "their β plays the role of 1 − β1" is my
+  reading of the paper's parameterization (findings only says "β, λ = O(ε²)"); worth a glance by the coordinator.
+- Taniguchi et al. 2024: ADOPT normalization by v_{t−1}, momentum after normalization, Theorem 4.1 for any β2 — findings;
+  our run vs the paper's Figure 1 (β2 = 0.99 succeeds here) noted on the page.
+- Staib et al. 2019 Theorem 4.4 / Corollary 4.2 (RMSProp, (τ, √(ρτ)), Õ(τ⁻⁵)) — findings.
+- Zhang et al. 2020: Definition 1, Lemma 2, Theorems 3 and 4, Figure 1 LSTM motivation — findings.
+- Gupta et al. 2018: Algorithm 1, Lemma 4, Theorem 7 (online convex O(√T) regret), experiments — findings.
+- Shin et al. 2025 SASSHA: method summary, Theorem 4.4 convex, Table 1 reported numbers — findings shin2025sassha.
+- Crawshaw et al. 2026: Props. 3.4–3.6 (Adam and Muon as steepest descent in norms), spectral LMO = −polar — findings.
+- Defazio et al. 2024: Schedule-Free SGD/AdamW exist (atlas line only) — findings.
+
+Not verifiable / caveats: RMSProp's attribution (Tieleman & Hinton 2012 lecture) and "AdaHessian and Sophia estimate the
+Hessian diagonal" are standard facts not in findings (the AdaHessian / Sophia papers are not in the Atlas). "Clipping is
+widely used for recurrent and transformer language models" and "Adam is the default for much of deep learning" are
+general observations.

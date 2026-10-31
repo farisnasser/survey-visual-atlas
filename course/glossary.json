@@ -566,35 +566,42 @@
   "tex": "x_{t+1} = x_t - \\eta\\, P\\, \\nabla f(x_t)",
   "aka": [
    "preconditioner"
-  ]
+  ],
+  "sec": "n-2-preconditioning-reshaping-the-landscape"
  },
  "adagrad": {
   "term": "AdaGrad",
   "ch": "adaptive",
   "def": "Duchi et al. 2011: divide each coordinate's step by the square root of the sum of all its past squared gradients, so coordinates with large gradients get smaller steps and rare ones get larger steps.",
-  "tex": "x_{t+1,i} = x_{t,i} - \\frac{\\eta}{\\sqrt{\\sum_{s \\le t} g_{s,i}^2} + \\epsilon}\\; g_{t,i}"
+  "tex": "x_{t+1,i} = x_{t,i} - \\frac{\\eta}{\\sqrt{\\sum_{s \\le t} g_{s,i}^2} + \\epsilon}\\; g_{t,i}",
+  "sec": "n-3-adagrad-let-the-gradients-set-the-steps"
  },
  "rmsprop": {
   "term": "RMSProp",
   "ch": "adaptive",
-  "def": "Like AdaGrad, but with an exponential moving average of squared gradients instead of their full sum, so old gradients are forgotten and the step size does not shrink forever."
+  "def": "Like AdaGrad, but with an exponential moving average of squared gradients instead of their full sum, so old gradients are forgotten and the step size does not shrink forever. Proposed by Tieleman and Hinton (2012).",
+  "tex": "v_t = \\beta_2 v_{t-1} + (1 - \\beta_2)\\, g_t^2, \\qquad x_{t+1} = x_t - \\frac{\\eta}{\\sqrt{v_t} + \\epsilon}\\, g_t",
+  "sec": "n-4-rmsprop-forget-the-distant-past"
  },
  "adam": {
   "term": "Adam",
   "ch": "adaptive",
-  "def": "Kingma & Ba 2015: momentum (an EMA $m_t$ of the gradients) divided coordinate by coordinate by the square root of an EMA $v_t$ of the squared gradients, both bias-corrected. Defaults $\\beta_1 = 0.9$, $\\beta_2 = 0.999$.",
-  "tex": "x_{t+1} = x_t - \\eta\\, \\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}"
+  "def": "Kingma & Ba 2015: momentum (an EMA $m_t$ of the gradients) divided coordinate by coordinate by the square root of an EMA $v_t$ of the squared gradients, both bias-corrected. Defaults $\\alpha = 0.001$, $\\beta_1 = 0.9$, $\\beta_2 = 0.999$. It can fail to converge on some problems (Reddi et al. 2018); fixes include AMSGrad and ADOPT.",
+  "tex": "x_{t+1} = x_t - \\eta\\, \\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}",
+  "sec": "n-5-adam-momentum-plus-rmsprop-with-bias-correction"
  },
  "bias-correction": {
   "term": "Bias correction",
   "ch": "adaptive",
-  "def": "An EMA started at zero is too small during the first steps; Adam divides it by $1 - \\beta^t$ to undo this, for example $\\hat m_t = m_t / (1 - \\beta_1^t)$."
+  "def": "An EMA started at zero is too small during the first steps; Adam divides it by $1 - \\beta^t$ to undo this, for example $\\hat m_t = m_t / (1 - \\beta_1^t)$.",
+  "sec": "n-5-adam-momentum-plus-rmsprop-with-bias-correction"
  },
  "clipping": {
   "term": "Gradient clipping",
   "ch": "adaptive",
   "def": "Shrinking the gradient whenever it is longer than a threshold $\\gamma$, so that steps stay bounded where the landscape is steep.",
-  "tex": "g \\;\\mapsto\\; \\min\\Big\\{1, \\frac{\\gamma}{\\lVert g \\rVert}\\Big\\}\\, g"
+  "tex": "g \\;\\mapsto\\; \\min\\Big\\{1, \\frac{\\gamma}{\\lVert g \\rVert}\\Big\\}\\, g",
+  "sec": "n-7-gradient-clipping-and-l-0-l-1-smoothness"
  },
  "l0l1-smooth": {
   "term": "$(L_0, L_1)$-smooth",
@@ -603,13 +610,15 @@
   "tex": "\\lVert \\nabla^2 f(x) \\rVert \\le L_0 + L_1 \\lVert \\nabla f(x) \\rVert",
   "aka": [
    "relaxed smoothness"
-  ]
+  ],
+  "sec": "n-7-gradient-clipping-and-l-0-l-1-smoothness"
  },
  "shampoo": {
   "term": "Shampoo",
   "ch": "adaptive",
   "def": "Gupta et al. 2018: for a weight matrix $W$, keep one small statistics matrix for its rows and one for its columns, and precondition the gradient from both sides. Captures more than a diagonal at a fraction of the cost of a full $d \\times d$ matrix.",
-  "tex": "W_{t+1} = W_t - \\eta\\, L_t^{-1/4}\\, G_t\\, R_t^{-1/4}"
+  "tex": "W_{t+1} = W_t - \\eta\\, L_t^{-1/4}\\, G_t\\, R_t^{-1/4}",
+  "sec": "n-8-beyond-the-diagonal"
  },
  "sharpness": {
   "term": "Sharpness",
