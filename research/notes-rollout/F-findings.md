@@ -182,3 +182,53 @@
   (2) Polyak–Ruppert averaging divides variance by ~t (0.01 for 100 draws) but lags (10, 0, 0, … → 1 after 10
   iterates); (3) the convex Lipschitz benchmark DG/√T (0.01 at D = G = 1, T = 10⁴), optimal in the worst case. All in
   `scripts/check-math/defazio2024road.py`.
+
+## [10] ahn2025general — Schedule-Free SGD Is Also Effective for Nonconvex Optimization
+
+- Checked against: arXiv 2411.07061 (32 pp.) and the ICML 2025 PMLR PDF the notes link (24 pp.): Assumption 1
+  (ΔF, well-behavedness line integral, ‖∇F‖ ≤ G), Assumption 2 (independent unbiased oracle, variance ≤ σ²),
+  Definition 1 ((λ, ε)-stationarity, O(λ^{1/2}ε^{−7/2}) optimal per Zhang & Cutkosky 2024), Proposition 1 (arXiv) /
+  2.1 (ICML), Theorem 2, Algorithm 5 and the base-step identity z_{t+1} − z_t = −η/(1 − ζ)·g_t.
+- No discrepancies found. Version note: the notes' "Proposition 2" (base-step identity) is the arXiv numbering; in the
+  ICML copy linked at the bottom of the notes it is "Proposition 5.1". The Atlas header links the arXiv PDF, where
+  "Proposition 2" is right, so the text is unchanged.
+- Worked example (x₂ = 0.5, y₂ = 0.625, g₂ = −1.375, z₃ = 1.6875) checked. The notes write κ_t for the paper's β_t.
+- Box mapping: "Conceptual proof path" → key; "Why the interpolation matters" and "Why this is genuinely a schedule-free
+  SGD result" are sub-headings in the PDF. Quick reference: no header row in the PDF; norms with \lVert…\rVert.
+- Primer (three ideas): (1) on F = |x| the gradient never gets small; the cloud {−0.01, 0.03} has mean 0.01, mean
+  gradient 0, spread 0.0004 (Definition 1's two terms); (2) regret and online gradient descent's DG√T bound for any
+  gradient sequence (simulated: 75.5 ≤ 100); (3) reading √λ ε^{−7/2}: 2^{3.5} ≈ 11.3, λ = L²/ε gives Lε^{−4}, λ = H/2
+  gives ε^{−3.5} (Proposition 1). All in `scripts/check-math/ahn2025general.py`.
+
+## [11] crawshaw2026exploration — Muon and Its Many Variants
+
+- Checked against: arXiv 2510.09827 (29 pp.): Sec. 3.1 CSD vs RSD, Sec. 3.2 product norms, Prop. 3.6 (MuonAdam is
+  exactly CSD in a spectral/adaptive product norm), MuonMax (stale dual norms, Eq. 16), Sec. 4 Momo (lower bound F*),
+  Sec. 5: 36 variants on GPT2-Small / FineWeb 1B tokens (5.1), four methods on GPT2-Large / SlimPajama with 1B and
+  6B tokens (5.2, Fig. 1–2), Table 1 (stale norms: MuonMax-Momo overhead vs MuonAdam 11 % → 5 %).
+- No discrepancies found. Worked example (−√10 vs −4 for diag(3, 1)) checked. The ICML 2026 PMLR page the notes link
+  resolves (HTTP 200); the statements were checked on the arXiv version.
+- Box mapping: "One norm, a different algorithm" → key; "Do not confuse two questions" → warn; "Why 'stale' nuclear
+  norms?" is a sub-heading in the PDF. Quick reference: no header row in the PDF.
+- Primer (four ideas): (1) unit balls of different norms (I₂: spectral 1, Frobenius √2); (2) steepest descent and
+  the dual norm: g = (3, −1) gives √10 (Euclidean) vs 4 = ‖g‖₁ with sign descent (max-norm); (3) polar factor and
+  nuclear norm: [[1, 1], [0, 1]] has σ = 1.618, 0.618, polar [[0.894, 0.447], [−0.447, 0.894]], ⟨G, polar G⟩ = √5;
+  Muon computes it by Newton–Schulz (cubic version checked); (4) CSD vs RSD lengths 0.1 vs 0.5 for g = (3, 4),
+  η = 0.1. All in `scripts/check-math/crawshaw2026exploration.py`.
+
+## [12] he2016deep — Deep Residual Learning for Image Recognition
+
+- Checked against: arXiv 1512.03385 (CVPR 2016, 12 pp.; the notes link the CVF open-access copy): abstract ("100
+  and 1000 layers" on CIFAR-10), Sec. 3.1–3.3 (Eqs. 1–2, zero-padding / projection shortcuts W_s), Fig. 1 (20- vs
+  56-layer plain nets on CIFAR-10, training error), Sec. 4.1 (plain nets with BN: "neither forward nor backward
+  signals vanish"; bottleneck 1×1–3×3–1×1 for 50/101/152 layers), Tables 3–5 (ResNet-152 single model 4.49 % top-5
+  val; ensemble 3.57 % top-5 test, ILSVRC 2015 1st), Sec. 4.2 (110 and 1202 layers), COCO detection.
+- No discrepancies found. The notes' "100 and even 1000 layers" is the paper's own abstract wording (the runs are
+  110 and 1202 layers).
+- Box mapping: "A subtle but crucial distinction" → key; "Connection to the survey" → plain; "Worked scalar
+  example", "Plain versus residual comparison", "Bottleneck blocks…" are sub-headings. Quick reference: no header row.
+- Primer (three ideas): (1) a deeper net can copy a shallower one, so higher training error is an optimization
+  failure, not overfitting; (2) chain-rule products through depth (0.9⁵⁰ ≈ 0.005, 1.1⁵⁰ ≈ 117; 20 layers at weight
+  0.1: plain 10⁻¹⁹ vs residual 1.1¹⁹ ≈ 6.1), stated as the textbook mechanism, with the paper's own caveat that its BN
+  plain nets do not have vanishing signals; (3) batch normalization ((2, 4, 6) → (−1.22, 0, 1.22)) and the paper's
+  "not vanishing gradients" argument. All in `scripts/check-math/he2016deep.py`.

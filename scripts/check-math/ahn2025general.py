@@ -46,5 +46,16 @@ print(f"    SF-SGD (gamma {GAM}, beta {BETA}): late |mean of true gradients at y
 check("near the kink: individual gradients stay large but their local average is small (Definition 1 intuition)", avg_norm < .2 * each, f"{avg_norm:.3f} vs {each:.3f}")
 sx, sz = np.linalg.norm(xs[late], axis=1).std(), np.linalg.norm(zs[late], axis=1).std()
 check("x (EMA of z) is much steadier than the base iterate z", sx < .5 * sz, f"std |x| {sx:.3f} vs std |z| {sz:.3f}")
+# in-page notes (papers/ahn2025general/notes.md): primer numbers
+ws_, ps_ = np.array([-.01, .03]), np.array([.5, .5])
+xm_ = ps_ @ ws_; gm_ = ps_ @ np.sign(ws_); sp_ = ps_ @ (ws_ - xm_) ** 2
+check("primer 1: F = |x|, w in {-0.01, 0.03}: mean location 0.01, mean gradient 0, spread 0.0004", abs(xm_ - .01) < 1e-15 and gm_ == 0 and abs(sp_ - 4e-4) < 1e-15)
+rng_ = np.random.default_rng(5); T_ = 10000; D_ = G_ = 1.
+gs_ = rng_.choice([-1., 1.], size=T_); d_ = 0.; dl = []
+for g in gs_:
+    dl.append(d_); d_ = float(np.clip(d_ - D_ / (G_ * np.sqrt(T_)) * g, -D_, D_))
+reg = max(np.dot(gs_, np.array(dl) - u) for u in (-D_, D_))
+check("primer 2: online gradient descent regret <= D G sqrt(T) = 100 (random +-1 losses)", reg <= D_ * G_ * np.sqrt(T_), f"regret {reg:.1f}")
+check("primer 3: 2^3.5 ~ 11.3; sqrt(L^2/eps) eps^-3.5 = L eps^-4", abs(2 ** 3.5 - 11.31) < 1e-2 and all(abs(np.sqrt(L_ ** 2 / e_) * e_ ** -3.5 - L_ * e_ ** -4) < 1e-6 * L_ * e_ ** -4 for L_ in (1, 3) for e_ in (.1, .01)))
 save_json("ahn2025general", "data.json", {"gamma": GAM, "beta": BETA, "avg": round(float(avg_norm), 4), "each": round(float(each), 4), "spread": round(float(spread), 5)})
 done()
