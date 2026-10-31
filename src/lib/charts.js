@@ -67,9 +67,12 @@ export class Plot {
     const g = this.ctx; g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
     const [pt, pr, pb, pl] = this.o.pad, W = w - pl - pr, H = h - pt - pb;
     let [x0, x1, y0, y1] = this._range();
+    if (this.o.equal && !this.o.logx && !this.o.logy) {   // same data units per pixel on both axes (contours, gradients, phase planes)
+      const kx = (x1 - x0) / W, ky = (y1 - y0) / H;
+      if (kx > ky) { const m = (kx * H - (y1 - y0)) / 2; y0 -= m; y1 += m; } else { const m = (ky * W - (x1 - x0)) / 2; x0 -= m; x1 += m; }
+    }
     const lx = v => this.o.logx ? Math.log10(v) : v, ly = v => this.o.logy ? Math.log10(v) : v;
     const X0 = lx(x0), X1 = lx(x1), Y0 = ly(y0), Y1 = ly(y1);
-    if (this.o.equal) { /* keep aspect for phase planes */ }
     const sx = v => pl + (lx(v) - X0) / (X1 - X0) * W, sy = v => pt + H - (ly(v) - Y0) / (Y1 - Y0) * H;
     this.sx = sx; this.sy = sy; this.box = [pl, pt, W, H]; this.range = [x0, x1, y0, y1];
     const muted = css('--muted') || '#8e99bd', line = css('--line') || '#2a3352', ink = css('--ink') || '#e8ecf8';

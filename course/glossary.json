@@ -1,0 +1,741 @@
+{
+ "parameters": {
+  "term": "Parameters",
+  "ch": "goal",
+  "def": "The adjustable numbers of a model (every weight and bias), collected into one vector $\\theta \\in \\mathbb{R}^d$. Training changes only these; $d$ is how many there are.",
+  "aka": [
+   "weights",
+   "$\\theta$, or $x$ in optimization papers"
+  ],
+  "sec": "n-1-a-model-is-a-function-with-knobs"
+ },
+ "loss": {
+  "term": "Loss",
+  "ch": "goal",
+  "def": "One number that measures how wrong the model is on the training data: the average of a per-example loss $\\ell$ over the $n$ examples. Small loss means a good fit.",
+  "tex": "\\mathcal{L}(\\theta) = \\frac{1}{n}\\sum_{i=1}^{n} \\ell(\\hat y_i, y_i)",
+  "aka": [
+   "objective",
+   "cost",
+   "$f(x)$ in optimization papers"
+  ],
+  "sec": "n-2-one-number-for-how-wrong-the-loss"
+ },
+ "landscape": {
+  "term": "Loss landscape",
+  "ch": "goal",
+  "def": "The loss drawn as a height over parameter space. With two parameters it is a surface; with $d$ parameters it is a $d$-dimensional terrain that can only be drawn in slices.",
+  "sec": "n-2-one-number-for-how-wrong-the-loss"
+ },
+ "argmin": {
+  "term": "arg min",
+  "ch": "goal",
+  "def": "The input at which a function is smallest, not the smallest value itself (that is $\\min$).",
+  "tex": "\\theta^\\star = \\operatorname*{arg\\,min}_{\\theta} \\mathcal{L}(\\theta)",
+  "sec": "n-3-training-means-minimizing"
+ },
+ "global-min": {
+  "term": "Global minimum",
+  "ch": "goal",
+  "def": "A point at least as low as every other point of the function.",
+  "tex": "f(x^\\star) \\le f(x) \\ \\text{ for all } x",
+  "sec": "n-4-the-landscape-can-have-many-valleys"
+ },
+ "local-min": {
+  "term": "Local minimum",
+  "ch": "goal",
+  "def": "A point at least as low as every point near it, that is, within some radius $r > 0$. Every global minimum is local; not the other way round.",
+  "tex": "f(x^\\star) \\le f(x) \\ \\text{ whenever } \\lVert x - x^\\star \\rVert < r",
+  "sec": "n-4-the-landscape-can-have-many-valleys"
+ },
+ "norm": {
+  "term": "Norm",
+  "ch": "goal",
+  "def": "The length of a vector. Unless a paper says otherwise, the Euclidean norm: square the entries, add them, take the square root. $\\lVert x - y\\rVert$ is the distance between $x$ and $y$; for a matrix, $\\lVert H\\rVert$ usually means its largest stretch factor.",
+  "tex": "\\lVert v \\rVert = \\sqrt{v_1^2 + \\cdots + v_d^2}",
+  "aka": [
+   "$\\lVert \\cdot \\rVert$",
+   "length"
+  ],
+  "sec": "n-4-the-landscape-can-have-many-valleys"
+ },
+ "iterative": {
+  "term": "Iterative method",
+  "ch": "goal",
+  "def": "A method that starts at a guess $x_0$ and improves it step by step, $x_0 \\to x_1 \\to x_2 \\to \\cdots$, instead of solving for the answer with one formula. All training algorithms are iterative.",
+  "sec": "n-5-why-we-cannot-just-solve-for-the-bottom"
+ },
+ "derivative": {
+  "term": "Derivative",
+  "ch": "slope",
+  "def": "The slope of a one-variable function at a point: the limit of rise over run as the run shrinks to zero. Its sign says which way the function goes up.",
+  "tex": "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}",
+  "sec": "n-1-the-derivative-the-slope-at-one-point"
+ },
+ "partial-derivative": {
+  "term": "Partial derivative",
+  "ch": "slope",
+  "def": "The derivative with respect to one coordinate while all the other coordinates are held fixed.",
+  "tex": "\\frac{\\partial f}{\\partial x_j}(x)",
+  "aka": [
+   "$\\partial f / \\partial x_j$"
+  ],
+  "sec": "n-3-many-knobs-partial-derivatives-and-the-gradient"
+ },
+ "gradient": {
+  "term": "Gradient",
+  "ch": "slope",
+  "def": "The vector of all partial derivatives. It points in the direction of steepest increase, its length is that steepest rate, and it is perpendicular to the contour through the point. Gradient descent moves along $-\\nabla f$.",
+  "tex": "\\nabla f(x) = \\Big(\\tfrac{\\partial f}{\\partial x_1}(x), \\dots, \\tfrac{\\partial f}{\\partial x_d}(x)\\Big)",
+  "aka": [
+   "$\\nabla f$",
+   "grad f"
+  ],
+  "sec": "n-3-many-knobs-partial-derivatives-and-the-gradient"
+ },
+ "directional-derivative": {
+  "term": "Directional derivative",
+  "ch": "slope",
+  "def": "How fast $f$ changes when moving from $x$ in the unit direction $u$. It equals $\\nabla f(x) \\cdot u = \\lVert \\nabla f(x) \\rVert \\cos\\varphi$, largest when $u$ points along the gradient.",
+  "tex": "D_u f(x) = \\nabla f(x) \\cdot u",
+  "sec": "n-4-the-gradient-points-straight-uphill"
+ },
+ "dot-product": {
+  "term": "Dot product",
+  "ch": "slope",
+  "def": "Multiply matching entries of two vectors and add. It equals the product of the two lengths times the cosine of the angle between them, so it is zero exactly when they are perpendicular.",
+  "tex": "a \\cdot b = \\sum_i a_i b_i = \\lVert a \\rVert \\lVert b \\rVert \\cos\\varphi",
+  "aka": [
+   "inner product",
+   "$\\langle a, b\\rangle$",
+   "$a^\\top b$"
+  ],
+  "sec": "n-4-the-gradient-points-straight-uphill"
+ },
+ "contour": {
+  "term": "Contour (level set)",
+  "ch": "slope",
+  "def": "A curve (a surface, in more dimensions) along which $f$ has one constant value, like a height line on a hiking map. The gradient is perpendicular to it.",
+  "aka": [
+   "level set",
+   "level curve"
+  ],
+  "sec": "n-4-the-gradient-points-straight-uphill"
+ },
+ "taylor": {
+  "term": "Taylor approximation",
+  "ch": "slope",
+  "def": "Approximating $f$ near $x$ by a polynomial in the displacement $\\Delta$. First order: the tangent plane, with error shrinking like $\\lVert\\Delta\\rVert^2$. Second order adds the curvature term $\\tfrac12 \\Delta^\\top \\nabla^2 f(x) \\Delta$ (stop 4).",
+  "tex": "f(x + \\Delta) \\approx f(x) + \\nabla f(x) \\cdot \\Delta",
+  "aka": [
+   "first-order approximation",
+   "linearization"
+  ],
+  "sec": "n-5-the-tangent-plane-a-first-order-picture-of-f"
+ },
+ "jacobian": {
+  "term": "Jacobian",
+  "ch": "slope",
+  "def": "For a map with several outputs, the matrix of all its partial derivatives: row $i$ is the gradient of output $i$. It is the map's best linear approximation near a point; its determinant is the local area (volume) scale.",
+  "tex": "(J_g)_{ij} = \\frac{\\partial g_i}{\\partial x_j}, \\qquad g(x + \\Delta) \\approx g(x) + J_g(x)\\,\\Delta",
+  "sec": "n-6-functions-with-many-outputs-the-jacobian"
+ },
+ "chain-rule": {
+  "term": "Chain rule",
+  "ch": "slope",
+  "def": "The derivative of a composition is the product of the derivatives: $(g \\circ h)'(x) = g'(h(x))\\,h'(x)$. For vector maps, the Jacobians multiply.",
+  "tex": "J_{g \\circ h}(x) = J_g\\big(h(x)\\big)\\, J_h(x)",
+  "sec": "n-7-the-chain-rule-how-the-gradient-flows-through-layers"
+ },
+ "backprop": {
+  "term": "Backpropagation",
+  "ch": "slope",
+  "def": "Computing the gradient of a network's loss by applying the chain rule from the loss backwards through the layers. The whole gradient costs only a small constant multiple of one evaluation of the loss.",
+  "aka": [
+   "reverse-mode differentiation"
+  ],
+  "sec": "n-7-the-chain-rule-how-the-gradient-flows-through-layers"
+ },
+ "gd": {
+  "term": "Gradient descent",
+  "ch": "steps",
+  "def": "Repeatedly step against the gradient. The basic first-order method; every other method in the course is a variation of it.",
+  "tex": "x_{t+1} = x_t - \\eta\\, \\nabla f(x_t)",
+  "aka": [
+   "GD"
+  ],
+  "sec": "n-1-gradient-descent"
+ },
+ "step-size": {
+  "term": "Step size (learning rate)",
+  "ch": "steps",
+  "def": "The multiplier $\\eta$ in a gradient step. On a valley of curvature $a$, GD is stable only if $\\eta < 2/a$; on an $L$-smooth function, $\\eta = 1/L$ guarantees that every step lowers $f$.",
+  "aka": [
+   "learning rate",
+   "$\\eta$"
+  ],
+  "sec": "n-2-the-whole-story-in-one-parabola"
+ },
+ "lipschitz": {
+  "term": "Lipschitz",
+  "ch": "steps",
+  "def": "A function is Lipschitz with constant $K$ if its output never changes faster than $K$ times its input. For a one-variable function: no secant is steeper than $K$.",
+  "tex": "\\lVert g(u) - g(v) \\rVert \\le K\\, \\lVert u - v \\rVert",
+  "aka": [
+   "Lipschitz continuous"
+  ],
+  "sec": "n-3-real-landscapes-bend-differently-in-different-places"
+ },
+ "l-smooth": {
+  "term": "$L$-smooth",
+  "ch": "steps",
+  "def": "$f$ is $L$-smooth if its gradient is $L$-Lipschitz. For twice-differentiable $f$ this means every curvature (every Hessian eigenvalue) lies between $-L$ and $L$. It is the standard assumption behind the step size $1/L$, and the $L$ in almost every paper.",
+  "tex": "\\lVert \\nabla f(x) - \\nabla f(y) \\rVert \\le L\\, \\lVert x - y \\rVert",
+  "aka": [
+   "smooth",
+   "gradient-Lipschitz",
+   "$\\ell$-smooth"
+  ],
+  "sec": "n-3-real-landscapes-bend-differently-in-different-places"
+ },
+ "descent-lemma": {
+  "term": "Descent lemma",
+  "ch": "steps",
+  "def": "For an $L$-smooth $f$, a GD step with $0 < \\eta < 2/L$ lowers $f$ unless the gradient is zero; with $\\eta = 1/L$ it lowers $f$ by at least $\\lVert \\nabla f \\rVert^2 / (2L)$. It follows from the quadratic upper bound $f(y) \\le f(x) + \\nabla f(x)\\cdot(y-x) + \\tfrac{L}{2}\\lVert y - x\\rVert^2$.",
+  "tex": "f(x_{t+1}) \\le f(x_t) - \\frac{1}{2L}\\, \\lVert \\nabla f(x_t) \\rVert^2",
+  "aka": [
+   "sufficient decrease"
+  ],
+  "sec": "n-4-the-descent-lemma-why-eta-1-l-is-safe"
+ },
+ "eps-stationary": {
+  "term": "$\\varepsilon$-stationary point",
+  "ch": "steps",
+  "def": "A point where the gradient is small, $\\lVert \\nabla f(x) \\rVert \\le \\varepsilon$. GD on an $L$-smooth function finds one within $2L(f(x_0) - f^\\star)/\\varepsilon^2$ steps. It can be a minimum, a saddle or even a maximum.",
+  "tex": "\\lVert \\nabla f(x) \\rVert \\le \\varepsilon",
+  "aka": [
+   "$\\varepsilon$-FOSP",
+   "$\\varepsilon$-first-order stationary point"
+  ],
+  "sec": "n-5-how-many-steps-stationary-points-and-big-o"
+ },
+ "big-o": {
+  "term": "Big-O notation",
+  "ch": "steps",
+  "def": "$O(g)$ means at most a constant times $g$, where the constant does not depend on the quantity of interest (here the accuracy $\\varepsilon$). $\\Omega(g)$ means at least a constant times $g$; $\\Theta(g)$ means both.",
+  "aka": [
+   "$O(\\cdot)$",
+   "$\\Omega(\\cdot)$"
+  ],
+  "sec": "n-5-how-many-steps-stationary-points-and-big-o"
+ },
+ "iteration-complexity": {
+  "term": "Iteration complexity",
+  "ch": "steps",
+  "def": "How many steps (or gradient evaluations) a method needs, in the worst case, to reach accuracy $\\varepsilon$. GD needs $O(\\varepsilon^{-2})$ to find an $\\varepsilon$-stationary point. The main currency for comparing algorithms in the papers.",
+  "aka": [
+   "oracle complexity",
+   "rate"
+  ],
+  "sec": "n-5-how-many-steps-stationary-points-and-big-o"
+ },
+ "hessian": {
+  "term": "Hessian",
+  "ch": "curvature",
+  "def": "The matrix of second partial derivatives. It says how the gradient changes, which is the curvature of $f$ in every direction. For smooth $f$ it is symmetric.",
+  "tex": "\\big(\\nabla^2 f(x)\\big)_{ij} = \\frac{\\partial^2 f}{\\partial x_i\\, \\partial x_j}",
+  "aka": [
+   "$\\nabla^2 f$",
+   "$H$"
+  ]
+ },
+ "eigen": {
+  "term": "Eigenvalue / eigenvector",
+  "ch": "curvature",
+  "def": "A direction $v$ that a matrix only stretches, by the factor $\\lambda$. For a symmetric matrix such as the Hessian, the eigenvectors are perpendicular principal directions of bending and the eigenvalues are the curvatures along them: positive bends up, negative bends down.",
+  "tex": "H v = \\lambda v",
+  "aka": [
+   "$\\lambda_{\\min}$, $\\lambda_{\\max}$",
+   "spectrum"
+  ]
+ },
+ "psd": {
+  "term": "Positive semidefinite",
+  "ch": "curvature",
+  "def": "A symmetric matrix with no negative eigenvalues, equivalently $v^\\top H v \\ge 0$ for every $v$. Written $H \\succeq 0$. Positive definite ($H \\succ 0$) means all eigenvalues are strictly positive.",
+  "tex": "H \\succeq 0 \\iff v^\\top H v \\ge 0 \\ \\text{ for all } v",
+  "aka": [
+   "PSD",
+   "$\\succeq$"
+  ]
+ },
+ "convex": {
+  "term": "Convex function",
+  "ch": "curvature",
+  "def": "A function whose graph never rises above a chord between two of its points. For twice-differentiable $f$: the Hessian is PSD everywhere. Every local minimum of a convex function is global.",
+  "tex": "f\\big(\\lambda x + (1-\\lambda) y\\big) \\le \\lambda f(x) + (1-\\lambda) f(y), \\quad 0 \\le \\lambda \\le 1"
+ },
+ "strongly-convex": {
+  "term": "Strongly convex",
+  "ch": "curvature",
+  "def": "Convex with curvature at least $\\mu > 0$ in every direction, $\\nabla^2 f \\succeq \\mu I$. It has exactly one minimizer, and GD converges to it geometrically fast.",
+  "aka": [
+   "$\\mu$-strongly convex"
+  ]
+ },
+ "condition-number": {
+  "term": "Condition number",
+  "ch": "curvature",
+  "def": "The ratio of the largest to the smallest curvature, $\\kappa = L/\\mu$. A large $\\kappa$ means long narrow valleys in which GD zig-zags; on a strongly convex function GD needs about $\\kappa \\log(1/\\varepsilon)$ steps.",
+  "tex": "\\kappa = \\frac{\\lambda_{\\max}}{\\lambda_{\\min}} = \\frac{L}{\\mu}",
+  "aka": [
+   "$\\kappa$",
+   "ill-conditioning"
+  ]
+ },
+ "quadratic-model": {
+  "term": "Quadratic model",
+  "ch": "curvature",
+  "def": "The second-order Taylor approximation of $f$ at $x$: a bowl, a dome or a saddle fitted to $f$, with the Hessian as its curvature.",
+  "tex": "f(x + \\Delta) \\approx f(x) + \\nabla f(x) \\cdot \\Delta + \\tfrac12\\, \\Delta^\\top \\nabla^2 f(x)\\, \\Delta",
+  "aka": [
+   "second-order Taylor approximation"
+  ]
+ },
+ "hvp": {
+  "term": "Hessian-vector product",
+  "ch": "curvature",
+  "def": "The product $\\nabla^2 f(x)\\, v$ of the Hessian with one vector. It costs a small constant multiple of a gradient, without ever forming the $d \\times d$ Hessian, and can also be approximated by a difference of two gradients.",
+  "tex": "\\nabla^2 f(x)\\, v \\approx \\frac{\\nabla f(x + h v) - \\nabla f(x)}{h}",
+  "aka": [
+   "HVP"
+  ]
+ },
+ "critical-point": {
+  "term": "Critical point",
+  "ch": "critical",
+  "def": "A point where the gradient is exactly zero. Minima, maxima and saddle points are all critical points, so $\\nabla f = 0$ alone does not mean done.",
+  "tex": "\\nabla f(x) = 0",
+  "aka": [
+   "stationary point"
+  ]
+ },
+ "saddle": {
+  "term": "Saddle point",
+  "ch": "critical",
+  "def": "A critical point that is neither a local minimum nor a local maximum: $f$ rises in some directions and falls in others, like a mountain pass between two valleys.",
+  "aka": [
+   "saddle"
+  ]
+ },
+ "strict-saddle": {
+  "term": "Strict saddle",
+  "ch": "critical",
+  "def": "A critical point whose Hessian has at least one strictly negative eigenvalue, so there is a direction of clear downward curvature to escape along. A function has the strict-saddle property if every saddle is strict. (Lee et al. 2016 also count local maxima.)",
+  "tex": "\\nabla f(x) = 0, \\qquad \\lambda_{\\min}\\big(\\nabla^2 f(x)\\big) < 0"
+ },
+ "degenerate": {
+  "term": "Degenerate critical point",
+  "ch": "critical",
+  "def": "A critical point whose Hessian has a zero eigenvalue, so second derivatives cannot classify it and higher-order terms decide. At the origin, $x^2 + y^4$ has a minimum and $x^2 - y^4$ a saddle, but both have Hessian $\\operatorname{diag}(2, 0)$.",
+  "aka": [
+   "non-strict saddle",
+   "flat direction"
+  ]
+ },
+ "fosp": {
+  "term": "First-order stationary point",
+  "ch": "critical",
+  "def": "A point with zero gradient, or approximately, $\\lVert \\nabla f(x) \\rVert \\le \\varepsilon$ (an $\\varepsilon$-FOSP). It says nothing about curvature, so it may be a saddle or a maximum.",
+  "aka": [
+   "FOSP",
+   "$\\varepsilon$-FOSP"
+  ]
+ },
+ "sosp": {
+  "term": "Second-order stationary point",
+  "ch": "critical",
+  "def": "A point with zero gradient and no negative curvature: $\\nabla f(x) = 0$ and $\\nabla^2 f(x) \\succeq 0$. The approximate version used in the papers, an $\\varepsilon$-SOSP, allows a gradient up to $\\varepsilon$ and curvature down to $-\\sqrt{\\rho\\varepsilon}$, where $\\rho$ is the Hessian-Lipschitz constant. Strict saddles are not SOSPs.",
+  "tex": "\\lVert \\nabla f(x) \\rVert \\le \\varepsilon, \\qquad \\lambda_{\\min}\\big(\\nabla^2 f(x)\\big) \\ge -\\sqrt{\\rho\\, \\varepsilon}",
+  "aka": [
+   "SOSP",
+   "$\\varepsilon$-SOSP",
+   "approximate local minimum"
+  ]
+ },
+ "hessian-lipschitz": {
+  "term": "Hessian-Lipschitz",
+  "ch": "critical",
+  "def": "The Hessian cannot change faster than $\\rho$ times the distance moved. This second-order smoothness assumption is what lets papers make guarantees about curvature, saddles and SOSPs.",
+  "tex": "\\lVert \\nabla^2 f(x) - \\nabla^2 f(y) \\rVert \\le \\rho\\, \\lVert x - y \\rVert",
+  "aka": [
+   "$\\rho$",
+   "second-order smoothness"
+  ]
+ },
+ "index": {
+  "term": "Index of a critical point",
+  "ch": "critical",
+  "def": "The number of negative Hessian eigenvalues at a critical point: how many independent downhill directions it has. A nondegenerate local minimum has index 0; a nondegenerate local maximum in $d$ dimensions has index $d$."
+ },
+ "stable-set": {
+  "term": "Stable set",
+  "ch": "escape",
+  "def": "All starting points from which an algorithm converges to a given critical point. For GD with a small step at a strict saddle it is a thin, lower-dimensional set (Lee et al. 2016).",
+  "aka": [
+   "stable manifold",
+   "region of attraction"
+  ]
+ },
+ "measure-zero": {
+  "term": "Measure zero",
+  "ch": "escape",
+  "def": "Having zero volume, like a line inside a plane or a plane inside 3-D space. A starting point drawn from any distribution with a density lands in a measure-zero set with probability zero.",
+  "aka": [
+   "null set"
+  ]
+ },
+ "almost-surely": {
+  "term": "Almost surely",
+  "ch": "escape",
+  "def": "With probability one. GD almost surely avoids strict saddles means that the starting points ending at a strict saddle form a measure-zero set.",
+  "aka": [
+   "a.s."
+  ]
+ },
+ "whp": {
+  "term": "With high probability",
+  "ch": "escape",
+  "def": "With probability at least $1 - \\delta$ for a small failure probability $\\delta$ that the user chooses; the complexity bound then usually grows like $\\log(1/\\delta)$.",
+  "aka": [
+   "w.h.p."
+  ]
+ },
+ "perturbed-gd": {
+  "term": "Perturbed gradient descent",
+  "ch": "escape",
+  "def": "Gradient descent that adds a small random kick when the gradient becomes small, so it cannot linger at a saddle. Jin et al. 2017 prove that it finds an $\\varepsilon$-SOSP in $\\tilde O(\\varepsilon^{-2})$ iterations, the same as GD's rate for first-order points up to log factors.",
+  "aka": [
+   "PGD"
+  ]
+ },
+ "negative-curvature": {
+  "term": "Negative curvature direction",
+  "ch": "escape",
+  "def": "A direction $v$ along which $f$ bends downward, $v^\\top \\nabla^2 f(x)\\, v < 0$. Moving along it lowers $f$ even where the gradient is zero, so many saddle-escape methods search for one.",
+  "tex": "v^\\top \\nabla^2 f(x)\\, v < 0"
+ },
+ "newton": {
+  "term": "Newton's method",
+  "ch": "escape",
+  "def": "Jump to the critical point of the local quadratic model. Very fast near a minimum, but it is attracted to saddle points just as much as to minima, and it needs the Hessian.",
+  "tex": "x_{t+1} = x_t - \\big[\\nabla^2 f(x_t)\\big]^{-1} \\nabla f(x_t)"
+ },
+ "cubic-reg": {
+  "term": "Cubic regularization",
+  "ch": "escape",
+  "def": "Newton's method made safe: minimize the quadratic model plus a cubic penalty on the step length, with $M$ at least the Hessian-Lipschitz constant. Nesterov and Polyak (2006) show it reaches an $\\varepsilon$-SOSP in $O(\\varepsilon^{-3/2})$ iterations.",
+  "tex": "\\Delta_t = \\operatorname*{arg\\,min}_{\\Delta}\\; \\nabla f(x_t)\\cdot\\Delta + \\tfrac12 \\Delta^\\top \\nabla^2 f(x_t) \\Delta + \\tfrac{M}{6} \\lVert \\Delta \\rVert^3",
+  "aka": [
+   "cubic-regularized Newton"
+  ]
+ },
+ "momentum": {
+  "term": "Momentum",
+  "ch": "memory",
+  "def": "Adding a fraction $\\beta$ of the previous step to the current one, so the optimizer keeps moving in consistent directions while back-and-forth zig-zags partly cancel.",
+  "aka": [
+   "$\\beta$"
+  ]
+ },
+ "ema": {
+  "term": "Exponential moving average",
+  "ch": "memory",
+  "def": "A running average that weights recent values more, with weights shrinking by the factor $\\beta$ per step; it averages over roughly the last $1/(1-\\beta)$ values.",
+  "tex": "m_t = \\beta\\, m_{t-1} + (1 - \\beta)\\, g_t",
+  "aka": [
+   "EMA"
+  ]
+ },
+ "heavy-ball": {
+  "term": "Heavy-ball method",
+  "ch": "memory",
+  "def": "Polyak's momentum method (1964): a gradient step plus $\\beta$ times the previous step, like a heavy ball rolling with inertia.",
+  "tex": "x_{t+1} = x_t - \\eta \\nabla f(x_t) + \\beta\\, (x_t - x_{t-1})",
+  "aka": [
+   "Polyak momentum"
+  ]
+ },
+ "nesterov": {
+  "term": "Nesterov's accelerated gradient",
+  "ch": "memory",
+  "def": "Momentum with a look-ahead: first move to where momentum is carrying you, $y_t = x_t + \\beta(x_t - x_{t-1})$, then take the gradient step from there.",
+  "tex": "x_{t+1} = y_t - \\eta\\, \\nabla f(y_t)",
+  "aka": [
+   "NAG",
+   "Nesterov momentum"
+  ]
+ },
+ "acceleration": {
+  "term": "Acceleration",
+  "ch": "memory",
+  "def": "Converging faster than plain GD by changing how the condition number enters: on smooth strongly convex functions about $\\sqrt{\\kappa}\\log(1/\\varepsilon)$ steps instead of $\\kappa\\log(1/\\varepsilon)$. Non-convex accelerated methods improve GD's $\\varepsilon^{-2}$ to about $\\varepsilon^{-7/4}$ (e.g. Jin et al. 2018)."
+ },
+ "lookahead": {
+  "term": "Lookahead",
+  "ch": "memory",
+  "def": "Zhang et al. 2019: let an inner optimizer take $k$ fast steps, then move the slow weights a fraction $\\alpha$ of the way toward where the fast weights ended, and restart the fast weights from there.",
+  "tex": "\\phi_{t+1} = \\phi_t + \\alpha\\,(\\theta_{t,k} - \\phi_t)"
+ },
+ "sgd": {
+  "term": "Stochastic gradient descent",
+  "ch": "noise",
+  "def": "Gradient descent with the exact gradient replaced by a cheap random estimate $g_t$, usually the gradient on a random minibatch of examples, whose average is the true gradient.",
+  "tex": "x_{t+1} = x_t - \\eta\\, g_t, \\qquad \\mathbb{E}[g_t] = \\nabla f(x_t)",
+  "aka": [
+   "SGD"
+  ]
+ },
+ "minibatch": {
+  "term": "Minibatch",
+  "ch": "noise",
+  "def": "A small random subset of $B$ training examples used to estimate the gradient. The estimate is unbiased and its variance shrinks like $1/B$.",
+  "aka": [
+   "batch size B"
+  ]
+ },
+ "unbiased": {
+  "term": "Unbiased estimate",
+  "ch": "noise",
+  "def": "A random estimate whose average (expected value) equals the true quantity, such as $\\mathbb{E}[g] = \\nabla f(x)$ for a minibatch gradient.",
+  "tex": "\\mathbb{E}[g] = \\nabla f(x)"
+ },
+ "variance": {
+  "term": "Variance",
+  "ch": "noise",
+  "def": "The average squared distance of a random quantity from its own mean: how noisy it is. Papers usually assume the stochastic gradient's variance is at most $\\sigma^2$.",
+  "tex": "\\mathbb{E}\\, \\lVert g - \\mathbb{E} g \\rVert^2 \\le \\sigma^2",
+  "aka": [
+   "$\\sigma^2$"
+  ]
+ },
+ "epoch": {
+  "term": "Epoch",
+  "ch": "noise",
+  "def": "One full pass over the training set; with minibatches of size $B$, about $n/B$ steps."
+ },
+ "robbins-monro": {
+  "term": "Robbins–Monro conditions",
+  "ch": "noise",
+  "def": "Step sizes that let stochastic methods converge despite noise: their sum is infinite (the steps can travel any distance), their squares have a finite sum (the noise they inject stays bounded). Example: $\\eta_t = c/t$. From Robbins and Monro (1951).",
+  "tex": "\\sum_t \\eta_t = \\infty, \\qquad \\sum_t \\eta_t^2 < \\infty"
+ },
+ "variance-reduction": {
+  "term": "Variance reduction",
+  "ch": "noise",
+  "def": "Making stochastic gradients less noisy by occasionally computing a full (or large-batch) gradient and correcting the cheap estimates with it (SVRG, SPIDER, SpiderBoost). It improves the rate for an $\\varepsilon$-stationary point from SGD's $O(\\varepsilon^{-4})$ stochastic gradients to $O(\\varepsilon^{-3})$.",
+  "aka": [
+   "SVRG",
+   "SPIDER"
+  ]
+ },
+ "preconditioning": {
+  "term": "Preconditioning",
+  "ch": "adaptive",
+  "def": "Multiplying the gradient by a matrix $P$ before stepping, so that the landscape looks rounder to the method. Newton's method uses the inverse Hessian; Adam and AdaGrad use a diagonal $P$.",
+  "tex": "x_{t+1} = x_t - \\eta\\, P\\, \\nabla f(x_t)",
+  "aka": [
+   "preconditioner"
+  ]
+ },
+ "adagrad": {
+  "term": "AdaGrad",
+  "ch": "adaptive",
+  "def": "Duchi et al. 2011: divide each coordinate's step by the square root of the sum of all its past squared gradients, so coordinates with large gradients get smaller steps and rare ones get larger steps.",
+  "tex": "x_{t+1,i} = x_{t,i} - \\frac{\\eta}{\\sqrt{\\sum_{s \\le t} g_{s,i}^2} + \\epsilon}\\; g_{t,i}"
+ },
+ "rmsprop": {
+  "term": "RMSProp",
+  "ch": "adaptive",
+  "def": "Like AdaGrad, but with an exponential moving average of squared gradients instead of their full sum, so old gradients are forgotten and the step size does not shrink forever."
+ },
+ "adam": {
+  "term": "Adam",
+  "ch": "adaptive",
+  "def": "Kingma & Ba 2015: momentum (an EMA $m_t$ of the gradients) divided coordinate by coordinate by the square root of an EMA $v_t$ of the squared gradients, both bias-corrected. Defaults $\\beta_1 = 0.9$, $\\beta_2 = 0.999$.",
+  "tex": "x_{t+1} = x_t - \\eta\\, \\frac{\\hat m_t}{\\sqrt{\\hat v_t} + \\epsilon}"
+ },
+ "bias-correction": {
+  "term": "Bias correction",
+  "ch": "adaptive",
+  "def": "An EMA started at zero is too small during the first steps; Adam divides it by $1 - \\beta^t$ to undo this, for example $\\hat m_t = m_t / (1 - \\beta_1^t)$."
+ },
+ "clipping": {
+  "term": "Gradient clipping",
+  "ch": "adaptive",
+  "def": "Shrinking the gradient whenever it is longer than a threshold $\\gamma$, so that steps stay bounded where the landscape is steep.",
+  "tex": "g \\;\\mapsto\\; \\min\\Big\\{1, \\frac{\\gamma}{\\lVert g \\rVert}\\Big\\}\\, g"
+ },
+ "l0l1-smooth": {
+  "term": "$(L_0, L_1)$-smooth",
+  "ch": "adaptive",
+  "def": "A relaxed smoothness condition (Zhang et al. 2020): the curvature may grow with the size of the gradient. Under it, clipped GD can be much faster than GD with any fixed step.",
+  "tex": "\\lVert \\nabla^2 f(x) \\rVert \\le L_0 + L_1 \\lVert \\nabla f(x) \\rVert",
+  "aka": [
+   "relaxed smoothness"
+  ]
+ },
+ "shampoo": {
+  "term": "Shampoo",
+  "ch": "adaptive",
+  "def": "Gupta et al. 2018: for a weight matrix $W$, keep one small statistics matrix for its rows and one for its columns, and precondition the gradient from both sides. Captures more than a diagonal at a fraction of the cost of a full $d \\times d$ matrix.",
+  "tex": "W_{t+1} = W_t - \\eta\\, L_t^{-1/4}\\, G_t\\, R_t^{-1/4}"
+ },
+ "sharpness": {
+  "term": "Sharpness",
+  "ch": "sharpness",
+  "def": "The largest Hessian eigenvalue at a point, the curvature of its steepest direction. GD is locally stable at a minimum only if the sharpness is below $2/\\eta$.",
+  "tex": "S(x) = \\lambda_{\\max}\\big(\\nabla^2 f(x)\\big)"
+ },
+ "flat-min": {
+  "term": "Flat vs sharp minimum",
+  "ch": "sharpness",
+  "def": "A flat minimum keeps the loss low in a wide region around it (small Hessian eigenvalues); a sharp one sits in a narrow pit. Flatness is often linked to better generalization, but Dinh et al. 2017 show that it depends on how the network is parameterized.",
+  "aka": [
+   "flat minimum",
+   "sharp minimum"
+  ]
+ },
+ "edge-of-stability": {
+  "term": "Edge of stability",
+  "ch": "sharpness",
+  "def": "Cohen et al. 2021: in full-batch GD on neural networks the sharpness rises until it reaches about $2/\\eta$ and then hovers there, while the loss keeps decreasing over the long run, though not monotonically.",
+  "aka": [
+   "EoS"
+  ]
+ },
+ "progressive-sharpening": {
+  "term": "Progressive sharpening",
+  "ch": "sharpness",
+  "def": "The tendency of the sharpness to increase during full-batch training while it is still below $2/\\eta$ (Cohen et al. 2021)."
+ },
+ "sam": {
+  "term": "Sharpness-aware minimization",
+  "ch": "sharpness",
+  "def": "Foret et al. 2021: compute the gradient at the worst nearby point, a step of radius $\\rho$ uphill (this $\\rho$ is SAM's radius, not a Hessian constant), and use it to update $x$, so the method prefers flat regions.",
+  "tex": "x_{t+1} = x_t - \\eta\\, \\nabla f\\Big(x_t + \\rho\\, \\tfrac{\\nabla f(x_t)}{\\lVert \\nabla f(x_t) \\rVert}\\Big)",
+  "aka": [
+   "SAM"
+  ]
+ },
+ "warmup": {
+  "term": "Learning-rate warmup",
+  "ch": "sharpness",
+  "def": "Starting training with a small learning rate and raising it over the first steps. Kalra & Barkeshli 2024 find that its main benefit is letting the network move to flatter, better-conditioned regions that tolerate the larger target rate.",
+  "aka": [
+   "warmup"
+  ]
+ },
+ "generalization": {
+  "term": "Generalization",
+  "ch": "sharpness",
+  "def": "How well a model trained on the training set performs on new data. The generalization gap is the test loss minus the training loss.",
+  "aka": [
+   "generalization gap"
+  ]
+ },
+ "overparameterization": {
+  "term": "Overparameterization",
+  "ch": "landscape",
+  "def": "Using many more parameters than strictly needed, often more than there are training examples. Under assumptions, sufficiently wide networks can be trained to zero training loss by gradient descent (Du et al. 2019; Allen-Zhu et al. 2019).",
+  "aka": [
+   "width"
+  ]
+ },
+ "symmetry": {
+  "term": "Symmetry",
+  "ch": "landscape",
+  "def": "Different parameter vectors that compute the same function, for example swapping two hidden neurons, or scaling $(u, v) \\to (cu, v/c)$ in a product $uv$. Symmetries create whole curves of equally good minima, with saddle points between them."
+ },
+ "spurious-min": {
+  "term": "Spurious local minimum",
+  "ch": "landscape",
+  "def": "A local minimum that is not a global minimum, a bad one. Some problems provably have none (matrix sensing under the RIP condition, deep linear networks); small ReLU networks can have them (Safran & Shamir 2018).",
+  "aka": [
+   "bad local minimum"
+  ]
+ },
+ "benign": {
+  "term": "Benign landscape",
+  "ch": "landscape",
+  "def": "A landscape in which every local minimum is global and every saddle is strict. Then any method that avoids strict saddles finds a global minimum.",
+  "aka": [
+   "benign non-convexity"
+  ]
+ },
+ "pl": {
+  "term": "Polyak–Łojasiewicz condition",
+  "ch": "landscape",
+  "def": "A small gradient forces a small loss gap. Then every critical point is a global minimum and GD converges geometrically fast, even without convexity.",
+  "tex": "\\tfrac12 \\lVert \\nabla f(x) \\rVert^2 \\ge \\mu\\, \\big(f(x) - f^\\star\\big)",
+  "aka": [
+   "PL inequality"
+  ]
+ },
+ "ntk": {
+  "term": "Neural tangent kernel",
+  "ch": "landscape",
+  "def": "For very wide networks, training barely changes the features, and the network behaves like a linear model in its parameters with this fixed kernel.",
+  "tex": "K(x, x') = \\nabla_\\theta \\hat y(x) \\cdot \\nabla_\\theta \\hat y(x')",
+  "aka": [
+   "NTK"
+  ]
+ },
+ "lazy-training": {
+  "term": "Lazy training",
+  "ch": "landscape",
+  "def": "A regime in which the parameters move so little that the model stays close to its first-order Taylor expansion around the initialization (Chizat, Oyallon & Bach 2019). Training in the NTK regime is an example."
+ },
+ "mean-field": {
+  "term": "Mean-field limit",
+  "ch": "landscape",
+  "def": "A description of very wide two-layer networks in which the neurons are treated as a distribution of particles moving under a gradient flow (Chizat & Bach 2018; Mei et al. 2019). Unlike lazy training, the features do move."
+ },
+ "oracle": {
+  "term": "Oracle",
+  "ch": "limits",
+  "def": "The only way an algorithm may learn about $f$: it asks for information at a point, for example $f(x)$ and $\\nabla f(x)$ (a first-order oracle) or also the Hessian (second-order). Complexity is counted in oracle calls.",
+  "aka": [
+   "first-order oracle"
+  ]
+ },
+ "upper-bound": {
+  "term": "Upper bound",
+  "ch": "limits",
+  "def": "A guarantee that some algorithm needs at most this many oracle calls on every function of a class; for example GD needs $O(\\varepsilon^{-2})$ on $L$-smooth functions."
+ },
+ "lower-bound": {
+  "term": "Lower bound",
+  "ch": "limits",
+  "def": "A proof that every algorithm of a class needs at least this many oracle calls on some function of the class, for example $\\Omega(\\varepsilon^{-2})$ for first-order methods on $L$-smooth functions (Carmon et al. 2020). When upper and lower bounds match, the method is optimal."
+ },
+ "soft-o": {
+  "term": "$\\tilde O$ notation",
+  "ch": "limits",
+  "def": "Big-O that also hides logarithmic factors, such as $\\log d$ or $\\log(1/\\varepsilon)$.",
+  "aka": [
+   "soft-O",
+   "$\\tilde O(\\cdot)$"
+  ]
+ },
+ "np-hard": {
+  "term": "NP-hard",
+  "ch": "limits",
+  "def": "At least as hard as every problem in the class NP: no polynomial-time algorithm is known, and finding one would prove P = NP. Global minimization of non-convex functions is NP-hard in general (Murty & Kabadi 1987)."
+ },
+ "worst-case": {
+  "term": "Worst case",
+  "ch": "limits",
+  "def": "A guarantee that holds for every function in the assumed class, including adversarially built ones. Real problems are often much easier than the worst case."
+ }
+}

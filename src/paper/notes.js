@@ -4,7 +4,8 @@
 //   # Title                 notes title
 //   ## Heading              section (gets an anchor and a contents entry)        ### Heading   sub-heading
 //   $$ ... $$               display math (may span lines)                         $..$          inline math
-//   **bold**  *italic*  `code`  [text](url)
+//   **bold**  *italic*  `code`  [text](url)  [text](paper.html?id=…)  [[term]] / [[term|text]] (glossary link)
+//   :::viz name  :::        live visual slot (crash course: mounted by src/learn/learn.js from course/<ch>/viz.js)
 //   - item / 1. item        lists; indent continuation lines (incl. $$ blocks) by 3 spaces
 //   | a | b |               tables (first row = header, second row = --- separator; an all-empty header row = no header)
 //   :::kind Title  ...  ::: callout; kinds: minute, key, theorem, warn, ours, plain
@@ -28,7 +29,9 @@ export function inline(s) {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
     .replace(/(^|[^*])\*([^*\s][^*]*?)\*/g, '$1<i>$2</i>')
-    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    .replace(/\[\[([\w-]+)(?:\|([^\]]+))?\]\]/g, (_, id, t) => `<a class="term" href="learn.html?ch=glossary#t-${id}" data-term="${id}">${t || id}</a>`)
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\[([^\]]+)\]\(((?:paper|learn)\.html[^)\s]*)\)/g, '<a href="$2">$1</a>');
   return s.replace(/\u0000(\d+)\u0000/g, (_, i) => tex(math[+i], false));
 }
 
@@ -95,6 +98,7 @@ export function blocks(lines, toc) {
         toc?.push([id, head]);
         out.push(`<details class="nt-fold" id="${id}"><summary><span class="nt-fold-t">${inline(head)}</span>${sub ? `<span class="nt-fold-s">${inline(sub)}</span>` : ''}</summary><div class="nt-fold-b">${blocks(body)}</div></details>`);
       }
+      else if (kind === 'viz') out.push(`<div class="lv" data-viz="${esc(title)}"></div>`);
       else if (kind === 'divider') out.push(`<div class="nt-div"><span>${inline(title)}</span></div>`);
       else if (kind === 'figure') out.push(`<figure class="nt-fig">${body.join('\n')}${title ? `<figcaption>${inline(title)}</figcaption>` : ''}</figure>`);
       else out.push(`<div class="nt-box nt-${kind}">${title ? `<div class="nt-box-h">${inline(title)}</div>` : ''}<div class="nt-box-b">${blocks(body)}</div></div>`);
