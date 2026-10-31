@@ -117,3 +117,33 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   O(min(nε⁻², ε⁻⁴)); at ε = 0.01, n = 100: 1e5 vs 1e6; n = 1e6: 1e6 vs 1e10; crossover n = ε⁻²). All in
   `fang2018spider.py`, plus the notes' exact cancellation in the g_i = h + ξ_i toy model.
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [8] arjevani2020second — What Can Second-Order Information Buy?
+- Notes checked against: arXiv 2006.13476 (COLT 2020, PMLR 125): abstract (O(ε⁻³) stochastic gradients + HVPs, matching
+  lower bound, no improvement for any p ≥ 2 even with Lipschitz first p derivatives), Fig. 1 (elbow: ε⁻⁴ → ε⁻³,
+  noiseless ε⁻² → ε⁻¹), Sec. 1 (single-point vs two-point same-seed queries; integral identity for ∇F(x) − ∇F(x′);
+  footnote 2: HVPs roughly as expensive as stochastic gradients, Pearlmutter 1994), (ε, γ)-SOSP upper/lower bounds.
+- Fixes to the notes: none. No discrepancies found.
+- Minute box: no "paper in one minute" heading in the notes (labels Problem / Method / Result); standard title used.
+  "Meaning of a lower bound." (green) → key, "Survey caution." (amber) → warn; "Our takeaway." stays a paragraph as in
+  the PDF; the "Source:" sentence moved into the `>` line.
+- Primer (4 ideas): noise costs a power of ε (σ²/ε² samples per step → ε⁻⁴, heuristic labelled; the rate itself from
+  the paper); the elbow of Fig. 1 (ε = 0.01: 1e8 vs 1e6); HVP as the directional derivative of the gradient
+  (F = x²y at (1, 2), v = (1, 0): Hv = (4, 2), finite difference (4, 2.001)); gradient differences as integrals of
+  HVPs (x³/3 from 1 to 1.2: 0.44 exact, 0.40 with K = 1, 0.43 with K = 4). All in `arjevani2020second.py`, plus an
+  O(δ²) check of the notes' Taylor expansion of the gradient.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [9] du2019gradient — Why Wide Deep Networks Can Reach Zero Loss
+- Notes checked against: ICML 2019 PMLR 97 PDF (proceedings.mlr.press/v97/du19c/du19c.pdf): Sec. 3.3 Eq. (1) loss
+  ½Σ(f − y)², Eq. (3) ResNet layer x^(h) = x^(h−1) + (c_res/(H√m)) σ(W^(h)x^(h−1)), Sec. 4 (technique), Sec. 5
+  Def. 5.1 and Theorem 5.1, Sec. 6 Theorem 6.1, Sec. 7 Theorem 7.1 (each with (1 − ηλ_min/2)^k), Sec. 8.
+- Fixes to the notes: none. No discrepancies found (theorem and section numbers, the bound and the layer formula match).
+- Title: "Paper 6 — Why Wide Deep Networks Can Reach Zero Loss" → without "Paper 6". Primary-source line built from
+  `data/papers.json` (the notes have none).
+- Primer (4 ideas): chain rule r ↦ (I − ηJJᵀ)r (linear model x1 = (1,0), x2 = (1,1): G = [[1,1],[1,2]], eigenvalues
+  ≈ 2.618, 0.382); λ_min sets the slowest rate (η = 1/λ_max ≈ 0.382: factors 0 and ≈ 0.854); averages concentrate
+  (1/√m; 100 coins → std 0.1, m = 1e4 → 0.01); wide nets move each weight O(1/√m) (labelled intuition; the paper's
+  per-layer 1/√m scaling). All in `du2019gradient.py`, plus the notes' fixed-Gram example (r1..r3, losses 1.00000 /
+  0.12500 / 0.03125 / 0.00781, λ_min = 0.5) and 2^10 = 1024 vs 1.1^10 ≈ 2.59.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px (tables stack).
