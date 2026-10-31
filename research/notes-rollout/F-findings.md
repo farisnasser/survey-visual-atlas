@@ -243,11 +243,18 @@
   Manifolds" pp. 33–70, Ch. 6 "Stable Manifolds for Hyperbolic Sets" pp. 71–82: the notes' page ranges are right) and
   a catalogue listing of Chapter 5's appendices (Appendix III = center and strong stable manifolds). The GD argument
   (Sec. 6) checked against Lee et al. 2016, which cites Shub's center-stable manifold theorem as Theorem III.7.
-- **Not verified:** "Theorem 5.20" (stable/unstable manifolds of a hyperbolic fixed point) and "Appendix III
-  (pp. 61–70)". The book is not openly available: the notes' author-copy link
+- Theorem 5.20 verified on the French original the English book translates (Shub, *Stabilité globale des systèmes
+  dynamiques*, Astérisque 56, 1978, numdam AST_1978__56__1_0, p. 64): "THEOREME 5.20. Si f est un difféomorphisme de
+  classe C^r et p un point fixe hyperbolique de f, il existe une variété stable locale … et une variété instable
+  locale … tangentes à E^s resp. E^u en p … Les variétés W^u(p) = ∪ f^n(W^u_loc(p)), W^s(p) = … sont … l'image d'un
+  disque par une immersion injective" — the local stable/unstable manifolds and their global immersed extensions, as
+  the notes say. (That the 1987 English edition kept the number is assumed; Lee et al. 2016 cite the English edition's
+  appendix theorem as "Theorem III.7", consistent with appendices being added there.)
+- **Not verified:** "Appendix III (pp. 61–70)". The French original has only Appendices 5.1–5.2 (no center-stable
+  appendix), and the English edition is not openly available: the notes' author-copy link
   (shub.ccny.cuny.edu/articles/1986-Global_Stability_of_Dynamical_Systems.pdf) serves a TLS certificate for a different
-  host (hosting.ccny.cuny.edu), so browsers refuse it, and the plain-HTTP address returns 404. Kept verbatim. The link
-  is printed as in the notes; the coordinator may want to drop it if it stays unreachable.
+  host (hosting.ccny.cuny.edu), so browsers refuse it, and the plain-HTTP address returns 404. Kept verbatim; the
+  coordinator may want to drop that link if it stays unreachable.
 - No discrepancies found in what could be checked. Worked example (GD on ½(x² − y²) with η = 0.2 = (0.8x, 1.2y))
   checked.
 - Box mapping: "Why this matters for gradient descent" → key; "Do not overstate measure-zero arguments" → warn;
