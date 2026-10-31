@@ -54,3 +54,36 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   together with every number in the notes (gradient, H(0,0) eigenvalues ±2, the (3,2) projection, the trace identity,
   E(θ) = 1 + 8 sin²θ, AB = (AC)(C⁻¹B)).
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 8 sections, no overflow at 375 px.
+
+## [4] dauphin2014identifying — Escaping Saddle Points
+- Notes checked against: NeurIPS 2014 proceedings PDF (papers.nips.cc …/04192426585542c54b96ba14445be996-Paper.pdf):
+  Sec. 2 and Fig. 1 (random Gaussian fields, index–error curve, downsampled MNIST/CIFAR-10), Sec. 4 and Fig. 2 (GD vs
+  Newton near saddles), Sec. 5 Eq. (2)–(3), Sec. 6 Lemma 1, Eq. (4)–(5), Algorithm 1 (Lanczos/Krylov, damping),
+  Sec. 7 (10 × 10 downsampling; seven-hidden-layer MNIST autoencoder: SGD stuck at MSE 1.0, SFN reaches 0.57 vs
+  Hessian-free 0.69; Penn Treebank RNN), Figs. 1–4.
+- Fixes to the notes: none. No discrepancies found. The experiment numbers (1.0, 0.57, 0.69, 10 × 10, seven layers)
+  were checked against the paper's Sec. 7 text, not recomputed.
+- Title: "Paper 3 — Escaping Saddle Points" → "Escaping Saddle Points" (the "Paper 3" numbering is title-block material).
+- Primer (4 ideas): Newton step −H⁻¹g from the quadratic model (2(x−3)² from 0: g = −12, H = 4, step 3); functions of a
+  symmetric matrix act on eigenvalues (|H| = 2I for [[0,2],[2,0]] vs elementwise |H| = H); the coin-flip cartoon
+  2^−N (1/1024 at N = 10), labelled a cartoon, next to the paper's random-field statement (Sec. 2: high-error critical
+  points exponentially likely to be saddles); linear model in an ellipse trust region → s ∝ −M⁻¹g (M = diag(1,4),
+  g = (1,1): s ≈ (−0.894, −0.224)). All in `dauphin2014identifying.py`, with every number of the notes' worked example
+  (GD (0, 1.01), Newton (0, 0), SFN (0, 2), f values −0.005 / −0.00510 / −0.020) and Lemma 1 on a random 3×3 Hessian.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 9 sections, no overflow at 375 px.
+
+## [5] jin2017escape — Efficient Saddle Escape
+- Notes checked against: ICML 2017 PMLR 70 PDF (proceedings.mlr.press/v70/jin17a/jin17a.pdf): Def. 6 (p. 4), Algorithm 2,
+  A1, Theorem 3 (p. 5; ε ≤ ℓ²/ρ, probability 1 − δ, O(ℓ(f(x0) − f*)/ε² · log⁴(dℓΔf/(ε²δ)))), Sec. 3.1 A2 and
+  Corollary 4 (pp. 5–6), Sec. 3.2 A3.a/b and Theorem 5 (p. 6: + (β/α) log(ζ/ε)), Sec. 4 Eq. (2), Lemmas 6–7 and
+  Theorem 8 (p. 7), Sec. 5 Lemmas 9–11 and Figs. 1–2 (pp. 7–8, "thin pancake" / "narrow band").
+- Fixes to the notes: none. No discrepancies found (every page, lemma, theorem and assumption number matches).
+- Title: "Paper — Efficient Saddle Escape" → "Efficient Saddle Escape". The perturbation-ball figure is redrawn as SVG
+  (stuck band and e₁ arrow in the negative-curvature red, kicks in optimizer coral). Primary-source line built from
+  `data/papers.json` (the notes have only a title-block link).
+- Primer (4 ideas): descent lemma and the 2ℓΔ/ε² count (20 000 for ℓ = Δ = 1, ε = 0.01); the √(ρε) curvature scale
+  from balancing γ³/ρ² against εγ/ρ (labelled a scale argument; ρ = 1, ε = 1e−4 → 0.01); a thin slab holds a small
+  share of a ball (w = 0.05: 0.064 of the disk, 0.075 of the 3-ball, Monte Carlo-checked); repetition gives log(1/δ)
+  (p = 1/2, δ = 1e−6 → 20 kicks). All in `jin2017escape.py`, with the notes' example (Hessian diag(1, −1) and
+  diag(1, −cos y), y1 ≈ 0.0240, ℓ = ρ = 1, bounded below).
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px.

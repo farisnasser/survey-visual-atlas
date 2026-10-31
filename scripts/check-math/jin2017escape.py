@@ -95,4 +95,29 @@ for d in [2, 10, 100, 1000, 10000]:
 m2 = np.median([escape_d(2, s) for s in range(40)])
 m4 = np.median([escape_d(10000, s) for s in range(40)])
 check("escape iterations grow only ~log d", m4 < 3 * m2, f"{m2:.0f} -> {m4:.0f}")
+
+# in-page notes (papers/jin2017escape/notes.md): f = x^2/2 + cos y - 1, kick (0, 0.02), eta = 0.2
+fJ = lambda p: .5 * p[0] ** 2 + np.cos(p[1]) - 1
+gJ = lambda p: np.array([p[0], -np.sin(p[1])])
+check_grad("notes: grad (x, -sin y)", fJ, gJ, rand_pts(10, -3, 3))
+check_hess_at("notes: Hessian at (0,0) = diag(1, -1)", fJ, [0, 0], [[1, 0], [0, -1]])
+check_hess_at("notes: Hessian diag(1, -cos y) at (0, 1.3)", fJ, [0, 1.3], [[1, 0], [0, -np.cos(1.3)]])
+q1 = np.array([0, .02]) - .2 * gJ(np.array([0, .02]))
+check("notes: y1 = 0.02 + 0.2 sin(0.02) ~ 0.0240", abs(q1[1] - .0240) < 5e-5 and abs(q1[1] - (.02 + .2 * np.sin(.02))) < 1e-15, f"{q1[1]:.6f}")
+check("notes: x+ = 0.8x and y+ ~ 1.2y near 0", abs((np.array([.5, 0]) - .2 * gJ(np.array([.5, 0])))[0] - .4) < 1e-15 and abs(q1[1] / .02 - 1.2) < 1e-3)
+ys = np.linspace(-10, 10, 20001)
+check("notes: l = rho = 1 (|cos y| <= 1, |sin y| <= 1) and f >= -2 (bounded below)", np.max(np.abs(np.cos(ys))) <= 1 and np.max(np.abs(np.sin(ys))) <= 1 and min(np.cos(ys) - 1) >= -2)
+# primer
+check("primer: 2 l Delta / eps^2 = 20000 for l = 1, Delta = 1, eps = 0.01", abs(2 * 1 * 1 / .01 ** 2 - 20000) < 1e-6)
+# descent lemma on the notes' f (l = 1, eta = 1/l)
+check("primer: f(x - grad/l) <= f(x) - |grad|^2/(2l) on the notes' f", all(fJ(q - gJ(q)) <= fJ(q) - gJ(q) @ gJ(q) / 2 + 1e-12 for q in rand_pts(200, -4, 4)))
+check("primer: gamma^3/rho^2 = eps gamma/rho at gamma = sqrt(rho eps); rho = 1, eps = 1e-4 -> 0.01",
+      all(abs(np.sqrt(r * e) ** 3 / r ** 2 - e * np.sqrt(r * e) / r) < 1e-15 for r, e in [(1, 1e-4), (3, .02)]) and abs(np.sqrt(1e-4) - .01) < 1e-15)
+w = .05
+disk = 2 / np.pi * (w * np.sqrt(1 - w * w) + np.arcsin(w)); ball3 = 1.5 * w - .5 * w ** 3
+U2 = np.random.default_rng(0).uniform(-1, 1, (2000000, 2)); U2 = U2[(U2 ** 2).sum(1) <= 1]
+U3 = np.random.default_rng(1).uniform(-1, 1, (2000000, 3)); U3 = U3[(U3 ** 2).sum(1) <= 1]
+check("primer: band |y| <= 0.05 holds ~0.064 of the disk (Monte Carlo)", abs(disk - .064) < 5e-4 and abs(np.mean(np.abs(U2[:, 1]) <= w) - disk) < 1.5e-3, f"{disk:.5f}")
+check("primer: slab |z| <= 0.05 holds ~0.075 of the 3-ball (Monte Carlo)", abs(ball3 - .075) < 5e-4 and abs(np.mean(np.abs(U3[:, 2]) <= w) - ball3) < 1.5e-3, f"{ball3:.5f}")
+check("primer: k = log(1/delta)/log(1/p) = 20 for p = 1/2, delta = 1e-6", int(np.ceil(np.log(1e6) / np.log(2))) == 20 and .5 ** 20 < 1e-6 < .5 ** 19)
 done()
