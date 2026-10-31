@@ -238,3 +238,51 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   w: ratios in [0.38, 1.97], 98% in [0.60, 1.51]). The key box quotes Theorem 3.3 (β/α < 2, η = 1/β,
   O(α/(2α − β) log 1/ε)). All in `jain2017non.py`.
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [16] jin2021nonconvex — Gradients, Stochasticity, and Saddle Points
+- Notes checked against: arXiv 1902.04811 (J. ACM 68(2)): Sec. 4 Algorithm 1 PGD (p. 10), Theorem 13, Algorithms 2–3
+  PSGD, Theorems 16–17, Algorithm 4 "PGD (Variant)" (p. 12), Theorem 18, Sec. 5 Lemmas 19–22 (improve or localize,
+  coupling sequence / thin stuck region), Figs. 1–2.
+- **Fix to the notes (Sec. 3).** Original: "The basic perturbed-GD mechanism runs descent normally, then injects a random
+  vector when progress is small: $x \leftarrow x + \xi$, $\xi \sim \mathrm{Unif}(B(0, r))$, $x \leftarrow x - \eta\nabla f(x)$."
+  Fixed: "The paper's main PGD (Algorithm 1) adds a small isotropic Gaussian perturbation at every step,
+  $x_{t+1} = x_t - \eta(\nabla f(x_t) + \xi_t)$ with $\xi_t \sim \mathcal{N}(0, (r^2/d)I)$. Its streamlined proof uses a
+  variant (Algorithm 4) that runs descent normally, then injects a random vector when progress is small:
+  $x \leftarrow x - \eta\xi$, $\xi \sim \mathrm{Unif}(B(0, r))$, $x \leftarrow x - \eta\nabla f(x)$."
+  Paper, p. 10: "xt+1 ← xt − η(∇f(xt) + ξt), ξt ∼ N(0, (r²/d)I) … We note that Algorithm 1 is different from that
+  studied in Jin et al. [2017a], where perturbation was added only when certain conditions hold." p. 12, Algorithm 4:
+  "if ∥∇f(xt)∥ ≤ ǫ and t − tperturb > T then xt ← xt − ηξt, (ξt ∼ Uniform(B0(r)))". The rest of Sec. 3 (thin
+  slab, coupling argument) describes Sec. 5's proof for Algorithm 4 and was kept verbatim. The closing "Our takeaway"
+  ("add randomness only when the gradient becomes uninformative") is the notes' own reading and matches Algorithm 4,
+  so it was left unchanged; the coordinator may want to soften it.
+- Minute box: no heading in the notes (Problem / Method / Main result); standard title. "Do not overstate the
+  conclusion." → warn, "Survey interpretation." → key.
+- Primer (4 ideas): escape time logarithmic in the start (η = 0.1: ≈ 72 steps from 1e−3, ≈ 217 from 1e−9);
+  component of N(0, (r²/d)I) along a fixed direction has std r/√d (0.01 at d = 1e4; 100× smaller costs ≈ 48 steps;
+  P(< 1e−4) ≈ 0.008); SGD noise can miss the escape direction (noise only in u leaves v = 0 forever); union bound
+  (1000 × 1e−6) and the paper's Lemma 20 2^{−ι} decay. All in `jin2021nonconvex.py`, with the notes' T_esc formula.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [17] sun2020optimization — Optimization for Deep Learning: An Overview
+- Notes checked against: arXiv 1912.08957 (J. Oper. Res. Soc. China 8): Sec. 3 (convergence criterion; Bertsekas
+  Prop. 1.2.3 quoted: constant step < 2/β ⇒ every limit point stationary, gradient → 0 if bounded below), Sec. 4.1
+  Eqs. (13)–(14) (F = ½(w1⋯wL − 1)², gradient norm 2^{L−1}|e| at w = 2 vs 0.5^{L−1}e at w = 1/2), Secs. 4.2–4.5, 5, 6.
+- **Fix to the notes (Sec. 2).** Original: "If $\eta \le 1/\ell$, summing gives $\min_{0\le t<T}\|\nabla f(\theta_t)\|^2 \le
+  2\ell(f(\theta_0) - f_*)/T$." Fixed: "If $\eta = 1/\ell$, …". Reason: summing the notes' own descent inequality gives
+  $\min_t\|\nabla f\|^2 \le 2(f(\theta_0) - f_*)/(\eta T)$ for $\eta \le 1/\ell$, which equals the stated bound only at
+  $\eta = 1/\ell$; for smaller η the stated bound is false (counterexample in the check script: f = 2x², η = 0.001,
+  T = 2 gives min ‖∇f‖² ≈ 15.97 > 8). Sun's paper states no such rate (it cites only the asymptotic Prop. 1.2.3), so
+  this is a mathematical slip in the notes, not a claim about the paper.
+- **Fix to the source line.** The notes' URL (ise.ncsu.edu …/Optimization-for-deep-learning.pdf) returns HTTP 404
+  (checked 2026-10-31). It is kept verbatim and followed by "(this link no longer resolves; official version
+  doi.org/10.1007/s40305-020-00309-6, author version arxiv.org/abs/1912.08957)".
+- Remark (not changed): the notes label their scalar depth-L example "not a theorem quoted from Sun"; it is in fact
+  essentially the paper's own example after Eq. (13). The label is still literally true (it is an example, not a
+  theorem), so it was kept.
+- Boxes: "Teaching example (not a theorem quoted from Sun)." (amber, explanatory) → plain; the untitled red box in
+  Sec. 4 → warn without a title.
+- Primer (4 ideas): products of many factors (0.9^50 ≈ 0.005, 1.1^50 ≈ 117); singular values as stretch, condition
+  number (diag(2, 0.5)^10: 1024 vs ≈ 0.001, 4^10); variance-preserving init (simulation n = 256, 20 ReLU layers: mean
+  square ≈ 0.8 with σ² = 2/n vs ≈ 6e−7 with 1/n, 0.5^20 ≈ 1e−6); residual identity path (1.01^50 ≈ 1.645 vs
+  e^0.5 ≈ 1.649). All in `sun2020optimization.py`, with the notes' scalar example and residual Jacobian.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
