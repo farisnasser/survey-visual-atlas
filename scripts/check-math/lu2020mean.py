@@ -82,4 +82,17 @@ check("continuum limit: loss curves for L = 16 and L = 64 nearly coincide (same 
 check("notes' Euler example: (1 + 1/2)^2 = 2.25, (1 + 1/10)^10 = 2.594 -> e", abs(1.5 ** 2 - 2.25) < 1e-12 and abs(1.1 ** 10 - 2.5937) < 1e-4)
 save_json("lu2020mean", "data.json", {"xs": r(xs[::2], 4), "ys": r(ys[::2], 4), "frames": F16, "adj": A16, "H16": sig(H16[::10], 4),
                                      "curves": {str(L): sig(curves[L][::10], 4) for L in curves}})
+# in-page notes (papers/lu2020mean/notes.md): (1 + 1/L)^L: 2.25 (L = 2), 2.594 (L = 10) -> e; E(p) = (p - 2)^2, E(0) = 4
+check("notes example: (1 + 1/2)^2 = 2.25, (1 + 1/10)^10 ~ 2.594, limit e ~ 2.718", np.isclose(1.5 ** 2, 2.25) and abs(1.1 ** 10 - 2.594) < 5e-4 and abs((1 + 1e-7) ** 1e7 - np.e) < 1e-6 and abs(np.e - 2.718) < 5e-4)
+check("notes analogy: E(0) = 4 and E decreases toward p = 2", (0 - 2) ** 2 == 4 and all((p_ - 2) ** 2 < 4 for p_ in (.5, 1, 1.5, 2)))
+# primer idea 1: Euler for X' = X: L = 10 -> 2.594 (error 0.124), L = 100 -> 2.705 (error 0.0135)
+e10, e100 = np.e - 1.1 ** 10, np.e - 1.01 ** 100
+check("primer: Euler errors 0.124 (L = 10) and 0.0135 (L = 100)", abs(e10 - .124) < 1e-3 and abs(1.01 ** 100 - 2.705) < 5e-4 and abs(e100 - .0135) < 1e-4)
+# primer idea 2: E(rho) = (mean - 2)^2 at delta_0: dE/drho = -4 theta, direction to delta_1 gives -4; E(mix) = (lam - 2)^2
+lams = np.linspace(0, 1, 11)
+check("primer: E((1-lam) delta0 + lam delta1) = 4 - 4 lam + lam^2, slope -4", np.allclose((lams - 2) ** 2, 4 - 4 * lams + lams ** 2) and np.isclose(((1e-6 - 2) ** 2 - 4) / 1e-6, -4, atol=1e-5))
+# primer idea 4: X' = a X, E = (X(1) - y)^2/2: dE/dX0 = (X(1) - y) e^a ~ 1.95 for a = 1, X0 = 1, y = 2 (finite difference)
+Ef = lambda x0: .5 * (x0 * np.e - 2) ** 2
+fdv = (Ef(1 + 1e-6) - Ef(1 - 1e-6)) / 2e-6
+check("primer: adjoint gives dE/dX(0) = (e - 2) e ~ 1.95", np.isclose(fdv, (np.e - 2) * np.e, atol=1e-6) and abs((np.e - 2) * np.e - 1.95) < 5e-3)
 done()
