@@ -33,3 +33,9 @@ understand optimization and learn what the field is like".
 | 12 | limits | How hard can it be? | What is provably the best possible? | oracle, upper/lower bound, Õ, NP-hard |
 
 Test stage: shell + chapters 1–3 shown to Faris first (as with the Lee notes page), then chapters 4–12.
+
+Status (2026-10-31): all 12 stops written and live. Stops 1–3 by the coordinator; 4–6, 7–9, 10–12 by sessions A, B, C
+(brief `research/course-rollout/BRIEF.md`, per-stop notes with every paper claim and its source in
+`research/course-rollout/{A,B,C}-notes.md`). 54 live visuals, 96 glossary terms, one check script per stop.
+Known library caveat (session C): `Stage.stepBalls` clamps balls to the drawn domain, so a visual must keep its
+optimizer inside the box (slider ranges are chosen so; the check scripts confirm).

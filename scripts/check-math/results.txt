@@ -750,6 +750,473 @@ cohen2021gradient
   [PASS] primer: eta lambda = 2.02 -> multiplier -1.02 (2% growth per step)
 all checks passed
 
+course_adaptive
+  kappa = 10: effective condition number with the diagonal preconditioner: 0 deg 1.00, 30 deg 7.95, 45 deg 10.00, 90 deg 1.00
+  kappa = 100: effective condition number with the diagonal preconditioner: 0 deg 1.00, 30 deg 75.49, 45 deg 100.00, 90 deg 1.00
+  [PASS] diagonal preconditioner: kappa_eff = 1 for an axis-aligned valley (0 and 90 deg)
+  [PASS] ... = kappa itself at 45 deg (both diagonal entries equal (mu + L)/2): no help at all
+  [PASS] kappa = 100 at 30 deg: kappa_eff = 75.5
+  [PASS] Newton: P = H^-1 gives kappa_eff = 1 at any angle, and one step with eta = 1 lands on the minimum
+  [PASS] change of variables x = P^(1/2) y: GD on y is preconditioned GD on x with Hessian P^(1/2) H P^(1/2)
+  precond visual (kappa = 100, best step each): steps to f < 1e-8 (GD, diagonal): {0: (506, 1), 30: (525, 396), 45: (528, 528)}
+  [PASS] precond visual kappa = 100: GD 506 / 525 / 528 steps at 0 / 30 / 45 deg; diagonal 1 / 396 / 528  ({0: (506, 1), 30: (525, 396), 45: (528, 528)})
+  race, f after 400 steps (GD best step, AdaGrad 0.5, Adam 0.05): {0: ['8.2e-07', '5.6e-123', '1.2e-18'], 45: ['1.8e-06', '2.1e-05', '5.6e-05']}
+  [PASS] aligned valley: AdaGrad and Adam end far below GD (GD 8.2e-7, AdaGrad 5.6e-123, Adam 1.2e-18)
+  [PASS] rotated 45 deg: the advantage is gone, both end above GD (GD 1.8e-6, AdaGrad 2.1e-5, Adam 5.6e-5)
+  [PASS] EMA started at 0 with constant input g: m_t = (1 - b1^t) g
+  [PASS] uncorrected step / alpha = (1 - 0.9^t)/sqrt(1 - b2^t): beta2 = 0.99: peak 2.131 at t = 13, first step 1
+  [PASS] uncorrected step / alpha = (1 - 0.9^t)/sqrt(1 - b2^t): beta2 = 0.999: peak 6.569 at t = 12, first step 3.16
+  [PASS] uncorrected step / alpha = (1 - 0.9^t)/sqrt(1 - b2^t): beta2 = 0.9999: peak 20.72 at t = 12, first step 10
+  [PASS] first uncorrected step: 0.1/sqrt(0.001) = 3.16 alpha; corrected step = alpha exactly
+  [PASS] toy gradient is unbiased with mean 1 (so theta* = -1 on [-1, 1]): k^2 (1/k) - k (1 - 1/k) = 1
+  k = 10, final theta for beta2 = 0.1/0.5/0.9/0.99/0.999: Adam [ 1.     1.     1.    -0.992 -0.994] AMSGrad [-0.998 -0.998 -0.998 -0.998 -0.998] ADOPT [-0.98  -0.981 -0.991 -0.994 -0.994]
+  [PASS] k = 10: Adam ends at the worst point +1 for beta2 <= 0.9 and near -1 for 0.99, 0.999 (-0.992, -0.994)
+  [PASS] k = 10: AMSGrad -0.998, ADOPT -0.980 / -0.981 / -0.991 / -0.994 / -0.994
+  k = 50: Adam [0.98  0.994 0.998 0.996 0.193] AMSGrad [-0.052 -0.052 -0.052 -0.052 -0.052] ADOPT [-0.97  -0.974 -0.966 -0.996 -0.997]
+  [PASS] k = 50: Adam fails for every beta2 (ends >= 0.19); AMSGrad -0.052; ADOPT <= -0.966
+  [PASS] gradient x^2/2 + x^4/4 + y^2/2  (max rel err 1.27e-10)
+  [PASS] (L0, L1) = (1, 3)-smooth on [-6, 6]^2: curvature 1 + 3x^2 <= 1 + 3 ||grad||
+  [PASS] not L-smooth: curvature 1 + 3x^2 is 193 at x = 8 and unbounded
+  clipping table x0: (M, best fixed-step iterations, best step, clipped iterations): {1: (2.2, 6, 0.9742, 4), 2: (10.0, 22, 0.3577, 6), 4: (68.0, 81, 0.1111, 10), 8: (520.0, 322, 0.0292, 18)}
+  [PASS] best fixed step needs 6 / 22 / 81 / 322 iterations from x0 = 1 / 2 / 4 / 8; clipped GD (eta 1, gamma 0.5) 4 / 6 / 10 / 18
+  [PASS] viz constants: best steps 0.9742 / 0.3577 / 0.1111 / 0.0292, M = 2.2 / 10.0 / 68.0 / 520.0
+  [PASS] stability of a fixed step near x0 = 8 needs h < 2/193 = 0.0104
+  [PASS] memory: diagonal m n = 10^6, Shampoo m^2 + n^2 = 2 x 10^6, full-matrix AdaGrad (m n)^2 = 10^12
+  [PASS] Kronecker identity behind Shampoo: (L kron R^T) vec(G) = vec(L G R)
+all checks passed
+
+course_critical
+  [PASS] gradient zoo min  (max rel err 1.12e-10)
+  [PASS] Hessian zoo min at 0  (fd=[[2.0, 0.0], [0.0, 2.0]] err 0.0e+00)
+  [PASS] gradient zoo max  (max rel err 1.12e-10)
+  [PASS] Hessian zoo max at 0  (fd=[[-2.0, 0.0], [0.0, -2.0]] err 0.0e+00)
+  [PASS] gradient zoo saddle  (max rel err 8.22e-11)
+  [PASS] Hessian zoo saddle at 0  (fd=[[2.0, 0.0], [0.0, -2.0]] err 0.0e+00)
+  [PASS] gradient zoo monkey  (max rel err 7.91e-11)
+  [PASS] Hessian zoo monkey at 0  (fd=[[0.0, 0.0], [0.0, 0.0]] err 0.0e+00)
+  [PASS] gradient zoo flatmin  (max rel err 7.87e-11)
+  [PASS] Hessian zoo flatmin at 0  (fd=[[2.0, 0.0], [0.0, 0.0]] err 8.0e-08)
+  [PASS] gradient zoo flatsad  (max rel err 7.88e-11)
+  [PASS] Hessian zoo flatsad at 0  (fd=[[2.0, 0.0], [0.0, -0.0]] err 8.0e-08)
+  balls within 0.1 of the origin after 400 GD steps (eta 0.1, 12 starts on the unit circle): {'min': np.int64(12), 'max': np.int64(0), 'saddle': np.int64(2), 'monkey': np.int64(3), 'flatmin': np.int64(12), 'flatsad': np.int64(2)}
+  [PASS] zoo counts: min 12, max 0, saddle 2 (the two starts on the x-axis), monkey 3, x^2+y^4 12, x^2-y^4 2
+  [PASS] text: x^2 + y^4 and x^2 - y^4 have the same Hessian diag(2, 0) at 0
+  x^2 - y^4: GD (eta 0.1) from y = 0.05 needs 504 steps to reach |y| = 1
+  [PASS] gradient (1 - uv)^2  (max rel err 1.93e-10)
+  [PASS] gradient (1 - u v^2)^2  (max rel err 1.35e-10)
+  [PASS] Hessian (1 - uv)^2 at 0  (fd=[[0.0, -2.0], [-2.0, 0.0]] err 9.4e-09)
+  [PASS] (1 - uv)^2: eigenvalues -2 along (1,1)/sqrt2 and +2 along (1,-1)/sqrt2: strict saddle
+  [PASS] Hessian (1 - u v^2)^2 at 0  (fd=[[0.0, 0.0], [0.0, 0.0]] err 0.0e+00)
+  [PASS] Hessian three-weight chain (1 - abc)^2 at 0 (zero Hessian)  (fd=[[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]] err 0.0e+00)
+  [PASS] chord between minima (1,1) and (-1,-1) passes (0,0) with f = 1 > 0
+  [PASS] symmetry f(-u,-v) = f(u,v) => grad f(0) = 0
+  [PASS] stable set of the (1-uv)^2 saddle is the line u = -v (gradient stays on it)
+  start (s, 0.6 s), eta 0.05, steps until f < 0.01 (strict, degenerate): {0.1: (37, 85), 0.01: (61, 833), 0.001: (85, 8301)}
+  [PASS] visual 'sym' default s = 0.01: 61 steps (strict) vs 833 (degenerate)
+  [PASS] text: s = 0.1 -> 37 vs 85; s = 0.001 -> 85 vs 8301 (log(1/s) vs 1/s growth)
+  shift m = 0: P(all N eigenvalues > 0) = {1: 0.4965, 2: 0.145, 3: 0.021, 4: 0.0015, 5: 0.0, 6: 0.0, 7: 0.0, 8: 0.0, 9: 0.0, 10: 0.0}
+  shift m = 1: P(all N eigenvalues > 0) = {1: 0.7555, 2: 0.566, 3: 0.3755, 4: 0.235, 5: 0.144, 6: 0.0885, 7: 0.0425, 8: 0.0195, 9: 0.0035, 10: 0.0015}
+  [PASS] m = 0: P = 0.5 for N = 1 (within MC error), below 0.01 by N = 4, 0 of 2000 at N = 10
+  [PASS] m = 1: minima still become rarer as N grows (P(10) < P(2))
+  [PASS] MC agrees with numpy eigvalsh on the same matrices (N = 5, m = 0)
+  [PASS] Cholesky test = 'all eigenvalues > 0'
+  N = 100 sample (seed 7): eigenvalues in [-1.894, 1.973], negatives: 50 at m = 0, 19 at m = 1
+  [PASS] semicircle edge ~ +-2 for N = 100
+  semicircle fraction of negative eigenvalues: m = 0 -> 0.500, m = 1 -> 0.196
+  [PASS] sample index fractions close to the semicircle law (0.5 and 0.196)
+  [PASS] gradient Lee et al.'s example  (max rel err 1.00e-10)
+  [PASS] Hessian Lee example at (0.4, 0.7)  (fd=[[1.0, -0.0], [-0.0, 0.47]] err 1.9e-08)
+  [PASS] rho = 9 on the box |y| <= 1.5 (sampled sup below and close to 9)  (8.765)
+  [PASS] text: eps = 0.01 -> sqrt(rho eps) = 0.3 < 1 = |lambda_min| at the saddle
+  [PASS] text: the saddle (lambda_min = -1) counts as an eps-SOSP once eps >= 1/9 = 0.111
+  [PASS] visual default eps = 0.1: sqrt(0.9) = 0.949 < 1, saddle excluded
+  [PASS] quadratic-model error <= (rho/6)|d|^3 with rho = 9  (max ratio 1.263 vs 1.5)
+all checks passed
+
+course_curvature
+  [PASS] f'' = derivative of f' (finite differences)
+  [PASS] text: f''(-0.5) = 4.689 (bends up), f''(0.5) = -4.289 (bends down)
+  [PASS] text: f'' ranges over [-4.3, 4.7] on the real line, so L = 4.7
+  at x = -0.5, step 0.3: tangent error 0.1936, parabola error 0.0174
+  [PASS] text: tangent error 0.194, parabola error 0.017 at x = -0.5, h = 0.3
+  [PASS] gradient 2x^2 + 2xy + 2y^2  (max rel err 2.27e-10)
+  [PASS] Hessian 2x^2 + 2xy + 2y^2  (fd=[[4.0, 2.0], [2.0, 4.0]] err 3.4e-09)
+  [PASS] eigenvalues 2 and 6, eigenvectors (1,-1)/sqrt2 and (1,1)/sqrt2
+  [PASS] curvature along x: u^T H u = 4 = 6 cos^2 45 + 2 sin^2 45
+  [PASS] d^2/dt^2 f(x + t u) = u^T H u
+  [PASS] u^T H u = sum lam_i (u.v_i)^2, always between lam_min and lam_max
+  [PASS] visual 'quad' default (6, 2, 45 deg) is the worked example
+  [PASS] quad display: max |height| on the box |x|,|y| <= 1.3 is 0.1 * 10.14 = 1.01 world units
+  [PASS] bend readout: f'(-0.5) = 0.006
+  zigzag default kappa 10, eta 0.18: f < 1e-6 after 38 steps
+  [PASS] u_i <- (1 - eta lam_i) u_i exactly, for kappa 10, eta 0.18 (default): factors 0.82 and -0.8
+  [PASS] zigzag default: f < 1e-6 after 38 steps
+  [PASS] zigzag: eta = 0.21 > 2/L = 0.2 diverges
+  [PASS] decoupling holds for other kappa, eta
+  start in eigen coordinates: u1 = -2.205, u2 = 0.580
+  kappa 10: eta = 1/L -> 132 steps, eta = 2/(L+mu) -> 69 steps, kappa ln(1e6) = 138
+  kappa 100: eta = 1/L -> 1375 steps, eta = 2/(L+mu) -> 691 steps, kappa ln(1e6) = 1382
+  kappa 1000: eta = 1/L -> 13809 steps, eta = 2/(L+mu) -> 6908 steps, kappa ln(1e6) = 13816
+  [PASS] kappa 10: 132 steps with eta = 1/L (factor 0.9), 69 with eta = 2/(L+mu) (factor 9/11)
+  [PASS] kappa 100: 1375 steps with eta = 1/L
+  [PASS] kappa 1000: 13809 steps with eta = 1/L
+  [PASS] kappa 1: one step lands on the minimum
+  [PASS] best fixed step 2/(L+mu) gives factor (kappa-1)/(kappa+1)
+  [PASS] steps ~ kappa ln(1/eps): ratio -> 1 as kappa grows
+  [PASS] gradient strongly convex example  (max rel err 1.27e-10)
+  example: mu = 0.8967, L = 4.1033
+  [PASS] f(x_t) - f* <= (1 - mu/L)^t (f(x0) - f*) along GD with eta = 1/L
+  [PASS] PL: |grad f|^2 >= 2 mu (f - f*) on random points
+  [PASS] gradient stop 2 surface  (max rel err 8.49e-11)
+  [PASS] Hessian stop 2 surface at (1.1, 0.9)  (fd=[[0.0423, 0.0372], [0.0372, 0.1521]] err 3.3e-09)
+  exact Hv at (1.1, 0.9), v = (1,1)/sqrt2: [0.0562 0.1339]
+  forward difference best h = 3.2e-09 (err 9.1e-09); central best h = 1.8e-06 (err 4.0e-12)
+  [PASS] text: forward difference is best near h ~ 1e-8 with error ~ 1e-8
+  [PASS] text: central difference is best near h ~ 1e-6 with error ~ 1e-11
+  [PASS] forward error at h = 1e-4 is ~1e-5 (shrinks like h)  (4.6e-05)
+  [PASS] text: d = 1e8 -> d^2 = 1e16 entries, 4 bytes each = 4e16 bytes = 40 petabytes
+all checks passed
+
+course_escape
+  [PASS] gradient Lee et al.'s example  (max rel err 7.16e-11)
+  steps until |y| > 0.5 from (1, delta): {0.01: 43, 0.0001: 91, 1e-06: 139, 1e-08: 188, 1e-12: 284}  prediction ln(0.5/delta)/ln(1.1): {0.01: 41.0, 0.0001: 89.4, 1e-06: 137.7, 1e-08: 186.0, 1e-12: 282.6}
+  [PASS] text: delta = 1e-2, 1e-4, 1e-6, 1e-8, 1e-12 -> 43, 91, 139, 188, 284 steps
+  [PASS] each factor 100 in delta costs ln(100)/ln(1.1) = 48.3 steps
+  [PASS] escape time is within 2 steps of the linear prediction ln(0.5/delta)/ln(1.1)
+  weak curvature gamma -> steps to |y| > sqrt(gamma)/2 from 1e-3: {1: 67, 0.1: 524, 0.01: 4058}
+  [PASS] text: gamma = 1, 0.1, 0.01 -> 67, 524, 4058 steps (about 1/(eta gamma) times a log)  ({1: 67, 0.1: 524, 0.01: 4058})
+  [PASS] gradient bent saddle  (max rel err 1.42e-10)
+  [PASS] Hessian bent saddle at 0  (fd=[[-1.0, 0.0], [0.0, 1.0]] err 6.1e-09)
+  [PASS] critical points in the box: saddle (0, 0), minima (+-pi, 0)
+  gradient-Lipschitz constant on the box |x| <= 4, |y| <= 2.4 (sampled): 3.09 -> 1/L = 0.323
+  [PASS] eta = 0.2 < 1/L on the drawn box (Lee et al. Theorem 4 needs a step below 1/L)
+  stable curve x*(y): {0.5: 0.0225, 1.0: 0.0921, 1.5: 0.2148, 2.0: 0.3983}  valley floor 0.25 y^2 at y = 2: 1.0
+  [PASS] the stable curve is bent: x*(2) = 0.398, neither the eigen-line (0) nor the valley floor (1.0)
+  [PASS] it is tangent to the y-axis at the saddle: |x*(0.5)| < 0.1 * 0.5
+  2000 random starts in the box: 0 at the saddle, {1: 943, -1: 1057} at the minima (+-pi, 0)
+  [PASS] 2000 random starts: none end at the saddle
+  start (x*(2) + 0.01, 2): f < -1 after 29 steps, ends near (3.142, 0.000)
+  start (x*(2) + 0.0001, 2): f < -1 after 54 steps, ends near (3.142, 0.000)
+  start (x*(2) + 1e-06, 2): f < -1 after 79 steps, ends near (3.142, 0.000)
+  [PASS] starts just beside the stable curve take longer the closer they are (log(1/delta) growth)
+  visual default start (0.4, 2): f < -1 after 39 steps, ends at (3.142, 0.000)
+  [PASS] visual 'stable' default start (0.4, 2): reaches f < -1 after 39 steps, at the minimum (pi, 0)
+  [PASS] gradient Jin et al.'s example  (max rel err 2.26e-10)
+  [PASS] Hessian Jin example saddle  (fd=[[1.0, 0.0], [0.0, -1.0]] err 6.1e-09)
+  [PASS] plain GD from (1.5, 0) stops at the saddle (f = 0)
+  PGD r = 0.1: kicks at steps [33, 114] (y-offsets ['1.2e-03', '-1.0e-02']), ends f = -2.0000 at t = 194
+  PGD r = 0.01: kicks at steps [33, 121] (y-offsets ['1.2e-04', '-1.0e-03']), ends f = -2.0000 at t = 201
+  PGD r = 0.001: kicks at steps [33, 133] (y-offsets ['1.2e-05', '-1.0e-04']), ends f = -2.0000 at t = 213
+  [PASS] PGD default (r = 0.1, seed 1): first kick at step 33, second kick at the minimum at step 114, stops at step 194 with f = -2  ([(33, np.float64(0.0012483022241147924)), (114, np.float64(-0.010465079663966481))], 194, -1.999999971211337)
+  steps from the first kick to the second (at the minimum): {0.1: 81, 0.01: 88, 0.001: 100}
+  [PASS] smaller kicks take longer, by about ln(10)/ln(1.2) = 12.6 steps per factor 10
+  [PASS] gradient power-iteration test function (d = 30)  (max rel err 2.04e-10)
+  iterations until v^T H v <= -gamma/2 (d = 30, eta = 1, r = 1e-3): {1: 5, 0.1: 24, 0.01: 195, 0.001: 1939}
+  [PASS] text: gamma = 1, 0.1, 0.01, 0.001 -> 5, 24, 195, 1939 iterations (about 1/gamma)  ({1: 5, 0.1: 24, 0.01: 195, 0.001: 1939})
+  [PASS] gradient Nesterov-Polyak toy  (max rel err 9.25e-11)
+  [PASS] Hessian Nesterov-Polyak toy at (0.4, -0.7)  (fd=[[1.0, -0.42], [-0.42, 0.71]] err 1.9e-08)
+  newton: |grad| < 1e-6 after 4 steps at [0. 0.], f = 0.0000, lambda_min = -1.000
+  sfn: |grad| < 1e-6 after 7 steps at [-0.3659  1.1043], f = -0.3049, lambda_min = 0.741
+  cr: |grad| < 1e-6 after 12 steps at [-0.3659  1.1043], f = -0.3049, lambda_min = 0.741
+  gd: |grad| < 1e-6 after 167 steps at [-0.3659  1.1043], f = -0.3049, lambda_min = 0.741
+  [PASS] Newton converges to the saddle (0, 0) in 4 steps
+  [PASS] cubic regularization (M = 10) reaches a minimum in 12 steps; GD (eta = 1/8) in 167
+  [PASS] saddle-free Newton (|lambda| floored at 0.1) reaches a minimum in 7 steps  (7)
+  [PASS] minimum value f = -0.3049 at (-0.366, +-1.104)  (-0.3049 [-0.36585366  1.10431526])
+  from (1.2, 0): {'newton': (1, [0.0, 0.0]), 'cr': (13, [-0.3659, 1.1043]), 'gd': (105, [0.0, 0.0])}
+  [PASS] from (1.2, 0): Newton and GD end at the saddle, CR reaches a minimum (cannot be attracted, Lemma 6)
+  [PASS] Newton on 5x^2 - y^2: one step from (0.9, 0.12) lands exactly on the saddle
+  [PASS] SFN step on 5x^2 - y^2 moves y away: (0.9, 0.12) -> (0, 0.24)
+all checks passed
+
+course_goal
+  [PASS] gradient line-fit loss  (max rel err 1.49e-10)
+  w* = 0.776429, b* = 0.284643, L* = 0.008557, L(0,0) = 1.028987, L(1,0) = 0.126488
+  [PASS] text: w* = 0.776, b* = 0.285, L* = 0.0086
+  [PASS] text: L(0,0) = 1.03, L(1,0) = 0.126
+  [PASS] Hessian line-fit loss (constant)  (fd=[[2.75, 0.5], [0.5, 2.0]] err 2.5e-09)
+  [PASS] visual 'fit': GD step 0.15 is stable (0.15 < 2/lambda_max)  (lambda = [1.75, 3.0])
+  [PASS] visual 'fit': rolling from (0,0) reaches (w*, b*)
+  [PASS] gradient valleys loss  (max rel err 3.69e-10)
+  minima: [(np.float64(-2.5045), np.float64(0.15596)), (np.float64(-0.5013), np.float64(-0.47375)), (np.float64(1.50352), np.float64(-0.26379))]
+  [PASS] three local minima at -2.50, -0.50, 1.50
+  [PASS] their losses 0.156, -0.474, -0.264
+  [PASS] the middle one is global on [-3, 3]
+  [PASS] viz.js MINIMA constants match
+  [PASS] visual 'valleys': GD step 0.05 is stable (max |F''| = 4.7)
+  [PASS] default start 2.6 rolls into the local minimum at 1.50
+all checks passed
+
+course_landscape
+  [PASS] gradient mirror loss  (max rel err 5.89e-11)
+  [PASS] mirror: L(w1, w2) = L(w2, w1) (swapping the units)
+  mirror critical points in [-0.5, 2.5]^2: [([0.4, 1.6], np.float64(0.0), [0.031, 1.505]), ([0.736, 0.736], np.float64(0.0118), [-0.106, 0.775]), ([1.6, 0.4], np.float64(0.0), [0.031, 1.505])]
+  [PASS] mirror: exactly three critical points: minima (0.4, 1.6), (1.6, 0.4) with loss 0, saddle (0.736, 0.736) on the diagonal
+  [PASS] mirror: saddle loss 0.0118, Hessian eigenvalues -0.106 (across the diagonal) and 0.775 (along it)
+  [PASS] mirror: minima Hessian eigenvalues 0.031 and 1.505
+  [PASS] mirror: GD started on the diagonal stays exactly on it (the units stay identical)
+  [PASS] mirror visual: 24 random starts, GD step 0.5, 3000 steps: 12 end at (1.6, 0.4), 12 at (0.4, 1.6)  (Counter({'a': 12, 'b': 12}))
+  [PASS] mirror visual: every path stays inside the drawn square [-0.5, 2.5]^2  (max |p - 1| = 1.323)
+  [PASS] mirror visual: start (2 + d, 2 - d): d = 0 ends at the saddle; d > 0 at (1.6, 0.4); d < 0 at (0.4, 1.6) (d = +-0.001, 0.05, -0.1)
+  [PASS] gradient benign  (max rel err 9.98e-11)
+  [PASS] benign: at 0 the Hessian is -2 diag(1, s): a local maximum
+  [PASS] benign: at (+-1, 0) loss 0.125 = s^2/2, Hessian eigenvalues 1 and 4 (minimum, global)
+  [PASS] benign: global min value: f >= s^2/2 everywhere on a grid
+  [PASS] benign: at (0, +-sqrt(s)) loss 0.5, Hessian eigenvalues -1 and 2 (strict saddle)
+  [PASS] benign: general s: saddle eigenvalues 2(s - 1) and 4s, minimum eigenvalues 2(1 - s) and 4
+  [PASS] benign visual: for every s on the slider (0.1 ... 0.9): all 24 random starts reach a global minimum (+-1, 0); the start (0, 1.2) on the saddle's stable set ends at the saddle (0, sqrt s); paths stay in [-1.5, 1.5]^2
+  [PASS] benign visual at s = 0.5: 13 end at (1, 0), 11 at (-1, 0)  (Counter({'+': 13, '-': 11}))
+  [PASS] gradient neuron, phi = quad  (max rel err 3.30e-10)
+  [PASS] gradient neuron, phi = tanh  (max rel err 2.33e-10)
+  [PASS] neuron, quadratic phi: (1.5, 1) is a local minimum with F = 1 (F >= 1 within radius 0.3), the global min is 0
+  [PASS] neuron, quadratic phi: Hessian at (v, 1), v > 0, has eigenvalues 0 and v/2 (flat along v)
+  neuron visual (30 starts): quad (21, 9), tanh (30, 0); max |p| 3.48 / 2.90
+  [PASS] neuron visual: 30 random starts, step 0.05, 6000 steps: quadratic phi 21 reach F = 0 and 9 stop at F = 1; tanh 30 reach F = 0
+  [PASS] neuron: 41 x 41 grid of starts: quadratic phi 30.4% stop at F = 1; tanh: only the start (0, 0) (a saddle)
+  [PASS] PL: mu = min (1/2) f'^2 / (f - f*) = 0.1755 at |x| = 2.20 (f* = 0 at x = 0)
+  [PASS] PL: near 0 the ratio tends to 8; as |x| grows it tends to 2
+  [PASS] PL: f'' ranges over [-4, 8]: non-convex, L = 8
+  [PASS] PL: x = 0 is the only critical point (|f'| >= 1.54 for |x| > 0.5)
+  [PASS] PL: GD obeys f(x_t) <= (1 - 2 mu eta (1 - L eta/2))^t f(x_0) for every slider eta in [0.01, 0.24] and starts -6 ... 6
+  [PASS] PL: with eta = 1/L the factor is 1 - mu/L = 0.978
+  PL: from x0 = 5.5 with eta = 1/8, f < 1e-10 after 11 steps; bound needs 1194
+  [PASS] PL text: from x0 = 5.5 (f = 31.7), eta = 1/8: f < 1e-10 after 11 steps; the bound promises it by step 1194
+  [PASS] gradient wide net (first-layer weights)  (max rel err 2.94e-10)
+  m =     4: lam_min(G0) = 0.0050, lam_max = 1.673, L(0) = 5.993, L(1000) = 6.41e-02, move = 4.093, d lam_min = 96.5%
+  m =    16: lam_min(G0) = 0.0153, lam_max = 1.491, L(0) = 3.420, L(1000) = 2.46e-07, move = 1.588, d lam_min = 37.5%
+  m =    64: lam_min(G0) = 0.0078, lam_max = 1.751, L(0) = 6.208, L(1000) = 5.44e-09, move = 0.838, d lam_min = 95.9%
+  m =   256: lam_min(G0) = 0.0078, lam_max = 1.738, L(0) = 3.862, L(1000) = 7.76e-08, move = 0.374, d lam_min = 18.6%
+  m =  1024: lam_min(G0) = 0.0085, lam_max = 1.652, L(0) = 2.936, L(1000) = 3.29e-11, move = 0.174, d lam_min = 0.9%
+  [PASS] wide: relative weight movement 4.09 / 1.59 / 0.838 / 0.374 / 0.174 for m = 4 ... 1024 (about halves per 4x width)
+  [PASS] wide: change of lambda_min(G) during training 96.5% / 37.5% / 95.9% / 18.6% / 0.9%
+  [PASS] wide: m = 4 is still at loss 0.064 after 1000 steps; m >= 16 below 1e-6
+  [PASS] wide: at m = 1024: lambda_min(G0) = 0.0085, eta = 1/lambda_max = 0.605
+  [PASS] wide: every run stays below Du et al.'s rate (1 - eta lambda0/2)^k L(0)
+  [PASS] wide: movement x sqrt(m) is roughly constant for m >= 64 (5.6-6.7)  ([np.float64(8.19), np.float64(6.35), np.float64(6.71), np.float64(5.98), np.float64(5.56)])
+all checks passed
+
+course_limits
+  [PASS] text: GD guarantee 2 L (f(x0) - f*)/eps^2 = 20,000 for L = 1, gap 1, eps = 0.01
+  [PASS] gradient f_T (T = 4)  (max rel err 3.17e-10)
+  [PASS] Psi(1) = 1, Psi = 0 on (-inf, 1/2]; Phi' = sqrt(e) exp(-t^2/2), Phi'(0) = sqrt(e) = 1.649
+  [PASS] Phi matches its integral definition
+  [PASS] zero chain: if x_j = 0 for j >= i, then the gradient is 0 in coordinates j > i
+  [PASS] Lemma 1: Psi(x) Phi'(y) > 1 for x >= 1, |y| < 1
+  [PASS] Lemma 2: |grad f_T(x)| > 1 whenever some |x_i| < 1 (3000 random points, T = 5)
+  [PASS] Lemma 3 (sampled, T = 10): f_T(0) - inf f_T <= 12 T and |grad f_T| <= 23 sqrt(T)
+  T = 2, eta = 0.05: |grad| <= 1 at step 29; x_2 first non-zero after step 8, when x_1 = 0.554
+  [PASS] visual 'chain2': T = 2, eta 0.05: x_2 stays exactly 0 for 7 steps and moves at step 8, once x_1 = 0.554 > 1/2
+  [PASS] visual 'chain2': |grad f_2| <= 1 first at step 29
+  [PASS] visual 'chain2': for every slider eta in [0.01, 0.1], x_2 starts moving only after x_1 > 1/2, and GD reaches |grad| <= 1
+  [PASS] visual 'chain2': for every slider eta, the GD path until |grad| <= 1 (where the ball stops) stays in the drawn box [-0.6, 3]^2
+  p = 1.0: queries until all T coordinates are non-zero / until |grad| <= 1: {2: (8, 29), 4: (22, 44), 8: (44, 71), 12: (67, 96), 16: (90, 121)}
+  p = 0.2: queries until all T coordinates are non-zero / until |grad| <= 1: {2: (17, 32), 4: (46, 62), 8: (77, 90), 12: (93, 111), 16: (137, 156)}
+  p = 0.05: queries until all T coordinates are non-zero / until |grad| <= 1: {2: (18, 18), 4: (67, 67), 8: (191, 191), 12: (151, 151), 16: (529, 529)}
+  [PASS] visual 'chain': every run (T = 2..16, p = 1, 0.2, 0.05) discovers all coordinates and reaches |grad| <= 1
+  [PASS] visual 'chain': exact GD needs a number of steps growing linearly in T (about 6.5 per coordinate)  (slope 6.51)
+  [PASS] text: T = 8: exact GD reaches |grad| <= 1 after 71 queries; p = 0.2 after 90; p = 0.05 after 191  ([71, 90, 191])
+  [PASS] text: T = 16: 121 / 156 / 529 queries  ([121, 156, 529])
+  [PASS] oracle: unbiased (mean of 1e5 samples = grad f_T)
+  [PASS] oracle: variance <= 23^2 (1 - p)/p
+  [PASS] gradient scaled chain  (max rel err 3.22e-10)
+  [PASS] scaling: |grad f(x)| = eps |grad f_T(x/lam)| with lam = l1 eps / L, so |grad f| > eps unless every |x_i| >= lam
+  [PASS] scaling: Hessian of f = (L / l1) x Hessian of f_T, so f is L-smooth when f_T is l1-smooth
+  [PASS] scaling: gap <= (L lam^2 / l1) 12 T = 12 T l1 eps^2 / L, so T = Delta L / (12 l1 eps^2) fits a gap Delta
+  [PASS] text: (p + 1)/p = 2, 3/2, 4/3; at eps = 0.01: 1e4, 1e3, 464
+  [PASS] text (stochastic): variance 23^2 eps^2 (1 - p)/p <= sigma^2 needs p ~ eps^2/sigma^2; T/p ~ (Delta L/eps^2)(sigma^2/eps^2)
+  [PASS] gradient quartic q = -1.5  (max rel err 7.33e-11)
+  [PASS] gradient quartic q = -1  (max rel err 1.00e-10)
+  [PASS] gradient quartic q = 0  (max rel err 3.21e-11)
+  [PASS] gradient quartic q = 1.3  (max rel err 4.30e-11)
+  [PASS] quartic: gradient and Hessian at 0 are zero for every q
+  [PASS] quartic: min of f on the unit circle = (1 + q)/2 for q <= 1 (at the diagonals), 1 for q >= 1
+  [PASS] quartic: f(r u) = r^4 f(u), so 0 is a local min iff (1 + q)/2 >= 0 iff q >= -1; q = -1.2 gives -0.1 on the circle
+  [PASS] quartic: Q = [[1, q], [q, 1]] is copositive iff q >= -1, PSD iff |q| <= 1 (f(u) = v^T Q v with v = (u1^2, u2^2))
+  [PASS] quartic ball: q = -1.3, GD from (0.5, 0.45) leaves the unit square (along the diagonal) after 30 steps  (30, [1.01163541 1.0116354 ])
+  [PASS] quartic ball: q = 0.5, GD from (0.5, 0.45) creeps toward 0 (|u| < 0.25 after 400 steps, still not 0: a slow, degenerate minimum)  (0.090)
+  [PASS] ladder: at eps = 1e-3 the counts eps^-a are 1e6 (a = 2), 1.8e5 (1.75), 3.2e4 (1.5), 1e12 (4), 1e9 (3), 3.2e10 (3.5), 5.6e9 (3.25)
+  [PASS] ladder: kappa log(1/eps) vs sqrt(kappa) log(1/eps): kappa = 100, eps = 1e-3: 691 vs 69
+all checks passed
+
+course_memory
+  [PASS] gradient valley kappa = 10  (max rel err 9.82e-11)
+  [PASS] gradient valley kappa = 100  (max rel err 9.82e-11)
+  [PASS] GD best step 2/(L + mu) = 2/11, contraction (kappa - 1)/(kappa + 1) = 9/11 = 0.818
+  [PASS] GD on the bowl: the y-coordinate flips sign every step, x keeps its sign
+  [PASS] beta = 0.9: steady gradient gain 1/(1 - beta) = 10
+  [PASS] beta = 0.9: alternating gradient gain 1/(1 + beta) = 0.526
+  [PASS] unrolled sum: steady part -> 1/(1-beta), alternating part -> 1/(1+beta)
+  [PASS] EMA weights (1 - beta) beta^k sum to 1
+  [PASS] beta = 0.9: the last 7 values carry 52% of the EMA weight
+  kappa = 10: Polyak eta = 0.2309, beta = 0.2699; Nesterov eta = 1/L = 0.1, beta = 0.5195; {'gd': 48, 'hbP': 20, 'nagP': 'div', 'hbN': 30, 'nagN': 31}
+  kappa = 100: Polyak eta = 0.3306, beta = 0.6694; Nesterov eta = 1/L = 0.1, beta = 0.8182; {'gd': 469, 'hbP': 71, 'nagP': 'div', 'hbN': 84, 'nagN': 100}
+  [PASS] Polyak's tuning, kappa = 10: eta = 0.2309, beta = 0.2699
+  [PASS] Polyak's tuning, kappa = 100: eta = 0.3306, beta = 0.6694
+  [PASS] Nesterov's tuning beta = (sqrt k - 1)/(sqrt k + 1): 0.519 (kappa 10), 0.818 (kappa 100)
+  [PASS] kappa = 10 steps to f < 1e-8: GD 48, heavy ball (Polyak) 20, Nesterov (its tuning) 31
+  [PASS] kappa = 100 steps to f < 1e-8: GD 469, heavy ball (Polyak) 71, Nesterov (its tuning) 100
+  [PASS] Nesterov with Polyak's heavy-ball tuning diverges (kappa = 10 and 100)
+  [PASS] heavy ball with Nesterov's tuning: 30 (kappa 10), 84 (kappa 100) steps
+  [PASS] heavy ball along curvature lambda: u_{t+1} = (1 + beta - eta lambda) u_t - beta u_{t-1}; eigenvalues of M = roots
+  [PASS] complex roots have modulus sqrt(beta)
+  [PASS] complex exactly when (1 - sqrt b)^2 < eta lambda < (1 + sqrt b)^2
+  [PASS] kappa = 10: tuned heavy ball worst |r| = (sqrt k - 1)/(sqrt k + 1) = 0.519; GD 0.818
+  [PASS] kappa = 10: eta mu = (1 - sqrt b)^2 and eta L = (1 + sqrt b)^2 (window edges)
+  [PASS] kappa = 10: Nesterov (eta = 1/L) worst |r| = 1 - 1/sqrt(kappa) = 0.684
+  [PASS] kappa = 100: tuned heavy ball worst |r| = (sqrt k - 1)/(sqrt k + 1) = 0.818; GD 0.980
+  [PASS] kappa = 100: eta mu = (1 - sqrt b)^2 and eta L = (1 + sqrt b)^2 (window edges)
+  [PASS] kappa = 100: Nesterov (eta = 1/L) worst |r| = 1 - 1/sqrt(kappa) = 0.900
+  [PASS] rates printed in the text: 0.519 / 0.818 (heavy ball), 0.818 / 0.980 (GD), 0.684 / 0.900 (Nesterov)
+  [PASS] kappa = 100: a factor 10^6 takes ~691 GD steps vs ~69 heavy-ball steps  (690.8, 68.8)
+  [PASS] kappa = 100: ... and ~131 Nesterov steps  (131.1)
+  [PASS] gradient stop-1 curve  (max rel err 1.38e-10)
+  overshoot from 2.4, eta = 0.05: {0.0: (np.float64(1.504), 0), 0.9: (np.float64(1.504), 92), 0.95: (np.float64(-0.501), 96), 0.99: (np.float64(-2.505), 98)}
+  [PASS] from 2.4: GD (beta = 0) ends in the local minimum 1.50 and f never increases
+  [PASS] beta = 0.9 also ends at 1.50, but f rises on 92 of the first 200 steps (beta = 0.95: 96)
+  [PASS] beta = 0.95 rolls over the bump into the global minimum -0.50
+  [PASS] beta = 0.99 rolls past the global minimum into the worst valley -2.50
+  [PASS] losses: -0.264 (1.50), -0.474 (-0.50), 0.156 (-2.50)
+  [PASS] fourth minimum at 3.5032 just outside stop 1's window (viz constant)
+  [PASS] eps = 1e-4: eps^-2 = 1e8, eps^-7/4 = 1e7 (ten times fewer, constants and logs aside)
+  Lookahead, kappa = 100, eta = 0.1, beta = 0.99, k = 20, alpha = 0.5: HB 1425 steps (rate 0.9950), LA 340 steps (rate 0.9759)
+  [PASS] under-damped heavy ball (beta = 0.99): 1425 steps; Lookahead(k = 20, alpha = 0.5) 340
+  [PASS] ... per-step rate on the valley's two curvatures: heavy ball 0.9950, Lookahead 0.9759
+  [PASS] with Polyak's tuning Lookahead is slower per step (0.980 vs 0.818)
+  [PASS] Lookahead simulation decays at the cycle-map rate
+all checks passed
+
+course_noise
+  [PASS] mulberry32 port: seed 1 gives 0.6270739406, 0.0027357212, 0.5274470400 (the JS values)
+  [PASS] gradient line-fit finite sum (n = 50)  (max rel err 1.68e-10)
+  x* = (0.7997, -0.4881), f* = 0.1804, Hessian eigenvalues [ 0.45  12.325], kappa 27.4
+  [PASS] minimum w* = 0.800, b* = -0.488, f* = 0.180
+  [PASS] curvatures 0.450 and 12.33, kappa = 27.4 (one step size must respect the steep one)
+  [PASS] unbiased: the average of the n example gradients is the full gradient
+  [PASS] at (1.8, -1.2): grad = (7.93, 2.58), sigma^2 = 75.25, sigma^2/5 = 15.05
+  [PASS] enumeration (n = 6, B = 2): with replacement sigma^2/B, without (n - B)/(n - 1) sigma^2/B
+  page default (400 minibatches of B = 5, seed 1): mean (7.77, 2.56), spread 15.02
+  [PASS] cloud readout: mean (7.77, 2.56), measured spread 15.02 vs exact 15.05
+  [PASS] 1-D: stationary variance eta^2 s^2/(1 - (1 - eta a)^2) = eta s^2/(a(2 - eta a)); E f = eta s^2/(2(2 - eta a))
+  [PASS] sigma*^2 (spread of example gradients at the minimum) = 4.81
+  floor eta = 0.02, B = 1: constant 0.03139 (small-step theory 0.02407), decaying 0.000786, GD -2.56e-17
+  floor eta = 0.02, B = 5: constant 0.00586 (small-step theory 0.00481), decaying 0.000145, GD -2.56e-17
+  floor eta = 0.005, B = 1: constant 0.00622 (small-step theory 0.00602), decaying 0.015880, GD 6.91e-08
+  [PASS] eta = 0.005, B = 1: measured floor 0.0062, small-step theory eta sigma*^2/4 = 0.0060
+  [PASS] eta = 0.02, B = 1 (page default): constant 0.0314 (theory 0.0241), decaying 0.00079
+  [PASS] eta = 0.02, B = 5: floor 0.0059 (theory 0.0048)
+  [PASS] GD with the same step has no floor
+  [PASS] E x_t^2 recursion (1 - eta)^2 m + eta^2; constant 0.1 -> eta/(2 - eta) = 0.0526
+  [PASS] eta_t = 1/(t + 2): E x_t^2 = (x0^2 + t)/(t + 1)^2: 0.0102 at t = 100, 0.000100 at 10^4
+  [PASS] eta_t = 1/(t + 2): x_t = (x0 - sum of the noise)/(t + 1) exactly
+  [PASS] eta_t = 1/(t + 2)^2: steps sum to pi^2/6 - 1 = 0.645, E x^2 stalls at 1.04
+  [PASS] product of (1 - 1/k^2) over k >= 2 is 1/2 (the start is only halved)
+  schedules, 100 runs, t = 10^4: const 0.0595 (exact 0.0526), rm 9.39e-05 (exact 0.0001), fast 1.05 (exact 1.04)
+  [PASS] schedules readout (seeds 5, 6, 7) within 25% of the exact values
+  after 60 epochs: SVRG -2.8e-17, GD (1/L) 2.7e-03, SGD (0.03) 4.1e-02
+  [PASS] 60 epochs of gradients: SVRG (eta 0.03, m = n) below 1e-12, GD with 1/L 2.7e-3, SGD (0.03) 4.1e-2
+  [PASS] SVRG estimator is unbiased: averaging over i gives the full gradient
+  [PASS] n = 10^6, eps = 10^-2: GD n eps^-2 = 10^10; SGD eps^-4 = 10^8; SVRG n + n^(2/3) eps^-2 = 1.01e8; SPIDER n + n^(1/2) eps^-2 = 1.1e7, online eps^-3 = 10^6
+  [PASS] Ghadimi-Lan with noise: the sigma/sqrt(N) term needs N ~ eps^-4 (halving eps: x16)
+  [PASS] Corollary 2.2 with D~ = D_f: the noise term is <= eps^2 exactly when N >= 8 L Delta sigma^2 / eps^4
+  [PASS] gradient saddle landscape  (max rel err 1.00e-10)
+  [PASS] saddle at 0 with curvatures 1 and -1; minima (0, +-1) with f = -1/4
+  [PASS] noise along y (s = 0.3, seed 31): escapes (|y| > 0.5) after 23 steps; GD and noise along x never leave y = 0
+  [PASS] heavy tails, Prop. 5: eta_crit = 2b/(sigma^2 (d + b + 1)) = 2/3 for d = b = sigma^2 = 1
+  [PASS] epoch: n = 50, B = 5 -> 10 steps per epoch
+all checks passed
+
+course_sharpness
+  [PASS] gradient two wells  (max rel err 4.71e-11)
+  [PASS] Hessian two wells at [-1.24 -0.79]  (fd=[[-0.0943, -0.0715], [-0.0715, 0.1325]] err 1.2e-09)
+  [PASS] Hessian two wells at [0.9  0.25]  (fd=[[1.6317, -0.127], [-0.127, 1.115]] err 2.3e-08)
+  [PASS] Hessian two wells at [-1.22 -0.2 ]  (fd=[[-0.5355, -1.1489], [-1.1489, -1.5038]] err 1.1e-07)
+  sharp min [-0.8855  0.345 ] f = -1.0076 S = 20.845; flat min [ 0.7514 -0.1878] f = -1.0067 S = 1.974
+  [PASS] wells: depths -1.008 and -1.007 (equal to 0.001)
+  [PASS] wells: sharpness 20.8 vs 1.97 (ratio about 10.6)
+  [PASS] wells: thresholds 2/S = 0.096 and 1.01
+  [PASS] wells: both are minima (Hessian positive definite)
+  fates (sharp, flat, never settled): {0.05: (87, 270, 0), 0.09: (87, 270, 0), 0.1: (0, 270, 87), 0.15: (0, 270, 87), 0.2: (0, 270, 87), 0.25: (0, 357, 0), 0.3: (0, 357, 0), 0.6: (0, 357, 0), 1.0: (0, 357, 0), 1.05: (0, 0, 357)}
+  [PASS] wells: 357 starts; for eta < 0.096: 87 settle in the sharp well, 270 in the flat one
+  [PASS] wells: eta = 0.1 to 0.2: the 87 keep bouncing in the sharp well, none settle there
+  [PASS] wells: eta = 0.25 to 1.0: all 357 end in the flat well
+  [PASS] wells: eta = 1.05 > 2/1.97: nothing settles
+  [PASS] wells: the ball's GD path from (-1.25, 0.75) stays inside the ball's box [-50, 50]^2 for every eta <= 1.01 (no clamping)
+  [PASS] wells: default ball start (-1.25, 0.75) ends sharp at eta 0.05, flat at 0.3
+  [PASS] text: curvature 20 at eta 0.11: factor 1 - 2.2 = -1.2 (grows 20%/step); curvature 2: factor 0.78
+  [PASS] gradient valley 1/2 (uv - 1)^2  (max rel err 2.45e-10)
+  [PASS] Hessian valley at (1.3, -0.4)  (fd=[[0.16, -2.04], [-2.04, 1.69]] err 1.9e-08)
+  [PASS] sam visual labels: sharpness of (a, 1/a) for a = 1, 1.5, 2, 2.5 is 2.00, 2.69, 4.25, 6.41
+  [PASS] valley: at (a, 1/a) the Hessian eigenvalues are 0 and a^2 + 1/a^2: 2 at (1, 1), 4.25 at (2, 0.5), 16.06 at (4, 0.25)
+  [PASS] family: Hessian at the start (2.5, 0.05) has lambda_max 6.34
+  family end sharpness: {0.05: np.float64(6.54), 0.1: np.float64(6.51), 0.2: np.float64(6.37), 0.3: np.float64(5.42), 0.35: np.float64(3.97), 0.4: np.float64(2.54), 0.44: np.float64(2.0), 0.45: np.float64(2.04), 0.5: np.float64(2.01)}
+  [PASS] family: eta 0.05 / 0.3 / 0.4 / 0.5 end at sharpness 6.54 / 5.42 / 2.54 / 2.01
+  [PASS] family: every converged run ends with sharpness below 2/eta
+  [PASS] family: for every slider value eta in [0.02, 0.46] the GD path stays inside the drawn square [-1, 3] x [-1, 2.2] (no clamping)
+  [PASS] family: eta 0.44 ends at sharpness 2.00 (the flattest point (1, 1))
+  [PASS] EoS data: tanh MLP 10-48-48-1, 128 points, MSE, full-batch GD
+  [PASS] EoS: initial sharpness 4.05, initial loss 0.444
+  [PASS] EoS: eta = 0.1 (2/eta = 20): sharpness rises to 7.8 and never reaches 20; loss never increases
+  [PASS] EoS: eta = 0.3: last 1000 steps average sharpness 6.66 vs 2/eta = 6.67
+  [PASS] EoS: eta = 0.36: last 1000 steps average sharpness 5.55 vs 2/eta = 5.56
+  [PASS] EoS: eta = 0.42: last 1000 steps average sharpness 4.75 vs 2/eta = 4.76
+  [PASS] EoS: peak sharpness above 2/eta before settling: 7.33 / 6.84 / 5.84
+  [PASS] EoS: loss rises in 73 / 42 / 96 of the 300 ten-step windows, yet ends below 1e-5
+  [PASS] gradient self-stabilization toy  (max rel err 1.44e-11)
+  [PASS] toy: curvature across the trough d2L/dx2 = 2/eta + y
+  [PASS] toy: GD is exactly Eq. (3): x' = -(1 + eta y) x, y' = y + eta (alpha - x^2/2)
+  toy: S crosses 2/eta at step 27; S range 1.796..2.161; max |x| 0.285
+  [PASS] toy (alpha 0.002, start x 0.02, S 1.95): S crosses 2/eta at step 27, stays in [1.80, 2.16], |x| <= 0.29
+  [PASS] toy: delta = sqrt(2 alpha / beta) = 0.063 (the |x| where the sharpness stops rising)
+  [PASS] toy: average S over steps 100-600 is 1.99 (within 0.01 of 2/eta)  (1.9934)
+  [PASS] toy: bounded for alpha in [0.001, 0.003] (slider range), mean S within 0.03 of 2/eta; path inside the drawn box (|x| < 0.45, -0.35 < y < 0.3)
+  [PASS] text: (a, 1/a) all give uv = 1; a = 10 gives sharpness 100.01
+  [PASS] SAM visual: GD from (2.2, 0.1), eta 0.3 ends at sharpness 4.91
+  [PASS] unnormalized SAM rho = 0.05: ends at sharpness 4.2 (Agarwala page)
+  [PASS] unnormalized SAM rho = 0.1: ends at sharpness 2.96 (Agarwala page)
+  [PASS] unnormalized SAM rho = 0.2: ends at sharpness 2.0 (Agarwala page)
+  [PASS] SAM edge eta lambda (1 + rho lambda) = 2: 5.28 / 4.57 / 3.79 for rho 0.05 / 0.1 / 0.2 at eta 0.3
+  [PASS] SAM edge, notes example eta 0.5, rho 0.2: 2.62
+  [PASS] unnormalized SAM on the quadratic: x' = x - eta (H + rho H^2) x
+  normalized SAM rho 0.1: end [0.956 0.956], |uv - 1| = 0.085, mean S last 200 = 1.94
+  [PASS] normalized SAM rho 0.1 drifts to near (1, 1): mean sharpness of the last 200 steps 1.94, keeps jittering (|uv - 1| = 0.085)
+  [PASS] warmup: sqrt(1 - beta2) = 0.0316 = 1/31.6 for beta2 = 0.999
+  [PASS] warmup: Adam threshold (2 + 2 beta1)/((1 - beta1) eta) = 38/eta for beta1 = 0.9
+all checks passed
+
+course_slope
+  [PASS] text: secant of x^2 is 2x + h
+  [PASS] gradient bowl x^2 + 3y^2  (max rel err 1.47e-10)
+  [PASS] gradient saddle x^2 - y^2  (max rel err 8.84e-11)
+  [PASS] D_u f = grad . u for every direction
+  [PASS] max over u of D_u f is |grad f|, attained along grad f
+  [PASS] gradient is perpendicular to the contour
+  [PASS] gradient tangent-plane surface  (max rel err 2.76e-10)
+  [PASS] Taylor error shrinks like |Delta|^2 (ratio ~4 per halving)  (errors [0.014566, 0.00321, 0.000726, 0.000171])
+  [PASS] Jacobian of g(x, y) = (x + 0.5 sin y, y + 0.5 sin x)
+  [PASS] det J = 1 - 0.25 cos x cos y > 0 everywhere
+  [PASS] visual 'jacobian': corner gap shrinks like size^2  (gaps [0.043364, 0.010283, 0.002494, 0.000614])
+  [PASS] chain rule example f'(1) = 4
+  [PASS] secant slope -> f'(x) as h -> 0
+all checks passed
+
+course_steps
+  [PASS] eta = 0.1: factor 0.6, x10 = 0.006
+  [PASS] eta = 0.4: factor -0.6
+  [PASS] eta = 0.6: factor -1.4, x10 = 28.9
+  [PASS] GD iterates on the parabola are (1 - eta a)^t x0
+  [PASS] gradient elongated bowl  (max rel err 1.21e-10)
+  [PASS] bowl: eta = 0.17 converges, 0.21 diverges (threshold 0.2)
+  [PASS] max |f'| of 0.8 sin 2x + 0.3x is 1.9
+  [PASS] f'' ranges over [-1.4, 1.8] so L = 1.8
+  f* = -0.180931 at |x| = 1.3929
+  [PASS] f* = -0.180931 (viz constant)
+  [PASS] quadratic upper bound holds with L = 1.8
+  [PASS] and fails for L = 1.2 near x = 1.57, where f'' = 1.8 (visual hint)
+  [PASS] descent lemma: f(x - f'(x)/L) <= f(x) - f'(x)^2/(2L)
+  [PASS] text: T = 2 L (f0 - f*) / eps^2 = 20000 for L = 1, gap 1, eps = 0.01
+  [PASS] visual 'rate': min gradient stays below sqrt(2L(f0 - f*)/T) for several starts
+all checks passed
+
 crawshaw2026exploration
   [PASS] notes: Frobenius unit step -G/|G|_F gives <G, D> = -sqrt(10)
   [PASS] notes: spectral LMO -polar(G) = -I gives <G, D> = -4 = -|G|_nuc

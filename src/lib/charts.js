@@ -7,7 +7,7 @@ const MONO = '"JetBrains Mono", ui-monospace, monospace';
 function niceTicks(lo, hi, n = 5) {
   const span = hi - lo || 1, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
   const step = [1, 2, 2.5, 5, 10].map(s => s * mag).find(s => span / s <= n + .5) || mag * 10;
-  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step) out.push(+v.toPrecision(12));
+  const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step) out.push(Math.abs(v) < step * 1e-9 ? 0 : +v.toPrecision(12));   // snap float drift (e.g. -6e-17) to 0
   return out;
 }
 const tickLabel = v => {
