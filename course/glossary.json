@@ -668,7 +668,8 @@
   "term": "Sharpness",
   "ch": "sharpness",
   "def": "The largest Hessian eigenvalue at a point, the curvature of its steepest direction. GD is locally stable at a minimum only if the sharpness is below $2/\\eta$.",
-  "tex": "S(x) = \\lambda_{\\max}\\big(\\nabla^2 f(x)\\big)"
+  "tex": "S(x) = \\lambda_{\\max}\\big(\\nabla^2 f(x)\\big)",
+  "sec": "n-1-many-minima-different-shapes"
  },
  "flat-min": {
   "term": "Flat vs sharp minimum",
@@ -677,7 +678,8 @@
   "aka": [
    "flat minimum",
    "sharp minimum"
-  ]
+  ],
+  "sec": "n-1-many-minima-different-shapes"
  },
  "edge-of-stability": {
   "term": "Edge of stability",
@@ -685,12 +687,14 @@
   "def": "Cohen et al. 2021: in full-batch GD on neural networks the sharpness rises until it reaches about $2/\\eta$ and then hovers there, while the loss keeps decreasing over the long run, though not monotonically.",
   "aka": [
    "EoS"
-  ]
+  ],
+  "sec": "n-4-the-edge-of-stability"
  },
  "progressive-sharpening": {
   "term": "Progressive sharpening",
   "ch": "sharpness",
-  "def": "The tendency of the sharpness to increase during full-batch training while it is still below $2/\\eta$ (Cohen et al. 2021)."
+  "def": "The tendency of the sharpness to increase during full-batch training while it is still below $2/\\eta$ (Cohen et al. 2021).",
+  "sec": "n-4-the-edge-of-stability"
  },
  "sam": {
   "term": "Sharpness-aware minimization",
@@ -699,7 +703,8 @@
   "tex": "x_{t+1} = x_t - \\eta\\, \\nabla f\\Big(x_t + \\rho\\, \\tfrac{\\nabla f(x_t)}{\\lVert \\nabla f(x_t) \\rVert}\\Big)",
   "aka": [
    "SAM"
-  ]
+  ],
+  "sec": "n-7-sharpness-aware-minimization"
  },
  "warmup": {
   "term": "Learning-rate warmup",
@@ -707,7 +712,8 @@
   "def": "Starting training with a small learning rate and raising it over the first steps. Kalra & Barkeshli 2024 find that its main benefit is letting the network move to flatter, better-conditioned regions that tolerate the larger target rate.",
   "aka": [
    "warmup"
-  ]
+  ],
+  "sec": "n-8-warmup-start-small-end-large"
  },
  "generalization": {
   "term": "Generalization",
@@ -715,7 +721,8 @@
   "def": "How well a model trained on the training set performs on new data. The generalization gap is the test loss minus the training loss.",
   "aka": [
    "generalization gap"
-  ]
+  ],
+  "sec": "n-6-do-flat-minima-generalize-better"
  },
  "overparameterization": {
   "term": "Overparameterization",
@@ -723,12 +730,14 @@
   "def": "Using many more parameters than strictly needed, often more than there are training examples. Under assumptions, sufficiently wide networks can be trained to zero training loss by gradient descent (Du et al. 2019; Allen-Zhu et al. 2019).",
   "aka": [
    "width"
-  ]
+  ],
+  "sec": "n-6-wide-networks-gd-provably-reaches-zero-loss"
  },
  "symmetry": {
   "term": "Symmetry",
   "ch": "landscape",
-  "def": "Different parameter vectors that compute the same function, for example swapping two hidden neurons, or scaling $(u, v) \\to (cu, v/c)$ in a product $uv$. Symmetries create whole curves of equally good minima, with saddle points between them."
+  "def": "Different parameter vectors that compute the same function, for example swapping two hidden neurons, or scaling $(u, v) \\to (cu, v/c)$ in a product $uv$. Symmetries create whole curves of equally good minima, with saddle points between them.",
+  "sec": "n-2-symmetry-every-minimum-comes-in-copies"
  },
  "spurious-min": {
   "term": "Spurious local minimum",
@@ -736,7 +745,8 @@
   "def": "A local minimum that is not a global minimum, a bad one. Some problems provably have none (matrix sensing under the RIP condition, deep linear networks); small ReLU networks can have them (Safran & Shamir 2018).",
   "aka": [
    "bad local minimum"
-  ]
+  ],
+  "sec": "n-3-landscapes-with-no-bad-minima"
  },
  "benign": {
   "term": "Benign landscape",
@@ -744,7 +754,8 @@
   "def": "A landscape in which every local minimum is global and every saddle is strict. Then any method that avoids strict saddles finds a global minimum.",
   "aka": [
    "benign non-convexity"
-  ]
+  ],
+  "sec": "n-3-landscapes-with-no-bad-minima"
  },
  "pl": {
   "term": "Polyak–Łojasiewicz condition",
@@ -753,7 +764,8 @@
   "tex": "\\tfrac12 \\lVert \\nabla f(x) \\rVert^2 \\ge \\mu\\, \\big(f(x) - f^\\star\\big)",
   "aka": [
    "PL inequality"
-  ]
+  ],
+  "sec": "n-5-the-pl-condition-convergence-without-convexity"
  },
  "ntk": {
   "term": "Neural tangent kernel",
@@ -762,17 +774,20 @@
   "tex": "K(x, x') = \\nabla_\\theta \\hat y(x) \\cdot \\nabla_\\theta \\hat y(x')",
   "aka": [
    "NTK"
-  ]
+  ],
+  "sec": "n-7-lazy-training-and-the-neural-tangent-kernel"
  },
  "lazy-training": {
   "term": "Lazy training",
   "ch": "landscape",
-  "def": "A regime in which the parameters move so little that the model stays close to its first-order Taylor expansion around the initialization (Chizat, Oyallon & Bach 2019). Training in the NTK regime is an example."
+  "def": "A regime in which the parameters move so little that the model stays close to its first-order Taylor expansion around the initialization (Chizat, Oyallon & Bach 2019). Training in the NTK regime is an example.",
+  "sec": "n-7-lazy-training-and-the-neural-tangent-kernel"
  },
  "mean-field": {
   "term": "Mean-field limit",
   "ch": "landscape",
-  "def": "A description of very wide two-layer networks in which the neurons are treated as a distribution of particles moving under a gradient flow (Chizat & Bach 2018; Mei et al. 2019). Unlike lazy training, the features do move."
+  "def": "A description of very wide two-layer networks in which the neurons are treated as a distribution of particles moving under a gradient flow (Chizat & Bach 2018; Mei et al. 2019). Unlike lazy training, the features do move.",
+  "sec": "n-8-beyond-lazy-the-mean-field-picture"
  },
  "oracle": {
   "term": "Oracle",
@@ -780,17 +795,20 @@
   "def": "The only way an algorithm may learn about $f$: it asks for information at a point, for example $f(x)$ and $\\nabla f(x)$ (a first-order oracle) or also the Hessian (second-order). Complexity is counted in oracle calls.",
   "aka": [
    "first-order oracle"
-  ]
+  ],
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "upper-bound": {
   "term": "Upper bound",
   "ch": "limits",
-  "def": "A guarantee that some algorithm needs at most this many oracle calls on every function of a class; for example GD needs $O(\\varepsilon^{-2})$ on $L$-smooth functions."
+  "def": "A guarantee that some algorithm needs at most this many oracle calls on every function of a class; for example GD needs $O(\\varepsilon^{-2})$ on $L$-smooth functions.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "lower-bound": {
   "term": "Lower bound",
   "ch": "limits",
-  "def": "A proof that every algorithm of a class needs at least this many oracle calls on some function of the class, for example $\\Omega(\\varepsilon^{-2})$ for first-order methods on $L$-smooth functions (Carmon et al. 2020). When upper and lower bounds match, the method is optimal."
+  "def": "A proof that every algorithm of a class needs at least this many oracle calls on some function of the class, for example $\\Omega(\\varepsilon^{-2})$ for first-order methods on $L$-smooth functions (Carmon et al. 2020). When upper and lower bounds match, the method is optimal.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "soft-o": {
   "term": "$\\tilde O$ notation",
@@ -799,16 +817,28 @@
   "aka": [
    "soft-O",
    "$\\tilde O(\\cdot)$"
-  ]
+  ],
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
  },
  "np-hard": {
   "term": "NP-hard",
   "ch": "limits",
-  "def": "At least as hard as every problem in the class NP: no polynomial-time algorithm is known, and finding one would prove P = NP. Global minimization of non-convex functions is NP-hard in general (Murty & Kabadi 1987)."
+  "def": "At least as hard as every problem in the class NP: no polynomial-time algorithm is known, and finding one would prove P = NP. Global minimization of non-convex functions is NP-hard in general (Murty & Kabadi 1987).",
+  "sec": "n-5-a-different-kind-of-hard-np-hardness"
  },
  "worst-case": {
   "term": "Worst case",
   "ch": "limits",
-  "def": "A guarantee that holds for every function in the assumed class, including adversarially built ones. Real problems are often much easier than the worst case."
+  "def": "A guarantee that holds for every function in the assumed class, including adversarially built ones. Real problems are often much easier than the worst case.",
+  "sec": "n-1-upper-bounds-lower-bounds-and-oracles"
+ },
+ "zero-chain": {
+  "term": "Zero chain",
+  "ch": "limits",
+  "def": "A hard function built so that a gradient query reveals at most one new coordinate: the gradient is zero beyond coordinate $i$ whenever $x$ is zero beyond $i - 1$. A method that only moves within the span of the gradients it has seen (a zero-respecting method, such as GD) then needs at least $T$ queries to uncover $T$ coordinates. Carmon et al. 2020 use it to prove the $\\Omega(\\varepsilon^{-2})$ lower bound.",
+  "aka": [
+   "zero-respecting method"
+  ],
+  "sec": "n-2-a-hard-function-the-zero-chain"
  }
 }
