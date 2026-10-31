@@ -210,3 +210,31 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   (½(1 − a²)² from a = 0.01: L = 0.462 at t = 1.5, half-way at t ≈ 2.3, 0.0017 at t = 3). All in `zhang2026saddle.py`,
   with the notes' numbers (t = log(100)/3 ≈ 1.535, a2 ≈ 0.0464, v1(9) = 1, v2(9) ≈ 0.091, unit duplication).
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px.
+
+## [14] bottou2018optimization — Optimization Methods for Large-Scale ML
+- Notes checked against: arXiv 1606.04838 (SIAM Review 60(2)): Sec. 4 (Assumption 4.3 first/second moment limits,
+  Sec. 4.3 nonconvex SG theorems), Secs. 5–6 (noise reduction, second-order methods).
+- Fixes to the notes: none. No discrepancies found. The notes' expected-descent inequality and the telescoped bound
+  (1/T)Σ E‖∇F‖² ≤ 2Δ/(αT) + Lασ² are correct under their stated simplification (unbiased, variance ≤ σ², α ≤ 1/L),
+  and the notes themselves flag that the paper's Assumption 4.3 is more general.
+- Minute box: no "paper in one minute" heading in the notes; standard title. "Source distinction." (amber) → warn,
+  "Survey relevance." (green) → key.
+- Primer (4 ideas): one full gradient = n sample gradients (n = 1e6); E‖g‖² = ‖∇F‖² + noise (g ∈ {1, 5}: 13 = 9 + 4);
+  telescoping; optimising the bound over α (Δ = L = σ² = 1, T = 1e4: α* ≈ 0.0141, bound ≈ 0.0283, 1/√T). All in
+  `bottou2018optimization.py`, plus Monte Carlo checks of the notes' two inequalities on a quadratic (L = 3, σ² = 0.5)
+  and of the averaged bound along one SG run.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [15] jain2017non — Non-Convex Optimization for Machine Learning
+- Notes checked against: arXiv 1712.07897 (FnT ML 10(3–4)) and the author copy named in the notes (cse.iitk.ac.in
+  …/ncom-book.pdf, HTTP 200): Parts I–II contents, Ch. 3 (non-convex projections onto sparse vectors and low-rank
+  matrices, RSC/RSS, Algorithm 2 gPGD, Theorem 3.3), Ch. 6 (escaping saddles).
+- Fixes to the notes: none. No discrepancies found ("Parts I–III, especially Chapters 3 and 6" matches the monograph).
+- Minute box: no heading in the notes (Problem / Approach / Main message); standard title. "Why this matters for RQ4."
+  (green) → key.
+- Primer (4 ideas): convex sets and why sparse sets fail ((1,0,0), (0,1,0) midpoint); easy projections ((0.3, −2, 1.1,
+  0.05), s = 2 → (0, −2, 1.1, 0); rank-1 of diag(3,1)); restricted curvature (A = [[1,0,1],[0,1,1]]: AᵀA eigenvalues
+  0, 1, 3, but over 2-sparse directions [0.382, 2.618]); restricted isometry Monte Carlo (50 × 200 Gaussian A, 3-sparse
+  w: ratios in [0.38, 1.97], 98% in [0.60, 1.51]). The key box quotes Theorem 3.3 (β/α < 2, η = 1/β,
+  O(α/(2α − β) log 1/ε)). All in `jain2017non.py`.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.

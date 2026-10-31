@@ -41,4 +41,32 @@ print(f"  diminishing: last-iterate E|grad F(w_K)|^2 at K = 3000: {out[-1][2]:.4
 check("Theorem 4.10: the weighted average keeps decreasing (K >= 300) with diminishing steps", all(out[i + 1][1] <= out[i][1] for i in range(np.searchsorted(Ks, 300), len(out) - 1)))
 check("Corollary 4.12: the last iterate's E|grad F|^2 goes toward 0, below the a = 0.05 running average", out[-1][2] < curves["0.05"][-1][1])
 save_json("bottou2018optimization", "data.json", {"curves": {k_: [[q[0], float(f"{q[1]:.4g}")] + ([float(f"{q[2]:.4g}")] if len(q) > 2 else []) for q in v] for k_, v in curves.items()}, "L": L, "M": M, "F1": F1})
+
+# in-page notes (papers/bottou2018optimization/notes.md): expected-descent inequality and telescoped bound, primer numbers
+rngB = np.random.default_rng(19)
+Fq = lambda w: .5 * (w @ np.diag([1., 3.]) @ w)            # L = 3
+gF_ = lambda w: np.diag([1., 3.]) @ w
+LB, sig2 = 3., .5
+ok = True
+for _ in range(200):
+    w = rngB.normal(size=2); al = rngB.uniform(.01, 1 / LB)
+    gs = gF_(w) + rngB.normal(0, np.sqrt(sig2 / 2), (20000, 2))    # E||g - grad||^2 = sig2
+    lhs = np.mean([Fq(w - al * g) for g in gs[:4000]])
+    rhs = Fq(w) - al * gF_(w) @ gF_(w) + LB * al ** 2 / 2 * (gF_(w) @ gF_(w) + sig2)
+    rhs2 = Fq(w) - al / 2 * gF_(w) @ gF_(w) + LB * al ** 2 * sig2 / 2
+    ok &= lhs <= rhs + .02 and rhs <= rhs2 + 1e-12
+check("notes: E[F(w+)] <= F - a|grad|^2 + (L a^2/2)(|grad|^2 + s^2) <= F - (a/2)|grad|^2 + L a^2 s^2/2 for a <= 1/L", ok)
+w, al, T_, gsq = np.array([2., -1.]), .05, 4000, []
+D0 = Fq(w)
+for k in range(T_):
+    gsq.append(gF_(w) @ gF_(w))
+    w = w - al * (gF_(w) + rngB.normal(0, np.sqrt(sig2 / 2), 2))
+check("notes: (1/T) sum E|grad F|^2 <= 2 Delta/(a T) + L a s^2 (one SG run, F_inf = 0)", np.mean(gsq) <= 2 * D0 / (al * T_) + LB * al * sig2, f"{np.mean(gsq):.4f} <= {2 * D0 / (al * T_) + LB * al * sig2:.4f}")
+# primer
+gB = np.array([1., 5.])
+check("primer: g in {1, 5}: E g = 3, E g^2 = 13 = 9 + 4", gB.mean() == 3 and (gB ** 2).mean() == 13 == 9 + gB.var())
+aS = np.sqrt(2 / 1e4); bS = 2 * np.sqrt(2 / 1e4)
+ag = np.linspace(1e-4, .2, 200001); bnd = 2 / (ag * 1e4) + ag
+check("primer: Delta = L = s^2 = 1, T = 1e4: alpha* ~ 0.0141, bound ~ 0.0283", abs(ag[bnd.argmin()] - aS) < 1e-5 and abs(bnd.min() - bS) < 1e-6 and abs(aS - .0141) < 5e-5 and abs(bS - .0283) < 5e-5)
+check("primer: 4x the steps halves the optimised bound", abs(2 * np.sqrt(2 / 4e4) / bS - .5) < 1e-12)
 done()
