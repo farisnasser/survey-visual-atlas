@@ -52,4 +52,21 @@ for d0 in [3, 4, 5, 8]:
     check(f"d0={d0}: min 0 iff a subset of {{3,5}} sums to d0", (mn < 1e-9) == (d0 in (0, 3, 5, 8)))
 check("d0 = 4: no subset -> minimum stays positive", res[4][0] > .1)
 check("projected GD can land in non-global box minima (d0 = 5)", (res[5][2] > 1e-3).any() or (res[3][2] > 1e-3).any())
+
+# in-page notes (papers/murty1987some/notes.md): q(x,y) = x^2 - y^2 teaching example (notes Secs. 1-2)
+qn = lambda p: p[0] ** 2 - p[1] ** 2
+check_hess_at("notes: q = x^2 - y^2 has Hessian diag(2, -2)", qn, [0, 0], [[2, 0], [0, -2]])
+check("notes: grad q(0,0) = 0 and q(0,t) = -t^2 < 0", np.allclose([2 * 0, -2 * 0], 0) and all(qn([0, t]) == -t * t < 0 for t in [.1, -.5, 2]))
+# primer: brute-force counts, Example 2 with d = (3, 5), copositive but indefinite Q
+check("primer: 2^20 = 1 048 576 and 2^60 ~ 1.15e18", 2 ** 20 == 1048576 and abs(2 ** 60 / 1.15e18 - 1) < .003)
+Gp = np.stack(np.meshgrid(np.linspace(0, 1, 4001), np.linspace(0, 1, 4001)), -1).reshape(-1, 2)
+v8 = (Gp @ d - 8) ** 2 + (Gp * (1 - Gp)).sum(1)
+v4 = (Gp @ d - 4) ** 2 + (Gp * (1 - Gp)).sum(1)
+check("primer: d0 = 8 -> minimum 0 at y = (1, 1)", v8.min() < 1e-12 and np.allclose(Gp[v8.argmin()], [1, 1]))
+# on y1 = 1 the objective is 24 y2^2 - 9 y2 + 1, minimised at y2 = 3/16 with value 5/32
+check("primer: d0 = 4 -> minimum 5/32 at y = (1, 3/16)", abs(v4.min() - 5 / 32) < 1e-7 and np.allclose(Gp[v4.argmin()], [1, 3 / 16]), f"{v4.min():.6f} at {Gp[v4.argmin()]}")
+check("primer: 5/32 = F(1, 3/16) exactly", abs(F(np.array([1, 3 / 16]), 4) - 5 / 32) < 1e-15)
+Qc = np.array([[1, 2], [2, 1]])
+check("primer: [[1,2],[2,1]] has eigenvalues -1 and 3", np.allclose(np.linalg.eigvalsh(Qc), [-1, 3]))
+check("primer: ... yet x^T Q x >= 0 on the orthant (copositive)", np.einsum("ni,ij,nj->n", simplex, Qc, simplex).min() >= 0)
 done()
