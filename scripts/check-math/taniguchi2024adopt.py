@@ -68,5 +68,20 @@ check("Adam with k = 10 succeeds at beta2 = 0.999 (paper Fig. 1)", res["10-0.999
 check("AMSGrad is slower than ADOPT at k = 50", all(res[f"50-{b2}"]["amsgrad"] > res[f"50-{b2}"]["adopt"] for b2 in B2S))
 # the notes' ordering example
 check("notes: v = 0.9*1 + 0.1*16 = 2.5, 4/sqrt(2.5) = 2.53 vs 4/sqrt(1) = 4", abs(.9 + .1 * 16 - 2.5) < 1e-12 and abs(4 / np.sqrt(2.5) - 2.5298) < 1e-4)
+# in-page notes (papers/taniguchi2024adopt/notes.md): primer numbers
+gs_ = np.full(50, 100.); m_ = v_ = 0.
+for t, g in enumerate(gs_, 1):
+    m_ = .9 * m_ + .1 * g; v_ = .999 * v_ + .001 * g * g
+check("primer 1: constant gradient c -> bias-corrected m/sqrt(v) = sign(c)", abs((m_ / (1 - .9 ** 50)) / np.sqrt(v_ / (1 - .999 ** 50)) - 1) < 1e-9)
+vv = lambda g: .9 * 1 + .1 * g * g
+k_ = 10; pk = 1 / k_
+check("primer 2: Eq. 17 at k = 10: g = 100 w.p. 0.1, -10 w.p. 0.9, mean +1", abs(pk * k_ ** 2 + (1 - pk) * (-k_) - 1) < 1e-12)
+same = pk * 100 / np.sqrt(vv(100)) + (1 - pk) * (-10) / np.sqrt(vv(-10))
+check("primer 2: same-step normalized values 3.16 / -3.03, average -2.41 (wrong sign)", abs(100 / np.sqrt(vv(100)) - 3.16) < 5e-3 and abs(-10 / np.sqrt(vv(-10)) + 3.03) < 5e-3 and abs(same + 2.41) < 5e-3, f"{same:.4f}")
+check("primer 2: past-scale average = +1", abs(pk * 100 + (1 - pk) * (-10) - 1) < 1e-12)
+m43 = (.5 * 2 ** (4 / 3)) ** 1.5
+check("primer 3: (E|x|^(4/3))^(3/2) = 1.414 < E|x|^2 = 2 for |x| in {0, 2}", abs(m43 - 1.4142) < 1e-4 and m43 < .5 * 4)
+xs_ = np.abs(np.random.default_rng(0).standard_cauchy(1000)) % 7
+check("primer 3: Jensen: (E Y^(4/3))^(3/2) <= E Y^2 on random data", np.mean(xs_ ** (4 / 3)) ** 1.5 <= np.mean(xs_ ** 2))
 save_json("taniguchi2024adopt", "data.json", {"T": T, "b2s": B2S, "res": res, "traj": traj})
 done()

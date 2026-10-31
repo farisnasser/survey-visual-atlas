@@ -71,6 +71,19 @@ check("eta = 0.2: square root alone stays sharp, adding the SAM perturbation (rh
 # notes example
 g = np.array([1., 1.]); Hd = np.array([.01, 4.])
 check("notes: H^-1 g = (100, 0.25), |H|^-1/2 g = (10, 0.5)", np.allclose(g / Hd, [100, .25]) and np.allclose(g / np.sqrt(Hd), [10, .5]))
+# in-page notes (papers/shin2025sassha/notes.md): primer numbers
+import math
+check("primer 1: GD at eta = 0.5 on curvature 0.01: multiplier 0.995, ~139 steps to halve", abs(1 - .5 * .01 - .995) < 1e-12 and math.ceil(math.log(.5) / math.log(.995)) == 139)
+Hq = np.diag([.01, 4.]); p0 = np.array([3., -2.])
+check("primer 1: one Newton step lands on the minimum of the quadratic", np.allclose(p0 - np.linalg.solve(Hq, Hq @ p0), 0))
+check("primer 2: Newton on -x^2/2 from 0.5 -> 0 (the maximum); |H| version -> 1", 0.5 - (-0.5) / (-1) == 0 and 0.5 - (-0.5) / 1 == 1)
+H2 = np.array([[2., 1.], [1., 3.]])
+pr = [z * (H2 @ z) for z in (np.array([1., 1.]), np.array([1., -1.]))]
+check("primer 3: Hutchinson probes (3, 4) and (1, 2) average to diag (2, 3)", np.allclose(pr[0], [3, 4]) and np.allclose(pr[1], [1, 2]) and np.allclose((pr[0] + pr[1]) / 2, np.diag(H2)))
+zs = np.array([[a, b] for a in (1, -1) for b in (1, -1)], float)
+check("primer 3: E[z * Hz] over all sign vectors = diag(H)", np.allclose(np.mean([z * (H2 @ z) for z in zs], axis=0), np.diag(H2)))
+check("primer 4: sqrt preconditioner, eta = 0.5: multipliers 0 (h = 4) and 0.95 (h = 0.01); ~14 steps to halve", abs(1 - .5 * 2) < 1e-12 and abs(1 - .5 * .1 - .95) < 1e-12 and math.ceil(math.log(.5) / math.log(.95)) == 14)
+check("notes: H^-1 g = (100, 0.25), |H|^-1/2 g = (10, 0.5)", np.allclose(np.array([1, 1]) / np.array([.01, 4]), [100, .25]) and np.allclose(np.array([1, 1]) / np.sqrt([.01, 4]), [10, .5]))
 save_json("shin2025sassha", "data.json", {"sharp": r(ms), "flat": r(mf), "aS": round(float(a_s), 3), "aF": round(float(a_f), 3),
                                           "table1": {"opt": ["SGD", "AdaHessian", "Sophia-H", "Shampoo", "SASSHA"], "lmax": [265, 11992, 22797, 436374, 107], "acc": [69.32, 68.06, 67.76, 64.08, 72.14]}})
 done()

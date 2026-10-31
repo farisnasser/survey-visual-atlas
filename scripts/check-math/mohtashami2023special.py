@@ -55,4 +55,19 @@ check("GD diverges only beyond 2/lambda_global (bowl curvature 2B = 0.3 -> 6.67)
 save_json("mohtashami2023special", "data.json", {"frac": frac, "lamL": round(float(lam_l), 3), "lamG": round(float(lam_g), 3), "zl": r(zl), "zg": r(zg)})
 # notes example: a = 10, eta 0.1 -> multiplier 0; eta 0.25 -> -1.5
 check("notes: 1 - 0.1*10 = 0 and 1 - 0.25*10 = -1.5", 1 - .1 * 10 == 0 and 1 - .25 * 10 == -1.5)
+# in-page notes (papers/mohtashami2023special/notes.md): primer numbers
+check("primer 1: descent factor eta (1 - L eta / 2) = 0.05 at L = 10, eta = 0.1", abs(.1 * (1 - 10 * .1 / 2) - .05) < 1e-12)
+fq = lambda x: 5 * x ** 2           # L = 10 quadratic: the descent-lemma bound is tight
+xq = .7; gq = 10 * xq
+check("primer 1: descent lemma tight on f = 5x^2 (L = 10)", abs(fq(xq - .1 * gq) - (fq(xq) - .05 * gq ** 2)) < 1e-12)
+check("primer 2: multipliers 1 - 0.25*0.3 = 0.925, 1 - 0.25*10 = -1.5", abs(1 - .25 * .3 - .925) < 1e-12 and abs(1 - .25 * 10 + 1.5) < 1e-12)
+check("primer 3: OPSC factor 1 - 2 eta mu + eta^2 L^2 = 0.75 at mu = 1, L = 2, eta = 0.25 = mu/L^2", abs(1 - 2 * .25 + .25 ** 2 * 4 - .75) < 1e-12 and .25 == 1 / 2 ** 2)
+# a nonconvex OPSC example: f = x^2 + 0.5 sin^2 x, f' = 2x + 0.5 sin 2x, <f', x> >= x^2 (mu = 1), |f''| <= 3 (L = 3)
+fp_ = lambda x: 2 * x + .5 * np.sin(2 * x)
+xsx = np.linspace(-6, 6, 2001)
+check("primer 3: f = x^2 + 0.5 sin^2 x is 1-OPSC and 3-smooth", np.all(fp_(xsx) * xsx >= xsx ** 2 - 1e-12) and np.all(np.abs(2 + np.cos(2 * xsx)) <= 3))
+et = 1 / 9
+ok = all((x - et * fp_(x)) ** 2 <= (1 - 2 * et + et ** 2 * 9) * x ** 2 + 1e-12 for x in xsx)
+check("primer 3: one step at eta = mu/L^2 contracts |x - x*|^2 by at most 1 - 2 eta mu + eta^2 L^2", ok)
+check("primer 4: window 2/mu_dag < eta <= mu*/L^2 = (0.2, 0.25] for mu_dag = 10; needs mu_dag > 2L^2/mu* = 8", 2 / 10 == .2 and 1 / 4 == .25 and 2 * 4 / 1 == 8 and 10 > 8)
 done()

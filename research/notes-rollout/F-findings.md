@@ -68,3 +68,117 @@
   from 0.8 at η = 1.05 the iterates settle on {0.8729, 1.0911}, loss 0.0142 / 0.0091, two-step multiplier 0.595;
   (4) period doubling: in our simulation the 2-cycle lasts until η ≈ 1.237 (labelled as ours), so Theorem 2's 1.121 is
   sufficient, not sharp. All in `scripts/check-math/chen2023beyond.py`.
+
+## [4] mohtashami2023special — Special Properties of GD with Large Learning Rates
+
+- Checked against: ICML 2023 PMLR PDF linked from the notes (23 pp.; arXiv 2205.15142 for the appendix): Sec. 3 Main
+  Results (Theorems 1–2 informal), Sec. 4.1 Def. 1–2 (L-smoothness, μ-OPSC), Lemma 1 (2/μ† < γ ≤ μ*/L², μ† > 2L²/μ*),
+  Theorem 1 formal (small γ < μ†/L²_global from inside M → x†; large step from any positive-measure set → x* a.s.),
+  Sec. 4.2 Theorem 2, Sec. 5 experiments (5.1 full-batch vs stochastic), Figs. 1, 3, 4 (Fig. 4 = regions of Lemma 1).
+- No discrepancies found. The paper writes the step as γ; the notes' η is kept. Worked multipliers 1 − 0.1·10 = 0 and
+  1 − 0.25·10 = −1.5 checked (and η = 0.25 > 2/κ = 0.2).
+- Kept verbatim: two sections numbered "5."; "an one-point" (notes' wording).
+- Box mapping: "Why the theorem is a genuine contribution" → key; "Copy into Our notes" → plain. The two-line
+  "small step / large step" display → `aligned` with `\text`.
+- Primer (four ideas): (1) descent lemma for η < 2/L (drop 0.05‖∇f‖² at L = 10, η = 0.1), so small steps never leave a
+  basin; (2) η = 0.25 is stable at κ = 0.3 (0.925) and unstable at κ = 10 (−1.5); (3) one-point strong convexity
+  (Def. 2) and the contraction 1 − 2ημ + η²L² = 0.75 at μ = 1, L = 2, η = μ/L² (also checked on the nonconvex
+  f = x² + 0.5 sin²x); (4) the step window 2/μ† < η ≤ μ*/L² (Lemma 1's form), (0.2, 0.25] for μ† = 10, needs μ† > 8.
+  All in `scripts/check-math/mohtashami2023special.py`.
+
+## [5] agarwala2023sam — SAM Operates Far from Home
+
+- Checked against: arXiv 2302.08692 (ICML 2023, 15 pp.): Sec. 1.2 contributions list (Theorem 2.1 = limited
+  suppression near initialization; **Theorem 2.2 = SAM-modified EOS**; **Theorem 2.3 = SGD / batch fraction β**),
+  Eq. (6) unnormalized SAM, Eq. (7), Theorem 2.2 p. 4 (C^∞ model, MSE, zero-residual θ*, JJᵀ positive definite,
+  convergent if ηλᵢ(1 + ρλᵢ) < 2 − ε for all i, divergent if > 2 + ε for one) and Eq. (13), Sec. 2.3 Theorem 2.3,
+  Fig. 3 (FC net, MSE, 2-class CIFAR; GD η = 4·10⁻³, SAM ρ = 10⁻²), Fig. 4 (WideResNet 28-10, CIFAR-10).
+- Fixes to the notes (the theorem numbers are swapped in the notes):
+  - Sec. 4: "derives the SAM stability condition near a zero-residual solution in Theorem 2.3" → "Theorem 2.2".
+    Paper: "SAM induces a modified edge of stability (EOS) (Theorem 2.2)" and Theorem 2.2 is the zero-residual
+    stability statement giving Eq. (13).
+  - Sec. 4 "Why do batch size…": "Theorem 2.2 shows minibatch effects can strengthen regularization" → "Theorem 2.3".
+    Paper: "As batch size decreases, the effect of SAM is stronger and the dynamics is no longer controlled by the
+    Hessian alone (Theorem 2.3)."
+  - Sec. 6 first bullet: "Theorem 2.3 concerns a smooth model near a zero-residual solution…" → "Theorem 2.2".
+- Verified, no change: λ_SAM = (−1 + √4.2)/0.4 ≈ 2.62 and multipliers −0.5 / −1.4 (check script); Figure 3 and the
+  WideResNet / CIFAR-10 experiments as described.
+- The notes have no source line (only the title-block "Original publication" link, to the PMLR page); the page ends
+  with a "Primary source" line built from the paper's authors/title/venue and that link.
+- Quick reference table has no header row in the PDF; written with an empty header row (renders as label/value cards
+  on phones). Box mapping: "Read the equation…" → key; "Connection to the previous EoS papers" → plain.
+- Primer (four ideas): (1) SAM takes the gradient at an uphill point: L = 1.5x² at x = 1, ρ = 0.2: normalized → x = 1.2
+  (loss 2.16, gradient 3.6), unnormalized → x = 1.6 (gradient 4.8 = (λ + ρλ²)x); (2) edge of stability as a ceiling
+  on sharpness (Cohen et al. 2021, stated as background); (3) MSE residual dynamics z ← (I − ηJJᵀ)z, SAM →
+  I − ηJJᵀ(I + ρJJᵀ) (checked on a random linear model); (4) normalized SAM on the quadratic bounces at ±0.6 from
+  0.05 (our toy, labelled). All in `scripts/check-math/agarwala2023sam.py`.
+
+## [6] shin2025sassha — SASSHA
+
+- Checked against: arXiv 2502.18153 (ICML 2025, 27 pp.): Sec. 3 / Table 1 (ResNet-32, CIFAR-100: SGD λ_max 265 /
+  69.32 %, SASSHA 107 / 72.14 %; AdaHessian, Sophia-H, Shampoo compared), Sec. 4.1 Eqs. (1)–(4) (min–max objective,
+  ε* = ρ∇f/‖∇f‖₂, Hutchinson diagonal Hessian at the perturbed point), Sec. 4.2 (absolute value + square root),
+  Sec. 4.3 (lazy Hessian, every k steps), Algorithm 1, Assumptions 4.1–4.3 (bounded below; twice differentiable,
+  convex, β-smooth; ∇f(x_t) ≠ 0 for t ∈ {1, …, n}), Theorem 4.4 (Σηₜ = ∞, Σηₜ² < ∞, Σρₜ²ηₜ < ∞ ⇒ liminf ‖∇f‖ = 0),
+  Def. 4.5, Corollary 4.6.
+- No discrepancies found. Worked example (100, 0.25) → (10, 0.5) checked.
+- The notes have no source line (title-block "Original publication" link → PMLR page); added a "Primary source" line.
+- Quick reference table: no header row in the PDF (empty header row); norms in cells written with \lVert…\rVert.
+  Box mapping: "Why absolute values and square roots?" → key; "Don't overstate the theorem" → warn; "Why would lazy
+  Hessian updates help?" is a sub-heading in the PDF (no box) → `###`.
+- Primer (four ideas): (1) Newton fixes ill-conditioning: on ½(0.01x² + 4y²) GD at η = 0.5 needs ~139 steps to halve
+  the flat coordinate, Newton one step; (2) negative curvature sends a Newton step to the maximum (−½x² from 0.5 → 0),
+  |H| reverses it (→ 1); (3) Hutchinson diagonal estimate E[z ⊙ Hz] = diag H, probes (3, 4) and (1, 2) average to
+  (2, 3) — the paper uses Hutchinson (Sec. 4.1); (4) |h|^{-1/2} between GD and Newton: multipliers 0 and 0.95 at
+  η = 0.5, ~14 steps to halve. All in `scripts/check-math/shin2025sassha.py`. (I left out a linear-stability idea:
+  the paper's Corollary 4.6 has its own form, a(1 + ρa) ≤ 2ε/η, and a simplified version would not match it.)
+
+## [7] taniguchi2024adopt — ADOPT
+
+- Checked against: arXiv 2411.02853 (NeurIPS 2024, 39 pp.): Sec. 2.1 Assumptions 2.1–2.6 (the analysis uses 2.1,
+  2.2, 2.3, 2.5; 2.6 = almost-sure bound, removed), the measure min_t (E‖∇f‖^{4/3})^{3/2}, Sec. 3 (Theorem 3.1, lagged
+  normalization, order swap with momentum), Algorithm 1 (max{√v, ε}), Theorem 4.1 (α = Θ(1/√T), O(1/√T) for any
+  β2), toy problem Eq. (17), experiments (image classification, generative, language, RL).
+- No discrepancies found. Worked example v = 2.5, 4/√2.5 ≈ 2.53 vs 4 checked.
+- The notes have no source line (title-block "Original publication" link → NeurIPS proceedings page); added a
+  "Primary source" line.
+- Box mapping: "Key first-principles connection" → key; "Why this belongs in the survey" → plain (neutral title,
+  cautionary content). Quick reference: no header row in the PDF; norm written with \lVert…\rVert.
+- Primer (three ideas): (1) Adam's per-coordinate scale (constant gradient c → step α·sign c); (2) same-step
+  normalization biases the step: the paper's Eq. 17 at k = 10 (g = 100 w.p. 0.1, −10 otherwise, mean +1) with
+  v_{t−1} = 1, β2 = 0.9 gives normalized values 3.16 / −3.03, average −2.41 (wrong sign) vs +1 with the past scale —
+  labelled as a single-step illustration; (3) the 4/3-moment measure is ≤ E‖∇f‖² by Jensen (1.41 vs 2 for ‖∇f‖ ∈
+  {0, 2}), and O(T^{−1/2}) is the minimax SGD rate the paper cites. All in `scripts/check-math/taniguchi2024adopt.py`.
+
+## [8] gupta2018shampoo — Shampoo
+
+- Checked against: arXiv 1802.09568 (ICML 2018, 21 pp.): Algorithm 1 (L₀ = εI_m, R₀ = εI_n, L_t = L_{t−1} + GGᵀ,
+  R_t = R_{t−1} + GᵀG, W ← W − ηL^{−1/4}GR^{−1/4}), Lemma 1 (online mirror descent regret), Lemma 4
+  ((L ⊗ Rᵀ)vec G = vec(LGR)), Lemmas 5–6 (operator monotonicity), Theorem 7 (rank ≤ r matrices, convex regret),
+  Lemmas 8–9 (Kronecker upper bound on the full-matrix statistic), Algorithm 2 / Theorem 10 (tensors, mode ranks rᵢ).
+- No discrepancies found. Worked example diag(2, 1) → I₂ and the 10¹² vs 2 × 10⁶ memory figures checked.
+- The notes have no source line (title-block "Original publication" link → PMLR page); added a "Primary source" line.
+- Box mapping: "The important memory saving" → key; "What makes the proof work?" is a sub-heading in the PDF → `###`;
+  "Different use of the word 'second order'" → warn. Quick reference: no header row in the PDF.
+- Primer (four ideas): (1) regret and O(√T) (100 after 10⁴ rounds = 0.01 per round); (2) diagonal vs full-matrix
+  AdaGrad and its 10¹² / 10¹⁸ cost for a 1000 × 1000 layer; (3) spectral vs entrywise matrix powers:
+  [[2, 1], [1, 2]]^{−1/2} = [[0.789, −0.211], [−0.211, 0.789]] vs entrywise [[0.707, 1], [1, 0.707]]; (4) Lemma 4 and
+  (L ⊗ R)^p = L^p ⊗ R^p. All in `scripts/check-math/gupta2018shampoo.py`.
+
+## [9] defazio2024road — The Road Less Scheduled
+
+- Checked against: the NeurIPS 2024 camera-ready PDF linked from the notes (34 pp.) and arXiv 2405.15682v4: Eqs.
+  (3)–(5), Theorem 1 (convex, G-Lipschitz, i.i.d., γ = D/(G√T), any β ∈ [0, 1]: E[F(x_T) − F(x*)] ≤ DG/√T), Theorem 2
+  (online-to-batch), Theorem 3, AlgoPerf 2024 self-tuning win.
+- No discrepancies found. Note on figure numbers: the notes' "Figures 2–4 … language modeling and the AlgoPerf suite"
+  matches the NeurIPS version (Fig. 2 averaging comparison + momentum on quadratics, Fig. 3 deep-learning experiments
+  incl. GPT-2/OpenWebText, Fig. 4 AlgoPerf). In the arXiv v4 numbering these are Figs. 2, 3, 5 and 7 — the notes cite
+  the version they link, so no change.
+- Worked example (y₂ = 0.6, z₃ = 1.7, x₃ = 0.9) checked.
+- The notes have no source line (title-block "Original publication" link → NeurIPS page); added a "Primary source"
+  line. Box mapping: "How to think about the algorithm" → key; "What happens in real optimizers?" sub-heading;
+  "Practical caveat" → warn. The three-sequence display with right-hand labels → `aligned` with `&&\text{}`.
+- Primer (three ideas): (1) constant-step noise ball γ/(2 − γ): 1/3 at 0.5, 0.026 at 0.05, and why schedules need T;
+  (2) Polyak–Ruppert averaging divides variance by ~t (0.01 for 100 draws) but lags (10, 0, 0, … → 1 after 10
+  iterates); (3) the convex Lipschitz benchmark DG/√T (0.01 at D = G = 1, T = 10⁴), optimal in the worst case. All in
+  `scripts/check-math/defazio2024road.py`.

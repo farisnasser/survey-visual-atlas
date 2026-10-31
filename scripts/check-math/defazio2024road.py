@@ -62,6 +62,18 @@ for T in TS:
 ratio = [SF[T - 1] / best_lin[T][1][-1] for T in TS]
 check("schedule-free, one run without knowing T, is within 2x of linear decay tuned for each T", all(r_ < 2 for r_ in ratio), f"ratios {np.round(ratio, 2)}")
 check("schedule-free beats constant-step SGD at the longest horizon", SF[-1] < CONST[-1], f"{SF[-1]:.2e} vs {CONST[-1]:.2e}")
+# in-page notes (papers/defazio2024road/notes.md): primer numbers
+vs_ = lambda g: g * g / (1 - (1 - g) ** 2)
+check("primer 1: stationary variance gamma/(2 - gamma): 1/3 at 0.5, ~0.026 at 0.05", abs(vs_(.5) - 1 / 3) < 1e-12 and abs(vs_(.05) - .05 / 1.95) < 1e-12 and abs(vs_(.05) - .026) < 5e-4)
+rng_ = np.random.default_rng(2); w_ = np.zeros(100000)
+for _ in range(400):
+    w_ = w_ - .5 * (w_ + rng_.normal(size=w_.size))
+check("primer 1: Monte Carlo variance at gamma = 0.5 ~ 1/3", abs(w_.var() - 1 / 3) < .01, f"{w_.var():.4f}")
+check("primer 2: mean of 100 iid unit-variance draws has variance 0.01", abs(rng_.normal(size=(20000, 100)).mean(1).var() - .01) < 1e-3)
+check("primer 2: iterates 10, 0, 0, ... -> uniform average 1 after 10, 0.1 after 100", np.mean([10] + [0] * 9) == 1 and np.mean([10] + [0] * 99) == .1)
+D_, G_, T_ = 1., 1., 10000
+g_ = D_ / (G_ * np.sqrt(T_))
+check("primer 3: (D^2 + gamma^2 G^2 T)/(2 gamma T) = DG/sqrt(T) = 0.01 at gamma = D/(G sqrt T)", abs((D_ ** 2 + g_ ** 2 * G_ ** 2 * T_) / (2 * g_ * T_) - D_ * G_ / np.sqrt(T_)) < 1e-12 and D_ * G_ / np.sqrt(T_) == .01)
 save_json("defazio2024road", "data.json", {"Ts": TS, "sf": {"gamma": gm_sf, "gap": sig(SF[::10], 4)}, "const": {"gamma": gm_c, "gap": sig(CONST[::10], 4)},
                                            "lin": {str(T): {"gamma": best_lin[T][0], "gap": sig(best_lin[T][1][::10], 4), "end": float(f"{best_lin[T][1][-1]:.4g}"), "sf": float(f"{SF[T - 1]:.4g}")} for T in TS}})
 # ---------- 3D tab toy ----------
