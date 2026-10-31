@@ -55,4 +55,29 @@ check("SGD with eta = 0.01 escapes about as fast as RMSProp with 0.001 (within 3
 check("but SGD with eta = 0.01 ends higher (bounces in the noise) than RMSProp with 0.001", tail["sgd .01"] > tail["rms .001"], f"{tail['sgd .01']:.5f} vs {tail['rms .001']:.5f}")
 Fm = {k: sig(np.median([F[::50] for F, _ in v], 0), 4) for k, v in res.items()}
 save_json("staib2019escaping", "data.json", {"esc": esc, "tail": {k: round(v, 6) for k, v in tail.items()}, "curves": Fm, "fstar": round(float(f(np.array([0, x2]))), 6)})
+# in-page notes (papers/staib2019escaping/notes.md): G = diag(9, 1) -> A = G^(-1/2) = diag(1/3, 1), A G A^T = I
+def isqrt(M):
+    w, V = np.linalg.eigh(M); return V @ np.diag(w ** -.5) @ V.T
+Gn = np.diag([9., 1.]); An = isqrt(Gn)
+check("notes example: A = diag(1/3, 1), AGA^T = I, raw std 3 and 1", np.allclose(An, np.diag([1 / 3, 1])) and np.allclose(An @ Gn @ An.T, np.eye(2)) and np.allclose(np.sqrt(np.diag(Gn)), [3, 1]))
+Rn = np.random.default_rng(8); gsm = Rn.multivariate_normal([0, 0], Gn, size=200000)
+check("notes example (Monte Carlo): preconditioned noise has identity covariance", np.allclose(np.cov((gsm @ An.T).T), np.eye(2), atol=.02))
+mu = np.array([.7, -.4]); Cv = np.array([[2., .3], [.3, .5]])
+gs2 = Rn.multivariate_normal(mu, Cv, size=400000)
+check("notes: G = E[gg^T] = Cov(g) + grad grad^T", np.allclose(gs2.T @ gs2 / len(gs2), Cv + np.outer(mu, mu), atol=.02))
+# primer idea 1: G = [[5, 4], [4, 5]] -> eigenvalues 9, 1; G^(-1/2) = [[2, -1], [-1, 2]]/3
+Gp = np.array([[5., 4.], [4., 5.]])
+check("primer: eigenvalues 9 and 1, G^(-1/2) = [[2,-1],[-1,2]]/3, whitening gives I", np.allclose(np.linalg.eigvalsh(Gp), [1, 9]) and np.allclose(isqrt(Gp), np.array([[2, -1], [-1, 2]]) / 3) and np.allclose(isqrt(Gp) @ Gp @ isqrt(Gp), np.eye(2)))
+# primer idea 2: zero noise along the escape direction keeps y = 0; nu for SGD = lambda_min(G) = 0.01; RMSProp nu = 0.01/0.0101 ~ 0.990 (Prop. 4.4)
+yv = 0.
+for _ in range(1000):
+    yv = (1 + .01 * .5) * yv - .01 * 0.
+check("primer: with no noise along e and y0 = 0, y stays 0", yv == 0)
+Gd = np.diag([1., .01]); epsr = 1e-4
+nu_rms = np.linalg.eigvalsh(isqrt(Gd + epsr * np.eye(2)) @ Gd @ isqrt(Gd + epsr * np.eye(2))).min()
+check("primer: nu(SGD) = 0.01, nu(RMSProp, eps = 1e-4) = 0.01/0.0101 ~ 0.990", np.isclose(np.linalg.eigvalsh(Gd).min(), .01) and np.isclose(nu_rms, .01 / .0101) and abs(nu_rms - .990) < 5e-4, f"{nu_rms:.4f}")
+# primer idea 3: beta = 1 - C eta^(2/3): eta = 0.001, C = 1 -> 0.99; memory 1/(1 - beta) = 100
+check("primer: eta = 1e-3 -> eta^(2/3) = 0.01, beta = 0.99, memory ~ 100 steps", np.isclose(1 - 1e-3 ** (2 / 3), .99) and np.isclose(1 / (1 - .99), 100))
+# primer idea 4: tau = 1e-2 -> tau^-5 = 1e10
+check("primer: tau^-5 = 1e10 at tau = 1e-2", np.isclose(1e-2 ** -5, 1e10))
 done()

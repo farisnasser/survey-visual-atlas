@@ -87,4 +87,27 @@ print(f"  slice span alpha in [{ga[0]:.2f}, {ga[1]:.2f}], beta in [{ga[2]:.2f}, 
 save_json("arora2019fine", "data.json", {"lam": sig(lam, 4), "ps": sig(proj(y_s), 4), "pr": sig(proj(y_r), 4), "Ls": sig(Ls, 4), "Lr": sig(Lr, 4), "Ps": sig(Ps, 4), "Pr": sig(Pr, 4),
                                        "eta": float(f"{eta:.5g}"), "cs": round(cost(y_s), 3), "cr": round(cost(y_r), 3), "n": n,
                                        "slice": [sig(row, 4) for row in grid], "dom": ga})
+# in-page notes (papers/arora2019fine/notes.md): H = diag(2, 0.2), eta = 0.25, y = (1, 1), u0 = 0
+Hn = np.diag([2., .2]); yn = np.array([1., 1.]); un = np.zeros(2); es = []
+for _ in range(3):
+    un = un - .25 * Hn @ (un - yn); es.append(un - yn)
+check("notes example: multipliers 0.5 and 0.95", np.allclose(np.diag(np.eye(2) - .25 * Hn), [.5, .95]))
+check("notes example: e1 = (-0.5, -0.95), e2 = (-0.25, -0.9025)", np.allclose(es[0], [-.5, -.95]) and np.allclose(es[1], [-.25, -.9025]))
+check("notes example: ||e_t||^2 = 0.5^(2t) + 0.95^(2t)", all(np.isclose(es[t - 1] @ es[t - 1], .5 ** (2 * t) + .95 ** (2 * t)) for t in (1, 2, 3)))
+check("notes: y^T H^-1 y = 5.5 for y = (1, 1), 0.5 for y = (1, 0)", np.isclose(yn @ np.linalg.solve(Hn, yn), 5.5) and np.isclose(np.array([1, 0]) @ np.linalg.solve(Hn, [1, 0]), .5))
+# primer idea 1: unit inputs at 60 deg: H12 = 0.5 (pi - pi/3)/(2 pi) = 1/6, H11 = 1/2; Monte Carlo of the indicator definition
+x1p, x2p = np.array([1., 0.]), np.array([.5, np.sqrt(3) / 2])
+hcf = lambda a, b: a @ b * (np.pi - np.arccos(np.clip(a @ b, -1, 1))) / (2 * np.pi)
+Rw = np.random.default_rng(9).normal(size=(400000, 2))
+mc12 = x1p @ x2p * np.mean((Rw @ x1p >= 0) & (Rw @ x2p >= 0))
+check("primer: H12 = 1/6 (closed form and Monte Carlo), H11 = 1/2", np.isclose(hcf(x1p, x2p), 1 / 6) and abs(mc12 - 1 / 6) < 3e-3 and np.isclose(hcf(x1p, x1p), .5), f"MC {mc12:.4f}")
+Hp = np.array([[.5, 1 / 6], [1 / 6, .5]]); wv, Vv = np.linalg.eigh(Hp)
+check("primer: eigenvalues 1/3 along (1,-1)/sqrt2 and 2/3 along (1,1)/sqrt2", np.allclose(wv, [1 / 3, 2 / 3]) and np.isclose(abs(Vv[:, 1] @ [1, 1]) / np.sqrt(2), 1) and np.isclose(abs(Vv[:, 0] @ [1, -1]) / np.sqrt(2), 1))
+# primer idea 3: eta = 1: residual of y = (1,1) shrinks by 1/3 per step, of y = (1,-1) by 2/3
+for yy, fac in [((1., 1.), 1 / 3), ((1., -1.), 2 / 3)]:
+    e0 = -np.array(yy); e1 = (np.eye(2) - Hp) @ e0
+    assert np.allclose(e1, fac * e0)
+check("primer: with eta = 1 the residual shrinks by 1/3 (y = (1,1)) and by 2/3 (y = (1,-1)) per step", True)
+# primer idea 4: y^T H^-1 y = 3 for (1, 1) and 6 for (1, -1)
+check("primer: y^T H^-1 y = 3 and 6", np.isclose(np.array([1, 1]) @ np.linalg.solve(Hp, [1, 1]), 3) and np.isclose(np.array([1, -1]) @ np.linalg.solve(Hp, [1, -1]), 6))
 done()
