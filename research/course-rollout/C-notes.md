@@ -40,3 +40,34 @@ Paper claims (all from `research/findings.md`):
   (2 + 2β₁)/((1 − β₁)η), GI-Adam factor √(1 − β₂), "two orders" is the paper's rounding).
 - Kalra 2025 and Galli 2026 only in the Atlas box (findings lines).
 Unverified: none.
+
+## Stop 11 · landscape (`course/landscape`, check `scripts/check-math/course_landscape.py`)
+Sections: 1 worst case vs trained cases · 2 symmetry · 3 benign landscapes (linear nets, matrix problems) · 4 bad minima
+exist (one neuron, Safran–Shamir) · 5 PL condition (derivation from the descent lemma) · 6 wide networks (Gram matrix,
+Du, Allen-Zhu, Zou–Gu) · 7 lazy training / NTK (Arora, Chizat–Oyallon–Bach, Li–Ma–Zhang) · 8 mean field (Chizat–Bach,
+Mei) · 9 architecture and landscape pictures (He, Li 2018, Goodfellow 2015).
+
+Visuals (random starts and initial weights use `rng` from `src/lib/math.js`; the check script ports it to Python, so
+the readouts match exactly):
+- `mirror` (3D): two tanh units, L = mean (tanh(w₁x) + tanh(w₂x) − y)², targets from units 1.6 and 0.4. Exactly three
+  critical points in [−0.5, 2.5]²: minima (1.6, 0.4), (0.4, 1.6), saddle (0.736, 0.736) with eigenvalues −0.106 / 0.775.
+  24 random starts split 12 / 12; a start on the diagonal ends at the saddle; offset slider d.
+- `benign` (3D): ½‖uuᵀ − diag(1, s)‖², s slider; for every slider value all 24 random starts reach ±(1, 0); the start
+  (0, 1.2) on the saddle's stable set ends at the saddle.
+- `neuron` (3D): F = (1 − vφ(w))² (Sun et al. 2020 Fig. 2), φ = −(z − 1)²/8 vs tanh; 30 starts → 21 / 9 vs 30 / 0;
+  41 × 41 grid → 30.4% stuck (same as the sun2020global page).
+- `pl` (2D + 2 charts): x² + 3 sin²x, μ = 0.1755, L = 8; the PL bound is checked for every slider η and starts −6…6.
+- `wide` (2D + chart): live training of a one-hidden-layer tanh net (8 points, widths 4…1024, η = 1/λ_max(G₀)); weight
+  movement 4.09 → 0.174, Δλ_min 96.5% → 0.9%, every run below (1 − ηλ₀/2)ᵏ L(0).
+- All balls drawn on an unclamped copy of the surface def (`freeDef`), so the shown paths are the true GD paths.
+
+Paper claims (findings entries): baldi1989neural, kawaguchi2016deep (Thm 2.3, Cor 2.4), laurent2018deep (Thm 1),
+bhojanapalli2016global (noiseless all local minima global, strict saddle Thm 3.2), ge2017no, lee2016gradient (Thm 4),
+sun2020global (Prop. IV.1, Fig. 2), safran2018spurious (Thm 1 ranges, Table 1, n ≥ k + 2 observed), zhang2026saddle
+(Thms 1, 3), du2019gradient (Thm 5.1, 6.1, footnote), allenzhu2019convergence (Thms 1–3), zou2019improved (n⁸ vs n²⁴),
+arora2019fine (Thms 4.1, 5.1), chizat2019lazy (Thms 2.2, 2.5, experiments), li2020learning (Thm 1.2), chizat2018global
+(Thms 3.3/3.5, qualitative), mei2019mean (Thm 1, dimension-free), he2016deep (Table 2, BN remark), li2018visualizing
+(Fig. 5 errors, slice caveat), goodfellow2015qualitatively, nguyen2017loss (N − 1, Atlas box only), danilova2022recent
+(μ = 0.1755 for the same function).
+Not from findings: the PL condition's history (Polyak 1963, Łojasiewicz 1963) is stated as standard background, no
+Atlas link.

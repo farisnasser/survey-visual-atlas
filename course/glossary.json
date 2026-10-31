@@ -657,12 +657,14 @@
   "def": "Using many more parameters than strictly needed, often more than there are training examples. Under assumptions, sufficiently wide networks can be trained to zero training loss by gradient descent (Du et al. 2019; Allen-Zhu et al. 2019).",
   "aka": [
    "width"
-  ]
+  ],
+  "sec": "n-6-wide-networks-gd-provably-reaches-zero-loss"
  },
  "symmetry": {
   "term": "Symmetry",
   "ch": "landscape",
-  "def": "Different parameter vectors that compute the same function, for example swapping two hidden neurons, or scaling $(u, v) \\to (cu, v/c)$ in a product $uv$. Symmetries create whole curves of equally good minima, with saddle points between them."
+  "def": "Different parameter vectors that compute the same function, for example swapping two hidden neurons, or scaling $(u, v) \\to (cu, v/c)$ in a product $uv$. Symmetries create whole curves of equally good minima, with saddle points between them.",
+  "sec": "n-2-symmetry-every-minimum-comes-in-copies"
  },
  "spurious-min": {
   "term": "Spurious local minimum",
@@ -670,7 +672,8 @@
   "def": "A local minimum that is not a global minimum, a bad one. Some problems provably have none (matrix sensing under the RIP condition, deep linear networks); small ReLU networks can have them (Safran & Shamir 2018).",
   "aka": [
    "bad local minimum"
-  ]
+  ],
+  "sec": "n-3-landscapes-with-no-bad-minima"
  },
  "benign": {
   "term": "Benign landscape",
@@ -678,7 +681,8 @@
   "def": "A landscape in which every local minimum is global and every saddle is strict. Then any method that avoids strict saddles finds a global minimum.",
   "aka": [
    "benign non-convexity"
-  ]
+  ],
+  "sec": "n-3-landscapes-with-no-bad-minima"
  },
  "pl": {
   "term": "Polyak–Łojasiewicz condition",
@@ -687,7 +691,8 @@
   "tex": "\\tfrac12 \\lVert \\nabla f(x) \\rVert^2 \\ge \\mu\\, \\big(f(x) - f^\\star\\big)",
   "aka": [
    "PL inequality"
-  ]
+  ],
+  "sec": "n-5-the-pl-condition-convergence-without-convexity"
  },
  "ntk": {
   "term": "Neural tangent kernel",
@@ -696,17 +701,20 @@
   "tex": "K(x, x') = \\nabla_\\theta \\hat y(x) \\cdot \\nabla_\\theta \\hat y(x')",
   "aka": [
    "NTK"
-  ]
+  ],
+  "sec": "n-7-lazy-training-and-the-neural-tangent-kernel"
  },
  "lazy-training": {
   "term": "Lazy training",
   "ch": "landscape",
-  "def": "A regime in which the parameters move so little that the model stays close to its first-order Taylor expansion around the initialization (Chizat, Oyallon & Bach 2019). Training in the NTK regime is an example."
+  "def": "A regime in which the parameters move so little that the model stays close to its first-order Taylor expansion around the initialization (Chizat, Oyallon & Bach 2019). Training in the NTK regime is an example.",
+  "sec": "n-7-lazy-training-and-the-neural-tangent-kernel"
  },
  "mean-field": {
   "term": "Mean-field limit",
   "ch": "landscape",
-  "def": "A description of very wide two-layer networks in which the neurons are treated as a distribution of particles moving under a gradient flow (Chizat & Bach 2018; Mei et al. 2019). Unlike lazy training, the features do move."
+  "def": "A description of very wide two-layer networks in which the neurons are treated as a distribution of particles moving under a gradient flow (Chizat & Bach 2018; Mei et al. 2019). Unlike lazy training, the features do move.",
+  "sec": "n-8-beyond-lazy-the-mean-field-picture"
  },
  "oracle": {
   "term": "Oracle",
