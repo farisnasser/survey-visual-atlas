@@ -87,12 +87,18 @@ function renderNav(P, db) {
 async function renderNotes(P) {
   const sec = $('#notes');
   if (P.notes_page) {
-    sec.classList.add('as-page');
-    sec.innerHTML = `<div class="sec-h"><h2>Study notes</h2><span class="sub">Our study notes, with a first-principles primer</span></div><div class="loading">Loading notes…</div>`;
+    sec.classList.add('as-page', 'dense');
+    const dl = P.notes ? `<a class="nt-dl" href="${esc(P.notes)}" download="${esc(P.key)}-study-notes.pdf">Download PDF notes</a>` : '';
+    sec.innerHTML = `<div class="sec-h"><h2>Study notes</h2><span class="sub">Our study notes, with a first-principles primer</span>${dl}</div><div class="loading">Loading notes…</div>`;
+    sec.addEventListener('click', e => {   // contents links open a folded section before jumping to it
+      const a = e.target.closest('a[href^="#n-"]'); if (!a) return;
+      const el = document.getElementById(a.getAttribute('href').slice(1)); if (!el) return;
+      const f = el.closest('details'); if (f) f.open = true;
+    });
     try {
       const md = await fetch(`papers/${P.key}/notes.md`).then(r => { if (!r.ok) throw new Error(`notes.md ${r.status}`); return r.text(); });
       sec.querySelector('.loading').outerHTML = await renderNotesArticle(md);
-      if (location.hash.startsWith('#n-')) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+      if (location.hash.startsWith('#n-')) { const el = document.getElementById(location.hash.slice(1)); if (el) { const f = el.closest('details'); if (f) f.open = true; el.scrollIntoView(); } }
     } catch (err) { sec.querySelector('.loading').textContent = 'Could not load the notes.'; console.error(err); }
     return;
   }

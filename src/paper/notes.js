@@ -11,6 +11,7 @@
 //   :::cols / :::col ... ::: side-by-side columns (stack on phones)
 //   :::figure Caption ... ::: raw HTML/SVG figure with a caption
 //   :::divider Label  :::   labelled rule between parts of the article
+//   :::fold Title | sub ... ::: collapsible part (starts folded; opened by a click or a contents link)
 //   > text                  source / footnote line
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const slug = s => s.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -88,6 +89,11 @@ export function blocks(lines, toc) {
       const [kind, title] = [m[1], m[2]];
       if (kind === 'cols') out.push(`<div class="nt-cols">${blocks(body)}</div>`);
       else if (kind === 'col') out.push(`<div class="nt-col">${blocks(body)}</div>`);
+      else if (kind === 'fold') {
+        const [head, sub] = title.split(/\s+\|\s+/), id = 'n-' + slug(head);
+        toc?.push([id, head]);
+        out.push(`<details class="nt-fold" id="${id}"><summary><span class="nt-fold-t">${inline(head)}</span>${sub ? `<span class="nt-fold-s">${inline(sub)}</span>` : ''}</summary><div class="nt-fold-b">${blocks(body)}</div></details>`);
+      }
       else if (kind === 'divider') out.push(`<div class="nt-div"><span>${inline(title)}</span></div>`);
       else if (kind === 'figure') out.push(`<figure class="nt-fig">${body.join('\n')}${title ? `<figcaption>${inline(title)}</figcaption>` : ''}</figure>`);
       else out.push(`<div class="nt-box nt-${kind}">${title ? `<div class="nt-box-h">${inline(title)}</div>` : ''}<div class="nt-box-b">${blocks(body)}</div></div>`);

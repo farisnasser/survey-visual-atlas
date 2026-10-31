@@ -10,15 +10,7 @@
 **Why we care:** Noise is *not necessary* for asymptotic strict-saddle avoidance. But this says nothing general about how *quickly* GD leaves saddle neighborhoods.
 :::
 
-:::divider First principles
-:::
-
-## First principles: what you need before the notes
-
-:::ours Written for the Atlas
-This part is not in the original study notes. It builds the five ideas the paper stands on, from scratch, so the notes below read easily.
-:::
-
+:::fold First principles: what you need before the notes | Written for the Atlas, not part of the original notes: the five ideas the paper stands on, built from scratch.
 ### 1. Gradient descent is a map from one point to the next
 
 Gradient descent picks a point $z$ and moves against the gradient: $z_{k+1} = z_k - \alpha \nabla f(z_k)$. The gradient points uphill, so a small step against it lowers the loss. To first order,
@@ -53,6 +45,7 @@ If the starting point is drawn from any distribution with a density (Gaussian, u
 
 :::key Putting the five ideas together
 One negative eigenvalue (idea 2) creates a direction that grows under GD (idea 3). Only starts with *exactly zero* component along it can still converge to the saddle, and those starts form a thin, zero-volume set (idea 5). The small step keeps GD invertible (idea 4), so the thinness carries back to starts anywhere in the space. That is the paper's main theorem, made precise in the notes below.
+:::
 :::
 
 :::divider Study notes

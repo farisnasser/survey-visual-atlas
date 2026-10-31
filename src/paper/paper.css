@@ -209,3 +209,53 @@ body.thumb .hud, body.thumb .tabs, body.thumb .mathbtn, body.thumb .labels { dis
   .nt-table td { border: 0 !important; padding: 6px 14px; text-align: left !important; min-width: 0; }
   .nt-table td::before { content: attr(data-label); display: block; font: 600 11px/1.4 var(--display); letter-spacing: .03em; color: var(--faint); }
 }
+/* PDF download + folded primer */
+.nt-dl { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; font: 500 12px/1 var(--display); color: var(--ink); text-decoration: none; white-space: nowrap; }
+.nt-dl::before { content: "\2193"; color: var(--opt2); font-weight: 650; }
+.nt-dl:hover { border-color: rgba(178, 140, 255, .6); background: #1d2440; }
+.nt-fold { border: 1px dashed rgba(178, 140, 255, .45); border-radius: 14px; }
+.nt-fold > summary { list-style: none; cursor: pointer; padding: 12px 16px 12px 40px; position: relative; display: grid; gap: 3px; }
+.nt-fold > summary::-webkit-details-marker { display: none; }
+.nt-fold > summary::before { content: "+"; position: absolute; left: 14px; top: 11px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(178, 140, 255, .6); color: var(--opt2); font: 600 13px/16px var(--display); text-align: center; }
+.nt-fold[open] > summary::before { content: "\2212"; }
+.nt-fold-t { font: 650 17px/1.35 var(--display); color: var(--ink); }
+.nt-fold-s { font: 400 13px/1.45 var(--display); color: var(--opt2); }
+.nt-fold-b { padding: 0 18px 18px; }
+.nt-fold-b > * + * { margin-top: 16px; }
+.nt-fold-b > .nt-h4:first-child { margin-top: 4px !important; }
+
+/* Compact density: PDF-like spacing, wider measure, lighter equation panels */
+.notes.dense .nt { font-size: 15.5px; line-height: 1.56; max-width: 920px; }
+@media (min-width: 1100px) { .notes.as-page.dense { grid-template-columns: 210px minmax(0, 920px); column-gap: 40px; } }
+.notes.dense .nt > * + *, .notes.dense .nt-fold-b > * + * { margin-top: 9px; }
+.notes.dense .nt-title { font-size: 21px; }
+.notes.dense .nt-h { font-size: 16.5px; margin-top: 22px !important; padding-top: 12px; }
+.notes.dense .nt-h4 { font-size: 14.5px; margin-top: 14px !important; }
+.notes.dense .nt-eq { background: none; border: 0; border-left: 2px solid rgba(124, 196, 255, .45); border-radius: 0; padding: 0 0 0 14px; }
+.notes.dense .nt-eq .katex-display { margin: .3em 0; }
+.notes.dense .nt-eq .katex { font-size: 1.05em; }
+.notes.dense .nt ul, .notes.dense .nt ol { gap: 3px; }
+.notes.dense .nt li > * + * { margin-top: 6px; }
+.notes.dense .nt-box-h { padding: 6px 14px; font-size: 12px; }
+.notes.dense .nt-minute .nt-box-h { font-size: 13px; }
+.notes.dense .nt-box-b { padding: 8px 14px 10px; }
+.notes.dense .nt-box-b > * + * { margin-top: 6px; }
+.notes.dense .nt-minute .nt-box-b > p + p { margin-top: 3px; }
+.notes.dense .nt-box .nt-eq { background: none; }
+.notes.dense .nt-table table { font-size: 14.5px; line-height: 1.42; }
+.notes.dense .nt-table th { padding: 6px 12px; }
+.notes.dense .nt-table td { padding: 5px 12px; }
+.notes.dense .nt-cols { gap: 22px; }
+.notes.dense .nt-cols > .nt-col > * + * { margin-top: 8px; }
+.notes.dense .nt-fig { padding: 6px 8px 6px; }
+.notes.dense .nt-fig svg { max-width: 290px; }
+.notes.dense .nt-div { margin-top: 26px !important; }
+.notes.dense .nt-div + .nt-h { margin-top: 10px !important; }
+.notes.dense .nt-src { margin-top: 20px !important; padding-top: 10px; }
+.notes.dense .nt-fold-t { font-size: 15.5px; }
+.notes.dense .nt-fold > summary { padding-top: 9px; padding-bottom: 9px; }
+@media (max-width: 760px) { .notes.dense .nt { font-size: 15px; line-height: 1.52; } }
+@media (max-width: 560px) {
+  .notes.dense .nt-table tr + tr { margin-top: 6px; }
+  .notes.dense .nt-table td { padding: 3px 12px; }
+}
