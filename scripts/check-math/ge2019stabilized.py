@@ -65,4 +65,32 @@ check("stabilized super epoch decreases f (Lemma 7: by ~gamma^3/rho^2 with const
 check("after the super epoch the shift is dropped and the run ends at a minimum of f", np.mean([np.linalg.norm(g(p[-1])) < .05 for p in S_]) > .9)
 save_json("ge2019stabilized", "data.json", {"a": r(a, 5), "b": r(bb, 5), "c": r(c, 5), "d": r(d, 5), "g0": g0, "eta": eta, "delta": delta, "dist": DIST, "bs": b, "m": m,
                                            "dP": round(float(dP), 4), "dS": round(float(dS), 4)})
+# in-page notes (papers/ge2019stabilized/notes.md): f = x + 2x^2 - y^2/2 shifted at 0
+fg = lambda p: p[0] + 2 * p[0] ** 2 - p[1] ** 2 / 2
+gg = lambda p: np.array([1 + 4 * p[0], -p[1]])
+check("notes example: grad f(0) = (1, 0)", np.allclose(gg([0, 0]), [1, 0]))
+fh = lambda p: fg(p) - p[0]
+check("notes example: f^ = 2x^2 - y^2/2 and grad f^(0) = 0", all(np.isclose(fh(q), 2 * q[0] ** 2 - q[1] ** 2 / 2) for q in rand_pts(20, -2, 2)) and np.allclose(gg([0, 0]) - [1, 0], 0))
+check_hess_at("notes example: Hess f^ = diag(4, -1)", fh, [.3, -.2], [[4, 0], [0, -1]])
+qz = np.array([0., 1e-3])
+for _ in range(20):
+    qz = qz - .1 * (gg(qz) - np.array([1, 0]))
+check("notes: after a small y-kick, GD on f^ grows y like (1 + eta gamma)^t and keeps x = 0", np.isclose(qz[1], 1e-3 * 1.1 ** 20) and qz[0] == 0)
+# primer idea 1: f1 = x^2, f2 = 0, x = 1.1, snapshot 1: raw 2.2 / 0, SVRG 1.2 / 1.0, error <= 2L|x - x~| (L = 2)
+raw = [2 * 1.1, 0.]; sv = [2 * 1.1 - 2 * 1 + 1, 0 - 0 + 1]
+check("primer: raw sample gradients 2.2, 0; SVRG estimates 1.2, 1.0; both average 1.1", np.allclose(raw, [2.2, 0]) and np.allclose(sv, [1.2, 1.0]) and np.isclose(np.mean(raw), 1.1) and np.isclose(np.mean(sv), 1.1))
+check("primer: SVRG error 0.1 <= 2 L |x - x~| = 0.4", max(abs(np.array(sv) - 1.1)) <= 2 * 2 * .1 + 1e-12)
+# primer idea 2: fraction of the unit ball in d dims within w of a central hyperplane ~ w sqrt(2d/pi); d = 100, w = 1e-3 -> ~0.008
+from math import lgamma, pi, exp, sqrt
+cd = exp(lgamma(100 / 2 + 1) - lgamma(100 / 2 + .5)) / sqrt(pi)
+frac = 2 * 1e-3 * cd
+check("primer: slab fraction ~ w sqrt(2d/pi) ~ 0.008 (d = 100, w = 0.001)", abs(frac - .008) < 5e-4 and abs(frac / (1e-3 * sqrt(200 / pi)) - 1) < .01, f"exact {frac:.5f}")
+Rb = np.random.default_rng(5); Z = Rb.normal(size=(200000, 100)); Z /= np.linalg.norm(Z, axis=1, keepdims=True); Z *= Rb.uniform(size=(200000, 1)) ** (1 / 100)
+check("primer: Monte Carlo slab fraction agrees", abs(np.mean(np.abs(Z[:, 0]) < 1e-3) - frac) < 1.5e-3, f"MC {np.mean(np.abs(Z[:, 0]) < 1e-3):.4f}")
+# primer idea 3: f1 = a x^3/6, f2 = -a x^3/6 -> rho' = a, rho = 0; factor 1 + (rho'/(n^(1/3) rho))^2 = 101 for n = 1e6, rho' = 1000 rho
+check("primer: 1 + (1000/100)^2 = 101", np.isclose(1 + (1000 / 1e6 ** (1 / 3)) ** 2, 101))
+# primer idea 4: n = 1e6, eps = 1e-3: n^(2/3)/eps^2 = 1e10, n/eps^1.5 ~ 3.2e10, n/eps^2 = 1e12; Sec. 4.4 accounting
+nn, ee = 1e6, 1e-3
+check("primer: 1e10, 3.2e10, 1e12", np.isclose(nn ** (2 / 3) / ee ** 2, 1e10) and abs(nn / ee ** 1.5 - 3.16e10) < 1e8 and np.isclose(nn / ee ** 2, 1e12))
+check("primer: (L D/(n^(1/3) eps^2)) n = n^(2/3) L D/eps^2", np.isclose(1 / (nn ** (1 / 3) * ee ** 2) * nn, nn ** (2 / 3) / ee ** 2))
 done()

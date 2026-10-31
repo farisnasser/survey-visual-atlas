@@ -69,4 +69,26 @@ check("SPIDER estimator error stays O(eps) along the run (Eq. 4.1 keeps it small
 check("notes' shrink example: sqrt(0.003 - 0.03^2 - 0.04^2) = 0.0224", abs(np.sqrt(.003 - .03 ** 2 - .04 ** 2) - .02236) < 1e-4)
 save_json("chen2022faster", "data.json", {"sa": sa, "sc": sc, "B": B, "b": b, "eps": eps, "epsH": round(float(eps_H), 5), "eta": eta, "etaH": etaH, "r": r_, "D": D, "lthres": lthres,
                                          "sfo_med": sfo_med})
+# in-page notes (papers/chen2022faster/notes.md): f1 = (x-1)^2/2, f2 = (x+1)^2/2, x0 = 2, d0 = 2, x1 = 1.8
+dd = [(1.8 - 1) - (2 - 1), (1.8 + 1) - (2 + 1)]
+check("notes example: f_i'(1.8) - f_i'(2) = -0.2 for both, d1 = 1.8 = F'(1.8); sample gradients differ by 2", np.allclose(dd, -.2) and np.isclose(2 + dd[0], 1.8) and np.isclose((1.8 + 1) - (1.8 - 1), 2))
+check("notes: 0.03^2 + 0.04^2 + 0.05^2 = 0.005", np.isclose(.03 ** 2 + .04 ** 2 + .05 ** 2, .005))
+sh = np.sqrt(.003 - .03 ** 2 - .04 ** 2)
+check("notes: shrunken last step sqrt(0.003 - 0.03^2 - 0.04^2) ~ 0.0224", abs(sh - .0224) < 5e-5 and np.isclose(.03 ** 2 + .04 ** 2 + sh ** 2, .003), f"{sh:.5f}")
+check("notes: eps_H = sqrt(eps) makes eps_H^-6 = eps^-3", all(np.isclose(np.sqrt(e_) ** -6, e_ ** -3) for e_ in (1e-2, 1e-3, 1e-4)))
+# primer idea 2: normalized step of d = (3, 4), eta = 0.01 is (0.006, 0.008), length 0.01
+dv = np.array([3., 4.]); stp = .01 * dv / np.linalg.norm(dv)
+check("primer: normalized step (0.006, 0.008) of length 0.01", np.allclose(stp, [.006, .008]) and np.isclose(np.linalg.norm(stp), .01))
+# primer idea 3: B ~ sigma^2/eps^2 = 1e4 (sigma = 1, eps = 1e-2); mean of B samples has error ~ sigma/sqrt(B); eps^-1.5 * eps^-2 = eps^-3.5
+Rm = np.random.default_rng(6); errs = np.abs(Rm.normal(0, 1, size=(400, 10000)).mean(1))
+check("primer: B = sigma^2/eps^2 = 1e4 averages to error ~ eps = 1e-2", np.isclose(1 / 1e-2 ** 2, 1e4) and .5e-2 < np.sqrt(np.mean(errs ** 2)) < 1.5e-2, f"rms error {np.sqrt(np.mean(errs ** 2)):.4f}")
+check("primer: eps^-1.5 * eps^-2 = eps^-3.5", np.isclose(-1.5 - 2, -3.5))
+# primer idea 4: STORM d+ = (1 - a)(d - g(x)) + g(x+): a = 1 -> SGD, a = 0 -> SARAH
+gx, gxp, d_ = 1.7, 2.3, 1.9
+storm = lambda a: (1 - a) * (d_ - gx) + gxp
+check("primer: STORM with a = 1 is SGD, with a = 0 is SARAH", np.isclose(storm(1), gxp) and np.isclose(storm(0), d_ + gxp - gx))
+# primer idea 5: eps_H^-6 <= eps^-3 iff eps_H >= sqrt(eps); at eps_H = eps^(3/5) LENA's term is eps^-3.6 (paper Remark 5.2 says eps^(3/5))
+e_ = 1e-4
+check("primer: eps_H >= sqrt(eps) gives eps_H^-6 <= eps^-3; eps_H = eps^(3/5) gives eps^-3.6 > eps^-3",
+      (e_ ** .5) ** -6 <= e_ ** -3 * (1 + 1e-9) and (e_ ** .6) ** -6 > e_ ** -3 and np.isclose((e_ ** .6) ** -5, e_ ** -3))
 done()
