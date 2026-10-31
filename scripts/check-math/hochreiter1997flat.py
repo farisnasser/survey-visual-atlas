@@ -46,4 +46,15 @@ for s in [.02, .05, .1, .15, .2, .3]:
     print(f"  noise s = {s}: mean loss increase flat {rob[-1][1]:.4f}, sharp {rob[-1][2]:.4f}")
 check("the sharp minimum loses more than 3x as much under the same weight noise", all(q[2] > 3 * q[1] for q in rob))
 save_json("hochreiter1997flat", "data.json", {"mF": r(mF, 5), "mS": r(mS, 5), "fF": fF, "fS": fS, "areas": rows, "rob": rob})
+# in-page notes (papers/hochreiter1997flat/notes.md): Sec. 2 example L(a, b) = a^2 + 0.01 b^2 under a loss budget delta
+for d in [1e-3, .01, .3]:
+    assert np.isclose(np.sqrt(d) ** 2, d) and np.isclose(.01 * (10 * np.sqrt(d)) ** 2, d)
+check("notes example: L = delta at |a| = sqrt(delta) and at |b| = 10 sqrt(delta)", True)
+# primer: room |u| <= sqrt(2 delta / lambda), bits log2(R / w), rescaled minima of (ab - 1)^2
+room = lambda lam, d=.01: np.sqrt(2 * d / lam)
+check("primer: delta = 0.01 gives |u| <= 0.014 (lambda = 100) and 0.14 (lambda = 1)", np.isclose(room(100), .014, atol=5e-4) and np.isclose(room(1), .14, atol=5e-3), f"{room(100):.4f}, {room(1):.4f}")
+check("primer: log2(200) ~ 7.6, log2(20) ~ 4.3, log2(10) ~ 3.3 bits", np.isclose(np.log2(200), 7.6, atol=.05) and np.isclose(np.log2(20), 4.3, atol=.05) and np.isclose(np.log2(10), 3.3, atol=.05))
+Lab = lambda p: (p[0] * p[1] - 1) ** 2
+lm = [eig(fd_hess(Lab, np.array(q)))[-1] for q in [(1., 1.), (4., .25)]]
+check("primer: lambda_max of (ab - 1)^2 is 2(a^2 + b^2): 4 at (1, 1), ~32.1 at (4, 0.25), ~8x", np.isclose(lm[0], 4, atol=1e-3) and np.isclose(lm[1], 32.125, atol=1e-2) and round(lm[1] / lm[0]) == 8, f"{lm[0]:.3f}, {lm[1]:.3f}")
 done()

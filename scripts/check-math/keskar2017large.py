@@ -51,4 +51,21 @@ sh = {q[0]: q[2] for q in rows}
 check("threshold in the batch size: B <= 2 ends in the sharp basin < 5% of the time, B >= 4 more than 15%", sh[1] < .05 and sh[2] < .05 and all(sh[b] > .15 for b in (4, 6, 8, 16, 64)))
 check("with B = 1 the noise is so large that most runs have not settled in either basin", rows[0][1] + rows[0][2] < .5)
 save_json("keskar2017large", "data.json", {"V": r(V, 5), "mF": r(mF, 5), "mS": r(mS, 5), "rows": rows, "phi": [phF, phS]})
+# in-page notes (papers/keskar2017large/notes.md): Sec. 2 bound max_{|u|<=r} u^T H u / 2 = r^2 lambda_max / 2, teaching example
+Rk = np.random.default_rng(1)
+A = Rk.normal(size=(5, 5)); Hq = A @ A.T; rq = .3
+U = Rk.normal(size=(200000, 5)); U = rq * U / np.linalg.norm(U, axis=1, keepdims=True)
+check("notes: max over the r-ball of u^T H u / 2 is r^2 lambda_max / 2 (sampled max <= bound, eigenvector attains it)",
+      np.max(.5 * np.einsum('ij,jk,ik->i', U, Hq, U)) <= .5 * rq ** 2 * eig(Hq)[-1] + 1e-12
+      and np.isclose(.5 * rq ** 2 * eig(Hq)[-1], .5 * (rq * np.linalg.eigh(Hq)[1][:, -1]) @ Hq @ (rq * np.linalg.eigh(Hq)[1][:, -1])))
+check("notes: L1 = x^2 + 100 y^2 rises 100x faster than L2 = x^2 + y^2 along y", np.isclose((0 + 100 * .01 ** 2) / (0 + .01 ** 2), 100))
+# primer: steps per epoch, 1/sqrt(b) noise, shifted test loss, basin width vs noise kick
+check("primer: n = 50,000 -> 196 steps (b = 256), 10 steps (b = 5,000 = 10%)", int(np.ceil(50000 / 256)) == 196 and 50000 // 5000 == 10 and 5000 == .1 * 50000)
+sds = {b: float(np.std(Rk.choice([-1., 1.], size=(20000, b)).mean(1))) for b in [1, 16, 256]}
+check("primer: per-example sd 1 -> minibatch sd 1, 0.25, 0.0625 (sampled)", all(np.isclose(sds[b], 1 / np.sqrt(b), rtol=.03) for b in sds), str({b: round(v, 4) for b, v in sds.items()}))
+check("primer: shift 0.1 costs 0.01 (theta^2) vs 1 (100 theta^2)", np.isclose(.1 ** 2, .01) and np.isclose(100 * .1 ** 2, 1))
+w = lambda lam, d=.01: np.sqrt(2 * d / lam); kick = lambda b, eta=.1, sg=1.: eta * sg / np.sqrt(b)
+check("primer: half-widths 0.014 (lambda 100) / 0.14 (lambda 1); kicks 0.1 (b = 1), 0.006 (b = 256)",
+      np.isclose(w(100), .014, atol=5e-4) and np.isclose(w(1), .14, atol=5e-3) and np.isclose(kick(1), .1) and np.isclose(kick(256), .006, atol=5e-4)
+      and w(100) < kick(1) < w(1) and kick(256) < w(100), f"{w(100):.4f}, {w(1):.4f}, {kick(256):.5f}")
 done()
