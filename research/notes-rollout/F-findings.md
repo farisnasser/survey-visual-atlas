@@ -2,8 +2,12 @@
 
 ## Shared changes needed
 
-- None to `src/` so far.
-- Convention (coordinator to confirm across sessions): the notes' cross-references "(Ref NN)" use the old draft
+- None to `src/` required. Everything in the 14 notes PDFs was expressible with the current syntax.
+- Optional renderer nicety: 11 of the 14 notes have a two-column "Quick reference" table *without* a header row. They
+  are written with an empty header row (`| | |`), which renders as an empty header strip on desktop (fine on phones,
+  where rows become cards). A `headerless` table option in `src/paper/notes.js` would remove the strip.
+- Only the notes of zhang2019lookahead contain an old-numbering cross-reference ("Ref 72", "Ref 85"); the other 13 cite
+  papers by author/year. Convention (coordinator to confirm across sessions): the notes' cross-references "(Ref NN)" use the old draft
   numbering (the notes headers say "Ref 94" for survey [97]). On the Atlas a reader takes them as survey numbers, so
   session F corrects the number to the current survey number and logs each one as a fix below; the names in the notes
   are unchanged. If the coordinator prefers the old numbers verbatim, revert those lines (each is listed).
@@ -247,7 +251,7 @@
 - No discrepancies found in what could be checked. Worked example (GD on ½(x² − y²) with η = 0.2 = (0.8x, 1.2y))
   checked.
 - Box mapping: "Why this matters for gradient descent" → key; "Do not overstate measure-zero arguments" → warn;
-  "Proof intuition…" is a sub-heading. Quick reference: no header row; |λ| written with \lvert…vert.
+  "Proof intuition…" is a sub-heading. Quick reference: no header row; |λ| written with \lvert…\rvert.
 - Primer (four ideas; "the book stands on" instead of "the paper"): (1) powers of A = [[0.8, 0.3], [0, 1.2]] follow its
   eigenvectors (1, 0) and (0.6, 0.8); (2) a curved stable manifold: g = (0.8x, 1.2y − 0.28x²) has stable set
   y = 0.5x² tangent to the x-axis ((1, 0.5) → (0.8, 0.32) → (0.64, 0.2048) → (0.512, 0.131)); (3) measure zero,
