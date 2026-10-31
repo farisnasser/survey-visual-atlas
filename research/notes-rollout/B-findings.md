@@ -72,3 +72,48 @@ Conventions used on every page of this session (the notes PDFs of this batch sha
   conserves a² − b² (0.08 from (0.3, 0.1)), so balanced layers stay balanced; (3) modes of strength s are half-learned
   at ln(s/u₀ − 1)/(2s) (Eq. 11; 1.33 for s = 3 vs 3.45 for s = 1 from u₀ = 0.001); (4) depth multiplies scales
   (0.9⁵⁰ ≈ 0.005, 1.1⁵⁰ ≈ 117).
+
+## [5] chizat2018global — Global Convergence Using Optimal Transport
+- Checked against: arXiv 1805.09545 v2 (NeurIPS 2018): Eq. (1) J(µ) = R(∫φ dµ) + G(µ) over signed measures, Eq. (2)
+  particle discretization (1/m)Σ wᵢδ_θᵢ (positions and weights), Sec. 1.2 contribution summary, Theorem 2.6
+  (many-particle limit = Wasserstein gradient flow), Theorems 3.3 / 3.5, Sec. 4 (ReLU / sigmoid), numerical section.
+- **Fix to the notes (one):** the "Actual contribution" box said "…the appropriate infinite-particle gradient flow
+  converges to global minimizers of the convex-in-measure objective". The paper proves a conditional statement:
+  Theorem 3.3 (and 3.5) "If (µ_t)_t converges to µ_∞ in W2, then µ_∞ is a global minimizer of F"; Sec. 1.2 (p. 3):
+  "we prove that if this Wasserstein gradient flow converges, then the limit is a global minimizer of J". Fixed to
+  "…if the appropriate infinite-particle gradient flow converges, its limit is a global minimizer of the
+  convex-in-measure objective." (The convergence of the flow is a hypothesis, not a result.)
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1 problem and idea, the corrected
+  "Actual contribution" box, the Sec. 5 qualification), labels Problem / Idea / Actual contribution / Limits.
+- Notes' µ_m = Σ a_j δ_θj vs the paper's (1/m)Σ w_i δ_θi: the same object (the 1/m is absorbed into a_j); not changed.
+- Numbers checked in `scripts/check-math/chizat2018global.py`: ∫φ dµ_m = Σ a_j φ(θ_j) for a particle measure.
+- Unverified: none.
+- Primer ideas: (1) (ab − 1)² is non-convex in (a, b) (Hessian eigenvalues ±2 at 0) but convex in p = ab; (2) the
+  predictor is linear in µ, so J is convex along mixtures (predictions 0 and 2 → mixture loss 0 ≤ 1); (3) gradient
+  descent moves a cloud of particles, and duplicating neurons leaves the m-scaled motion unchanged (checked).
+
+## [6] allenzhu2018neon2 — NEON2: Finding Local Minima via First-Order Oracles
+- Checked against: arXiv 1711.06673 (NeurIPS 2018): Sec. 1.1 Theorems 1–7 (informal), Figure 1 (Neon vs Neon2),
+  Sec. 3 Algorithms 1–2 and Theorem 1 (Õ(log²(d/p) L²/δ²) stochastic gradients; ⊥ ⇒ ∇²f ⪰ −δI, else ‖v‖ = 1,
+  vᵀ∇²f v ≤ −δ/2), Sec. 4 Algorithm 3 / Theorem 3 (Neon2det, Chebyshev, Õ(√L/√δ) full gradients), Neon2finite
+  (Theorem 5), Theorems 7a–7d (SGD, SCSG, GD, SVRG), Theorem 2 (Natasha2).
+- Fixes to the notes: none. No discrepancies found. The "Ref 74 / 76 / 77" labels are the notes' old numbering; kept.
+- Numbers checked in `scripts/check-math/allenzhu2018neon2.py`: the worked example (Hu = (0.2, −0.1) for both samples,
+  u⁺ = (0.06, 0.12)).
+- Unverified: none.
+- Primer ideas: (1) oracles and the (ε, δ) second-order target (x² − y² has eigenvalue −2 at a zero-gradient point);
+  (2) ∇f(x + u) − ∇f(x) = Hu + O(‖u‖²) (error 0.01 at u = (0.1, 0.1)); (3) the power method on I − ηH (multipliers
+  0.6, 1.2: 1024× in ten steps); (4) repetition with verification: (1/3)¹⁰ ≈ 1.7·10⁻⁵.
+
+## [7] foret2021sharpness — Sharpness-Aware Minimization for Efficiently Improving Generalization
+- Checked against: arXiv 2010.01412 (ICLR 2021): Sec. 2 (L_S, L_D; Theorem 1 informal: L_D(w) ≤ max_{‖ε‖₂≤ρ} L_S(w + ε)
+  + h(‖w‖²/ρ²); Eq. (1) SAM objective with p-norm; Eqs. (2)–(3) first-order ε̂ and dropped second-order terms;
+  Theorem 2 in App. A), Figure 1 (error reduction; sharp vs wide minimum), Figure 2 ("Schematic of the SAM parameter
+  update"), Sec. 3 (CIFAR-10/100, ImageNet, fine-tuning, label noise), Sec. 4.
+- Fixes to the notes: none. No discrepancies found.
+- Kept verbatim: two sections numbered "5." in the PDF.
+- Numbers checked in `scripts/check-math/foret2021sharpness.py`: the Sec. 2 example (0.01 vs 0.10) and ε̂ = ρg/‖g‖.
+- Unverified: none.
+- Primer ideas: (1) training loss L_S vs population loss L_D; (2) Cauchy–Schwarz worst nudge (g = (3, 4), ρ = 0.1:
+  ε = (0.06, 0.08), max 0.5); (3) Danskin: slope of the worst case is the slope at the worst point ((|w| + 0.1)²,
+  slope 2.2 = L′(1.1)); (4) the Theorem 1 bound and the radius ρ as a dial.

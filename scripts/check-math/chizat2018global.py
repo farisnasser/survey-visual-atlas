@@ -68,4 +68,32 @@ for m in (5, 10, 20, 100):
     out[f"traj{m}"] = [r(t, 3) for t in traj[::2]]; out[f"loss{m}"] = sig(np.maximum(L, 1e-12), 3); out[f"final{m}"] = float(f"{Lf:.3g}")
 check("loss curves saved", all(len(out[f"loss{m}"]) == 200 for m in (5, 10, 20, 100)))
 save_json("chizat2018global", "data.json", out)
+# in-page notes (papers/chizat2018global/notes.md): Sec. 2 particle measure sum, primer numbers
+Rc = np.random.default_rng(11)
+aj, th, xs = Rc.normal(size=5), Rc.normal(size=(5, 2)), Rc.normal(size=(40, 2))
+phi = lambda T: np.maximum(xs @ T.T, 0)                      # phi(theta)(x) = relu(theta . x), one column per particle
+check("notes: integral of phi against mu_m = sum_j a_j delta_theta_j equals sum_j a_j phi(theta_j)",
+      np.allclose(sum(aj[j] * np.maximum(xs @ th[j], 0) for j in range(5)), phi(th) @ aj))
+Lc = lambda p: (p[0] * p[1] - 1) ** 2
+check("primer: Hessian of (ab - 1)^2 at 0 is [[0, -2], [-2, 0]], eigenvalues -2, 2", np.allclose(fd_hess(Lc, np.zeros(2)), [[0, -2], [-2, 0]], atol=1e-4) and np.allclose(eig([[0, -2], [-2, 0]]), [-2, 2]))
+Rf = lambda f: (f - 1) ** 2
+check("primer: predictions 0 and 2 have loss 1 each, their mixture predicts 1 with loss 0", Rf(0) == 1 and Rf(2) == 1 and Rf(.5 * 0 + .5 * 2) == 0)
+# predictor linear in mu: mixing two particle measures mixes predictors; R convex => J convex along the mix
+a2, th2 = Rc.normal(size=3), Rc.normal(size=(3, 2)); ys = Rc.normal(size=40)
+Jm = lambda A, T: np.mean((phi(T) @ A / len(A) - ys) ** 2)
+for lam in [.2, .5, .8]:
+    # mixture measure: particles of both, masses scaled by lam and 1 - lam
+    A_mix, T_mix = np.r_[lam * aj * 8 / 5, (1 - lam) * a2 * 8 / 3], np.r_[th, th2]
+    assert np.isclose(Jm(A_mix, T_mix), np.mean((lam * phi(th) @ aj / 5 + (1 - lam) * phi(th2) @ a2 / 3 - ys) ** 2))
+    assert Jm(A_mix, T_mix) <= lam * Jm(aj, th) + (1 - lam) * Jm(a2, th2) + 1e-12
+check("primer: J is convex along mixtures of particle measures (predictor linear in mu)", True)
+# duplicating every neuron: same predictor; with the 1/m-scaled flow (step x m) each copy moves like the original
+def grads(A, T):
+    m = len(A); r = phi(T) @ A / m - ys; act = (xs @ T.T > 0)
+    gA = phi(T).T @ r * 2 / len(ys) / m
+    gT = np.stack([2 / len(ys) / m * A[j] * (r * act[:, j]) @ xs for j in range(m)])
+    return gA, gT
+gA1, gT1 = grads(aj, th); gA2, gT2 = grads(np.r_[aj, aj], np.r_[th, th])
+check("primer: duplicating neurons keeps the predictor; m-scaled velocities of the copies equal the originals",
+      np.allclose(phi(th) @ aj / 5, phi(np.r_[th, th]) @ np.r_[aj, aj] / 10) and np.allclose(10 * gA2[:5], 5 * gA1) and np.allclose(10 * gT2[5:], 5 * gT1))
 done()
