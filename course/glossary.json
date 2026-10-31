@@ -326,7 +326,8 @@
   "tex": "\\nabla f(x) = 0",
   "aka": [
    "stationary point"
-  ]
+  ],
+  "sec": "n-1-flat-is-not-finished"
  },
  "saddle": {
   "term": "Saddle point",
@@ -334,13 +335,15 @@
   "def": "A critical point that is neither a local minimum nor a local maximum: $f$ rises in some directions and falls in others, like a mountain pass between two valleys.",
   "aka": [
    "saddle"
-  ]
+  ],
+  "sec": "n-1-flat-is-not-finished"
  },
  "strict-saddle": {
   "term": "Strict saddle",
   "ch": "critical",
   "def": "A critical point whose Hessian has at least one strictly negative eigenvalue, so there is a direction of clear downward curvature to escape along. A function has the strict-saddle property if every saddle is strict. (Lee et al. 2016 also count local maxima.)",
-  "tex": "\\nabla f(x) = 0, \\qquad \\lambda_{\\min}\\big(\\nabla^2 f(x)\\big) < 0"
+  "tex": "\\nabla f(x) = 0, \\qquad \\lambda_{\\min}\\big(\\nabla^2 f(x)\\big) < 0",
+  "sec": "n-3-strict-saddles-and-degenerate-points"
  },
  "degenerate": {
   "term": "Degenerate critical point",
@@ -349,7 +352,8 @@
   "aka": [
    "non-strict saddle",
    "flat direction"
-  ]
+  ],
+  "sec": "n-3-strict-saddles-and-degenerate-points"
  },
  "fosp": {
   "term": "First-order stationary point",
@@ -358,7 +362,8 @@
   "aka": [
    "FOSP",
    "$\\varepsilon$-FOSP"
-  ]
+  ],
+  "sec": "n-6-first-order-and-second-order-stationary-points"
  },
  "sosp": {
   "term": "Second-order stationary point",
@@ -369,7 +374,8 @@
    "SOSP",
    "$\\varepsilon$-SOSP",
    "approximate local minimum"
-  ]
+  ],
+  "sec": "n-6-first-order-and-second-order-stationary-points"
  },
  "hessian-lipschitz": {
   "term": "Hessian-Lipschitz",
@@ -379,12 +385,14 @@
   "aka": [
    "$\\rho$",
    "second-order smoothness"
-  ]
+  ],
+  "sec": "n-6-first-order-and-second-order-stationary-points"
  },
  "index": {
   "term": "Index of a critical point",
   "ch": "critical",
-  "def": "The number of negative Hessian eigenvalues at a critical point: how many independent downhill directions it has. A nondegenerate local minimum has index 0; a nondegenerate local maximum in $d$ dimensions has index $d$."
+  "def": "The number of negative Hessian eigenvalues at a critical point: how many independent downhill directions it has. A nondegenerate local minimum has index 0; a nondegenerate local maximum in $d$ dimensions has index $d$.",
+  "sec": "n-2-the-zoo"
  },
  "stable-set": {
   "term": "Stable set",
