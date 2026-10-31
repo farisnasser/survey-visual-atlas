@@ -179,3 +179,34 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   stays at the second — simulated); period-2 oscillation just past 2 (multiplier −1.02). All in `cohen2021gradient.py`
   together with the notes' e_t = (1 − ηa)^t e_0 behaviour.
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
+
+## [12] lewkowycz2020large — The Catapult Mechanism at Large Learning Rates
+- Notes checked against: arXiv 2003.02218: Sec. 1.3 (three phases; λ_final < 2/η; c_act ≈ 12 for ReLU), Sec. 2.1
+  warm-up model f = n^{−1/2}vᵀu, Eq. (5) λ = n⁻¹(‖v‖² + ‖u‖²), exact Eqs. (6)–(7), η_crit = 2/λ₀, η_max = 4/λ₀,
+  Sec. 3 experiments (flatter minima, test accuracy vs learning rate), Secs. 4–5.
+- Fixes to the notes: none. No discrepancies found ("Sections 2–5" matches; the toy L(w) = ½(1 − w²)² is labelled
+  by the notes as not the paper's model and L″ = −2 + 6w² is correct).
+- Minute box: no "paper in one minute" heading in the notes (Problem / Method / Result); standard title.
+  "Characteristic trajectory:" (green) → key.
+- Primer (4 ideas), built on the paper's own warm-up model and its exact Eqs. (6)–(7): the kernel as output curvature
+  (n = 1, u = 2, v = 0.35: f0 = 0.7, λ0 = 4.1225, 2/λ0 ≈ 0.485); the kernel shrinks while ηλ < 4; the catapult in
+  numbers (ηλ0 = 2.6: loss 0.245 → 0.484 → 0, final λ ≈ 1.21 < 2/η ≈ 3.17; n = 1e4: 3.98 converges, 4.02 diverges);
+  width delays the spike by ~log n (peaks at steps 2, 6, 9 for n = 1e2, 1e4, 1e6). All in `lewkowycz2020large.py`,
+  including a check that Eqs. (6)–(7) reproduce GD on (u, v) exactly.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 5 sections, no overflow at 375 px.
+
+## [13] zhang2026saddle — Why Networks Learn One Unit at a Time
+- Notes checked against: ICLR 2026 proceedings PDF: Eq. (1), Theorem 1 and Corollary 2 (Sec. 3, proofs App. E),
+  Theorem 3 (Sec. 4, App. F), Eqs. (8)–(10) and Theorem 4 (Sec. 5.1: multiplicity r < D, N(0, ε²) init,
+  ‖(I − P)θ_i‖ = O(ε^{1 − s_{r+1}/s_1}) a.s.), Proposition 5 (quadratic case), Figs. 1–2 and captions, tanh discussion
+  (Secs. 5–7), Apps. G–H.
+- Fixes to the notes: none. No discrepancies found (Fig. 2 rows match the caption: width barely matters for linear
+  nets, shortens plateaus in linear self-attention; κ = 0 removes plateaus in linear nets only; larger init shortens).
+- Title: "Paper 8 — …" → without "Paper 8". The two-box stage schematic is redrawn as SVG. Boxes: "Why this example
+  matters", "Difference to memorize" → key; "What Theorem 4 proves…" → theorem; "Do not mix the two mechanisms",
+  "One subtlety for a good survey" → warn; "Papers Master — 2-line note" → plain.
+- Primer (4 ideas): gradient flow as the η → 0 limit (0.99^100 ≈ 0.366 vs e⁻¹ ≈ 0.368); W = Σ v_i u_iᵀ and merged
+  identical units (rank 1); growth time log(1/ε)/s (6.9 vs 13.8 for ε = 1e−3, 1e−6); a plateau is time near a saddle
+  (½(1 − a²)² from a = 0.01: L = 0.462 at t = 1.5, half-way at t ≈ 2.3, 0.0017 at t = 3). All in `zhang2026saddle.py`,
+  with the notes' numbers (t = log(100)/3 ≈ 1.535, a2 ≈ 0.0464, v1(9) = 1, v2(9) ≈ 0.091, unit duplication).
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 11 sections, no overflow at 375 px.

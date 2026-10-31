@@ -64,4 +64,29 @@ first = int(np.argmax(qn[:, order[0]] > .3))
 second = int(np.argmax(qn[:, order[1]] > .3))
 print(f"  quadratic net: final loss {ql[-1]:.2e}; unit A grows at snapshot {first}, unit B at {second}; others final norm {np.round(np.sort(qn[-1])[:-2], 3)}")
 check("quadratic net: units grow one at a time; rest stay small", second > first + 5 and np.sort(qn[-1])[-3] < .2)
+
+# in-page notes (papers/zhang2026saddle/notes.md): worked numbers (Secs. 2, 5, 6) and primer
+xg = np.linspace(-2, 2, 9); phi_ = lambda x, u: np.tanh(u * x); vz, uz = 1.7, .8
+check("notes: duplicating a unit with v/2 each leaves f unchanged", np.allclose(vz / 2 * phi_(xg, uz) + vz / 2 * phi_(xg, uz), vz * phi_(xg, uz)))
+t1 = np.log(100) / 3
+check("notes: s1 = 3 mode reaches 1 at t = log(100)/3 ~ 1.535", abs(t1 - 1.535) < 5e-4 and abs(.01 * np.exp(3 * t1) - 1) < 1e-12)
+check("notes: a2(t1) = 0.01 e^1.535 ~ 0.0464", abs(.01 * np.exp(t1) - .0464) < 5e-5)
+vt = lambda v0, t: 1 / (1 / v0 - t)
+check("notes: v' = v^2 solution 1/(1/v0 - t): v1(9) = 1, v2(9) ~ 0.091", abs(vt(.1, 9) - 1) < 1e-12 and abs(vt(.05, 9) - .091) < 5e-4)
+vv_, dt_ = .1, 1e-5
+for _ in range(int(9 / dt_)):
+    vv_ += dt_ * vv_ * vv_
+check("notes: Euler integration of v' = v^2 from 0.1 reaches ~1 at t = 9", abs(vv_ - 1) < .01, f"{vv_:.4f}")
+# primer
+check("primer: (1 - 0.01)^100 ~ 0.366 vs e^-1 ~ 0.368", abs(.99 ** 100 - .366) < 5e-4 and abs(np.exp(-1) - .368) < 5e-4)
+u_ = np.array([.3, -.4]); W2 = 1.2 * np.outer([1, 2], u_) + .5 * np.outer([1, 2], u_)
+check("primer: two units with equal weights merge into one rank-one term", np.linalg.matrix_rank(W2) == 1)
+check("primer: log(1/eps)/s = 6.9 (eps = 1e-3) and 13.8 (eps = 1e-6) for s = 1", abs(np.log(1e3) - 6.9) < .01 and abs(np.log(1e6) - 13.8) < .02)
+a_, dt_, Lm_ = .01, 1e-4, {}
+for k in range(1, 30001):
+    a_ += dt_ * 2 * a_ * (1 - a_ * a_)
+    if k in (15000, 30000):
+        Lm_[k] = .5 * (1 - a_ * a_) ** 2
+check("primer: L = (1 - a^2)^2/2 from a = 0.01: L(1.5) ~ 0.462, L(3) ~ 0.0017", abs(Lm_[15000] - .462) < 5e-4 and abs(Lm_[30000] - .0017) < 5e-5, f"{Lm_}")
+check("primer: halfway (a^2 = 1/2) at t = ln(9999)/4 ~ 2.3", abs(np.log(9999) / 4 - 2.3) < .005)
 done()

@@ -75,4 +75,32 @@ check("n = 1, eta lambda0 = 4.2: diverges", res[4.2][3] < 3000)
 # notes' teaching toy
 Lw = lambda w: .5 * (1 - w[0] ** 2) ** 2
 check_hess_at("notes toy L = (1 - w^2)^2/2: L'' = -2 + 6 w^2 at w = 0.7", Lw, [.7], [[-2 + 6 * .49]])
+
+# in-page notes (papers/lewkowycz2020large/notes.md): toy curvature (Sec. 4) and primer numbers from the paper's Eqs. (6)-(7)
+Lw = lambda w: .5 * (1 - w ** 2) ** 2
+check("notes: L(w) = (1 - w^2)^2 / 2 has L'' = -2 + 6 w^2", all(abs((Lw(w + 1e-4) - 2 * Lw(w) + Lw(w - 1e-4)) / 1e-8 - (-2 + 6 * w * w)) < 1e-4 for w in [-1.3, -.2, 0, .5, 1, 1.7]))
+def fl_run(f, l, eta, n, T=3000):
+    F, Lm = [f], [l]
+    for _ in range(T):
+        f, l = (1 - eta * l + eta ** 2 * f * f / n) * f, l + eta * f * f / n * (eta * l - 4)
+        F.append(f); Lm.append(l)
+        if abs(f) > 1e8:
+            break
+    return np.array(F), np.array(Lm)
+u0, v0 = 2., .35; f0_, l0_ = u0 * v0, u0 ** 2 + v0 ** 2
+check("primer: n = 1, u = 2, v = 0.35: f0 = 0.7, lambda0 = 4.1225, 2/lambda0 ~ 0.485", abs(f0_ - .7) < 1e-15 and abs(l0_ - 4.1225) < 1e-12 and abs(2 / l0_ - .485) < 5e-4)
+eta_c = 2.6 / l0_
+Fc, Lc = fl_run(f0_, l0_, eta_c, 1)
+# Eqs. (6)-(7) are exact: compare with GD on (u, v) directly
+uu_, vv_ = u0, v0
+for t in range(5):
+    ff = uu_ * vv_; uu_, vv_ = uu_ - eta_c * ff * vv_, vv_ - eta_c * ff * uu_
+    assert abs(uu_ * vv_ - Fc[t + 1]) < 1e-12 and abs(uu_ ** 2 + vv_ ** 2 - Lc[t + 1]) < 1e-12
+check("primer: Eqs. (6)-(7) reproduce GD on (u, v) exactly", True)
+check("primer: eta lambda0 = 2.6 -> eta ~ 0.631, loss 0.245 -> 0.484 after one step", abs(eta_c - .631) < 5e-4 and abs(Fc[0] ** 2 / 2 - .245) < 1e-12 and abs(Fc[1] ** 2 / 2 - .484) < 5e-4)
+check("primer: kernel ends at ~1.21 < 2/eta ~ 3.17, loss -> 0", abs(Lc[-1] - 1.21) < .005 and abs(2 / eta_c - 3.17) < .005 and abs(Fc[-1]) < 1e-10)
+F1, _ = fl_run(1., 1., 3.98, 1e4, 20000); F2, _ = fl_run(1., 1., 4.02, 1e4, 20000)
+check("primer: n = 1e4: eta lambda0 = 3.98 converges, 4.02 diverges", abs(F1[-1]) < 1e-6 and abs(F2[-1]) > 1e6)
+peaks = [int(np.argmax(fl_run(1., 1., 3., n)[0] ** 2)) for n in [1e2, 1e4, 1e6]]
+check("primer: eta lambda0 = 3: loss peaks at steps 2, 6, 9 for n = 1e2, 1e4, 1e6", peaks == [2, 6, 9], f"{peaks}")
 done()
