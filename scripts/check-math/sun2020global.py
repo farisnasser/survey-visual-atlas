@@ -30,4 +30,27 @@ for k, v in res.items(): print(f"  GD (step 0.05, 6000 steps) from a 41 x 41 gri
 check("quadratic activation: a sizeable share of GD runs ends at the spurious level F = 1", res["quad"][1] > .1)
 check("tanh: the only grid start that stays at F = 1 is (0, 0), a critical point that is a saddle, not a minimum (Prop. IV.1)", abs(res["tanh"][1] - 1 / 41 ** 2) < 1e-12 and (1 - .1 * np.tanh(.1)) ** 2 < 1)
 save_json("sun2020global", "data.json", {"res": res})
+
+# in-page notes (papers/sun2020global/notes.md): toy Hessian (Sec. 2), x^2 - y^4 (Sec. 3), primer numbers
+fab = lambda p: .5 * (p[0] * p[1] - 1) ** 2
+check_hess_at("notes: (ab-1)^2/2 at 0 has Hessian [[0,-1],[-1,0]]", fab, [0, 0], [[0, -1], [-1, 0]])
+check("notes: its eigenvalues are -1, +1", np.allclose(np.linalg.eigvalsh([[0, -1], [-1, 0]]), [-1, 1]))
+gxy = lambda p: p[0] ** 2 - p[1] ** 4
+check_hess_at("notes: x^2 - y^4 at 0 has Hessian diag(2, 0)", gxy, [0, 0], [[2, 0], [0, 0]])
+check("notes: g(0, y) < g(0, 0) for small y != 0", all(gxy([0, y]) < 0 for y in [1e-3, -.01, .1]))
+cr = np.sort(np.roots([4, 0, -4, .5]).real); fq4 = lambda x: x ** 4 - 2 * x ** 2 + .5 * x
+check("primer: x^4 - 2x^2 + 0.5x critical points ~ -1.057, 0.127, 0.930", np.allclose(cr, [-1.057, .127, .930], atol=5e-4))
+check("primer: f(-1.057) ~ -1.515 (global), f(0.930) ~ -0.517 (local), both with f'' > 0", abs(fq4(cr[0]) + 1.515) < 5e-4 and abs(fq4(cr[2]) + .517) < 5e-4 and 12 * cr[0] ** 2 - 4 > 0 and 12 * cr[2] ** 2 - 4 > 0 and 12 * cr[1] ** 2 - 4 < 0)
+xx = .5
+for _ in range(5000):
+    xx -= .01 * (4 * xx ** 3 - 4 * xx + .5)
+check("primer: GD from x = 0.5 ends at the worse minimum 0.930", abs(xx - cr[2]) < 1e-6)
+check_hess_at("primer: x^2 + y^4 at 0 also has Hessian diag(2, 0)", lambda p: p[0] ** 2 + p[1] ** 4, [0, 0], [[2, 0], [0, 0]])
+pts = rand_pts(20000, -3, 3, seed=4)
+check("primer: (ab-1)^2/2 >= 0.5 wherever ab <= 0", all(fab(p) >= .5 for p in pts if p[0] * p[1] <= 0))
+xs4 = np.linspace(-2, 2, 4000001); sub = xs4[(xs4 ** 2 - 1) ** 2 <= .5]
+check("primer: {(x^2-1)^2 <= 0.5} = [-1.31,-0.54] U [0.54,1.31]; barrier f(0) = 1",
+      abs(sub.max() - 1.31) < 5e-3 and abs(sub[sub > 0].min() - .54) < 5e-3 and not np.any(np.abs(sub) < .5) and (0 ** 2 - 1) ** 2 == 1)
+th4 = np.linspace(0, 2 * np.pi, 1000)
+check("primer: (x^2 + y^2 - 1)^2 = 0 along the whole unit circle", np.allclose((np.cos(th4) ** 2 + np.sin(th4) ** 2 - 1) ** 2, 0))
 done()

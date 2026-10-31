@@ -286,3 +286,33 @@ difference is listed per paper (title block, box/fence keywords and math tokens 
   square ≈ 0.8 with σ² = 2/n vs ≈ 6e−7 with 1/n, 0.5^20 ≈ 1e−6); residual identity path (1.01^50 ≈ 1.645 vs
   e^0.5 ≈ 1.649). All in `sun2020optimization.py`, with the notes' scalar example and residual Jacobian.
 - Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
+
+## [18] sun2020global — The Global Landscape of Neural Networks: An Overview
+- Notes checked against: arXiv 2007.01429 (IEEE SPM 37(5)): review structure (linear/factorized models, wide nets,
+  single-neuron and ReLU counterexamples with spurious minima, Fig. 1 (ab − 1)²), and the notes' own calculus.
+- Fixes to the notes: none. No discrepancies found (Hessian of ½(ab − 1)² at 0 = [[0, −1], [−1, 0]], eigenvalues ±1;
+  x² − y⁴ has Hessian diag(2, 0) and decreases along y — checked).
+- Minute box: no heading in the notes (Problem / Method / Result); standard title. "Toy calculation (illustrative)."
+  (amber, explanatory) → plain; "Attribution." (red) → warn.
+- Primer (4 ideas): a strictly worse local minimum (x⁴ − 2x² + 0.5x: critical points −1.057, 0.127, 0.930; f = −1.515
+  vs −0.517; GD from 0.5 lands in the worse one); a silent second-order test (x² ± y⁴ share Hessian diag(2, 0));
+  symmetry and saddles between minimum families (½(ab − 1)² ≥ 0.5 wherever ab ≤ 0); extra dimensions connect minima
+  ((x² − 1)² sublevel {≤ 0.5} = [−1.31, −0.54] ∪ [0.54, 1.31] vs the circle of minima of (x² + y² − 1)²). All in
+  `sun2020global.py`.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
+
+## [19] danilova2022recent — Recent Theoretical Advances in Non-Convex Optimization
+- Notes checked against: arXiv 2012.06188 (Springer 2022): Sec. 5 intro ("two subclasses of non-convex objective
+  functions which satisfy assumptions weaker than convexity"), Sec. 5.1 PŁ condition Eq. (36) and the linear rate
+  exp(−μk/L), Secs. 2–4 (first-order, stochastic, higher-order and zeroth-order complexity).
+- Fixes to the notes: none. No discrepancies with the paper. Remark for the coordinator (not changed, because the
+  chapter itself uses the same words): the notes say "PL is weaker than convexity". Strictly, PŁ is implied by strong
+  convexity but neither implies nor is implied by convexity (e.g. x⁴ is convex but not PŁ near 0); the chapter's Sec. 5
+  phrase is "assumptions weaker than convexity". Leave or soften by policy.
+- Notation: the notes write f_* (subscript); the page and primer follow.
+- Minute box: no heading in the notes (Problem / Method / Main synthesis); standard title. "Do not misattribute." → warn.
+- Primer (4 ideas): tolerances measure different things (x²/2 at 0.1: gradient 0.1, gap 0.005); exponent arithmetic
+  (ε = 1e−2: 1e4 vs 1e8); PŁ without convexity (x² + 3 sin²x on [−6, 6]: μ ≈ 0.176, L = 8, guarantee ≈ 623 steps for
+  1e6, actual 10 from x0 = 5); zeroth-order cost (forward difference 2.001; d + 1 evaluations). All in
+  `danilova2022recent.py`, plus checks of the notes' GD inequality, averaged bound and PL contraction along GD runs.
+- Audit: 0 KaTeX errors, `__atlasErrors` = [], 4 sections, no overflow at 375 px.
