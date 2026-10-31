@@ -63,4 +63,23 @@ for t in range(1500):
     gd_small = gd_small - .01 * G(gd_small)
 check("a smaller GD step (0.01) does converge from the same start", np.linalg.norm(G(gd_small)) < 1e-3)
 save_json("li2023convergence", "data.json", {"adam": sig(oa, 4), "gd": sig(og, 4)})
+# in-page notes (papers/li2023convergence/notes.md): Sec. 2 Adam recursion with bias corrections; Sec. 3 e^x
+check("notes: e^x has f' = f'' = e^x (no global L on R)", np.allclose([fd_grad(lambda q: np.exp(q[0]), np.array([t]))[0] for t in [-2., 0., 3.]], np.exp([-2., 0., 3.]), rtol=1e-6))
+# primer: EMA bias, exponents q for e^x, x^4, 1/x, complexity counts, local constant
+b1 = .9; m = 0.; ms = []
+for t in range(1, 11):
+    m = b1 * m + (1 - b1) * 2.; ms.append((m, m / (1 - b1 ** t)))
+check("primer: constant g = 2, beta1 = 0.9: m1 = 0.2, m10 ~ 1.30, bias-corrected m-hat = 2 every step",
+      np.isclose(ms[0][0], .2) and np.isclose(ms[9][0], 1.30, atol=.005) and all(np.isclose(mh, 2) for _, mh in ms), f"m10 = {ms[9][0]:.4f}")
+b2 = .999; v = 0.; g = np.array([2., -.03])
+v = b2 * v + (1 - b2) * g * g; mh = g; vh = v / (1 - b2)
+check("primer: first Adam step is ~eta per coordinate whatever the gradient scale", np.allclose(mh / (np.sqrt(vh) + 1e-12), np.sign(g)))
+check("primer: eps = 0.01: eps^-4 = 1e8, eps^-3 = 1e6", np.isclose(.01 ** -4, 1e8) and np.isclose(.01 ** -3, 1e6))
+xq = np.linspace(.2, 5, 50)
+qexp = lambda f1, f2: np.polyfit(np.log(np.abs(f1(xq))), np.log(np.abs(f2(xq))), 1)
+s_e, s_4, s_r = qexp(np.exp, np.exp), qexp(lambda x: x ** 3, lambda x: 3 * x ** 2), qexp(lambda x: -1 / x ** 2, lambda x: 2 / x ** 3)
+check("primer: |f''| = c |f'|^q with q = 1 (e^x), 2/3 (x^4/4), 3/2 (1/x, c = 2)",
+      np.isclose(s_e[0], 1) and np.isclose(s_4[0], 2 / 3) and np.isclose(s_r[0], 1.5) and np.isclose(np.exp(s_r[1]), 2))
+check("primer: f = x^4/4: f' = x^3, f'' = 3x^2 = 3|f'|^{2/3}", np.allclose(fd_grad(lambda q: q[0] ** 4 / 4, np.array([1.7])), 1.7 ** 3, rtol=1e-6) and np.allclose(3 * xq ** 2, 3 * np.abs(xq ** 3) ** (2 / 3)))
+check("primer: L0 + L1 G^q = 1 + 3 * 10 = 31", 1 + 3 * 10 ** 1 == 31)
 done()

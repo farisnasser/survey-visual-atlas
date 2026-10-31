@@ -181,3 +181,66 @@ Conventions used on every page of this session (the notes PDFs of this batch sha
 - Primer ideas: (1) Armijo on ½x² accepts η ≤ 2(1 − c) = 1.98; halving/doubling lands in [(1 − c)/λ, 2(1 − c)/λ]
   (Prop. 2.5's shape); (2) Zhang–Hager reference (ξ = 0.85, losses 1.0, 0.5 → 0.73); (3) small sharpness with a
   negative eigenvalue: [[0.2, 0.3], [0.3, −0.5]] → 0.31, −0.61.
+
+## [12] nesterov2006cubic — Cubic Regularization of Newton Method
+- Checked against: the open CORE DP 2003/41 preprint (UCLouvain DIAL, "Cubic regularization of a Newton scheme and its
+  global performance", April 2003): Introduction (Newton "may … converge to a saddle point or even to a point of local
+  maximum"), Lemma 1 / Eq. (2.3) (cubic Taylor bound L/6‖y − x‖³), Eq. (2.4) model, Eq. (2.5) first-order condition
+  g + Hs + (M/2)‖s‖s = 0, Proposition 1 (H + (M/2)r I ⪰ 0), Theorems 1–3 (global rates, limit points second-order,
+  local quadratic convergence), Theorems 4–5 (star-convex classes).
+- Fixes to the notes: none. No discrepancies found. The notes open with a "Source blocker" box saying the full article
+  was not available when they were written; it is part of the notes and stays verbatim. Everything the notes state
+  matches the paper (they use M for the Hessian Lipschitz constant, the paper uses L for it and M ≥ L in the model).
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 2, "Documented result" box,
+  Sec. 5 trade-off), labels Problem / Mechanism / Documented result / Trade-off.
+- Numbers checked in `scripts/check-math/nesterov2006cubic.py`: the global minimizer of the cubic model satisfies
+  g + Hs + (M/2)‖s‖s = 0 and (H + M‖s‖/2·I)s = −g (5 random indefinite instances).
+- Unverified: none (journal version not read; the preprint is the same paper).
+- Primer ideas: (1) Newton from (1, 0.5) on x² − y² lands on the saddle in one step; (2) the cubic Taylor cap is tight
+  (x³/6: f(2) = 4/3 = cap); (3) at g = 0, H = −1, M = 1 the cubic step has length 2 = 2|H|/M and model value −2/3.
+
+## [13] zhang2020gradient — Why Gradient Clipping Accelerates Training
+- Checked against: arXiv 1905.11881 (ICLR 2020): abstract ("converge arbitrarily faster than gradient descent with
+  fixed stepsize"), Definition 1 / Assumption 3 ((L0, L1)-smoothness), Lemma 2 (polynomials), Theorem 3 (clipped GD),
+  Theorems 4 and 6 (fixed-step lower/upper bounds), empirical smoothness measurements (Fig. 1).
+- Fixes to the notes: none. No discrepancies found.
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 2, "Main result" box), labels
+  Problem / Model / Main result / Limits.
+- Numbers checked in `scripts/check-math/zhang2020gradient.py`: the clipped direction's norm min(‖g‖, c), e^x
+  (f′ = f″) and the normalized step length.
+- Unverified: none.
+- Primer ideas: (1) descent lemma and η < 2/L; (2) ½x² + ¼x⁴ is (1, 3)-smooth (76 ≤ 1 + 3·130 at x = 5);
+  (3) fixed step forced below 2/76 ≈ 0.026 (contraction 0.974 near 0) vs clipped h = 0.5/130 ≈ 0.0038 at x = 5
+  (h·f″ ≈ 0.29) and h = 1 near the minimum.
+
+## [14] li2023convergence — Convergence of Adam Under Relaxed Assumptions
+- Checked against: arXiv 2304.13972 (NeurIPS 2023): Definition 3.2 / Assumption 2 ((ρ, L0, Lρ) smoothness, ρ < 2, a.e.),
+  Lemma 3.4 (local Lipschitz gradient), Adam with h_t = η/(√v̂_t + λ), Theorem 4.1 (O(ε⁻⁴), bounded gradients along the
+  trajectory w.h.p.), Theorem 4.2 (sub-Gaussian noise), Sec. 6 VRAdam (O(ε⁻³)), Proposition B.1 (rational functions).
+- Fixes to the notes: none. No discrepancies found. (Notation only: the notes write δ in Adam's denominator and q for
+  the exponent; the paper writes λ and ρ.)
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 4 first sentence, the "Reported
+  result" box, the "Do not claim" box), labels Problem / Proof idea / Reported result / Do not claim.
+- Numbers checked in `scripts/check-math/li2023convergence.py`: e^x (f′ = f″).
+- Unverified: none.
+- Primer ideas: (1) EMA bias and its correction (g = 2, β₁ = 0.9: m₁₀ ≈ 1.30, m̂ = 2); (2) ε-stationarity and counting
+  (ε = 0.01: 10⁸ vs 10⁶); (3) exponents q = 1 (eˣ), 2/3 (x⁴/4), 3/2 (1/x); (4) bounded gradients ⇒ local constant
+  L0 + L1 G^q (31), the paper's Lemma 3.4.
+- Self-correction before commit: the primer first said "for x⁴, f″ = 3|f′|^{2/3}" (true for x⁴/4 only); fixed.
+
+## [15] apidopoulos2026taming — Taming Stochastic Gradient Descent
+- Checked against: PMLR 306 copy (apidopoulos26a.pdf): abstract ((L0, L1) with superlinear, even exponential growth;
+  TSGD under an ABC-type noise condition; dissipative taming under weaker moment bounds; "for both taming schemes …
+  avoid strict saddle points (and/or manifolds thereof) with probability 1 so, generically, both methods only converge
+  to local minimizers"), (TSGD) with deterministic scale r(x) and Remark 2 (random ‖ĝ‖ normalization introduces bias),
+  Theorems 1–3.
+- Fixes to the notes: none. No discrepancies found. The notes' "Verification scope" box (formulas not reconstructed) is
+  part of the notes and stays verbatim.
+- The notes have no one-minute box: built from the notes' own sentences (Sec. 1, Sec. 4, the "Reported result" box),
+  labels Problem / Method / Reported result / Limits.
+- Numbers checked in `scripts/check-math/apidopoulos2026taming.py`: the teaching step's length < 1, the multiplier
+  1 + η_tγ.
+- Unverified: none.
+- Primer ideas: (1) almost surely vs finite time (ten tails: 1/1024); (2) Robbins–Monro step conditions (H₁₀₀₀ ≈ 7.49,
+  π²/6); (3) x⁴/4 with η = 0.1 blows up from 5 (→ −7.5 → 34.7) while the teaching tamed step goes to 4.07, and the
+  paper tames with a deterministic r(x) (Remark 2); (4) noise leaves the stable manifold, |y| = 0.01 → 1 in 49 steps.

@@ -109,4 +109,26 @@ s = cubic_step(np.zeros(2), H([0, 0]), L)
 check("at the exact saddle the cubic step has length 2|lambda_min|/M", abs(np.linalg.norm(s) - 2 / L) < 1e-9 and abs(s[0]) < 1e-12, f"s = {np.round(s, 4)}")
 gx = [np.linalg.norm(g(p)) for p in gdP]
 save_json("nesterov2006cubic", "data.json", {"L": L, "L1": L1, "D": round(float(D), 6), "x0": x0.tolist(), "cr_grad": sig(np.maximum(G, 1e-16)), "gd_grad": sig(np.maximum(gx[:300], 1e-16)), "kcr": kcr, "kgd": kgd})
+# in-page notes (papers/nesterov2006cubic/notes.md): Sec. 3 first-order condition g + Hs + (M/2)|s| s = 0 at the model minimizer
+Rn = np.random.default_rng(8)
+for _ in range(5):
+    A = Rn.normal(size=(3, 3)); Hm = (A + A.T) / 2; gm = Rn.normal(size=3); Mm = 2.
+    mfun = lambda s: gm @ s + .5 * s @ Hm @ s + Mm / 6 * np.linalg.norm(s) ** 3
+    # global minimizer via the 1-D secular equation r = |(H + M r/2 I)^{-1} g| with H + M r/2 I > 0 (Nesterov-Polyak Sec. 5)
+    lo = max(0., -2 * eig(Hm)[0] / Mm) + 1e-12; hi = lo + 100
+    phi = lambda r: np.linalg.norm(np.linalg.solve(Hm + Mm * r / 2 * np.eye(3), gm)) - r
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if phi(mid) > 0 else (lo, mid)
+    s = -np.linalg.solve(Hm + Mm * lo / 2 * np.eye(3), gm)
+    assert np.allclose(gm + Hm @ s + Mm / 2 * np.linalg.norm(s) * s, 0, atol=1e-8)
+    assert all(mfun(s) <= mfun(s + .3 * Rn.normal(size=3)) for _ in range(200))
+check("notes: the model's global minimizer solves g + Hs + (M/2)|s| s = 0 and (H + M|s|/2 I) s = -g", True)
+# primer: Newton jumps to the saddle of x^2 - y^2; cubic Taylor cap tight for x^3/6; cubic step at g = 0, H = -1, M = 1
+p0 = np.array([1., .5]); gN = np.array([2 * p0[0], -2 * p0[1]]); HN = np.diag([2., -2.]); sN = -np.linalg.solve(HN, gN)
+check("primer: Newton from (1, 0.5) on x^2 - y^2: g = (2, -1), s = (-1, -0.5), lands on the saddle; f rises along y",
+      np.allclose(gN, [2, -1]) and np.allclose(sN, [-1, -.5]) and np.allclose(p0 + sN, 0) and -(p0[1] + sN[1]) ** 2 > -p0[1] ** 2)
+check("primer: f = x^3/6 at 0: f(2) = 8/6 ~ 1.33 equals the cap M|s|^3/6 with M = 1", np.isclose(2 ** 3 / 6, 1.333, atol=1e-3) and np.isclose(2 ** 3 / 6, 1 / 6 * 2 ** 3))
+ss = np.linspace(-4, 4, 800001); mc = -.5 * ss ** 2 + abs(ss) ** 3 / 6
+check("primer: m(s) = -s^2/2 + |s|^3/6 is minimized at |s| = 2 = 2|H|/M with value -2/3", np.isclose(abs(ss[np.argmin(mc)]), 2, atol=1e-4) and np.isclose(mc.min(), -2 / 3, atol=1e-8))
 done()
