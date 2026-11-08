@@ -31,7 +31,7 @@ export function inline(s) {
     .replace(/(^|[^*])\*([^*\s][^*]*?)\*/g, '$1<i>$2</i>')
     .replace(/\[\[([\w-]+)(?:\|([^\]]+))?\]\]/g, (_, id, t) => `<a class="term" href="learn.html?ch=glossary#t-${id}" data-term="${id}">${t || id}</a>`)
     .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-    .replace(/\[([^\]]+)\]\(((?:paper|learn)\.html[^)\s]*)\)/g, '<a href="$2">$1</a>');
+    .replace(/\[([^\]]+)\]\(((?:paper|learn|guide|library)\.html[^)\s]*)\)/g, '<a href="$2">$1</a>');
   return s.replace(/\u0000(\d+)\u0000/g, (_, i) => tex(math[+i], false));
 }
 
@@ -100,6 +100,8 @@ export function blocks(lines, toc) {
       }
       else if (kind === 'viz') out.push(`<div class="lv" data-viz="${esc(title)}"></div>`);
       else if (kind === 'divider') out.push(`<div class="nt-div"><span>${inline(title)}</span></div>`);
+      // :::survey Caption  /  image path  /  :::  — one of our survey's own figures (guide chapters)
+      else if (kind === 'survey') out.push(`<figure class="nt-fig sv"><img src="${esc((body.find(l => l.trim()) || '').trim())}" alt="${esc(title.replace(/\$[^$]*\$/g, '').slice(0, 120))}" loading="lazy">${title ? `<figcaption>${inline(title)}</figcaption>` : ''}</figure>`);
       else if (kind === 'figure') out.push(`<figure class="nt-fig">${body.join('\n')}${title ? `<figcaption>${inline(title)}</figcaption>` : ''}</figure>`);
       else out.push(`<div class="nt-box nt-${kind}">${title ? `<div class="nt-box-h">${inline(title)}</div>` : ''}<div class="nt-box-b">${blocks(body)}</div></div>`);
       continue;

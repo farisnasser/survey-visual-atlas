@@ -61,7 +61,7 @@ export default {
       plot: { xlabel: 'oscillation |x|', ylabel: 'S − 2/η', xlim: [0, .16], ylim: [-.12, .12], legend: false },
       build(ctx) {
         ctx.start = [.6 * DELTA, 0];
-        ctx.listen(document.querySelector('#plot2d'), 'pointerdown', ev => { const [X, Y] = ctx.plot.toData(ev); if (X > 1e-3) { ctx.start = [X, Y]; this.draw(ctx); } });
+        ctx.listen(ctx.plot.c, 'pointerdown', ev => { const [X, Y] = ctx.plot.toData(ev); if (X > 1e-3) { ctx.start = [X, Y]; this.draw(ctx); } });
         this.draw(ctx);
       },
       draw(ctx) {

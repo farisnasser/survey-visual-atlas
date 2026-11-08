@@ -1,0 +1,112 @@
+{
+  "multiplier": {
+    "term": "multiplier $1 - \\eta\\lambda$",
+    "ch": "multiplier",
+    "def": "Near a critical point, one gradient-descent step multiplies the distance along a Hessian eigenvector with eigenvalue $\\lambda$ by $1 - \\eta\\lambda$. Below $-1$ or above $+1$, that distance grows: the point is unstable for GD.",
+    "tex": "u_j \\leftarrow (1 - \\eta\\lambda_j)\\, u_j",
+    "aka": ["linearized GD map"],
+    "sec": "n-1-gradient-descent-near-a-critical-point"
+  },
+  "linear-stability": {
+    "term": "linear stability",
+    "ch": "multiplier",
+    "def": "A critical point is linearly stable for GD with step $\\eta$ if every multiplier $1 - \\eta\\lambda_j$ lies strictly between $-1$ and $1$. Then GD started close enough converges to it. A minimum is linearly stable exactly when $\\eta\\lambda_{\\max} < 2$.",
+    "sec": "n-3-stability-of-minima-the-2-eta-threshold"
+  },
+  "stability-threshold": {
+    "term": "stability threshold $2/\\eta$",
+    "ch": "multiplier",
+    "def": "The largest sharpness a minimum can have and still hold gradient descent with step size $\\eta$. Above it, the sharpest direction's multiplier is below $-1$, and GD bounces out.",
+    "tex": "\\eta\\,\\lambda_{\\max}(H) < 2",
+    "sec": "n-3-stability-of-minima-the-2-eta-threshold"
+  },
+  "cnc": {
+    "term": "correlated negative curvature (CNC)",
+    "ch": "escape",
+    "def": "Daneshmand et al.'s condition that the stochastic gradients have a non-vanishing spread along the most negative curvature direction, at every point. Under it, SGD's own noise escapes saddles without added noise.",
+    "tex": "\\mathbb{E}_\\xi\\big[\\langle v_\\theta, g(\\theta;\\xi)\\rangle^2\\big] \\ge \\gamma",
+    "sec": "n-3-noise-as-an-escape-mechanism"
+  },
+  "heavy-tail": {
+    "term": "heavy-tailed noise",
+    "ch": "escape",
+    "def": "Randomness whose large values are not rare: $P(|x| > t)$ decays only like a power $t^{-\\alpha}$. With $\\alpha < 2$ the variance is infinite. SGD iterates can be heavy-tailed even for linear regression with Gaussian data.",
+    "aka": ["power-law tail", "tail index α"],
+    "sec": "n-4-heavy-tails-and-global-exploration"
+  },
+  "saddle-to-saddle": {
+    "term": "saddle-to-saddle dynamics",
+    "ch": "stages",
+    "def": "Training from small initialization that lingers near a saddle, escapes along one new direction, lingers near the next saddle, and so on. The loss falls in a staircase while the network learns one rank, kink, kernel or head at a time.",
+    "aka": ["incremental learning", "stage-wise learning"],
+    "sec": "n-2-from-one-saddle-to-the-next"
+  },
+  "simplicity-bias": {
+    "term": "simplicity bias",
+    "ch": "stages",
+    "def": "The tendency of training to find simple functions before complex ones. In saddle-to-saddle dynamics, the strongest pattern in the data is learned first and weaker ones later.",
+    "sec": "n-3-obstacle-or-mechanism"
+  },
+  "batch-size-stability": {
+    "term": "SGD stability condition",
+    "ch": "precursors",
+    "def": "For SGD with batch size $S$ out of $N$ examples, the condition for the mean square of the distance along the top direction to shrink. Its second term makes it stricter than the full-batch condition when the per-example curvatures differ (spread $s$).",
+    "tex": "(1 - \\eta\\lambda_1)^2 + s^2\\,\\frac{\\eta^2(N - S)}{S(N - 1)} \\le 1",
+    "aka": ["dynamical stability", "non-uniformity"],
+    "sec": "n-2-which-minima-can-sgd-stay-in-dynamical-stability"
+  },
+  "break-even": {
+    "term": "break-even point",
+    "ch": "precursors",
+    "def": "Jastrzębski et al.'s name for the first point on the training trajectory where the SGD stability condition is just met with equality. For full batches, this is where the sharpness reaches $2/\\eta$.",
+    "sec": "n-3-the-break-even-point"
+  },
+  "catapult": {
+    "term": "catapult",
+    "ch": "precursors",
+    "def": "With a step between $2/\\lambda_0$ and a maximal value, the loss first spikes, the curvature then drops below $2/\\eta$, and training converges in a flatter region (Lewkowycz et al. 2020).",
+    "aka": ["catapult phase"],
+    "sec": "n-4-catapults"
+  },
+  "unstable-convergence": {
+    "term": "unstable convergence",
+    "ch": "edge",
+    "def": "Ahn, Zhang & Sra's name for training that keeps making progress while its step size violates $\\eta < 2/L$. They prove that GD cannot converge to stationary points with an eigenvalue below $0$ or above $2/\\eta$.",
+    "sec": "n-4-unstable-convergence-a-theorem-that-covers-both-instabilities"
+  },
+  "self-stabilization": {
+    "term": "self-stabilization",
+    "ch": "why",
+    "def": "Damian et al.'s mechanism for the edge of stability. The oscillation along the top eigenvector produces, through a third-order Taylor term, a drift $-\\eta\\tfrac{x^2}{2}\\nabla S$ that lowers the sharpness, so the instability brakes itself.",
+    "tex": "\\nabla L(\\theta + xu) \\approx \\nabla L(\\theta) + xS(\\theta)u + \\tfrac{x^2}{2}\\nabla S(\\theta)",
+    "sec": "n-3-self-stabilization"
+  },
+  "period-doubling": {
+    "term": "period doubling",
+    "ch": "why",
+    "def": "As the step size grows past the edge, GD's late iterates go from one point to a 2-cycle, then 4, 8, … and finally chaos: the classic route to chaos of iterated maps.",
+    "aka": ["route to chaos", "period-2 orbit"],
+    "sec": "n-5-beyond-the-edge-and-a-route-to-chaos"
+  },
+  "central-flow": {
+    "term": "central flow",
+    "ch": "flow",
+    "def": "Cohen et al.'s differential equation for the time-averaged path of GD at the edge of stability: a gradient flow with an implicit sharpness penalty, equivalently gradient flow projected onto the set where the sharpness equals $2/\\eta$.",
+    "tex": "\\frac{d\\theta}{dt} = -\\eta\\,\\Pi^\\perp_{\\nabla S}\\,\\nabla L(\\theta)",
+    "sec": "n-1-average-the-oscillation-away"
+  },
+  "adaptive-eos": {
+    "term": "adaptive edge of stability",
+    "ch": "beyond",
+    "def": "For adaptive methods, the largest eigenvalue of the preconditioned Hessian $P^{-1}\\nabla^2 L$ equilibrates at the update's stability threshold, $38/\\eta$ for Adam with $\\beta_1 = 0.9$ (Cohen et al. 2022).",
+    "sec": "n-1-adaptive-methods-have-their-own-edge"
+  },
+  "batch-sharpness": {
+    "term": "batch sharpness",
+    "ch": "beyond",
+    "def": "The expected curvature of each minibatch Hessian along its own minibatch gradient. For minibatch SGD, this, and not the full-batch sharpness, stabilizes at $2/\\eta$ (Andreyev & Beneventano 2024).",
+    "tex": "\\mathbb{E}_B\\!\\left[\\frac{\\nabla L_B^\\top \\nabla^2 L_B\\, \\nabla L_B}{\\lVert\\nabla L_B\\rVert^2}\\right]",
+    "aka": ["edge of stochastic stability"],
+    "sec": "n-4-minibatch-sgd-the-edge-of-stochastic-stability"
+  }
+}

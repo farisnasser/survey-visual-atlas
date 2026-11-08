@@ -3,48 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Survey Visual Atlas</title>
-<meta name="description" content="Every reference of the MLR570 survey on non-convex optimization in neural networks, organized by the survey taxonomy, with interactive 3D visuals of the core ideas, the math behind them, and study notes.">
+<title>Survey Visual Atlas · a visual guide to our survey</title>
+<meta name="description" content="A visual journey through our MLR570 survey on non-convex optimization in neural networks: from the math preliminaries to saddle escape and the edge of stability, section by section, with live visuals. Every surface is a real function; every ball runs a real optimizer.">
 <link rel="icon" href="public/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <link rel="stylesheet" href="src/theme.css">
-<link rel="stylesheet" href="src/hub/hub.css">
+<link rel="stylesheet" href="src/paper/paper.css">
+<link rel="stylesheet" href="src/learn/learn.css">
+<link rel="stylesheet" href="src/guide/guide.css">
 </head>
 <body>
-<header class="hero">
-  <div class="hero-in">
-    <div class="kicker mono">MLR570 · Non-Convex Optimization in Neural Networks</div>
-    <h1>Survey Visual Atlas</h1>
-    <p class="lede">Every reference of our survey, placed where the survey’s taxonomy puts it. Papers we have studied get an interactive visual of their core result, the math behind it, and our study notes. Every surface is a real loss function. Every ball runs a real optimizer.</p>
-    <a class="learn-cta" href="learn.html"><span class="mono">Crash course</span><b>New to optimization? Start here.</b><span>From “make the loss small” to gradients, step sizes, saddle points, momentum and Adam, built from first principles with live visuals.</span></a>
-    <div class="stats" id="stats"></div>
-  </div>
+<header class="topbar">
+  <a class="brand" href="./">Survey Visual Atlas</a>
+  <nav class="pn" id="pn"></nav>
 </header>
-<main>
-  <div class="toolbar" id="toolbar">
-    <label class="search"><span class="sr-only">Search papers</span>
-      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      <input id="q" type="search" placeholder="Search title, author, [ref], concept…" autocomplete="off">
-    </label>
-    <div class="seg" role="group" aria-label="View" id="views">
-      <button type="button" data-view="map" aria-pressed="true">Survey map</button>
-      <button type="button" data-view="refs" aria-pressed="false">References</button>
-      <button type="button" data-view="timeline" aria-pressed="false">Timeline</button>
-      <button type="button" data-view="concepts" aria-pressed="false">Concepts</button>
-    </div>
-    <button type="button" class="cmpbtn" id="cmpBtn">Compare two</button>
-  </div>
-  <div class="filters" id="filters"></div>
-  <div id="view" aria-live="polite"></div>
+<main id="main">
+  <div class="loading lc-loading">Loading…</div>
 </main>
-<div class="cmpbar" id="cmpBar" hidden>
-  <span id="cmpMsg">Pick two papers with visuals</span>
-  <a class="act" id="cmpGo" href="#" aria-disabled="true">Open side by side</a>
-  <button type="button" class="x" id="cmpX" aria-label="Cancel compare">×</button>
-</div>
+<div class="term-pop" id="termPop" role="tooltip" hidden></div>
 <footer class="foot" id="foot"></footer>
-<script type="module" src="src/hub/hub.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script type="module" src="src/guide/guide.js"></script>
 </body>
 </html>

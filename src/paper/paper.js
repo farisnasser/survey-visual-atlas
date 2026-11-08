@@ -26,7 +26,7 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch { return 
 async function main() {
   const db = await fetch('data/papers.json').then(r => r.json());
   const P = db.papers.find(p => p.key === KEY);
-  if (!P) { $('#ph').innerHTML = `<h1>Paper not found</h1><p class="meta">No paper with key “${esc(KEY)}”. <a href="./">Back to the Atlas</a></p>`; $('#viz').hidden = true; return; }
+  if (!P) { $('#ph').innerHTML = `<h1>Paper not found</h1><p class="meta">No paper with key “${esc(KEY)}”. <a href="library.html">Back to the paper library</a></p>`; $('#viz').hidden = true; return; }
   document.title = `${P.short || P.title} · Survey Visual Atlas`;
   let meta = {};
   if (P.visual) meta = await fetch(`papers/${KEY}/meta.json`).then(r => r.ok ? r.json() : {}).catch(() => ({}));

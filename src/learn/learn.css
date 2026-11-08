@@ -116,3 +116,11 @@ a.term.chipterm:hover { color: var(--ink); border-color: var(--line); }
 .term-pop .tp-tex { overflow-x: auto; overflow-y: hidden; }
 .term-pop .tp-tex .katex-display { margin: 2px 0; }
 .term-pop a { font: 500 11.5px var(--mono); color: var(--pos); text-decoration: none; }
+
+/* inline visuals: segmented controls with many options wrap instead of overflowing the control box */
+.lv-ctrl .seg { flex-wrap: wrap; }
+.lv-ctrl .sliders { max-width: 100%; }
+@media (max-width: 720px) {
+  .lv-ctrl .sl.segrow { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .lv-ctrl .seg { display: flex; }
+}

@@ -1,0 +1,22 @@
+/* Survey guide: map grouped by survey section, plus the "How to read this visual" box.
+   Chapter pages reuse the crash-course styles (src/learn/learn.css) and the notes article styles (paper.css). */
+.gd-parts { display: grid; gap: 26px; max-width: 940px; }
+.gd-part { border-top: 1px solid var(--line-soft); padding-top: 18px; }
+.gd-part-h { display: grid; gap: 4px; margin-bottom: 4px; }
+.gd-part-h .mono { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--flat); }
+.gd-part-h h2 { font: 700 22px/1.2 var(--display); letter-spacing: -.01em; }
+.gd-part-h p { font: 400 15px/1.5 var(--display); color: #b9c2e0; max-width: 780px; }
+.gd-part .journey { margin-top: 6px; }
+
+/* How to read this visual */
+.nt-box.nt-read { border-color: rgba(178, 140, 255, .45); background: rgba(178, 140, 255, .045); }
+.nt-box.nt-read > .nt-box-h { color: var(--opt2); }
+.nt-box.nt-read > .nt-box-h::before { content: "◎ "; }
+.nt a[href^="guide.html"] { color: var(--opt2); text-decoration: none; border-bottom: 1px solid rgba(178, 140, 255, .35); }
+.nt a[href^="guide.html"]:hover { border-color: var(--opt2); }
+.nt a[href^="learn.html"] { color: var(--flat); text-decoration: none; border-bottom: 1px solid rgba(255, 200, 87, .35); }
+
+/* the survey's own figures (white-background PDF figures) */
+.nt-fig.sv { background: #f7f8fc; border-color: rgba(255, 255, 255, .25); padding: 10px 10px 8px; }
+.nt-fig.sv img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.nt-fig.sv figcaption { color: #3a4260; font-size: 12.5px; }

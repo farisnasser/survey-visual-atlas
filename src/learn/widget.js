@@ -22,7 +22,8 @@ export class Widget {
     const $ = s => slot.querySelector(s);
     this.$ = $;
     this.listeners = [];
-    const ctx = this.ctx = { charts: {}, vals: {}, widget: this };
+    // data / base / shell: lets paper-page tabs (papers/<Key>/visual.js) run inside a chapter unchanged
+    const ctx = this.ctx = { charts: {}, vals: {}, widget: this, data: t.data ?? null, base: t.base || '', shell: { tab: t } };
     if (is2d) { ctx.plot = new Plot($('.plot2d')); ctx.plot.set(Object.assign({ pad: [34, 16, 40, 54], legend: true }, t.plot || {})); }
     else {
       ctx.stage = new Stage($('.gl'), $('.labels'));

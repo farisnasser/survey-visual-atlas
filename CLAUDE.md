@@ -1,6 +1,6 @@
 # Survey Visual Atlas — project rules
 
-One static website that lists every reference of the MLR570 survey (*Non-Convex Optimization in Neural Networks*, Faris Nasser & Salah Moussa), organized by the survey's Fig. 5 taxonomy, and gives each studied paper an interactive visual of its core results, the math behind each visual, and the team's study-notes PDF. Live at **https://farisnasser.github.io/survey-visual-atlas/** (GitHub Pages, public repo `farisnasser/survey-visual-atlas`, branch `main`, root).
+Since 2026-11-08 the home page is **the guide**: a section-by-section visual journey through our focused survey (`MLR570/survey-v2/`, *Non-Convex Optimization in Neural Networks: A Survey of Gradient Dynamics from Saddle Escape to the Edge of Stability*), 15 chapters following the survey's Sections I–VII, every visual followed by a "How to read this visual" box. Plan and rules: `research/guide-plan.md`. The original per-paper Atlas (every reference of the first, broader survey, organized by its Fig. 5 taxonomy, with an interactive visual, the math and the study notes per paper) is kept as the **paper library** (`library.html`). Live at **https://farisnasser.github.io/survey-visual-atlas/** (GitHub Pages, public repo `farisnasser/survey-visual-atlas`, branch `main`, root).
 
 Full original brief: `reference/build-brief.md`. Quality bar: `reference/saddles.html` (the Kawaguchi visual every page must feel like a sibling of).
 
@@ -19,7 +19,13 @@ Run the **atlas-sync** skill (`.claude/skills/atlas-sync/SKILL.md`). In short: l
 
 ## Layout
 ```
-index.html, paper.html, compare.html, thumbs.html (local maintenance page)
+index.html                  the guide's map (src/guide/guide.js) · guide.html?sec=<id> one chapter
+guide/guide.json            chapters (id, survey section, title, question, terms, ready) · guide/glossary.json terms new to the guide
+guide/<id>/text.md|viz.js   one chapter: notes syntax + :::viz + :::read (How to read) + :::survey (our survey's own figures)
+guide/lib.js                paperTab(key, id): reuse a papers/<Key>/visual.js tab inside a chapter (data.json attached)
+public/survey/*.webp        figures of survey v2, cropped from its PDF
+scripts/check-math/guide_*.py   numbers of the guide's new visuals; guide_terms.py checks terms, anchors and read boxes
+library.html, paper.html, compare.html, thumbs.html (local maintenance page)   the paper library (first survey)
 src/theme.css               shared tokens + colour language
 src/lib/atlas3d.js          surfaces (def/gridDef), optimizer balls (opt.gd/sgd/momentum/curv), eigen-lines, labels, points
 src/lib/charts.js           canvas Plot: lines, log axes, reference lines, heat maps, arrows, bars

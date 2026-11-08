@@ -51,7 +51,7 @@ export default {
       plot: { xlim: [-3.2, 3.2], ylim: [0, 12], xlabel: 'residual f̃ = f − y', ylabel: 'λ = Tr H', legend: false },
       build(ctx) {
         ctx.starts = [[-1.96, .4], [-1.9, 7]];
-        ctx.listen(document.querySelector('#plot2d'), 'pointerdown', ev => { ctx.starts.push(ctx.plot.toData(ev)); if (ctx.starts.length > 6) ctx.starts.shift(); this.draw(ctx); });
+        ctx.listen(ctx.plot.c, 'pointerdown', ev => { ctx.starts.push(ctx.plot.toData(ev)); if (ctx.starts.length > 6) ctx.starts.shift(); this.draw(ctx); });
         this.draw(ctx);
       },
       onControl(ctx) { this.draw(ctx); },
