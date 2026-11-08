@@ -8,7 +8,7 @@ Saxe, McClelland & Ganguli (2014) derived exact solutions for this regime in dee
 
 $$\tau\frac{da_k}{dt} = 2a_k(s_k - a_k), \qquad a_k(t) = \frac{s_k\,e^{2s_kt/\tau}}{e^{2s_kt/\tau} - 1 + s_k/a_k(0)},$$
 
-where $\tau$ is the inverse learning rate. This is survey Eq. (10). Each mode follows a **sigmoid**. It stays near its small initial value for a time of order $(\tau/2s_k)\log(s_k/a_k(0))$, then rises rapidly to $s_k$. Three consequences:
+where $\tau$ is the inverse learning rate. This is survey Eq. (16). Each mode follows a **sigmoid**. It stays near its small initial value for a time of order $(\tau/2s_k)\log(s_k/a_k(0))$, then rises rapidly to $s_k$. Three consequences:
 
 - **Stronger modes are learned first**, since the waiting time scales like $1/s_k$.
 - **Smaller initializations mean longer plateaus**, since the waiting time grows like $\log(1/a_k(0))$. This is the escape-time formula of chapter 5 again: a small start is a small $\delta$.
@@ -29,7 +29,7 @@ where $\tau$ is the inverse learning rate. This is survey Eq. (10). Each mode fo
 :::
 
 :::read How to read this visual
-**What is drawn.** The mode strength $u(t)$ against time, for four modes of different strengths $s$. The lines are the exact solution of Eq. (10). The dots are discrete gradient descent on the same loss, started at $a = b = \sqrt{u_0}$ with step $0.01$.
+**What is drawn.** The mode strength $u(t)$ against time, for four modes of different strengths $s$. The lines are the exact solution of survey Eq. (16). The dots are discrete gradient descent on the same loss, started at $a = b = \sqrt{u_0}$ with step $0.01$.
 
 **What to try.** Move the initial strength $u_0$ from $10^{-1}$ down to $10^{-6}$.
 
@@ -75,9 +75,9 @@ The framework separates two mechanisms. **Data-induced** saddle-to-saddle dynami
 
 ## 3. Obstacle or mechanism?
 
-This line of work changes the meaning of a saddle. In the escape literature of chapters 6 and 7, a saddle is an obstacle to be left as quickly as possible. In the saddle-to-saddle view, **the sequence of saddles visited is the mechanism** by which networks acquire progressively more complex functions: first the strongest pattern, then the next. This is a form of **[[simplicity-bias|simplicity bias]]**: the network tries simple solutions before complex ones.
+This line of work changes the meaning of a saddle. In the escape literature of chapters 7 and 8, a saddle is an obstacle to be left as quickly as possible. In the saddle-to-saddle view, **the sequence of saddles visited is the mechanism** by which networks acquire progressively more complex functions: first the strongest pattern, then the next. This is a form of **[[simplicity-bias|simplicity bias]]**: the network tries simple solutions before complex ones.
 
-An optimizer that escaped every saddle instantly might change which solution is found. The two views are in tension, and chapter 15 returns to this as an open problem: is there a trade-off between escape speed and the simplicity bias that incremental learning provides?
+An optimizer that escaped every saddle instantly might change which solution is found. The two views are in tension, and chapter 16 returns to this as an open problem: is there a trade-off between escape speed and the simplicity bias that incremental learning provides?
 
 :::survey Survey Fig. 6. Original simulation of saddle-to-saddle learning in linear networks trained by GD from small random initialization, on a target map with singular values (3, 1.6, 0.8, 0.4).
 public/survey/saddle_to_saddle.webp
@@ -86,7 +86,7 @@ public/survey/saddle_to_saddle.webp
 :::read How to read this figure
 **Panel (a).** The training loss against the GD iteration, for a 2-layer (solid blue) and a 3-layer (dashed purple) linear network. The loss falls in a staircase. Each plateau sits at a saddle at which the end-to-end map has rank 0, 1, 2 or 3: rank 0 before anything is learned, rank 1 after the first mode, and so on.
 
-**Panel (b).** For the two-layer network, the four singular values of the end-to-end map $W_2W_1$ over the iterations. Each rises in a sigmoid from almost zero to its target, $s_1 = 3.0$ (red), $s_2 = 1.6$ (yellow), $s_3 = 0.8$ (green), $s_4 = 0.4$ (teal), shown as dotted lines. They are learned one at a time, strongest first, following Saxe et al.'s Eq. (10). The weakest mode takes several times longer than the strongest; their strengths differ by a factor $3/0.4 = 7.5$, and the waiting time scales like $1/s_k$.
+**Panel (b).** For the two-layer network, the four singular values of the end-to-end map $W_2W_1$ over the iterations. Each rises in a sigmoid from almost zero to its target, $s_1 = 3.0$ (red), $s_2 = 1.6$ (yellow), $s_3 = 0.8$ (green), $s_4 = 0.4$ (teal), shown as dotted lines. They are learned one at a time, strongest first, following the sigmoidal law of survey Eq. (16). The weakest mode takes several times longer than the strongest; their strengths differ by a factor $3/0.4 = 7.5$, and the waiting time scales like $1/s_k$.
 :::
 
 :::key What to keep from this chapter

@@ -1,33 +1,33 @@
 ## 1. From gaps to questions
 
-This chapter follows Sections VI and VII of the survey. The comparison of chapter 14 pointed to specific gaps between what is proved and what is observed. The survey turns each gap into an open problem: what the evidence says now, and a concrete direction for future work.
+This chapter follows Sections VI and VII of the survey. The comparison of chapter 15 pointed to specific gaps between what is proved and what is observed. The survey turns each gap into an open problem: what the evidence says now, and a concrete direction for future work.
 
 ## 2. A. Degenerate and non-smooth saddles
 
-The efficient-escape theory of chapters 6 and 7 assumes strict saddles and Lipschitz Hessians. Neural networks violate both. Deep linear networks have saddles without negative curvature (Kawaguchi 2016). Overparameterized students converge slowly in degenerate valleys: Xu & Du (2023) show that a student wider than its single-neuron teacher slows GD from an exponential rate to a polynomial one. And ReLU networks are not twice differentiable at all.
+The efficient-escape theory of chapters 7 and 8 assumes strict saddles and Lipschitz Hessians. Neural networks violate both. Deep linear networks have saddles without negative curvature (Kawaguchi 2016). Overparameterized students converge slowly in degenerate valleys: Xu & Du (2023) show that a student wider than its single-neuron teacher slows GD from an exponential rate to a polynomial one. And ReLU networks are not twice differentiable at all.
 
-A general theory of degenerate saddles cannot exist: certifying fourth-order local optimality is NP-hard (Anandkumar & Ge 2016). The useful question is narrower. **Do the degenerate saddles that arise from the structure of neural networks admit efficient escape?** Those come from permutation and rescaling symmetries, zero initialization, and neuron duplication. Cheridito et al.'s results for shallow ReLU networks (chapter 6) and the invariant-manifold picture of saddle-to-saddle dynamics (chapter 8) suggest that structured degeneracy may be tractable where generic degeneracy is not.
+A general theory of degenerate saddles cannot exist: certifying fourth-order local optimality is NP-hard (Anandkumar & Ge 2016). The useful question is narrower. **Do the degenerate saddles that arise from the structure of neural networks admit efficient escape?** Those come from permutation and rescaling symmetries, zero initialization, and neuron duplication. Cheridito et al.'s results for shallow ReLU networks (chapter 7) and the invariant-manifold picture of saddle-to-saddle dynamics (chapter 9) suggest that structured degeneracy may be tractable where generic degeneracy is not.
 
 :::viz race
 :::
 
 :::read How to read this visual
-**What is drawn.** Two surfaces side by side, the race of chapter 6. Left: a one-hidden-layer scalar network, whose origin is a strict saddle (red direction). Right: two hidden layers, whose origin is a degenerate saddle (amber, flat directions only).
+**What is drawn.** Two surfaces side by side, the race of chapter 7. Left: a one-hidden-layer scalar network, whose origin is a strict saddle (red direction). Right: two hidden layers, whose origin is a degenerate saddle (amber, flat directions only).
 
 **What moves.** *Restart race* starts both balls at the same small distance from their saddle, with the same step size.
 
-**What to notice.** The strict saddle lets go quickly, because its multiplier is above one. The degenerate one has a multiplier of exactly one in every direction, so the ball creeps, pushed only by higher-order terms. No escape-time theorem of chapter 7 covers the right-hand ball. That is open problem A in one picture.
+**What to notice.** The strict saddle lets go quickly, because its multiplier is above one. The degenerate one has a multiplier of exactly one in every direction, so the ball creeps, pushed only by higher-order terms. No escape-time theorem of chapter 8 covers the right-hand ball. That is open problem A in one picture.
 :::
 
 ## 3. B. A theory of stochastic and adaptive large-step training
 
-The optimizers that train modern models combine everything the theory handles separately: Adam variants with warmup and decay, large learning rates, momentum and minibatches. For exactly these, the large-step theory is thinnest. Central flows (chapter 12) describe deterministic GD and RMSProp without momentum. The adaptive edge of stability and the edge of stochastic stability (chapter 13) are established mainly empirically.
+The optimizers that train modern models combine everything the theory handles separately: Adam variants with warmup and decay, large learning rates, momentum and minibatches. For exactly these, the large-step theory is thinnest. Central flows (chapter 13) describe deterministic GD and RMSProp without momentum. The adaptive edge of stability and the edge of stochastic stability (chapter 14) are established mainly empirically.
 
-A natural next step is a **central flow for SGD**, in which the minibatch quantity of Eq. (14), the batch sharpness, rather than the full-batch sharpness is held at its threshold. Another is a central flow for **Adam**, in which the preconditioned sharpness is the state variable. Cohen et al. point out a real obstacle: because of the randomness, it is not clear that such a deterministic description exists for stochastic optimizers. The geometry of non-Euclidean optimizers such as Shampoo and Muon adds a further dimension. For them, stability thresholds and saddle escape should be measured in the norm the optimizer uses, not in the Euclidean norm.
+A natural next step is a **central flow for SGD**, in which the minibatch quantity of Eq. (20), the batch sharpness, rather than the full-batch sharpness is held at its threshold. Another is a central flow for **Adam**, in which the preconditioned sharpness is the state variable. Cohen et al. point out a real obstacle: because of the randomness, it is not clear that such a deterministic description exists for stochastic optimizers. The geometry of non-Euclidean optimizers such as Shampoo and Muon adds a further dimension. For them, stability thresholds and saddle escape should be measured in the norm the optimizer uses, not in the Euclidean norm.
 
 ## 4. C. Does real SGD noise satisfy the escape conditions?
 
-Plain SGD provably escapes saddles under the CNC or dispersive-noise conditions (chapter 7). These conditions are plausible, but they have been verified only on limited models and training stages. Meanwhile, SGD noise can be heavy-tailed, and its covariance changes as the sharpness evolves: Jastrzębski et al.'s break-even point (chapter 9) shows that the early step size shapes the noise for the rest of training. Systematic measurements across architectures, batch sizes and training phases, of the noise variance along the bottom Hessian eigenvectors, would settle whether the noise-based escape guarantees describe practice. A theory for heavy-tailed noise near saddles is also largely missing.
+Plain SGD provably escapes saddles under the CNC or dispersive-noise conditions (chapter 8). These conditions are plausible, but they have been verified only on limited models and training stages. Meanwhile, SGD noise can be heavy-tailed, and its covariance changes as the sharpness evolves: Jastrzębski et al.'s break-even point (chapter 10) shows that the early step size shapes the noise for the rest of training. Systematic measurements across architectures, batch sizes and training phases, of the noise variance along the bottom Hessian eigenvectors, would settle whether the noise-based escape guarantees describe practice. A theory for heavy-tailed noise near saddles is also largely missing.
 
 :::viz alpha
 :::
@@ -42,13 +42,13 @@ Plain SGD provably escapes saddles under the CNC or dispersive-noise conditions 
 
 ## 5. D. Saddles as features: escape speed against incremental learning
 
-Saddle-to-saddle dynamics (chapter 8) show that the plateaus in which GD lingers can be **stages of learning**. Each escape adds one unit of complexity: a singular value, a neuron, a kink, a head. This view conflicts with the goal of the escape literature, which is to leave every saddle as quickly as possible. **Is there a trade-off between escape speed and the simplicity bias that incremental learning provides?** A precise answer would require coupling the escape-time formula (chapter 5) with a measure of the complexity of the function learned at each stage.
+Saddle-to-saddle dynamics (chapter 9) show that the plateaus in which GD lingers can be **stages of learning**. Each escape adds one unit of complexity: a singular value, a neuron, a kink, a head. This view conflicts with the goal of the escape literature, which is to leave every saddle as quickly as possible. **Is there a trade-off between escape speed and the simplicity bias that incremental learning provides?** A precise answer would require coupling the escape-time formula (chapter 5) with a measure of the complexity of the function learned at each stage.
 
 :::viz plateaus
 :::
 
 :::read How to read this visual
-**What is drawn.** Saxe et al.'s exact mode strengths $u(t)$ for four modes, as in chapter 8. The lines are the exact solution and the dots are discrete gradient descent.
+**What is drawn.** Saxe et al.'s exact mode strengths $u(t)$ for four modes, as in chapter 9. The lines are the exact solution and the dots are discrete gradient descent.
 
 **What to try.** Move the initial strength $u_0$.
 
@@ -59,14 +59,14 @@ Saddle-to-saddle dynamics (chapter 8) show that the plateaus in which GD lingers
 
 The two halves of the survey have been studied separately. In practical training, though, they can occur together. Training at the edge of stability oscillates along the top Hessian eigenvectors, while in other directions the iterate may pass near saddles. The analyses reviewed in the survey treat one unstable regime or the other, never both at once.
 
-- Does the oscillation along high-curvature directions change the escape time along a negative-curvature direction, for example through the third-order coupling of Eq. (12)?
+- Does the oscillation along high-curvature directions change the escape time along a negative-curvature direction, for example through the third-order coupling of Eq. (18)?
 - Does saddle-to-saddle learning from small initialization proceed differently at large step sizes, where the plateaus may be crossed while the sharpness is held at $2/\eta$?
 
 A model that contains both a strict saddle and a sharp valley, analyzed with the central-flow method, would be a natural first step.
 
 ## 7. F. Global exploration and hitting times
 
-Almost all results in the survey are local: they describe escape from one saddle, or the behavior near one valley. Azizian et al. (chapter 7) took a global view. Using large-deviations theory, they bounded the expected time for SGD to reach the global minimizers, which scales as $\exp(E/\eta)$ in an energy $E$ set by the barriers SGD may have to climb. Extending such results to the anisotropic, state-dependent noise of minibatch SGD, and to large step sizes at which the iterates oscillate, would show which minima SGD reaches in realistic training times.
+Almost all results in the survey are local: they describe escape from one saddle, or the behavior near one valley. Azizian et al. (chapter 8) took a global view. Using large-deviations theory, they bounded the expected time for SGD to reach the global minimizers, which scales as $\exp(E/\eta)$ in an energy $E$ set by the barriers SGD may have to climb. Extending such results to the anisotropic, state-dependent noise of minibatch SGD, and to large step sizes at which the iterates oscillate, would show which minima SGD reaches in realistic training times.
 
 ## 8. Conclusion
 

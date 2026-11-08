@@ -98,7 +98,7 @@ The Hessian is symmetric, and a symmetric matrix has a special set of directions
 - $\lambda_j < 0$: the loss curves **down** along $v_j$, like a cap. This is a direction of **negative curvature**.
 - $\lambda_j = 0$: the loss is flat along $v_j$ to second order.
 
-The smallest and largest eigenvalues get names, $\lambda_{\min}$ and $\lambda_{\max}$. At a point where the gradient vanishes, the first-order term of the Taylor model is zero. Negative curvature is then the only first- or second-order information that reveals a way downhill. This one sentence is the seed of the whole saddle literature (chapters 6 to 8). And $\lambda_{\max}$, the sharpest upward curvature, is the quantity the large-step literature is about (chapters 9 to 13).
+The smallest and largest eigenvalues get names, $\lambda_{\min}$ and $\lambda_{\max}$. At a point where the gradient vanishes, the first-order term of the Taylor model is zero. Negative curvature is then the only first- or second-order information that reveals a way downhill. This one sentence is the seed of the whole saddle literature (chapters 7 to 9). And $\lambda_{\max}$, the sharpest upward curvature, is the quantity the large-step literature is about (chapters 10 to 14).
 
 :::viz quad
 :::

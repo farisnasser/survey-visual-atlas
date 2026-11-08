@@ -115,9 +115,25 @@
    ]
   },
   {
+   "id": "dynamics",
+   "sec": "II",
+   "n": 6,
+   "ready": true,
+   "title": "GD as a dynamical system, noise and measuring curvature",
+   "question": "What does it mean that GD converges to a saddle with probability zero, what shape does minibatch noise have, and how is the sharpness of a real network measured?",
+   "terms": [
+    "fixed-point",
+    "measure-zero",
+    "gradient-flow",
+    "period-doubling",
+    "isotropic-noise",
+    "hvp"
+   ]
+  },
+  {
    "id": "avoid",
    "sec": "III",
-   "n": 6,
+   "n": 7,
    "ready": true,
    "title": "Saddles: why they matter, and why GD almost never stops at one",
    "question": "Saddles outnumber minima in high dimension, and depth makes some of them degenerate. Why does gradient descent from a random start converge to a strict saddle with probability zero?",
@@ -131,7 +147,7 @@
   {
    "id": "escape",
    "sec": "III",
-   "n": 7,
+   "n": 8,
    "ready": true,
    "title": "Avoidance is not efficiency; noise as the way out",
    "question": "If GD avoids saddles, can it still waste exponential time near them? How do random perturbations and SGD's own noise make escape fast?",
@@ -144,7 +160,7 @@
   {
    "id": "stages",
    "sec": "III",
-   "n": 8,
+   "n": 9,
    "ready": true,
    "title": "Saddles as stages of learning",
    "question": "From small initialization, training starts at a saddle and moves from one saddle to the next. Why are these plateaus a feature rather than a bug?",
@@ -156,7 +172,7 @@
   {
    "id": "precursors",
    "sec": "IV",
-   "n": 9,
+   "n": 10,
    "ready": true,
    "title": "Before the edge: stability of SGD, the break-even point, catapults",
    "question": "Which minima can SGD with a given step size and batch size stay in, and what happens when the step size is larger than the curvature allows?",
@@ -169,7 +185,7 @@
   {
    "id": "edge",
    "sec": "IV",
-   "n": 10,
+   "n": 11,
    "ready": true,
    "title": "The edge of stability",
    "question": "Real networks trained by full-batch gradient descent push their sharpness up to 2/η and then hover there, while the loss keeps falling. What exactly is observed, and what does it break?",
@@ -183,7 +199,7 @@
   {
    "id": "why",
    "sec": "IV",
-   "n": 11,
+   "n": 12,
    "ready": true,
    "title": "Why it does not blow up",
    "question": "Past 2/η the linear analysis predicts divergence. Which mechanism keeps training alive, and where has it been proved?",
@@ -195,7 +211,7 @@
   {
    "id": "flow",
    "sec": "IV",
-   "n": 12,
+   "n": 13,
    "ready": true,
    "title": "Central flows: the time-averaged trajectory",
    "question": "The iterates oscillate wildly at the edge of stability. Can we describe their average path instead, and what does that description predict?",
@@ -206,7 +222,7 @@
   {
    "id": "beyond",
    "sec": "IV",
-   "n": 13,
+   "n": 14,
    "ready": true,
    "title": "Beyond full-batch GD: Adam, warmup, SAM, SGD, and where training ends",
    "question": "Do adaptive methods, sharpness-aware updates and minibatch SGD have their own edges of stability, and how do large steps change which minimum training reaches?",
@@ -220,7 +236,7 @@
   {
    "id": "compare",
    "sec": "V",
-   "n": 14,
+   "n": 15,
    "ready": true,
    "title": "One instability, two faces",
    "question": "Strict saddles and too-sharp minima are both unstable fixed points of the gradient-descent map. How do the two literatures compare, and what do their theorems assume?",
@@ -232,7 +248,7 @@
   {
    "id": "open",
    "sec": "VI–VII",
-   "n": 15,
+   "n": 16,
    "ready": true,
    "title": "Open problems and the take-away",
    "question": "Where does the evidence run out, which questions does that leave open, and what is the survey's conclusion?",

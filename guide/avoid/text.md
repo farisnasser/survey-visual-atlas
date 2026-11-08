@@ -75,7 +75,7 @@ Let $L$ be twice continuously differentiable with an $\ell$-Lipschitz gradient, 
 
 **What to try.** Slide the step $\alpha$ from small to large.
 
-**What to notice.** For small $\alpha$, the blue grid is a smooth deformation of the original: no cell is flipped, the map is a diffeomorphism, and a thin set stays thin when pulled back (step 4 of the proof). The readout gives $1/L$ on the drawn grid. Once $\alpha$ passes it, red folds appear, the map is no longer invertible, and the proof's argument no longer applies. The theorem needs a small step size, and chapter 10 shows that real training uses larger ones.
+**What to notice.** For small $\alpha$, the blue grid is a smooth deformation of the original: no cell is flipped, the map is a diffeomorphism, and a thin set stays thin when pulled back (step 4 of the proof). The readout gives $1/L$ on the drawn grid. Once $\alpha$ passes it, red folds appear, the map is no longer invertible, and the proof's argument no longer applies. The theorem needs a small step size, and chapter 11 shows that real training uses larger ones.
 :::
 
 ## 3. How the avoidance result was extended

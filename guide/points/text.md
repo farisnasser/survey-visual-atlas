@@ -47,7 +47,7 @@ Because a small gradient can still mean a saddle, the escape literature asks for
 A twice-differentiable $L$ is **$(\alpha, \gamma, \epsilon, \delta)$-strict saddle** if every point $\theta$ satisfies at least one of: (i) $\lVert\nabla L(\theta)\rVert \ge \epsilon$; (ii) $\lambda_{\min}(\nabla^2 L(\theta)) \le -\gamma$; or (iii) $\theta$ is within distance $\delta$ of a local minimum $\theta^\star$, and $L$ is $\alpha$-strongly convex on the $2\delta$-neighborhood of $\theta^\star$.
 :::
 
-In words: every point is either steep, or has a clear downhill curvature direction, or is already close to a good minimum. The property excludes degenerate saddles, and it is the central structural assumption of the escape theory in chapters 6 and 7.
+In words: every point is either steep, or has a clear downhill curvature direction, or is already close to a good minimum. The property excludes degenerate saddles, and it is the central structural assumption of the escape theory in chapters 7 and 8.
 
 :::def Approximate second-order stationarity (survey Definition 4)
 $\theta$ is an **$(\epsilon, \gamma)$-second-order stationary point** ($(\epsilon,\gamma)$-[[sosp|SOSP]]) if
@@ -70,7 +70,7 @@ public/survey/solution_hierarchy.webp
 
 **The crosses.** Each cross marks what can hide in a gap between two boxes. A strict saddle with $\lambda_{\min} < -\sqrt{\rho\epsilon}$ is an FOSP but not an SOSP. A degenerate saddle with $\lambda_{\min} = 0$ is an SOSP but not a local minimum.
 
-**The arrows on the right.** These say which methods reach which box. GD and SGD guarantee an FOSP. Escape methods, such as perturbed GD (chapter 7), guarantee an SOSP. Reaching the local or global minima needs additional structure, such as the strict-saddle property.
+**The arrows on the right.** These say which methods reach which box. GD and SGD guarantee an FOSP. Escape methods, such as perturbed GD (chapter 8), guarantee an SOSP. Reaching the local or global minima needs additional structure, such as the strict-saddle property.
 :::
 
 :::viz sosp
@@ -88,7 +88,7 @@ public/survey/solution_hierarchy.webp
 
 ## 3. What the theorems assume
 
-Every convergence guarantee needs quantitative regularity of the loss. The survey uses four standard assumptions, and chapter 14 checks each against practice.
+Every convergence guarantee needs quantitative regularity of the loss. The survey uses four standard assumptions, and chapter 15 checks each against practice.
 
 :::def Assumption 1: Lipschitz gradient ($\ell$-smoothness)
 $\lVert\nabla L(\theta) - \nabla L(\theta')\rVert \le \ell\,\lVert\theta - \theta'\rVert$ for all $\theta, \theta'$. For twice-differentiable $L$ this is the same as $-\ell I \preceq \nabla^2 L(\theta) \preceq \ell I$: no curvature, up or down, exceeds $\ell$ anywhere. A loss with this property is called [[l-smooth|$\ell$-smooth]].
@@ -107,7 +107,7 @@ The word "Lipschitz" means "never changes faster than a fixed rate". The first v
 **What to notice.** $f$ is $K$-Lipschitz exactly when the graph never enters the red regions, wherever the cone is placed. The coral marks show where the rule breaks. The steepest slope of this $f$ is $1.9$, so the rule holds everywhere exactly when $K \ge 1.9$. For Assumption 1, replace "the function" by "the gradient": the gradient of an $\ell$-smooth loss never changes faster than rate $\ell$.
 :::
 
-Why does $\ell$ matter so much? Because it makes a single gradient step safe. If $L$ is $\ell$-smooth, then at every point $L$ lies below the parabola $L(\theta) + \nabla L(\theta)^\top\Delta + \tfrac{\ell}{2}\lVert\Delta\rVert^2$. The step $\eta = 1/\ell$ jumps to the lowest point of that parabola and is guaranteed to decrease the loss by at least $\lVert\nabla L\rVert^2/(2\ell)$. This is the [[descent-lemma|descent lemma]], and almost every saddle-escape theorem rests on it, with a step size $\eta \le 1/\ell$. Chapter 10 shows that practical training runs far outside this regime.
+Why does $\ell$ matter so much? Because it makes a single gradient step safe. If $L$ is $\ell$-smooth, then at every point $L$ lies below the parabola $L(\theta) + \nabla L(\theta)^\top\Delta + \tfrac{\ell}{2}\lVert\Delta\rVert^2$. The step $\eta = 1/\ell$ jumps to the lowest point of that parabola and is guaranteed to decrease the loss by at least $\lVert\nabla L\rVert^2/(2\ell)$. This is the [[descent-lemma|descent lemma]], and almost every saddle-escape theorem rests on it, with a step size $\eta \le 1/\ell$. Chapter 11 shows that practical training runs far outside this regime.
 
 :::viz upper
 :::
@@ -138,7 +138,7 @@ The algorithm sees a random estimate $g(\theta;\xi)$ of the gradient that is rig
 
 **What to try.** Change the batch size $B$ from 1 to 50, and drag the point.
 
-**What to notice.** The violet average sits on the tip of the white arrow: minibatch gradients are right on average (unbiased). Their spread shrinks as $B$ grows, and the readout compares the measured spread with the exact value $\sigma^2/B$. This is Assumption 3 in a picture: SGD takes the right step plus random noise. Chapters 7, 9 and 13 show that this noise is not only an error. It changes which saddles are escaped and which curvatures are tolerated.
+**What to notice.** The violet average sits on the tip of the white arrow: minibatch gradients are right on average (unbiased). Their spread shrinks as $B$ grows, and the readout compares the measured spread with the exact value $\sigma^2/B$. This is Assumption 3 in a picture: SGD takes the right step plus random noise. Chapters 8, 10 and 14 show that this noise is not only an error. It changes which saddles are escaped and which curvatures are tolerated.
 :::
 
 :::def Assumption 4: $(L_0, L_1)$-smoothness (Zhang et al. 2020)
@@ -153,7 +153,7 @@ $\lVert\nabla^2 L(\theta)\rVert \le L_0 + L_1\lVert\nabla L(\theta)\rVert$. The 
 
 **What moves.** Violet: gradient descent with one fixed step $h$, which must be tiny to survive the steep start. Coral: clipped gradient descent, which takes steps of length at most $\gamma = 0.5$ while the gradient is large, and full steps $\eta = 1$ near the minimum (green).
 
-**What to notice.** The readout counts iterations until $\lVert\nabla f\rVert \le 10^{-4}$. The fixed step crawls, because a step safe for the steepest region is far too small near the minimum. Clipping adapts the step to the local curvature. Assumption 4 is the property that makes this provably better (Zhang et al. 2020, Theorems 3 and 4), and it is the setting of the tamed-SGD avoidance result in chapter 6.
+**What to notice.** The readout counts iterations until $\lVert\nabla f\rVert \le 10^{-4}$. The fixed step crawls, because a step safe for the steepest region is far too small near the minimum. Clipping adapts the step to the local curvature. Assumption 4 is the property that makes this provably better (Zhang et al. 2020, Theorems 3 and 4), and it is the setting of the tamed-SGD avoidance result in chapter 7.
 :::
 
 :::key What to keep from this chapter

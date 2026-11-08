@@ -1,16 +1,16 @@
 ## 1. Average the oscillation away
 
-This chapter follows Section IV-E of the survey. The mechanisms of chapter 11 analyze the edge of stability near a single unstable direction, or in small models. Real networks at the edge can have several Hessian eigenvalues at $2/\eta$ at once, oscillating in several directions with chaotic-looking iterates. Cohen, Damian, Talwalkar, Kolter & Lee (2025) proposed a different strategy: **do not track the oscillating iterates; track their time average.**
+This chapter follows Section IV-E of the survey. The mechanisms of chapter 12 analyze the edge of stability near a single unstable direction, or in small models. Real networks at the edge can have several Hessian eigenvalues at $2/\eta$ at once, oscillating in several directions with chaotic-looking iterates. Cohen, Damian, Talwalkar, Kolter & Lee (2025) proposed a different strategy: **do not track the oscillating iterates; track their time average.**
 
 Write the GD iterate as an average position plus an oscillation along the top eigenvector:
 
 $$\theta_t = \bar\theta_t + x_t\,u_t, \qquad \text{with } x_t \text{ averaging to zero over a few steps.}$$
 
-The average position moves with the *average* gradient. Average the Taylor expansion of chapter 11 (survey Eq. 12) over the oscillation. The term $x_t S u_t$ averages to zero because $x_t$ does; the term $\tfrac{x_t^2}{2}\nabla S$ does not, because $x_t^2 \ge 0$. Writing $\sigma^2(t)$ for the average of $x_t^2$, the variance of the oscillation, this gives a differential equation for the average path:
+The average position moves with the *average* gradient. Average the Taylor expansion of chapter 12 (survey Eq. 18) over the oscillation. The term $x_t S u_t$ averages to zero because $x_t$ does; the term $\tfrac{x_t^2}{2}\nabla S$ does not, because $x_t^2 \ge 0$. Writing $\sigma^2(t)$ for the average of $x_t^2$, the variance of the oscillation, this gives a differential equation for the average path:
 
 $$\frac{d\theta}{dt} = -\eta\Big[\nabla L(\theta) + \tfrac12\,\sigma^2(t)\,\nabla S(\theta)\Big].$$
 
-This is survey Eq. (13), the **[[central-flow|central flow]]** for one unstable direction. It is a gradient flow with an implicit **sharpness penalty**, whose strength is the variance of the oscillation.
+This is survey Eq. (19), the **[[central-flow|central flow]]** for one unstable direction. It is a gradient flow with an implicit **sharpness penalty**, whose strength is the variance of the oscillation.
 
 ## 2. The variance is not a free parameter
 
@@ -22,7 +22,7 @@ In words, the oscillation is exactly as large as it needs to be for its sharpnes
 
 $$\frac{d\theta}{dt} = -\eta\,\Pi^\perp_{\nabla S}\,\nabla L(\theta), \qquad \Pi^\perp_v = I - \frac{vv^\top}{\lVert v\rVert^2}.$$
 
-It takes the ordinary gradient and removes its component along $\nabla S$, the direction that would increase the sharpness. **At the edge of stability, GD moves like gradient flow constrained to the edge.** This nearly recovers the projected dynamics of self-stabilization (chapter 11) by a simpler, non-rigorous argument.
+It takes the ordinary gradient and removes its component along $\nabla S$, the direction that would increase the sharpness. **At the edge of stability, GD moves like gradient flow constrained to the edge.** This nearly recovers the projected dynamics of self-stabilization (chapter 12) by a simpler, non-rigorous argument.
 
 The general central flow allows any number of Hessian eigenvalues to be at the edge. It models the covariance of the oscillations as the solution of a semidefinite complementarity problem, a kind of convex program, and it reduces to the ordinary gradient flow when no eigenvalue is at the edge.
 
@@ -53,7 +53,7 @@ So gradient flow, which ignores step sizes, walks straight into the too-sharp re
 - At the end, GD's oscillation settles at $x^2 = 0.01429$, the central flow's $\sigma^2 = 0.01429$ exactly. GD's loss is higher than the central flow's ($0.0161$ against $0.0018$) and non-monotone, because it includes the energy of the oscillation itself. The central flow predicts the average *position*, not the bouncing.
 :::
 
-The overshoot in this toy is not a defect of the toy. It is the "blow-up" stage of chapter 11, and Cohen et al. note the same effect in real networks: when the sharpness first reaches $2/\eta$, the central flow starts regularizing immediately, while discrete GD has not yet developed its oscillation.
+The overshoot in this toy is not a defect of the toy. It is the "blow-up" stage of chapter 12, and Cohen et al. note the same effect in real networks: when the sharpness first reaches $2/\eta$, the central flow starts regularizing immediately, while discrete GD has not yet developed its oscillation.
 
 ## 4. What central flows explain
 
@@ -65,7 +65,7 @@ Two properties make the central flow a useful tool (Cohen et al., Propositions 1
 Cohen et al. derived analogous flows for scalar and per-coordinate RMSProp (Adam without momentum). These flows show how such optimizers implicitly adapt their step sizes to the local curvature, and how they steer towards regions where they can take larger steps. Empirically, the central flows predicted the long-term trajectories of GD on a ResNet and a Transformer, and of RMSProp on a Mamba model, with a high degree of numerical accuracy.
 
 :::warn Limitations, stated by the authors
-The derivation is informal: a heuristic time-averaging argument, validated by experiments rather than by theorems. It applies to deterministic (full-batch) training without momentum. It becomes less accurate for very large learning rates, on some cross-entropy problems, and around large loss spikes. The authors note that, because of the randomness, it is not clear whether such a deterministic description even exists for stochastic optimizers. Chapter 15 returns to this as an open problem.
+The derivation is informal: a heuristic time-averaging argument, validated by experiments rather than by theorems. It applies to deterministic (full-batch) training without momentum. It becomes less accurate for very large learning rates, on some cross-entropy problems, and around large loss spikes. The authors note that, because of the randomness, it is not clear whether such a deterministic description even exists for stochastic optimizers. Chapter 16 returns to this as an open problem.
 :::
 
 :::key What to keep from this chapter

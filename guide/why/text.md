@@ -30,7 +30,7 @@ Damian, Nichani & Lee (2023) gave a general mechanism, **[[self-stabilization]]*
 
 $$\nabla L(\theta + xu) \approx \nabla L(\theta) + x\,S(\theta)\,u + \frac{x^2}{2}\nabla S(\theta).$$
 
-This is survey Eq. (12). The three terms mean three things.
+This is survey Eq. (18). The three terms mean three things.
 
 - $\nabla L(\theta)$: the ordinary gradient, which drives progress and, in the progressive-sharpening phase, pushes the sharpness up.
 - $x\,S(\theta)\,u$: the oscillation itself. It flips sign with $x$, so it averages out.
@@ -38,7 +38,7 @@ This is survey Eq. (12). The three terms mean three things.
 
 So the instability brakes itself. The oscillation grows, the drift pushes $S$ below $2/\eta$, and the oscillation then decays. The net effect, which Damian et al. prove under their assumptions for a long but finite horizon, is that GD at the edge of stability approximately follows **projected gradient descent onto the stable set** $\{\theta : S(\theta) \le 2/\eta\}$. This accounts for the loss, the sharpness and the deviation from gradient flow.
 
-The amplification here is the same one that drives escape from a saddle in chapter 7, with alternating sign. The third-order term turns it into a restoring force.
+The amplification here is the same one that drives escape from a saddle in chapter 8, with alternating sign. The third-order term turns it into a restoring force.
 
 :::viz stages
 :::

@@ -123,7 +123,7 @@ Azizian, Iutzeler, Malick & Mertikopoulos (2025) quantified this global behavior
 :::
 
 :::warn What the noise results assume
-These analyses show that noise can provide escape without deliberate perturbation, but only under assumptions on its geometry relative to the Hessian, such as CNC or dispersivity. They have been checked empirically only on a limited range of models and training stages. Whether minibatch noise in modern architectures satisfies them throughout training is largely open (chapter 15).
+These analyses show that noise can provide escape without deliberate perturbation, but only under assumptions on its geometry relative to the Hessian, such as CNC or dispersivity. They have been checked empirically only on a limited range of models and training stages. Whether minibatch noise in modern architectures satisfies them throughout training is largely open (chapter 16).
 :::
 
 ## 5. The survey's simulation of this chapter

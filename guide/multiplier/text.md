@@ -10,7 +10,7 @@ Put this into one step of gradient descent, $\theta_{t+1} = \theta_t - \eta\nabl
 
 $$\theta_{t+1} - \theta^\star = (I - \eta H)(\theta_t - \theta^\star).$$
 
-This is the **linearized GD map**, survey Eq. (6). It says that near a critical point, gradient descent is just repeated multiplication by the matrix $I - \eta H$.
+This is the **linearized GD map**, survey Eq. (9). It says that near a critical point, gradient descent is just repeated multiplication by the matrix $I - \eta H$.
 
 Now use the eigenvectors $v_1, \dots, v_d$ of $H$ (chapter 2). Write the error $\theta_t - \theta^\star$ in those directions, with coordinate $u_j$ along $v_j$. Along each eigenvector, $I - \eta H$ acts as multiplication by one number:
 
@@ -51,7 +51,7 @@ At a minimum, every eigenvalue of $H$ is positive. Gradient descent converges to
 
 $$\eta\,\lambda_{\max}(H) < 2.$$
 
-This is survey Eq. (7). The largest eigenvalue $\lambda_{\max}(H)$ of the Hessian is called the **[[sharpness]]** of the minimum. A minimum whose sharpness exceeds $2/\eta$ is **linearly unstable** under GD, however low its loss: gradient descent with step $\eta$ cannot settle there. This [[stability-threshold|stability threshold]] $2/\eta$ is the central number of Section IV of the survey. Chapter 10 shows that practical training does not stay safely below it. It operates exactly at it.
+This is survey Eq. (10). The largest eigenvalue $\lambda_{\max}(H)$ of the Hessian is called the **[[sharpness]]** of the minimum. A minimum whose sharpness exceeds $2/\eta$ is **linearly unstable** under GD, however low its loss: gradient descent with step $\eta$ cannot settle there. This [[stability-threshold|stability threshold]] $2/\eta$ is the central number of Section IV of the survey. Chapter 11 shows that practical training does not stay safely below it. It operates exactly at it.
 
 The same multiplier also explains why gradient descent is slow in narrow valleys: the flat direction has a multiplier close to one, while the step size is capped by the sharp direction.
 
@@ -72,13 +72,13 @@ At a strict saddle, some eigenvalue is negative, $\lambda_j = -|\lambda_j|$. Its
 
 $$T_{\rm esc} \approx \frac{\log(r/\delta)}{\log(1 + \eta|\lambda_j|)}$$
 
-iterations. This is survey Eq. (8). Read it carefully, because chapters 6 to 8 are a commentary on it.
+iterations. This is survey Eq. (11). Read it carefully, because chapters 7 to 9 are a commentary on it.
 
 - The escape time is **finite whenever $\delta > 0$**. A strict saddle cannot hold GD forever, unless GD starts exactly on the stable manifold.
 - It **grows without bound as $\delta \to 0$**, but only logarithmically. With $\eta|\lambda_j| = 0.1$ and $r = 1$, every factor of 100 in $\delta$ costs $\log 100/\log 1.1 = 48.3$ extra steps. $\delta = 10^{-2}$ needs about $48$ steps, $\delta = 10^{-6}$ about $145$, and $\delta = 10^{-12}$ about $290$.
 - It is **long when the negative curvature is weak**: for small $\eta|\lambda_j|$, $\log(1 + \eta|\lambda_j|) \approx \eta|\lambda_j|$, so $T_{\rm esc}$ grows like $1/|\lambda_j|$.
 
-The whole saddle-escape literature can be read as an effort to control the two quantities in this formula: to make sure $\delta$ is not too small, through randomness (chapter 7), and that $|\lambda_j|$ is not too small, through the strict-saddle property (chapter 3).
+The whole saddle-escape literature can be read as an effort to control the two quantities in this formula: to make sure $\delta$ is not too small, through randomness (chapter 8), and that $|\lambda_j|$ is not too small, through the strict-saddle property (chapter 3).
 
 :::viz escape
 :::
@@ -97,8 +97,8 @@ The whole saddle-escape literature can be read as an effort to control the two q
 
 Both kinds of instability are **local**. The multiplier says that GD cannot remain near the critical point; it does not say where GD goes next. The terms that the linear map discards, the third-order terms of the Taylor expansion and beyond, decide what happens once the iterate has moved away.
 
-- **At a saddle**, they decide where the escaping trajectory goes: into a minimum, or towards the next saddle (chapter 8).
-- **At the edge of stability**, they produce a self-stabilizing feedback that keeps training alive instead of letting it diverge (chapter 11).
+- **At a saddle**, they decide where the escaping trajectory goes: into a minimum, or towards the next saddle (chapter 9).
+- **At the edge of stability**, they produce a self-stabilizing feedback that keeps training alive instead of letting it diverge (chapter 12).
 
 The survey's Fig. 4 draws exactly the multiplier chart of the first visual in this chapter: the line $1 - \eta\lambda$, the stable band in the middle, saddle escape on the left and the edge of stability on the right.
 
@@ -109,5 +109,5 @@ The survey's Fig. 4 draws exactly the multiplier chart of the first visual in th
 :::
 
 :::problem The next step
-The left side of the multiplier line opens Section III. Saddles are everywhere in high dimension, so do they ever trap gradient descent? The next chapter shows that, from a random start, GD essentially never stops at a strict saddle.
+The multiplier describes one step near one point. To say what happens over a whole run, from a random start, with minibatch noise, we need three more tools: GD seen as a map with stable sets, the shape of the noise, and a way to measure curvature in a network with millions of weights. The next chapter builds them, and then Section III begins.
 :::

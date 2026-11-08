@@ -47,14 +47,14 @@ where $\lambda$ is the curvature in that direction. Chapter 5 derives this from 
 - If $\lambda < 0$ (the loss curves *down* in that direction), then $1 - \eta\lambda > 1$, the distance grows, and gradient descent **leaves**. This is how it escapes saddles. Section III of the survey is about this case.
 - If $\lambda > 2/\eta$ (the loss curves up *too sharply* for the step size), then $1 - \eta\lambda < -1$, the distance grows while flipping sign, and gradient descent **bounces**. This is the starting point of catapults and the edge of stability. Section IV of the survey is about this case.
 
-The two cases have been studied by largely separate communities, with different questions and different tools. The saddle literature asks whether, and how fast, GD escapes. The large-step literature asks why training still converges when it is unstable. Both describe the same object: the instability of the gradient-descent map. Ahn, Zhang & Sra (2022) proved a single theorem that covers both (chapter 10). Our survey puts the two literatures side by side.
+The two cases have been studied by largely separate communities, with different questions and different tools. The saddle literature asks whether, and how fast, GD escapes. The large-step literature asks why training still converges when it is unstable. Both describe the same object: the instability of the gradient-descent map. Ahn, Zhang & Sra (2022) proved a single theorem that covers both (chapter 11). Our survey puts the two literatures side by side.
 
 ## 4. Two research questions
 
 :::key The two research questions of the survey
-**RQ1 (Saddles).** When do unmodified GD and SGD avoid or escape saddle points, how long does escape take, and what roles do initialization and gradient noise play? (Survey Section III, chapters 6 to 8 here.)
+**RQ1 (Saddles).** When do unmodified GD and SGD avoid or escape saddle points, how long does escape take, and what roles do initialization and gradient noise play? (Survey Section III, chapters 7 to 9 here.)
 
-**RQ2 (Stability).** What happens when the step size exceeds the classical stability limit $2/\lambda_{\max}$, and why does training still make progress? (Survey Section IV, chapters 9 to 13 here.)
+**RQ2 (Stability).** What happens when the step size exceeds the classical stability limit $2/\lambda_{\max}$, and why does training still make progress? (Survey Section IV, chapters 10 to 14 here.)
 :::
 
 "Unmodified" is the key word of the scope. The survey studies the methods practitioners actually run: GD, SGD, momentum and adaptive methods such as Adam. It does not survey algorithms built specifically to escape saddles, such as cubic regularization, Hessian-free negative-curvature search or variance reduction. The one exception is perturbed gradient descent, the smallest change that makes escape provably fast. Overparameterization theory and the debate on whether flat minima generalize better are discussed only where they bear directly on optimization.
@@ -66,11 +66,11 @@ Each chapter follows one part of the survey, in order. The map on the home page 
 | Survey section | What it does | Guide chapters |
 |---|---|---|
 | I. Introduction | the puzzle, existing surveys, the two RQs | 1 |
-| II. Preliminaries | loss, gradient, Hessian, flat points, assumptions, algorithms, the multiplier | 2–5 |
-| III. Saddles (RQ1) | avoidance, escape time, noise, saddle-to-saddle learning | 6–8 |
-| IV. Stability (RQ2) | catapults, edge of stability, mechanisms, central flows, Adam and SGD | 9–13 |
-| V. Comparison | the two faces side by side; assumptions against practice | 14 |
-| VI–VII. Open problems, conclusion | where the evidence runs out | 15 |
+| II. Preliminaries | loss, gradient, Hessian, flat points, assumptions, algorithms, the multiplier; dynamics, noise and curvature vocabulary | 2–6 |
+| III. Saddles (RQ1) | avoidance, escape time, noise, saddle-to-saddle learning | 7–9 |
+| IV. Stability (RQ2) | catapults, edge of stability, mechanisms, central flows, Adam and SGD | 10–14 |
+| V. Comparison | the two faces side by side; assumptions against practice | 15 |
+| VI–VII. Open problems, conclusion | where the evidence runs out | 16 |
 
 Every visual in the guide is followed by a **How to read this visual** box. It says what the axes are, what the colors mean, what moves, what to try, and what to notice. Every surface is a real function, and every ball runs a real optimizer on it. Every number shown is recomputed by a script in the repository.
 

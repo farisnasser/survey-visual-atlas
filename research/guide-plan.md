@@ -9,7 +9,7 @@ Brief (Faris, 2026-11-08): rebuild the Atlas to suit the new survey
 - When done: push to the same repo, `farisnasser/survey-visual-atlas`.
 
 ## Shape
-- `index.html` becomes the guide's map: the 15 chapters grouped by survey section.
+- `index.html` becomes the guide's map: the 16 chapters grouped by survey section.
 - `guide.html?sec=<id>` shows one chapter.
 - The old paper hub moves to `library.html` (kept, labelled "first survey's paper library"). Paper pages stay, and their brand link goes to `library.html`.
 - `learn.html` (the crash course) stays. Its brand link goes back to `./`.
@@ -44,7 +44,7 @@ Brief (Faris, 2026-11-08): rebuild the Atlas to suit the new survey
 - The tone is the crash course's: short declarative sentences, "we", define every symbol at first use, no hype.
 
 ## Status (2026-11-08)
-All 15 chapters are written and live.
+All 16 chapters are written and live. Chapter 6 (dynamics: survey II-G/H/I, GD as a map, noise, measuring curvature) was added after the survey's first-principles pass, which also renumbered the survey's equations; the guide's equation and chapter references were renumbered with scripts/renumber_guide_eqs.py and renumber_guide_chapters.py.
 - **Visuals:** 62 inline visuals, plus 7 of the survey's own figures, each with a "How to read" box.
 - **New visuals (4), check-scripted:** multiplier (`guide_multiplier.py`), sgdstab (`guide_precursors.py`), normgd (`guide_why.py`), centralflow (`guide_flow.py`). `guide_terms.py` checks that every term resolves, every anchor exists, and every visual and figure has its read box.
 - **Reused visuals:** the rest come from crash-course stops and paper tabs. `damian2023self` and `kalra2025universal` now listen on `ctx.plot.c` instead of `#plot2d`, so they work inside chapters too.

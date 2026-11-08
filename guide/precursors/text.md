@@ -2,7 +2,7 @@
 
 This chapter opens Section IV of the survey and RQ2: what happens when the step size exceeds the classical stability limit. It follows Sections IV-A and IV-B.
 
-Everything in chapters 6 to 8 shared one implicit assumption: the step size is small enough that gradient descent approximately follows the gradient flow and decreases the loss at every step. Under Assumption 1 that means $\eta < 1/\ell$, or at least $\eta < 2/\ell$. Recall from chapter 5 that a minimum whose sharpness $\lambda_{\max}$ exceeds $2/\eta$ is linearly unstable under GD: the right side of the multiplier line, $1 - \eta\lambda < -1$. Classical analyses therefore choose $\eta$ small relative to the curvature. **Practice does the opposite.** This chapter covers the early work that took that seriously.
+Everything in chapters 7 to 9 shared one implicit assumption: the step size is small enough that gradient descent approximately follows the gradient flow and decreases the loss at every step. Under Assumption 1 that means $\eta < 1/\ell$, or at least $\eta < 2/\ell$. Recall from chapter 5 that a minimum whose sharpness $\lambda_{\max}$ exceeds $2/\eta$ is linearly unstable under GD: the right side of the multiplier line, $1 - \eta\lambda < -1$. Classical analyses therefore choose $\eta$ small relative to the curvature. **Practice does the opposite.** This chapter covers the early work that took that seriously.
 
 ## 2. Which minima can SGD stay in? Dynamical stability
 
@@ -12,7 +12,7 @@ Here is the condition in its simplest form, as stated by Jastrzębski et al. (20
 
 $$(1 - \eta\lambda_1)^2 + s^2\,\frac{\eta^2(N - S)}{S(N - 1)} \;\le\; 1.$$
 
-This is survey Eq. (11). Read it in two parts.
+This is survey Eq. (17). Read it in two parts.
 
 - The first term is the full-batch multiplier of chapter 5, squared. For full-batch GD, $S = N$ and the second term vanishes: the condition is $|1 - \eta\lambda_1| \le 1$, the familiar $\eta\lambda_1 \le 2$.
 - The second term is the variance of the random multiplier. It is positive whenever the examples disagree ($s > 0$) and the batch is smaller than the data set. It adds to the left side, so the **condition is stricter for smaller batches**. SGD can stay only where the curvature is smaller, or more uniform across examples.
@@ -23,9 +23,9 @@ A worked example with $N = 100$, $\eta\lambda_1 = 1.5$ and $\eta s = 1$: full ba
 :::
 
 :::read How to read this visual
-**What is drawn.** A map of possible minima, each described by two numbers along its sharpest direction. The horizontal axis is $\eta\lambda$, the step size times the average curvature: the quantity of chapter 5. The vertical axis is $\eta s$, the step size times the spread of the per-example curvatures. Each colored curve is the boundary of survey Eq. (11) for one batch size. Below its curve, SGD with that batch size is stable. The full-batch boundary is the pair of vertical lines $\eta\lambda = 0$ and $\eta\lambda = 2$: for full batches the spread does not matter. The lightly shaded region is the stable region of the batch size you selected. The $S = 64$ boundary peaks at $eta s pprox 13.3$, above the drawn area, so its curve only shows near the two ends.
+**What is drawn.** A map of possible minima, each described by two numbers along its sharpest direction. The horizontal axis is $\eta\lambda$, the step size times the average curvature: the quantity of chapter 5. The vertical axis is $\eta s$, the step size times the spread of the per-example curvatures. Each colored curve is the boundary of survey Eq. (17) for one batch size. Below its curve, SGD with that batch size is stable. The full-batch boundary is the pair of vertical lines $\eta\lambda = 0$ and $\eta\lambda = 2$: for full batches the spread does not matter. The lightly shaded region is the stable region of the batch size you selected. The $S = 64$ boundary peaks at $eta s pprox 13.3$, above the drawn area, so its curve only shows near the two ends.
 
-**What moves.** The dot is one minimum; drag it. The chart below runs real SGD at that point: 100 examples whose curvatures have exactly that mean and spread, batches drawn without replacement, $\eta = 1$. It plots the average of $\psi_t^2$ over 250 runs (dots) on a log scale, against the exact mean-square law, the factor of Eq. (11) to the power $t$ (white line).
+**What moves.** The dot is one minimum; drag it. The chart below runs real SGD at that point: 100 examples whose curvatures have exactly that mean and spread, batches drawn without replacement, $\eta = 1$. It plots the average of $\psi_t^2$ over 250 runs (dots) on a log scale, against the exact mean-square law, the factor of Eq. (17) to the power $t$ (white line).
 
 **What to try.** Put the dot at $(1.5, 1.0)$ and switch the batch size from 100 down to 1. Then drag the dot upwards, increasing the spread, at a fixed $\eta\lambda$.
 
@@ -34,7 +34,7 @@ A worked example with $N = 100$, $\eta\lambda_1 = 1.5$ and $\eta s = 1$: full ba
 
 ## 3. The break-even point
 
-Jastrzębski, Szymczak, Fort, Arpit, Tabor, Cho & Geras (2020) applied this condition to the early phase of training. In a simplified model, they assume that the sharpness grows during training until training becomes unstable along $e_1$. They call the first point where the left side of Eq. (11) reaches one the **[[break-even|break-even point]]**. For full batches it is reached exactly when $\lambda_1 = 2/\eta$.
+Jastrzębski, Szymczak, Fort, Arpit, Tabor, Cho & Geras (2020) applied this condition to the early phase of training. In a simplified model, they assume that the sharpness grows during training until training becomes unstable along $e_1$. They call the first point where the left side of Eq. (17) reaches one the **[[break-even|break-even point]]**. For full batches it is reached exactly when $\lambda_1 = 2/\eta$.
 
 They conjectured, and supported with experiments on several classification tasks, the following.
 

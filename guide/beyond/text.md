@@ -23,7 +23,7 @@ The behavior differs from GD in one important respect. Non-adaptive methods at t
 
 ## 2. Warmup through the same lens
 
-Kalra & Barkeshli (2024) explained learning-rate [[warmup]] through the stability lens. Its main benefit is to let training tolerate a larger target learning rate, by steering it towards flatter, better-conditioned regions. As the learning rate rises during warmup, each time $\eta_t\lambda$ crosses 2 a small loss catapult (chapter 9) reduces the sharpness and restores stability. They distinguish two regimes:
+Kalra & Barkeshli (2024) explained learning-rate [[warmup]] through the stability lens. Its main benefit is to let training tolerate a larger target learning rate, by steering it towards flatter, better-conditioned regions. As the learning rate rises during warmup, each time $\eta_t\lambda$ crosses 2 a small loss catapult (chapter 10) reduces the sharpness and restores stability. They distinguish two regimes:
 
 - a **sharpness-reduction** regime, for instance large standard-parameterization initializations, in which warmup helps considerably;
 - a **progressive-sharpening** regime, for instance $\mu$P or pre-LayerNorm Transformers, in which it helps little.
@@ -68,12 +68,12 @@ For SGD, the sharpness of the full-batch loss does **not** lock onto $2/\eta$; i
 
 $$\mathrm{BS}(\theta) = \mathbb{E}_B\left[\frac{\nabla L_B(\theta)^\top\,\nabla^2 L_B(\theta)\,\nabla L_B(\theta)}{\lVert\nabla L_B(\theta)\rVert^2}\right].$$
 
-This is survey Eq. (14). Read it as: draw a batch $B$; compute its gradient direction; measure the curvature of *that batch's* loss along *that* direction; average over batches. It is a curvature of the minibatch landscape, the one SGD actually steps on.
+This is survey Eq. (20). Read it as: draw a batch $B$; compute its gradient direction; measure the curvature of *that batch's* loss along *that* direction; average over batches. It is a curvature of the minibatch landscape, the one SGD actually steps on.
 
-Because the full-batch sharpness is generally smaller than the batch sharpness, it is suppressed below $2/\eta$. This fits the long-standing observation that smaller batches and larger step sizes favor flatter minima. The evidence is empirical, for vision classification tasks with the squared loss. It is complemented by a theorem on the local quadratic approximation: crossing $2/\eta$ by any fixed margin forces a catapult. Together with the stability condition of chapter 9, this suggests that **for SGD the relevant notion of stability is stability on the minibatch landscape.**
+Because the full-batch sharpness is generally smaller than the batch sharpness, it is suppressed below $2/\eta$. This fits the long-standing observation that smaller batches and larger step sizes favor flatter minima. The evidence is empirical, for vision classification tasks with the squared loss. It is complemented by a theorem on the local quadratic approximation: crossing $2/\eta$ by any fixed margin forces a catapult. Together with the stability condition of chapter 10, this suggests that **for SGD the relevant notion of stability is stability on the minibatch landscape.**
 
 :::plain Why there is no live visual of batch sharpness here
-Batch sharpness only becomes interesting in a model whose curvature changes during training, that is, a non-linear network trained by SGD long enough to reach the edge. We have not built a check-scripted replication of that experiment, and the Atlas only shows what it can recompute. The SGD stability visual of chapter 9 shows the same principle in the simplest exact setting: minibatch noise makes the curvature threshold stricter than $2/\eta$.
+Batch sharpness only becomes interesting in a model whose curvature changes during training, that is, a non-linear network trained by SGD long enough to reach the edge. We have not built a check-scripted replication of that experiment, and the Atlas only shows what it can recompute. The SGD stability visual of chapter 10 shows the same principle in the simplest exact setting: minibatch noise makes the curvature threshold stricter than $2/\eta$.
 :::
 
 | Optimizer | Quantity that stabilizes | Threshold | Source |
@@ -83,8 +83,8 @@ Batch sharpness only becomes interesting in a model whose curvature changes duri
 | Nesterov | $\lambda_{\max}(\nabla^2 L)$ | $(2 + 2\beta)/(\eta(1 + 2\beta))$ | Cohen et al. 2021 |
 | Adam | $\lambda_{\max}(P^{-1}\nabla^2 L)$ | $(2 + 2\beta_1)/((1 - \beta_1)\eta)$, i.e. $38/\eta$ at $\beta_1 = 0.9$ | Cohen et al. 2022; Kalra & Barkeshli 2024 |
 | SAM (unnormalized) | $\lambda(1 + \rho\lambda)$ at $\lambda = \lambda_{\max}$ | $2/\eta$ | Agarwala & Dauphin 2023 |
-| SGD | batch sharpness, Eq. (14) | $2/\eta$ | Andreyev & Beneventano 2024 |
-| SGD, quadratic model | condition (11) | stricter than $2/\eta$ | Wu et al. 2018; Jastrzębski et al. 2020 |
+| SGD | batch sharpness, Eq. (20) | $2/\eta$ | Andreyev & Beneventano 2024 |
+| SGD, quadratic model | condition (17) | stricter than $2/\eta$ | Wu et al. 2018; Jastrzębski et al. 2020 |
 
 This is the survey's Table IV: the stability thresholds of the main optimizers. In each case the listed quantity rises during training and then stabilizes near its threshold.
 

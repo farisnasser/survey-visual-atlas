@@ -74,7 +74,7 @@ Ahn, Zhang & Sra (2022) called this behavior **[[unstable-convergence|unstable c
 Under a mild non-degeneracy assumption, gradient descent with step size $\eta$, from almost every initialization, cannot converge to a stationary point whose Hessian has **either a negative eigenvalue or an eigenvalue above $2/\eta$**.
 :::
 
-The theorem treats strict saddles and overly sharp minima in exactly the same way, as unstable fixed points of the GD map. Its proof follows the stable-manifold argument of chapter 6. In the language of chapter 5: a fixed point with any multiplier outside $[-1, 1]$ cannot attract a set of positive measure. So when no flat enough stationary point lies near the trajectory, GD cannot settle anywhere, and it keeps moving.
+The theorem treats strict saddles and overly sharp minima in exactly the same way, as unstable fixed points of the GD map. Its proof follows the stable-manifold argument of chapter 7. In the language of chapter 5: a fixed point with any multiplier outside $[-1, 1]$ cannot attract a set of positive measure. So when no flat enough stationary point lies near the trajectory, GD cannot settle anywhere, and it keeps moving.
 
 Ahn et al. identified two causes of unstable convergence. The first is the lack of flat stationary points near the GD trajectory. The second is the existence of forward-invariant sets of the GD dynamics, sets that the iterates cannot leave, which keep the unstable iterates from diverging. They characterize the regime by two quantities. One is a relative-progress ratio, $\big(L(\theta - \eta\nabla L(\theta)) - L(\theta)\big)/\big(\eta\lVert\nabla L(\theta)\rVert^2\big)$, which oscillates near zero instead of staying negative. The other is a directional smoothness along the update, which oscillates near $2/\eta$.
 
@@ -88,11 +88,11 @@ Ahn et al. identified two causes of unstable convergence. The first is the lack 
 
 **What to try.** Raise the step size $\eta$ in stages: $0.05$, $0.08$, then just past $2/20.8 \approx 0.096$ (for example $0.1$), then $0.4$.
 
-**What to notice.** At $\eta = 0.05$ and $0.08$, the two wells split the starts by basin (87 sharp, 270 flat), and no start ends at the saddle: chapter 6's avoidance. Just past $0.096$, the sharp well loses every one of its starts. Its multiplier along the sharp direction is now below $-1$, so it cannot hold GD, exactly as Ahn et al.'s theorem says. At $\eta = 0.1$ those starts do not settle anywhere: they keep bouncing near the sharp well (white, "never settles"), a bouncing orbit of the kind chapter 11 studies. At $\eta = 0.4$ every start ends in the flat well, the only stationary point left that is stable at this step. The readout reports the counts. The same theorem forbids both the saddle and the sharp minimum.
+**What to notice.** At $\eta = 0.05$ and $0.08$, the two wells split the starts by basin (87 sharp, 270 flat), and no start ends at the saddle: chapter 7's avoidance. Just past $0.096$, the sharp well loses every one of its starts. Its multiplier along the sharp direction is now below $-1$, so it cannot hold GD, exactly as Ahn et al.'s theorem says. At $\eta = 0.1$ those starts do not settle anywhere: they keep bouncing near the sharp well (white, "never settles"), a bouncing orbit of the kind chapter 12 studies. At $\eta = 0.4$ every start ends in the flat well, the only stationary point left that is stable at this step. The readout reports the counts. The same theorem forbids both the saddle and the sharp minimum.
 :::
 
 :::warn What the edge of stability breaks
-Full-batch GD at practical learning rates operates at $\eta\lambda_{\max} \approx 2$, far outside the regime $\eta < 1/\ell$ (and hence $\eta\lambda_{\max} < 1$) assumed by the saddle-avoidance theorems of chapter 6, and outside the descent lemma of chapter 3. The loss is not monotone. The classical convergence analyses do not describe this regime. That is the problem the next two chapters address: why does training not blow up, and what path does it take?
+Full-batch GD at practical learning rates operates at $\eta\lambda_{\max} \approx 2$, far outside the regime $\eta < 1/\ell$ (and hence $\eta\lambda_{\max} < 1$) assumed by the saddle-avoidance theorems of chapter 7, and outside the descent lemma of chapter 3. The loss is not monotone. The classical convergence analyses do not describe this regime. That is the problem the next two chapters address: why does training not blow up, and what path does it take?
 :::
 
 :::key What to keep from this chapter

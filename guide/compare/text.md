@@ -1,8 +1,8 @@
 ## 1. One instability, two faces
 
-This chapter follows Section V of the survey. Chapters 6 to 13 followed each literature in roughly chronological order. Here we step back and compare them. We ask three questions. What do the two kinds of instability have in common, and where do they differ? What does each result actually guarantee? And which of its assumptions hold for the networks that are trained in practice?
+This chapter follows Section V of the survey. Chapters 7 to 14 followed each literature in roughly chronological order. Here we step back and compare them. We ask three questions. What do the two kinds of instability have in common, and where do they differ? What does each result actually guarantee? And which of its assumptions hold for the networks that are trained in practice?
 
-The common structure was made precise by Ahn, Zhang & Sra (2022), chapter 10: **strict saddles and minima sharper than $2/\eta$ are both unstable fixed points of the GD map**, and GD avoids both from almost every initialization. In the language of chapter 5, both have a multiplier $1 - \eta\lambda$ outside $[-1, 1]$: above $+1$ for a saddle, below $-1$ for a too-sharp minimum. The first visual is that multiplier again. Keep it in view while reading the table.
+The common structure was made precise by Ahn, Zhang & Sra (2022), chapter 11: **strict saddles and minima sharper than $2/\eta$ are both unstable fixed points of the GD map**, and GD avoids both from almost every initialization. In the language of chapter 5, both have a multiplier $1 - \eta\lambda$ outside $[-1, 1]$: above $+1$ for a saddle, below $-1$ for a too-sharp minimum. The first visual is that multiplier again. Keep it in view while reading the table.
 
 :::viz multiplier
 :::
@@ -15,14 +15,14 @@ The common structure was made precise by Ahn, Zhang & Sra (2022), chapter 10: **
 **What to notice.** Both make $|u_t|$ grow: on the log chart, both are rising straight lines. They differ in one thing only, the sign pattern. The saddle grows monotonically, so the iterate leaves in one direction. The too-sharp minimum grows with alternating sign, so the iterate bounces across the valley. That single difference, monotone escape against oscillation, is the root of every row of the table below.
 :::
 
-| | **Negative curvature** (saddles, chapters 6–8) | **Excess curvature** (edge of stability, chapters 9–13) |
+| | **Negative curvature** (saddles, chapters 7–9) | **Excess curvature** (edge of stability, chapters 10–14) |
 |---|---|---|
 | Condition | $\lambda < 0$ along some eigenvector | $\lambda > 2/\eta$ along some eigenvector |
 | Multiplier $1 - \eta\lambda$ | $> 1$: monotone growth | $< -1$: growth with alternating sign |
 | What GD does | leaves along the negative-curvature direction; its stable set has measure zero (Lee et al. 2016, 2019) | oscillates along the top eigenvector; cannot converge to such points (Ahn et al. 2022) |
 | What limits progress | time near the stable manifold, $\propto \log(1/\delta)$; exponential in $d$ in the worst case (Du et al. 2017) | progressive sharpening against oscillation-induced sharpness reduction (Damian et al. 2023; Cohen et al. 2025) |
-| Higher-order effect | decides where the escaping trajectory goes | restoring drift $-\eta\tfrac{x^2}{2}\nabla S$ (survey Eq. 12) |
-| Role of noise | supplies a component along the escape direction (Ge et al. 2015; Daneshmand et al. 2018; Fang et al. 2019) | makes the threshold stricter (Eq. 11); batch sharpness locks to $2/\eta$ (Andreyev & Beneventano 2024) |
+| Higher-order effect | decides where the escaping trajectory goes | restoring drift $-\eta\tfrac{x^2}{2}\nabla S$ (survey Eq. 18) |
+| Role of noise | supplies a component along the escape direction (Ge et al. 2015; Daneshmand et al. 2018; Fang et al. 2019) | makes the threshold stricter (Eq. 17); batch sharpness locks to $2/\eta$ (Andreyev & Beneventano 2024) |
 | Role in learning | saddle-to-saddle simplicity bias (Saxe et al. 2014; Zhang et al. 2026) | selects flatter regions; catapults (Lewkowycz et al. 2020; Kalra & Barkeshli 2024); can change the destination (Mohtashami et al. 2023) |
 | Status of the theory | asymptotic theorems; polynomial-time escape with noise; degenerate saddles open | rigorous in specific settings (Damian et al. 2023; Arora et al. 2022; Chen & Bruna 2023); accurate but informal flows (Cohen et al. 2025) |
 
@@ -30,9 +30,9 @@ This is the survey's Table V. Three differences stand out.
 
 **The question asked.** For saddles, the question is how to leave as fast as possible, and the answer is measured in escape time. For the edge of stability, the question is how to make progress while unstable, and the answer is a description of the time-averaged trajectory. The saddle literature counts iterations; the edge-of-stability literature predicts curves.
 
-**The role of higher-order terms.** At a saddle, the linear instability is the whole story near the critical point, and higher-order terms matter only after escape. At the edge, the linear instability alone would predict divergence, and it is the third-order term of Eq. (12) that keeps training alive. The saddle analysis is local; the edge-of-stability analysis is a feedback loop between the iterate and its own curvature.
+**The role of higher-order terms.** At a saddle, the linear instability is the whole story near the critical point, and higher-order terms matter only after escape. At the edge, the linear instability alone would predict divergence, and it is the third-order term of Eq. (18) that keeps training alive. The saddle analysis is local; the edge-of-stability analysis is a feedback loop between the iterate and its own curvature.
 
-**The role of noise.** Noise helps at saddles, because it supplies a component along the direction of escape. Noise does not help stability: it tightens it. Under condition (11), smaller batches make the curvature threshold stricter. Under Eq. (14), SGD locks a minibatch quantity, not the full-batch sharpness, to $2/\eta$. **The same randomness that speeds up escape from negative curvature pushes training away from regions of large positive curvature.** The next two visuals show the two effects side by side.
+**The role of noise.** Noise helps at saddles, because it supplies a component along the direction of escape. Noise does not help stability: it tightens it. Under condition (17), smaller batches make the curvature threshold stricter. Under Eq. (20), SGD locks a minibatch quantity, not the full-batch sharpness, to $2/\eta$. **The same randomness that speeds up escape from negative curvature pushes training away from regions of large positive curvature.** The next two visuals show the two effects side by side.
 
 :::viz noisesaddle
 :::
@@ -44,14 +44,14 @@ This is the survey's Table V. Three differences stand out.
 
 **What to try.** Switch *noise points along* between $y$ and *x only*, and change the noise size $s$.
 
-**What to notice.** GD slides into the saddle and stays. With noise along $y$, SGD is knocked off the stable line and escapes to a minimum. With noise along $x$ only, however large it is, SGD stays on the line and stops at the saddle too. The readout says whether, and when, each run escaped. **At a saddle, noise helps, but only its component along the negative-curvature direction counts**: the CNC condition of chapter 7.
+**What to notice.** GD slides into the saddle and stays. With noise along $y$, SGD is knocked off the stable line and escapes to a minimum. With noise along $x$ only, however large it is, SGD stays on the line and stops at the saddle too. The readout says whether, and when, each run escaped. **At a saddle, noise helps, but only its component along the negative-curvature direction counts**: the CNC condition of chapter 8.
 :::
 
 :::viz sgdstab
 :::
 
 :::read How to read this visual
-**What is drawn.** The SGD stability map of chapter 9. The horizontal axis is $\eta\lambda$ (step times average curvature) and the vertical axis is $\eta s$ (step times the spread of the per-example curvatures). Each curve bounds the stable region of one batch size; the full-batch region is the strip $0 \le \eta\lambda \le 2$. The chart runs real SGD at the dragged point.
+**What is drawn.** The SGD stability map of chapter 10. The horizontal axis is $\eta\lambda$ (step times average curvature) and the vertical axis is $\eta s$ (step times the spread of the per-example curvatures). Each curve bounds the stable region of one batch size; the full-batch region is the strip $0 \le \eta\lambda \le 2$. The chart runs real SGD at the dragged point.
 
 **What to try.** Keep the dot at a moderate $\eta\lambda$, around $1.5$, and lower the batch size from 100 to 1.
 
@@ -64,8 +64,8 @@ Results in both literatures claim success in different senses, and comparing the
 
 1. **First-order stationarity**, $\lVert\nabla L\rVert \le \epsilon$. This is the guarantee of GD and SGD under Assumptions 1 and 3 (chapter 4). An $\epsilon$-FOSP may be a saddle point.
 2. **Asymptotic avoidance.** Lee et al.'s theorem and its extensions guarantee that the limit, if it exists, is not a strict saddle. They give no rate.
-3. **Second-order stationarity.** This is the guarantee of perturbed GD and of the noise-based analyses (chapter 7). It implies approximate local optimality only under the strict-saddle property.
-4. **Progress at the edge.** No classical guarantee applies, because the step size violates the descent lemma. The available results are the monotone decrease of the central-flow loss (chapter 12), which is derived informally, and rigorous analyses in specific settings (Damian et al.; Arora et al.; Chen & Bruna).
+3. **Second-order stationarity.** This is the guarantee of perturbed GD and of the noise-based analyses (chapter 8). It implies approximate local optimality only under the strict-saddle property.
+4. **Progress at the edge.** No classical guarantee applies, because the step size violates the descent lemma. The available results are the monotone decrease of the central-flow loss (chapter 13), which is derived informally, and rigorous analyses in specific settings (Damian et al.; Arora et al.; Chen & Bruna).
 
 A fifth target, implicit in Section IV, is reaching a **good** minimum: flat enough to be stable at the chosen step size and to generalize. No theorem reviewed in the survey guarantees this for practical networks. The self-stabilization and catapult analyses explain how the step size biases which minimum is reached.
 

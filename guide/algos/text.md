@@ -43,7 +43,7 @@ SGD has a characteristic behavior with a constant step: it gets close to a minim
 
 **What to try.** Change $\eta$ and $B$, then *Run again*.
 
-**What to notice.** The coral curve drops, then flattens into a noisy band: the noise floor. Its height grows with $\eta$ and shrinks with $B$, and the readout compares it with the small-step prediction $\eta\sigma^2/(4B)$. The violet curve keeps going down, because its noise shrinks with the step. The white curve has no floor. Remember this: noise is a nuisance near a minimum, but chapter 7 shows that near a saddle it can be exactly what is needed.
+**What to notice.** The coral curve drops, then flattens into a noisy band: the noise floor. Its height grows with $\eta$ and shrinks with $B$, and the readout compares it with the small-step prediction $\eta\sigma^2/(4B)$. The violet curve keeps going down, because its noise shrinks with the step. The white curve has no floor. Remember this: noise is a nuisance near a minimum, but chapter 8 shows that near a saddle it can be exactly what is needed.
 :::
 
 ## 3. Momentum
@@ -64,7 +64,7 @@ Nesterov's accelerated gradient is similar, but evaluates the gradient at a look
 
 **What to try.** Press *Polyak's tuning* and *Nesterov's tuning*, switch $\kappa$ between 10 and 100, then move $\eta$ and $\beta$ yourself.
 
-**What to notice.** The readout counts steps to $f < 10^{-8}$ for each method. Violet zig-zags and needs many steps. The momentum methods glide along the valley and need far fewer, roughly $\sqrt{\kappa}$ instead of $\kappa$ times a constant. The survey uses momentum in two places: heavy ball escapes the saddle earliest in the survey's Fig. 5 (chapter 7), and momentum changes the stability threshold of chapter 10 from $2/\eta$ to $(2 + 2\beta)/\eta$.
+**What to notice.** The readout counts steps to $f < 10^{-8}$ for each method. Violet zig-zags and needs many steps. The momentum methods glide along the valley and need far fewer, roughly $\sqrt{\kappa}$ instead of $\kappa$ times a constant. The survey uses momentum in two places: heavy ball escapes the saddle earliest in the survey's Fig. 5 (chapter 8), and momentum changes the stability threshold of chapter 11 from $2/\eta$ to $(2 + 2\beta)/\eta$.
 :::
 
 ## 4. Adaptive methods: a step size per direction
@@ -77,7 +77,7 @@ where $m_t$ is a moving average of gradients and $\varepsilon$ a small constant.
 
 $$\theta_{t+1} = \theta_t - \eta\, P_t^{-1} m_t,$$
 
-where $P_t$ is a diagonal matrix built from the past gradients. Its local stability is governed not by the Hessian $\nabla^2 L$ but by the **preconditioned Hessian** $P_t^{-1}\nabla^2 L$. Chapter 13 returns to this: Adam has its own edge of stability, measured on $P^{-1}\nabla^2 L$.
+where $P_t$ is a diagonal matrix built from the past gradients. Its local stability is governed not by the Hessian $\nabla^2 L$ but by the **preconditioned Hessian** $P_t^{-1}\nabla^2 L$. Chapter 14 returns to this: Adam has its own edge of stability, measured on $P^{-1}\nabla^2 L$.
 
 :::viz precond
 :::
