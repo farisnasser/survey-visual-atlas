@@ -45,7 +45,7 @@ Brief (Faris, 2026-11-08): rebuild the Atlas to suit the new survey
 
 ## Status (2026-11-08)
 All 16 chapters are written and live. Chapter 6 (dynamics: survey II-G/H/I, GD as a map, noise, measuring curvature) was added after the survey's first-principles pass, which also renumbered the survey's equations; the guide's equation and chapter references were renumbered with scripts/renumber_guide_eqs.py and renumber_guide_chapters.py.
-- **Visuals:** 62 inline visuals, plus 7 of the survey's own figures, each with a "How to read" box.
+- **Visuals:** 67 inline visuals, plus 7 of the survey's own figures, each with a "How to read" box.
 - **New visuals (4), check-scripted:** multiplier (`guide_multiplier.py`), sgdstab (`guide_precursors.py`), normgd (`guide_why.py`), centralflow (`guide_flow.py`). `guide_terms.py` checks that every term resolves, every anchor exists, and every visual and figure has its read box.
 - **Reused visuals:** the rest come from crash-course stops and paper tabs. `damian2023self` and `kalra2025universal` now listen on `ctx.plot.c` instead of `#plot2d`, so they work inside chapters too.
 - **Batch sharpness** has no live visual. That needs a non-linear SGD replication, which we have not check-scripted. Chapter 13 says so.
