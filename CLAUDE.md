@@ -23,7 +23,8 @@ index.html                  the guide's map (src/guide/guide.js) · guide.html?s
 guide/guide.json            chapters (id, survey section, title, question, terms, ready) · guide/glossary.json terms new to the guide
 guide/<id>/text.md|viz.js   one chapter: notes syntax + :::viz + :::read (How to read) + :::survey (our survey's own figures)
 guide/lib.js                paperTab(key, id): reuse a papers/<Key>/visual.js tab inside a chapter (data.json attached)
-public/survey/*.webp        figures of survey v2, cropped from its PDF
+public/survey/*.webp        figures of survey v2, cropped from its PDF · public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf our survey itself (linked from the map hero and every chapter nav; recopy from survey-v2/ when the survey changes)
+scripts/audit_pages.js      rendering audit on localhost: __audit(urls, width) for guide/learn pages, __auditPapers(keys) for every paper tab · scripts/check_paths.py exact-case path check (Pages is case-sensitive)
 scripts/check-math/guide_*.py   numbers of the guide's new visuals; guide_terms.py checks terms, anchors and read boxes
 library.html, paper.html, compare.html, thumbs.html (local maintenance page)   the paper library (first survey)
 src/theme.css               shared tokens + colour language

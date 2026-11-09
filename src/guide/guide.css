@@ -20,3 +20,6 @@
 .nt-fig.sv { background: #f7f8fc; border-color: rgba(255, 255, 255, .25); padding: 10px 10px 8px; }
 .nt-fig.sv img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .nt-fig.sv figcaption { color: #3a4260; font-size: 12.5px; }
+
+/* phone: chapter nav shows numbers only, so every pill stays readable */
+@media (max-width: 560px) { .pn .pn-t { display: none; } .pn a { max-width: none; } }

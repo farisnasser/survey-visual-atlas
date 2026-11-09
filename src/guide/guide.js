@@ -5,6 +5,7 @@
 // terms: course/glossary.json + guide/glossary.json; order: guide/guide.json.
 import { renderNotesArticle, inline } from '../paper/notes.js';
 import { Widget } from '../learn/widget.js';
+const PDF = 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf';
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -51,14 +52,14 @@ async function renderMap(guide, gloss, where) {
   document.title = 'Survey Visual Atlas · a visual guide to our survey';
   await katexReady();
   const chs = guide.chapters;
-  $('#pn').innerHTML = `<a href="learn.html">Crash course</a><a href="library.html">Paper library</a>`;
+  $('#pn').innerHTML = `<a href="${PDF}" target="_blank" rel="noopener">Survey PDF</a><a href="learn.html">Crash course</a><a href="library.html">Paper library</a>`;
   const parts = guide.parts.map(p => ({ ...p, chs: chs.filter(c => c.sec === p.sec) })).filter(p => p.chs.length);
   $('#main').innerHTML = `
     <header class="lc-head lc-hero">
       <div class="kicker mono">${esc(guide.kicker)}</div>
       <h1>${esc(guide.title)}</h1>
       <p class="lede">${inline(guide.lede)}</p>
-      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a></div>
+      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="${PDF}" target="_blank" rel="noopener">Read the survey (PDF)</a><a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a></div>
     </header>
     <div class="gd-parts">${parts.map(p => `
       <section class="gd-part">
@@ -82,7 +83,7 @@ async function renderChapter(guide, i, gloss, where) {
   const chs = guide.chapters, c = chs[i], prev = chs[i - 1], next = chs[i + 1];
   const part = guide.parts.find(p => p.sec === c.sec);
   document.title = `${c.n}. ${c.title} · Survey guide`;
-  $('#pn').innerHTML = `<a href="./">Map</a>${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}. ${esc(prev.title)}</a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}. ${esc(next.title)} →</a>` : ''}`;
+  $('#pn').innerHTML = `<a href="./">Map</a><a href="${PDF}" target="_blank" rel="noopener"><span class="pn-t">Survey </span>PDF</a>${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}<span class="pn-t">. ${esc(prev.title)}</span></a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}<span class="pn-t">. ${esc(next.title)}</span> →</a>` : ''}`;
   const [md, mod] = await Promise.all([
     fetch(`guide/${c.id}/text.md`).then(r => { if (!r.ok) throw new Error(`text.md ${r.status}`); return r.text(); }),
     import(`../../guide/${c.id}/viz.js`).catch(err => { console.error(err); return { default: {} }; }),
