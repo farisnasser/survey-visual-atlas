@@ -1,9 +1,4 @@
-// Chapter 15 (survey Sections VI and VII). Reused paper tabs from the Atlas library, each checked in
-// scripts/check-math/<key>.py.
+// Chapter 18 (survey Sections VII, VIII; the stability and invariance questions of VI-E and VII-D). Reused paper tabs:
+// cohen2021gradient 'quad' and 'mlp', dinh2017sharp 'rescale' (their check scripts).
 import { paperTab } from '../lib.js';
-
-export default {
-  race: await paperTab('kawaguchi2016deep', 'race', { title: 'Open problem A: a degenerate saddle holds GD far longer than a strict one' }),
-  alpha: await paperTab('gurbuzbalaban2021heavy', 'alpha', { title: 'Open problem C: how heavy is SGD’s noise? The tail index against the step size' }),
-  plateaus: await paperTab('saxe2014exact', 'plateaus', { title: 'Open problem D: the plateaus are where the learning happens' }),
-};
+export default { quad: await paperTab('cohen2021gradient', 'quad'), mlp: await paperTab('cohen2021gradient', 'mlp'), rescale: await paperTab('dinh2017sharp', 'rescale') };

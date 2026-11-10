@@ -1,3 +1,10 @@
+# Guide plan
+
+## Survey v3 guide (home page, since 2026-11-10)
+18 chapters for *From Gradients to Curvature and Matrix Geometry* (survey-v3): intro (I); taylor, smooth, conditioning, stochastic, metric (II, with Appendices A-A, C-A, D-B, C-B); momentum, adaptive, lean (III, with A-B); newton, quasinewton, fisher (IV, with D-A, C-D); kfac, shampoo, diagonal, muon (V, with A-C, C-C); compare (VI, live Fig. 9 dashboard from real runs); open (VII-VIII). 15 new visuals (checked in guide3_numbers.py), the rest reused from the crash course and paper tabs; every visual and survey figure has a How-to-read box. Rules unchanged from the v2 plan below.
+
+## Survey v2 guide (now guide-v2/, guide.html?v=2)
+
 # Survey guide (v2): a visual journey through our survey, section by section
 
 Brief (Faris, 2026-11-08): rebuild the Atlas to suit the new survey

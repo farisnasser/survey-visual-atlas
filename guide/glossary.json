@@ -1,157 +1,160 @@
 {
  "multiplier": {
   "term": "multiplier $1 - \\eta\\lambda$",
-  "ch": "multiplier",
-  "def": "Near a critical point, one gradient-descent step multiplies the distance along a Hessian eigenvector with eigenvalue $\\lambda$ by $1 - \\eta\\lambda$. Below $-1$ or above $+1$, that distance grows: the point is unstable for GD.",
-  "tex": "u_j \\leftarrow (1 - \\eta\\lambda_j)\\, u_j",
-  "aka": [
-   "linearized GD map"
-  ],
-  "sec": "n-1-gradient-descent-near-a-critical-point"
+  "ch": "conditioning",
+  "def": "Near a stationary point, one gradient-descent step multiplies the error along a Hessian eigenvector with eigenvalue $\\lambda$ by $1 - \\eta\\lambda$. It contracts for $0 < \\eta\\lambda < 2$, grows without changing sign for $\\lambda < 0$, and grows while flipping sign for $\\eta\\lambda > 2$.",
+  "sec": "n-4-local-stability-the-multiplier-1-eta-lambda",
+  "tex": "e_{t+1} \\approx (I - \\eta H^\\star)e_t"
  },
- "linear-stability": {
-  "term": "linear stability",
-  "ch": "multiplier",
-  "def": "A critical point is linearly stable for GD with step $\\eta$ if every multiplier $1 - \\eta\\lambda_j$ lies strictly between $-1$ and $1$. Then GD started close enough converges to it. A minimum is linearly stable exactly when $\\eta\\lambda_{\\max} < 2$.",
-  "sec": "n-3-stability-of-minima-the-2-eta-threshold"
+ "variable-metric": {
+  "term": "variable-metric step",
+  "ch": "metric",
+  "def": "The step that minimizes the linear model plus a penalty measured in a positive-definite metric $M$: $\\Delta = -\\eta M^{-1}g$. $M = I$ gives GD, a diagonal $M$ per-coordinate scaling, $M = H$ Newton, $M = F$ natural gradient. A lens, not an identity: Adam's moments are not a Hessian, and Muon's geometry is not a quadratic metric.",
+  "sec": "n-1-every-step-minimizes-a-model-plus-a-penalty",
+  "tex": "\\Delta_t = \\arg\\min_\\Delta\\, g_t^\\top\\Delta + \\tfrac{1}{2\\eta}\\Delta^\\top M_t\\Delta = -\\eta M_t^{-1}g_t"
  },
- "stability-threshold": {
-  "term": "stability threshold $2/\\eta$",
-  "ch": "multiplier",
-  "def": "The largest sharpness a minimum can have and still hold gradient descent with step size $\\eta$. Above it, the sharpest direction's multiplier is below $-1$, and GD bounces out.",
-  "tex": "\\eta\\,\\lambda_{\\max}(H) < 2",
-  "sec": "n-3-stability-of-minima-the-2-eta-threshold"
+ "optimizer-state": {
+  "term": "optimizer state",
+  "ch": "compare",
+  "def": "What an optimizer keeps between steps besides the weights and gradients: nothing for SGD, one vector for momentum and Lion, two for Adam, row and column sums for Adafactor, two factor matrices per layer for K-FAC and Shampoo.",
+  "sec": "n-2-count-the-actual-tensors"
  },
- "cnc": {
-  "term": "correlated negative curvature (CNC)",
-  "ch": "escape",
-  "def": "Daneshmand et al.'s condition that the stochastic gradients have a non-vanishing spread along the most negative curvature direction, at every point. Under it, SGD's own noise escapes saddles without added noise.",
-  "tex": "\\mathbb{E}_\\xi\\big[\\langle v_\\theta, g(\\theta;\\xi)\\rangle^2\\big] \\ge \\gamma",
-  "sec": "n-3-noise-as-an-escape-mechanism"
+ "adafactor-factored": {
+  "term": "factored second moment (Adafactor)",
+  "ch": "lean",
+  "def": "Adafactor stores only the row sums $r$ and column sums $c$ of an $m\\times n$ second-moment matrix and rebuilds it as $r_ic_j/\\sum_k r_k$: $m + n$ numbers instead of $mn$. Exact when the matrix is a product of a row and a column factor.",
+  "sec": "n-1-adafactor-factor-the-second-moment",
+  "tex": "\\widetilde V_{ij} = \\frac{r_ic_j}{\\sum_k r_k}"
  },
- "heavy-tail": {
-  "term": "heavy-tailed noise",
-  "ch": "escape",
-  "def": "Randomness whose large values are not rare: $P(|x| > t)$ decays only like a power $t^{-\\alpha}$. With $\\alpha < 2$ the variance is infinite. SGD iterates can be heavy-tailed even for linear regression with Gaussian data.",
-  "aka": [
-   "power-law tail",
-   "tail index α"
-  ],
-  "sec": "n-4-heavy-tails-and-global-exploration"
+ "lion": {
+  "term": "Lion",
+  "ch": "lean",
+  "def": "A sign-based optimizer found by program search: it steps by $-\\eta\\,\\mathrm{sign}(\\beta_1m + (1-\\beta_1)g)$, so every coordinate moves by exactly $\\eta$; the momentum $m$ uses a second coefficient $\\beta_2$. One state array instead of Adam's two.",
+  "sec": "n-2-lion-a-sign-update-with-one-state",
+  "tex": "\\theta \\leftarrow (1-\\eta\\lambda)\\theta - \\eta\\,\\mathrm{sign}(c_t)"
  },
- "saddle-to-saddle": {
-  "term": "saddle-to-saddle dynamics",
-  "ch": "stages",
-  "def": "Training from small initialization that lingers near a saddle, escapes along one new direction, lingers near the next saddle, and so on. The loss falls in a staircase while the network learns one rank, kink, kernel or head at a time.",
-  "aka": [
-   "incremental learning",
-   "stage-wise learning"
-  ],
-  "sec": "n-2-from-one-saddle-to-the-next"
+ "decoupled-decay": {
+  "term": "decoupled weight decay (AdamW)",
+  "ch": "adaptive",
+  "def": "Shrinking every weight by the same factor $1 - \\eta\\lambda$, separately from the adaptive step. Adding an L2 penalty inside Adam instead divides the decay by each coordinate's adaptive scale, so heavily updated weights are barely regularized.",
+  "sec": "n-5-adamw-weight-decay-is-not-an-l2-penalty",
+  "tex": "\\theta_{t+1} = (1-\\eta\\lambda)\\theta_t - \\eta\\frac{\\hat m_t}{\\sqrt{\\hat v_t}+\\varepsilon}"
  },
- "simplicity-bias": {
-  "term": "simplicity bias",
-  "ch": "stages",
-  "def": "The tendency of training to find simple functions before complex ones. In saddle-to-saddle dynamics, the strongest pattern in the data is learned first and weaker ones later.",
-  "sec": "n-3-obstacle-or-mechanism"
+ "damping": {
+  "term": "damping",
+  "ch": "newton",
+  "def": "Replacing the Hessian by $H + \\lambda I$ in Newton's equation. If $H + \\lambda I \\succ 0$ the step is a descent direction, even where $H$ is indefinite; large $\\lambda$ makes the step short, like gradient descent.",
+  "sec": "n-3-why-undamped-newton-can-fail",
+  "tex": "(H_t + \\lambda_tI)\\Delta_t = -g_t"
  },
- "batch-size-stability": {
-  "term": "SGD stability condition",
-  "ch": "precursors",
-  "def": "For SGD with batch size $S$ out of $N$ examples, the condition for the mean square of the distance along the top direction to shrink. Its second term makes it stricter than the full-batch condition when the per-example curvatures differ (spread $s$).",
-  "tex": "(1 - \\eta\\lambda_1)^2 + s^2\\,\\frac{\\eta^2(N - S)}{S(N - 1)} \\le 1",
-  "aka": [
-   "dynamical stability",
-   "non-uniformity"
-  ],
-  "sec": "n-2-which-minima-can-sgd-stay-in-dynamical-stability"
+ "trust-region": {
+  "term": "trust region",
+  "ch": "newton",
+  "def": "A method that minimizes the quadratic model only within a radius $r_t$, then grows or shrinks the radius by comparing the actual decrease of the loss with the predicted one. It handles negative curvature naturally.",
+  "sec": "n-4-trust-regions-and-cubic-regularization",
+  "tex": "\\min_{\\|\\Delta\\|\\le r_t}\\, g_t^\\top\\Delta + \\tfrac12\\Delta^\\top H_t\\Delta"
  },
- "break-even": {
-  "term": "break-even point",
-  "ch": "precursors",
-  "def": "Jastrzębski et al.'s name for the first point on the training trajectory where the SGD stability condition is just met with equality. For full batches, this is where the sharpness reaches $2/\\eta$.",
-  "sec": "n-3-the-break-even-point"
+ "secant": {
+  "term": "secant condition",
+  "ch": "quasinewton",
+  "def": "The requirement that a curvature estimate reproduce the observed change of the gradient: $B_{t+1}s_t = y_t$, with $s_t$ the last step and $y_t$ the change in gradient. Quasi-Newton methods learn curvature from these pairs without second derivatives.",
+  "sec": "n-1-bfgs-curvature-from-differences-of-gradients",
+  "tex": "B_{t+1}s_t = y_t"
  },
- "catapult": {
-  "term": "catapult",
-  "ch": "precursors",
-  "def": "With a step between $2/\\lambda_0$ and a maximal value, the loss first spikes, the curvature then drops below $2/\\eta$, and training converges in a flatter region (Lewkowycz et al. 2020).",
-  "aka": [
-   "catapult phase"
-  ],
-  "sec": "n-4-catapults"
+ "bfgs": {
+  "term": "BFGS",
+  "ch": "quasinewton",
+  "def": "The classical quasi-Newton update (Broyden, Fletcher, Goldfarb, Shanno): a rank-two correction that satisfies the secant condition and keeps the estimate positive definite when $y_t^\\top s_t > 0$. L-BFGS keeps only the last $k$ pairs.",
+  "sec": "n-1-bfgs-curvature-from-differences-of-gradients",
+  "tex": "B_{t+1} = B_t - \\frac{B_ts_ts_t^\\top B_t}{s_t^\\top B_ts_t} + \\frac{y_ty_t^\\top}{y_t^\\top s_t}"
  },
- "unstable-convergence": {
-  "term": "unstable convergence",
-  "ch": "edge",
-  "def": "Ahn, Zhang & Sra's name for training that keeps making progress while its step size violates $\\eta < 2/L$. They prove that GD cannot converge to stationary points with an eigenvalue below $0$ or above $2/\\eta$.",
-  "sec": "n-4-unstable-convergence-a-theorem-that-covers-both-instabilities"
+ "conjugate-gradient": {
+  "term": "conjugate gradients (CG)",
+  "ch": "quasinewton",
+  "def": "An iterative solver for $A\\Delta = -g$ with positive-definite $A$ that needs only products $Av$. Its rate depends on $\\sqrt\\kappa$ instead of $\\kappa$, and in exact arithmetic it finishes in at most $d$ iterations. The inner solver of Hessian-free optimization.",
+  "sec": "n-4-hessian-free-optimization"
  },
- "self-stabilization": {
-  "term": "self-stabilization",
-  "ch": "why",
-  "def": "Damian et al.'s mechanism for the edge of stability. The oscillation along the top eigenvector produces, through a third-order Taylor term, a drift $-\\eta\\tfrac{x^2}{2}\\nabla S$ that lowers the sharpness, so the instability brakes itself.",
-  "tex": "\\nabla L(\\theta + xu) \\approx \\nabla L(\\theta) + xS(\\theta)u + \\tfrac{x^2}{2}\\nabla S(\\theta)",
-  "sec": "n-3-self-stabilization"
+ "ggn": {
+  "term": "generalized Gauss–Newton matrix",
+  "ch": "fisher",
+  "def": "The first term of the Hessian of a composite loss, $G = J^\\top H_\\ell J$, where $J$ is the Jacobian of the network outputs and $H_\\ell$ the Hessian of the loss in those outputs. Positive semidefinite when $H_\\ell$ is, even if the full Hessian is not.",
+  "sec": "n-1-three-different-matrices",
+  "tex": "G = J^\\top H_\\ell J"
  },
- "period-doubling": {
-  "term": "period doubling",
-  "ch": "why",
-  "def": "As the step size grows past the edge, GD's late iterates go from one point to a 2-cycle, then 4, 8, … and finally chaos: the classic route to chaos of iterated maps.",
-  "aka": [
-   "route to chaos",
-   "period-2 orbit"
-  ],
-  "sec": "n-5-beyond-the-edge-and-a-route-to-chaos"
+ "fisher": {
+  "term": "Fisher information matrix",
+  "ch": "fisher",
+  "def": "The expected outer product of the score $\\nabla_\\theta\\log p_\\theta(y\\mid x)$, with labels drawn from the model itself. It measures how much a parameter step changes the model's predictions: $\\mathrm{KL}(p_\\theta\\|p_{\\theta+\\Delta}) \\approx \\tfrac12\\Delta^\\top F\\Delta$.",
+  "sec": "n-1-three-different-matrices",
+  "tex": "F = \\mathbb{E}_{y\\sim p_\\theta}[\\nabla\\log p_\\theta\\,\\nabla\\log p_\\theta^\\top]"
  },
- "central-flow": {
-  "term": "central flow",
-  "ch": "flow",
-  "def": "Cohen et al.'s differential equation for the time-averaged path of GD at the edge of stability: a gradient flow with an implicit sharpness penalty, equivalently gradient flow projected onto the set where the sharpness equals $2/\\eta$.",
-  "tex": "\\frac{d\\theta}{dt} = -\\eta\\,\\Pi^\\perp_{\\nabla S}\\,\\nabla L(\\theta)",
-  "sec": "n-1-average-the-oscillation-away"
+ "empirical-fisher": {
+  "term": "empirical Fisher",
+  "ch": "fisher",
+  "def": "The Fisher formula evaluated with the observed labels instead of labels drawn from the model: a gradient outer-product estimate. It does not generally equal the Fisher, the Gauss–Newton matrix, or the Hessian.",
+  "sec": "n-1-three-different-matrices"
  },
- "adaptive-eos": {
-  "term": "adaptive edge of stability",
-  "ch": "beyond",
-  "def": "For adaptive methods, the largest eigenvalue of the preconditioned Hessian $P^{-1}\\nabla^2 L$ equilibrates at the update's stability threshold, $38/\\eta$ for Adam with $\\beta_1 = 0.9$ (Cohen et al. 2022).",
-  "sec": "n-1-adaptive-methods-have-their-own-edge"
+ "natural-gradient": {
+  "term": "natural gradient",
+  "ch": "fisher",
+  "def": "The step $-\\eta F^{-1}g$: the steepest descent direction when step size is measured by how much the predictions change (KL divergence), not by Euclidean distance in parameters. Approximately invariant to how the model is parameterized.",
+  "sec": "n-2-natural-gradient-geometry-of-predictions",
+  "tex": "\\Delta_{\\mathrm{NG}} = -\\eta F^{-1}g"
  },
- "batch-sharpness": {
-  "term": "batch sharpness",
-  "ch": "beyond",
-  "def": "The expected curvature of each minibatch Hessian along its own minibatch gradient. For minibatch SGD, this, and not the full-batch sharpness, stabilizes at $2/\\eta$ (Andreyev & Beneventano 2024).",
-  "tex": "\\mathbb{E}_B\\!\\left[\\frac{\\nabla L_B^\\top \\nabla^2 L_B\\, \\nabla L_B}{\\lVert\\nabla L_B\\rVert^2}\\right]",
-  "aka": [
-   "edge of stochastic stability"
-  ],
-  "sec": "n-4-minibatch-sgd-the-edge-of-stochastic-stability"
+ "kronecker": {
+  "term": "Kronecker product",
+  "ch": "kfac",
+  "def": "$A\\otimes S$ is the block matrix whose $(j, l)$ block is $A_{jl}S$. Its inverse is $A^{-1}\\otimes S^{-1}$, so a huge $mn\\times mn$ matrix that is a Kronecker product can be stored and inverted through an $n\\times n$ and an $m\\times m$ factor.",
+  "sec": "n-1-why-structure-matters",
+  "tex": "(A\\otimes S)^{-1} = A^{-1}\\otimes S^{-1}"
  },
- "fixed-point": {
-  "term": "fixed point of a map",
-  "ch": "dynamics",
-  "def": "A point the map does not move, $G(\\theta) = \\theta$. For the GD map $G(\\theta) = \\theta - \\eta\\nabla L(\\theta)$ this happens exactly when $\\nabla L(\\theta) = 0$, so the fixed points of GD are the critical points of $L$.",
-  "tex": "G(\\theta^\\star) = \\theta^\\star",
-  "sec": "n-1-gradient-descent-as-a-map"
+ "kfac": {
+  "term": "K-FAC",
+  "ch": "kfac",
+  "def": "Kronecker-factored approximate curvature: it approximates a layer's Fisher block $\\mathbb{E}[(aa^\\top)\\otimes(\\delta\\delta^\\top)]$ by $\\mathbb{E}[aa^\\top]\\otimes\\mathbb{E}[\\delta\\delta^\\top]$, exact when activations and back-propagated errors are independent.",
+  "sec": "n-3-k-fac-separate-the-expectation",
+  "tex": "F_W \\approx A\\otimes S"
  },
- "diffeomorphism": {
-  "term": "diffeomorphism",
-  "ch": "dynamics",
-  "def": "A smooth map with a smooth inverse. It never folds a region of positive volume onto a set of zero volume. The GD map is one when $\\eta < 1/\\ell$, because then every factor $1 - \\eta\\lambda_j$ of $\\det DG$ is positive.",
-  "sec": "n-2-stable-sets-measure-zero-almost-surely"
+ "hutchinson": {
+  "term": "Hutchinson's estimator",
+  "ch": "diagonal",
+  "def": "For a random vector $z$ of independent $\\pm1$ entries, $z\\odot(Hz)$ is an unbiased estimate of the diagonal of $H$, at the cost of one Hessian-vector product. Averaging $k$ probes reduces the error like $1/\\sqrt k$.",
+  "sec": "n-2-hutchinson-s-estimator",
+  "tex": "\\hat h = z\\odot(Hz),\\quad \\mathbb{E}[\\hat h] = \\operatorname{diag}(H)"
  },
- "gradient-flow": {
-  "term": "gradient flow",
-  "ch": "dynamics",
-  "def": "The limit of GD as the step size goes to zero: the differential equation $d\\theta/ds = -\\nabla L(\\theta)$, with time $s = \\eta t$. The loss decreases along it at rate $\\lVert\\nabla L\\rVert^2$.",
-  "tex": "\\frac{d\\theta}{ds} = -\\nabla L(\\theta)",
-  "sec": "n-3-gradient-flow-invariant-sets-oscillations"
+ "sophia": {
+  "term": "Sophia",
+  "ch": "diagonal",
+  "def": "A language-model optimizer that divides momentum by an occasional diagonal Hessian estimate and clips each coordinate's step to $\\pm\\rho$, so tiny or negative curvature estimates cannot produce huge steps.",
+  "sec": "n-3-sophia-curvature-scaling-with-explicit-control-of-step-size",
+  "tex": "\\Delta\\theta_t = -\\eta_t\\,\\mathrm{clip}\\left(\\frac{m_t}{\\max\\{h_t,\\epsilon\\}}, -\\rho, \\rho\\right)"
  },
- "isotropic-noise": {
-  "term": "isotropic noise",
-  "ch": "dynamics",
-  "def": "Noise whose covariance is a multiple of the identity, equally strong in every direction. In $d$ dimensions only a $1/d$ share of its variance lies along any one fixed direction. Real minibatch noise is anisotropic.",
-  "tex": "\\Sigma = cI",
-  "sec": "n-4-randomness-the-shape-of-minibatch-noise"
+ "soap": {
+  "term": "SOAP",
+  "ch": "muon",
+  "def": "Adam run in the rotated basis given by Shampoo's eigenvectors: the gradient is rotated to $U^\\top GV$, Adam-style moments are kept there, and the step is rotated back.",
+  "sec": "n-1-soap-adam-in-a-rotated-matrix-basis",
+  "tex": "\\widetilde G = U^\\top GV"
+ },
+ "polar-factor": {
+  "term": "polar factor (msign)",
+  "ch": "muon",
+  "def": "For $M = U\\Sigma V^\\top$, the matrix $UV^\\top$: the same singular directions with every nonzero singular value set to one. Muon's update direction.",
+  "sec": "n-2-muon-orthogonalize-the-update",
+  "tex": "\\mathrm{msign}(M) = UV^\\top"
+ },
+ "spectral-norm": {
+  "term": "spectral norm",
+  "ch": "muon",
+  "def": "The largest singular value of a matrix, $\\|\\Delta\\|_2$: how much $\\Delta$ can stretch any vector. Under the budget $\\|\\Delta\\|_2\\le\\eta$, the steepest linearized step is $-\\eta UV^\\top$.",
+  "sec": "n-3-why-the-polar-factor-steepest-descent-in-the-spectral-norm",
+  "tex": "\\min_{\\|\\Delta\\|_2\\le\\eta}\\langle G,\\Delta\\rangle_F = -\\eta\\sum_i\\sigma_i(G)"
+ },
+ "newton-schulz": {
+  "term": "Newton–Schulz iteration",
+  "ch": "muon",
+  "def": "A matrix-multiplication iteration that pushes every singular value toward one, approximating the polar factor without an SVD: $X \\leftarrow \\tfrac12X(3I - X^\\top X)$. It has nothing to do with the loss's Hessian.",
+  "sec": "n-4-newton-schulz-orthogonalizing-with-matrix-products-only",
+  "tex": "s \\leftarrow \\tfrac12 s(3 - s^2)"
  }
 }

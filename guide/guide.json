@@ -1,261 +1,34 @@
 {
  "kicker": "MLR570 · a visual guide to our survey",
- "title": "Non-Convex Optimization in Neural Networks: from saddle escape to the edge of stability",
- "lede": "A visual journey through our survey, section by section. It starts with the math every later section needs, built from scratch. It then follows the survey's single thread: gradient descent multiplies every curvature direction by $1-\\eta\\lambda$. It leaves saddles when $\\lambda<0$ and lives at the edge of stability when $\\lambda>2/\\eta$. Every visual is explained: what the axes are, what moves, and what to notice. Every surface is a real function; every ball runs a real optimizer.",
+ "title": "From gradients to curvature and matrix geometry: optimization methods for deep networks",
+ "lede": "A visual journey through our survey, section by section. Every optimizer in it turns the same gradient into a different step: a scalar step size, a memory of past gradients, a per-coordinate scale, a curvature matrix, a Fisher metric, or a matrix norm. The guide builds the math from first principles, then walks through each family and asks the survey's question every time: *what information does it use, what geometry does it impose, and what does it cost?* Every visual is explained: what the axes are, what moves, and what to notice. Every surface is a real function; every ball runs a real optimizer.",
  "parts": [
-  {
-   "sec": "I",
-   "title": "Introduction",
-   "blurb": "Why training non-convex networks should be hard, why it works anyway, and the two research questions of the survey."
-  },
-  {
-   "sec": "II",
-   "title": "Mathematical preliminaries",
-   "blurb": "The loss, gradients and Hessians, flat points and what counts as success, the assumptions behind the theorems, the algorithms, and the one multiplier that connects the two halves of the survey."
-  },
-  {
-   "sec": "III",
-   "title": "Escaping saddles (RQ1)",
-   "blurb": "What plain gradient descent and SGD do near saddle points: they almost never stop there, they can wait a very long time, noise helps, and from small initialization the saddles are stages of learning."
-  },
-  {
-   "sec": "IV",
-   "title": "Beyond the stability threshold (RQ2)",
-   "blurb": "What happens when the step size is too large for the curvature: catapults, the edge of stability, why training survives, central flows, and the adaptive and stochastic versions."
-  },
-  {
-   "sec": "V",
-   "title": "Critical comparison",
-   "blurb": "The two halves side by side: one instability of the gradient-descent map, two faces."
-  },
-  {
-   "sec": "VI–VII",
-   "title": "Open problems and conclusion",
-   "blurb": "Gaps between what is proved and what is observed, and the take-away of the survey."
-  }
+  {"sec": "I", "title": "Introduction", "blurb": "Why one gradient leaves so many decisions open, the two research questions, and the map of the survey."},
+  {"sec": "II", "title": "Mathematical preliminaries", "blurb": "Taylor models, smoothness and safe steps, conditioning and rotated valleys, minibatch noise, and the variable-metric model that connects most of the survey. Appendix derivations are folded in where they belong."},
+  {"sec": "III", "title": "First-order optimization: from gradients to adaptivity (RQ1)", "blurb": "GD and SGD, momentum, AdaGrad, RMSProp, Adam, AdamW, and the memory-light designs Adafactor and Lion."},
+  {"sec": "IV", "title": "Second-order optimization: what curvature adds (RQ2)", "blurb": "Newton's method and its safeguards, quasi-Newton and Hessian-free methods, and the difference between the Hessian, the Gauss-Newton matrix and the Fisher."},
+  {"sec": "V", "title": "Structured curvature and matrix-aware methods (RQ2)", "blurb": "K-FAC, Shampoo, diagonal curvature (AdaHessian, Apollo, Sophia), SOAP, and Muon: what each one inverts, estimates or normalizes."},
+  {"sec": "VI", "title": "Critical comparison", "blurb": "Comparing the mathematics rather than the names: memory, cost, guarantees, stability, and a reproducible protocol, with a real measured dashboard."},
+  {"sec": "VII", "title": "Open problems and conclusion", "blurb": "Where the evidence runs out, and the survey's answers to RQ1 and RQ2."}
  ],
  "chapters": [
-  {
-   "id": "intro",
-   "sec": "I",
-   "n": 1,
-   "ready": true,
-   "title": "The puzzle and the plan",
-   "question": "Training a network means minimizing a non-convex loss, which is NP-hard in the worst case. Why does plain gradient descent work, and which part of that question does our survey answer?",
-   "terms": [
-    "loss",
-    "landscape",
-    "np-hard",
-    "gd",
-    "sgd"
-   ]
-  },
-  {
-   "id": "loss",
-   "sec": "II",
-   "n": 2,
-   "ready": true,
-   "title": "From a network to a loss, and its local shape",
-   "question": "What exactly is being minimized, why is it non-convex, and how do the gradient and the Hessian describe the loss near a point?",
-   "terms": [
-    "parameters",
-    "symmetry",
-    "gradient",
-    "taylor",
-    "hessian",
-    "eigen"
-   ]
-  },
-  {
-   "id": "points",
-   "sec": "II",
-   "n": 3,
-   "ready": true,
-   "title": "Flat points, success, and assumptions",
-   "question": "Where the gradient vanishes, how do we tell a minimum from a saddle, what does it mean for an algorithm to succeed, and what do the theorems assume about the loss?",
-   "terms": [
-    "critical-point",
-    "strict-saddle",
-    "degenerate",
-    "fosp",
-    "sosp",
-    "l-smooth",
-    "hessian-lipschitz",
-    "l0l1-smooth"
-   ]
-  },
-  {
-   "id": "algos",
-   "sec": "II",
-   "n": 4,
-   "ready": true,
-   "title": "The algorithms under study",
-   "question": "What do GD, SGD, momentum, Adam and Newton's method actually do in one step, and why is Newton's method drawn to saddles?",
-   "terms": [
-    "step-size",
-    "minibatch",
-    "momentum",
-    "adam",
-    "preconditioning",
-    "newton"
-   ]
-  },
-  {
-   "id": "multiplier",
-   "sec": "II",
-   "n": 5,
-   "ready": true,
-   "title": "One multiplier: linear stability and 2/η",
-   "question": "Near a critical point, gradient descent multiplies each curvature direction by 1 − ηλ. What do the three regimes of this one number mean, and how do they connect the two halves of the survey?",
-   "terms": [
-    "multiplier",
-    "linear-stability",
-    "stability-threshold",
-    "stable-set"
-   ]
-  },
-  {
-   "id": "dynamics",
-   "sec": "II",
-   "n": 6,
-   "ready": true,
-   "title": "GD as a dynamical system, noise and measuring curvature",
-   "question": "What does it mean that GD converges to a saddle with probability zero, what shape does minibatch noise have, and how is the sharpness of a real network measured?",
-   "terms": [
-    "fixed-point",
-    "measure-zero",
-    "gradient-flow",
-    "period-doubling",
-    "isotropic-noise",
-    "hvp"
-   ]
-  },
-  {
-   "id": "avoid",
-   "sec": "III",
-   "n": 7,
-   "ready": true,
-   "title": "Saddles: why they matter, and why GD almost never stops at one",
-   "question": "Saddles outnumber minima in high dimension, and depth makes some of them degenerate. Why does gradient descent from a random start converge to a strict saddle with probability zero?",
-   "terms": [
-    "index",
-    "stable-set",
-    "measure-zero",
-    "almost-surely"
-   ]
-  },
-  {
-   "id": "escape",
-   "sec": "III",
-   "n": 8,
-   "ready": true,
-   "title": "Avoidance is not efficiency; noise as the way out",
-   "question": "If GD avoids saddles, can it still waste exponential time near them? How do random perturbations and SGD's own noise make escape fast?",
-   "terms": [
-    "perturbed-gd",
-    "cnc",
-    "heavy-tail"
-   ]
-  },
-  {
-   "id": "stages",
-   "sec": "III",
-   "n": 9,
-   "ready": true,
-   "title": "Saddles as stages of learning",
-   "question": "From small initialization, training starts at a saddle and moves from one saddle to the next. Why are these plateaus a feature rather than a bug?",
-   "terms": [
-    "saddle-to-saddle",
-    "simplicity-bias"
-   ]
-  },
-  {
-   "id": "precursors",
-   "sec": "IV",
-   "n": 10,
-   "ready": true,
-   "title": "Before the edge: stability of SGD, the break-even point, catapults",
-   "question": "Which minima can SGD with a given step size and batch size stay in, and what happens when the step size is larger than the curvature allows?",
-   "terms": [
-    "batch-size-stability",
-    "break-even",
-    "catapult"
-   ]
-  },
-  {
-   "id": "edge",
-   "sec": "IV",
-   "n": 11,
-   "ready": true,
-   "title": "The edge of stability",
-   "question": "Real networks trained by full-batch gradient descent push their sharpness up to 2/η and then hover there, while the loss keeps falling. What exactly is observed, and what does it break?",
-   "terms": [
-    "sharpness",
-    "progressive-sharpening",
-    "edge-of-stability",
-    "unstable-convergence"
-   ]
-  },
-  {
-   "id": "why",
-   "sec": "IV",
-   "n": 12,
-   "ready": true,
-   "title": "Why it does not blow up",
-   "question": "Past 2/η the linear analysis predicts divergence. Which mechanism keeps training alive, and where has it been proved?",
-   "terms": [
-    "self-stabilization",
-    "period-doubling"
-   ]
-  },
-  {
-   "id": "flow",
-   "sec": "IV",
-   "n": 13,
-   "ready": true,
-   "title": "Central flows: the time-averaged trajectory",
-   "question": "The iterates oscillate wildly at the edge of stability. Can we describe their average path instead, and what does that description predict?",
-   "terms": [
-    "central-flow"
-   ]
-  },
-  {
-   "id": "beyond",
-   "sec": "IV",
-   "n": 14,
-   "ready": true,
-   "title": "Beyond full-batch GD: Adam, warmup, SAM, SGD, and where training ends",
-   "question": "Do adaptive methods, sharpness-aware updates and minibatch SGD have their own edges of stability, and how do large steps change which minimum training reaches?",
-   "terms": [
-    "adaptive-eos",
-    "warmup",
-    "sam",
-    "batch-sharpness"
-   ]
-  },
-  {
-   "id": "compare",
-   "sec": "V",
-   "n": 15,
-   "ready": true,
-   "title": "One instability, two faces",
-   "question": "Strict saddles and too-sharp minima are both unstable fixed points of the gradient-descent map. How do the two literatures compare, and what do their theorems assume?",
-   "terms": [
-    "multiplier",
-    "linear-stability"
-   ]
-  },
-  {
-   "id": "open",
-   "sec": "VI–VII",
-   "n": 16,
-   "ready": true,
-   "title": "Open problems and the take-away",
-   "question": "Where does the evidence run out, which questions does that leave open, and what is the survey's conclusion?",
-   "terms": [
-    "degenerate",
-    "heavy-tail"
-   ]
-  }
+  {"id": "intro", "sec": "I", "n": 1, "ready": true, "title": "One gradient, many updates", "question": "If every optimizer starts from the same gradient, why do they behave so differently, and how does the survey organize them?", "terms": ["gradient", "preconditioning", "condition-number"]},
+  {"id": "taylor", "sec": "II", "n": 2, "ready": true, "title": "The objective and its local Taylor models", "question": "What do the gradient and the Hessian say about a loss near a point, and why is a network's loss non-convex?", "terms": ["loss", "gradient", "hessian", "taylor", "eigen"]},
+  {"id": "smooth", "sec": "II", "n": 3, "ready": true, "title": "Smoothness, the descent lemma, and safe steps", "question": "How large can a gradient step be before it stops decreasing the loss?", "terms": ["l-smooth", "descent-lemma", "step-size"]},
+  {"id": "conditioning", "sec": "II", "n": 4, "ready": true, "title": "Conditioning, rotated valleys, and local stability", "question": "Why does a narrow valley slow gradient descent, and why can a diagonal rescaling fix an aligned valley but not a rotated one?", "terms": ["condition-number", "multiplier", "preconditioning"]},
+  {"id": "stochastic", "sec": "II", "n": 5, "ready": true, "title": "Stochastic gradients: what minibatches change", "question": "What does replacing the full gradient by a minibatch estimate do to a convergence bound?", "terms": ["sgd", "minibatch", "variance", "noise-floor"]},
+  {"id": "metric", "sec": "II", "n": 6, "ready": true, "title": "One variable-metric model, and what counts as cost", "question": "How does one formula, Δ = −ηM⁻¹g, describe GD, Adam-like scaling, Newton and natural gradient, and where does it stop applying?", "terms": ["variable-metric", "preconditioning", "oracle"]},
+  {"id": "momentum", "sec": "III", "n": 7, "ready": true, "title": "Gradient descent, SGD, and momentum", "question": "What does plain GD guarantee on a non-convex loss, and why does storing past directions help, and sometimes hurt?", "terms": ["gd", "heavy-ball", "nesterov", "eps-stationary"]},
+  {"id": "adaptive", "sec": "III", "n": 8, "ready": true, "title": "AdaGrad, RMSProp, Adam, and AdamW", "question": "How do per-coordinate learning rates work, why does Adam correct its bias, and why is weight decay not the same as an L2 penalty?", "terms": ["adagrad", "rmsprop", "adam", "bias-correction", "decoupled-decay"]},
+  {"id": "lean", "sec": "III", "n": 9, "ready": true, "title": "Memory-light designs: Adafactor, Lion, and others", "question": "How can an optimizer keep less state than Adam, and what does it give up?", "terms": ["adafactor-factored", "lion", "optimizer-state"]},
+  {"id": "newton", "sec": "IV", "n": 10, "ready": true, "title": "Newton's method and its safeguards", "question": "Where does Newton's step come from, why does it converge so fast near a minimum, and why can it fail on a non-convex loss?", "terms": ["newton", "damping", "trust-region", "cubic-reg"]},
+  {"id": "quasinewton", "sec": "IV", "n": 11, "ready": true, "title": "Quasi-Newton and Hessian-free methods", "question": "How can a method use curvature without ever forming the Hessian?", "terms": ["secant", "bfgs", "hvp", "conjugate-gradient"]},
+  {"id": "fisher", "sec": "IV", "n": 12, "ready": true, "title": "Hessian, Gauss-Newton, Fisher, and natural gradient", "question": "What are the three matrices that papers call second order, and what does it mean to measure steps by how much the predictions change?", "terms": ["ggn", "fisher", "natural-gradient", "empirical-fisher"]},
+  {"id": "kfac", "sec": "V", "n": 13, "ready": true, "title": "Why structure matters: K-FAC", "question": "How does K-FAC shrink a layer's huge Fisher block into two small factors, and when is that exact?", "terms": ["kronecker", "kfac"]},
+  {"id": "shampoo", "sec": "V", "n": 14, "ready": true, "title": "Shampoo: preconditioning across tensor dimensions", "question": "What does Shampoo accumulate, why the inverse fourth roots, and what does a two-sided preconditioner buy?", "terms": ["shampoo", "kronecker"]},
+  {"id": "diagonal", "sec": "V", "n": 15, "ready": true, "title": "Diagonal curvature: AdaHessian, Apollo, and Sophia", "question": "How can an optimizer estimate the diagonal of the Hessian without storing it, and why does Sophia clip?", "terms": ["hutchinson", "sophia", "hvp"]},
+  {"id": "muon", "sec": "V", "n": 16, "ready": true, "title": "SOAP and Muon: rotated bases and orthogonalized updates", "question": "What does SOAP rotate, what does Muon's orthogonalization do to an update, and why is Muon not a Newton method?", "terms": ["polar-factor", "spectral-norm", "newton-schulz", "soap"]},
+  {"id": "compare", "sec": "VI", "n": 17, "ready": true, "title": "Comparing the mathematics rather than the names", "question": "How should optimizers be compared, by memory, by cost, by theorem, and by measured runs?", "terms": ["optimizer-state", "oracle", "eps-stationary"]},
+  {"id": "open", "sec": "VII", "n": 18, "ready": true, "title": "Open problems and conclusion", "question": "Where does the evidence run out, and what are the survey's answers to its two research questions?", "terms": ["sharpness", "edge-of-stability"]}
  ]
 }

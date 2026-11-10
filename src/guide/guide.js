@@ -5,7 +5,12 @@
 // terms: course/glossary.json + guide/glossary.json; order: guide/guide.json.
 import { renderNotesArticle, inline } from '../paper/notes.js';
 import { Widget } from '../learn/widget.js';
-const PDF = 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf';
+// Two guides: survey v3 (default, guide/) and the earlier survey v2 (guide.html?v=2, guide-v2/).
+const V2 = new URLSearchParams(location.search).get('v') === '2';
+const BASE = V2 ? 'guide-v2' : 'guide';
+const PDF = V2 ? 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf' : 'public/survey3/Optimization_Methods_Survey_with_Figures.pdf';
+const MAP = V2 ? 'guide.html?v=2' : './';
+const OTHER = V2 ? { href: './', label: 'Current survey guide' } : { href: 'guide.html?v=2', label: 'Previous survey (v2) guide' };
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -17,13 +22,13 @@ if (LOCAL) {   // test hook: collect errors so scripts can audit every visual
   const ce = console.error.bind(console); console.error = (...a) => { window.__atlasErrors.push(a.map(String).join(' ')); ce(...a); };
 }
 const katexReady = async () => { for (let i = 0; i < 100 && !window.katex; i++) await new Promise(r => setTimeout(r, 50)); };
-const chapUrl = id => `guide.html?sec=${id}`;
+const chapUrl = id => `guide.html?${V2 ? 'v=2&' : ''}sec=${id}`;
 
 async function main() {
   const [guide, g1, g2, course] = await Promise.all([
-    fetch('guide/guide.json').then(r => r.json()),
+    fetch(`${BASE}/guide.json`).then(r => r.json()),
     fetch('course/glossary.json').then(r => r.json()),
-    fetch('guide/glossary.json').then(r => r.json()).catch(() => ({})),
+    fetch(`${BASE}/glossary.json`).then(r => r.json()).catch(() => ({})),
     fetch('course/course.json').then(r => r.json()),
   ]);
   const gloss = Object.assign({}, g1, g2);
@@ -52,14 +57,14 @@ async function renderMap(guide, gloss, where) {
   document.title = 'Survey Visual Atlas · a visual guide to our survey';
   await katexReady();
   const chs = guide.chapters;
-  $('#pn').innerHTML = `<a href="${PDF}" target="_blank" rel="noopener">Survey PDF</a><a href="learn.html">Crash course</a><a href="library.html">Paper library</a>`;
+  $('#pn').innerHTML = `<a href="${PDF}" target="_blank" rel="noopener">Survey PDF</a><a href="learn.html">Crash course</a><a href="library.html">Paper library</a><a href="${OTHER.href}">${OTHER.label}</a>`;
   const parts = guide.parts.map(p => ({ ...p, chs: chs.filter(c => c.sec === p.sec) })).filter(p => p.chs.length);
   $('#main').innerHTML = `
     <header class="lc-head lc-hero">
       <div class="kicker mono">${esc(guide.kicker)}</div>
       <h1>${esc(guide.title)}</h1>
       <p class="lede">${inline(guide.lede)}</p>
-      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="${PDF}" target="_blank" rel="noopener">Read the survey (PDF)</a><a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a></div>
+      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="${PDF}" target="_blank" rel="noopener">Read the survey (PDF)</a><a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a><a class="btnlink" href="${OTHER.href}">${OTHER.label}</a></div>
     </header>
     <div class="gd-parts">${parts.map(p => `
       <section class="gd-part">
@@ -83,10 +88,10 @@ async function renderChapter(guide, i, gloss, where) {
   const chs = guide.chapters, c = chs[i], prev = chs[i - 1], next = chs[i + 1];
   const part = guide.parts.find(p => p.sec === c.sec);
   document.title = `${c.n}. ${c.title} · Survey guide`;
-  $('#pn').innerHTML = `<a href="./">Map</a><a href="${PDF}" target="_blank" rel="noopener"><span class="pn-t">Survey </span>PDF</a>${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}<span class="pn-t">. ${esc(prev.title)}</span></a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}<span class="pn-t">. ${esc(next.title)}</span> →</a>` : ''}`;
+  $('#pn').innerHTML = `<a href="${MAP}">Map</a><a href="${PDF}" target="_blank" rel="noopener"><span class="pn-t">Survey </span>PDF</a>${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}<span class="pn-t">. ${esc(prev.title)}</span></a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}<span class="pn-t">. ${esc(next.title)}</span> →</a>` : ''}`;
   const [md, mod] = await Promise.all([
-    fetch(`guide/${c.id}/text.md`).then(r => { if (!r.ok) throw new Error(`text.md ${r.status}`); return r.text(); }),
-    import(`../../guide/${c.id}/viz.js`).catch(err => { console.error(err); return { default: {} }; }),
+    fetch(`${BASE}/${c.id}/text.md`).then(r => { if (!r.ok) throw new Error(`text.md ${r.status}`); return r.text(); }),
+    import(`../../${BASE}/${c.id}/viz.js`).catch(err => { console.error(err); return { default: {} }; }),
   ]);
   const article = await renderNotesArticle(md);
   $('#main').innerHTML = `

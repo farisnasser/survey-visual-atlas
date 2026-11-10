@@ -1,88 +1,102 @@
-## 1. From gaps to questions
+## 1. When does better geometry repay its cost?
 
-This chapter follows Sections VI and VII of the survey. The comparison of chapter 15 pointed to specific gaps between what is proved and what is observed. The survey turns each gap into an open problem: what the evidence says now, and a concrete direction for future work.
+This chapter follows Sections VII and VIII of the survey. The main practical question is whether expensive geometric information saves enough expensive training operations to pay for itself. The trade-off differs by method:
 
-## 2. A. Degenerate and non-smooth saddles
+- **K-FAC and Shampoo:** factor quality, refresh frequency, matrix roots and distributed synchronization all interact.
+- **Hessian-free optimization:** the inner CG solve may dominate.
+- **Muon:** matrix products may be efficient on accelerators, but eligible matrices and auxiliary AdamW groups complicate the memory comparison.
 
-The efficient-escape theory of chapters 7 and 8 assumes strict saddles and Lipschitz Hessians. Neural networks violate both. Deep linear networks have saddles without negative curvature (Kawaguchi 2016). Overparameterized students converge slowly in degenerate valleys: Xu & Du (2023) show that a student wider than its single-neuron teacher slows GD from an exponential rate to a polynomial one. And ReLU networks are not twice differentiable at all.
+The survey asks research to report both the idealized optimizer arithmetic and the complete training-system cost. The dashboard of chapter 17 is a small example of the second.
 
-A general theory of degenerate saddles cannot exist: certifying fourth-order local optimality is NP-hard (Anandkumar & Ge 2016). The useful question is narrower. **Do the degenerate saddles that arise from the structure of neural networks admit efficient escape?** Those come from permutation and rescaling symmetries, zero initialization, and neuron duplication. Cheridito et al.'s results for shallow ReLU networks (chapter 7) and the invariant-manifold picture of saddle-to-saddle dynamics (chapter 9) suggest that structured degeneracy may be tractable where generic degeneracy is not.
+## 2. Curvature under noise and non-convexity
 
-:::viz race
+A stochastic Hessian estimate can be indefinite or noisy (chapter 15). An empirical Fisher can differ substantially from the true Fisher (chapter 12). A structured gradient covariance may reflect loss curvature only indirectly (chapter 14). Open questions:
+- which approximations are accurate enough along real training paths;
+- how much damping or clipping they need;
+- whether apparent acceleration survives when gradients and curvature factors are estimated from minibatches of different sizes.
+
+The right benchmark includes noisy, poorly conditioned and rotated problems, not only nearly quadratic convex ones.
+
+## 3. Stability beyond the quadratic picture
+
+Chapter 4 derived the threshold $\eta < 2/\lambda_{\max}$ from a fixed quadratic. Section VI-E of the survey warns that it is not a universal prohibition for networks. On a fixed quadratic it is exact:
+
+:::viz quad
 :::
 
 :::read How to read this visual
-**What is drawn.** Two surfaces side by side, the race of chapter 7. Left: a one-hidden-layer scalar network, whose origin is a strict saddle (red direction). Right: two hidden layers, whose origin is a degenerate saddle (amber, flat directions only).
+**What is drawn.** Gradient descent on the fixed quadratic $f = \tfrac12(20x^2 + y^2)$ in 3D, with the eigen-directions drawn in blue (curvatures $20$ and $1$). The chart shows the error $|x_t|$ along the sharp axis on a log scale.
 
-**What moves.** *Restart race* starts both balls at the same small distance from their saddle, with the same step size.
+**What moves.** The step size $\eta$, around the threshold $2/20 = 0.1$.
 
-**What to notice.** The strict saddle lets go quickly, because its multiplier is above one. The degenerate one has a multiplier of exactly one in every direction, so the ball creeps, pushed only by higher-order terms. No escape-time theorem of chapter 8 covers the right-hand ball. That is open problem A in one picture.
+**What to notice.** Along the sharp axis, every step multiplies the error by $1 - 20\eta$. Below $\eta = 0.1$ it shrinks; above $0.1$ it flips sign and grows, and GD diverges, even though the flat axis would still converge. On a quadratic the Hessian never changes, so nothing can rescue the run.
 :::
 
-## 3. B. A theory of stochastic and adaptive large-step training
+But a network's Hessian changes as it trains. Cohen et al. observed that full-batch GD drives the sharpness up to $2/\eta$ and then keeps training there, at the **[[edge-of-stability|edge of stability]]**.
 
-The optimizers that train modern models combine everything the theory handles separately: Adam variants with warmup and decay, large learning rates, momentum and minibatches. For exactly these, the large-step theory is thinnest. Central flows (chapter 13) describe deterministic GD and RMSProp without momentum. The adaptive edge of stability and the edge of stochastic stability (chapter 14) are established mainly empirically.
-
-A natural next step is a **central flow for SGD**, in which the minibatch quantity of Eq. (20), the batch sharpness, rather than the full-batch sharpness is held at its threshold. Another is a central flow for **Adam**, in which the preconditioned sharpness is the state variable. Cohen et al. point out a real obstacle: because of the randomness, it is not clear that such a deterministic description exists for stochastic optimizers. The geometry of non-Euclidean optimizers such as Shampoo and Muon adds a further dimension. For them, stability thresholds and saddle escape should be measured in the norm the optimizer uses, not in the Euclidean norm.
-
-## 4. C. Does real SGD noise satisfy the escape conditions?
-
-Plain SGD provably escapes saddles under the CNC or dispersive-noise conditions (chapter 8). These conditions are plausible, but they have been verified only on limited models and training stages. Meanwhile, SGD noise can be heavy-tailed, and its covariance changes as the sharpness evolves: Jastrzębski et al.'s break-even point (chapter 10) shows that the early step size shapes the noise for the rest of training. Systematic measurements across architectures, batch sizes and training phases, of the noise variance along the bottom Hessian eigenvectors, would settle whether the noise-based escape guarantees describe practice. A theory for heavy-tailed noise near saddles is also largely missing.
-
-:::viz alpha
+:::viz mlp
 :::
 
 :::read How to read this visual
-**What is drawn.** For streaming linear regression trained by SGD, the tail index $\alpha$ of the iterates (vertical) against the step size $\eta$ (horizontal), one curve per batch size. A smaller $\alpha$ means a heavier tail. $\alpha = 2$ is the boundary between finite and infinite variance. The dots mark $\eta_{\rm crit} = 2b/(\sigma^2(d + b + 1))$, where $\alpha$ crosses 2 exactly (the paper's Proposition 5). Each curve stops where no stationary distribution exists. The values are an offline Monte Carlo computation.
+**What is drawn.** An offline replication: a small tanh network (10–48–48–1, 128 synthetic regression points) trained by full-batch GD at four step sizes. The main plot is the **[[sharpness]]**, the largest Hessian eigenvalue, measured by power iteration with Hessian–vector products (chapter 11). The dashed lines mark $2/\eta$ for each step size. The side chart is the training loss on a log scale.
 
-**What to try.** Change the dimension $d$.
-
-**What to notice.** $\alpha$ falls as the step grows and rises with the batch size (the paper's Theorem 4). Past the dot, the iterates have infinite variance even though the data are Gaussian. The bounded-variance assumption of most SGD analyses fails in the simplest model, at ordinary step sizes. How such tails interact with saddles is open problem C.
+**What to notice.** At the smallest step size, sharpness rises and settles below $2/\eta$. At the three larger ones, it rises until it reaches $2/\eta$, overshoots once, and then hovers right at the line, while the loss keeps falling. Locally the iterates are unstable, yet training continues. The quadratic threshold describes a fixed local model, not the global nonlinear path. This is why the survey treats stability, noise and generalization as separate questions.
 :::
 
-## 5. D. Saddles as features: escape speed against incremental learning
+## 4. Matrix-aware methods need their own theory
 
-Saddle-to-saddle dynamics (chapter 9) show that the plateaus in which GD lingers can be **stages of learning**. Each escape adds one unit of complexity: a singular value, a neuron, a kink, a head. This view conflicts with the goal of the escape literature, which is to leave every saddle as quickly as possible. **Is there a trade-off between escape speed and the simplicity bias that incremental learning provides?** A precise answer would require coupling the escape-time formula (chapter 5) with a measure of the complexity of the function learned at each stage.
+Muon shows that useful optimizer geometry need not be an estimated inverse Hessian (chapter 16). The spectral-norm view explains one aspect of its update, the steepest linearized step. It leaves open the effects of momentum, nonlinearity, approximate orthogonalization, stochastic gradients and changing layer shapes. A theoretical comparison with Shampoo and SOAP should treat their actual operators, rather than relabel every matrix transform as "second order". It also remains to understand *which* parameter blocks benefit from matrix-aware updates, since implementations keep AdamW for embeddings and non-matrix parameters.
 
-:::viz plateaus
+## 5. Invariance and parameterization
+
+An optimizer's path can change when the same model is written in different coordinates. Euclidean and diagonal methods use the stored coordinates directly. Natural gradient attempts a geometrically meaningful transformation of predictive distributions (chapter 12). Structured and matrix-aware methods introduce their own invariances or biases. These properties matter for networks with normalization, scale symmetries, and layers of very different widths. One consequence: sharpness itself is not invariant.
+
+:::viz rescale
 :::
 
 :::read How to read this visual
-**What is drawn.** Saxe et al.'s exact mode strengths $u(t)$ for four modes, as in chapter 9. The lines are the exact solution and the dots are discrete gradient descent.
+**What is drawn.** A one-neuron ReLU network $y = \theta_2\,\mathrm{ReLU}(\theta_1x)$ fit to the single point $(1, 1)$, over the plane of its two weights. Every point of the green valley $\theta_1\theta_2 = 1$ is a minimum, and every one of them computes *exactly the same function*, because $\mathrm{ReLU}(a\theta_1x)\cdot\theta_2/a = \mathrm{ReLU}(\theta_1x)\cdot\theta_2$ for $a > 0$. The ring is the minimum $(a, 1/a)$; blue marks the curved direction across the valley, amber the flat direction along it.
 
-**What to try.** Move the initial strength $u_0$.
+**What moves.** $a$ (log scale): sliding along the valley.
 
-**What to notice.** The plateaus are where the order of learning is decided: strongest mode first, weakest last. An optimizer that removed the plateaus by escaping instantly would learn all modes at once, and lose that ordering. Whether that would help or hurt generalization in real networks is the open question.
+**What to notice.** The curvature across the valley, $2(a^2 + 1/a^2)$, grows without bound as $a$ moves away from $1$, although the function never changes. "Sharp" and "flat" describe the parameterization, not the function (Dinh et al.). So a lower sharpness, or a lower training loss, does not by itself establish better generalization. The survey places generalization in the evaluation protocol, not among the guaranteed outputs of an optimizer.
 :::
 
-## 6. E. When the two instabilities meet
+## 6. Toward fair, system-aware benchmarks
 
-The two halves of the survey have been studied separately. In practical training, though, they can occur together. Training at the edge of stability oscillates along the top Hessian eigenvectors, while in other directions the iterate may pass near saddles. The analyses reviewed in the survey treat one unstable regime or the other, never both at once.
+Optimizer studies should state exactly what they count:
+- number of updates;
+- examples or tokens processed;
+- gradient evaluations;
+- GPU-hours;
+- peak memory;
+- communication volume;
+- final held-out performance.
 
-- Does the oscillation along high-curvature directions change the escape time along a negative-curvature direction, for example through the third-order coupling of Eq. (18)?
-- Does saddle-to-saddle learning from small initialization proceed differently at large step sizes, where the plateaus may be crossed while the sharpness is held at $2/\eta$?
+These are related, but not interchangeable. Training-scale studies make the trade-offs central. Public comparisons are more informative when they release the optimizer implementations, hyperparameter searches, mixed-precision settings, parameter-group exclusions and hardware assumptions with the results.
 
-A model that contains both a strict saddle and a sharp valley, analyzed with the central-flow method, would be a natural first step.
+## 7. Conclusion: the survey's answers
 
-## 7. F. Global exploration and hitting times
+All the methods interpret one object, the gradient of the training loss, in different ways:
+- **GD** follows it in Euclidean geometry, and **SGD** estimates it from a minibatch.
+- **Momentum** accumulates its history.
+- **Adam and Adafactor** use coordinate-dependent gradient statistics.
+- **Newton and quasi-Newton methods** add loss curvature.
+- **Natural gradient and K-FAC** use Fisher-information geometry.
+- **Shampoo and SOAP** use structured matrix statistics.
+- **Sophia** estimates diagonal Hessian curvature.
+- **Muon** reshapes a momentum update along its singular directions.
 
-Almost all results in the survey are local: they describe escape from one saddle, or the behavior near one valley. Azizian et al. (chapter 8) took a global view. Using large-deviations theory, they bounded the expected time for SGD to reach the global minimizers, which scales as $\exp(E/\eta)$ in an energy $E$ set by the barriers SGD may have to climb. Extending such results to the anisotropic, state-dependent noise of minibatch SGD, and to large step sizes at which the iterates oscillate, would show which minima SGD reaches in realistic training times.
+These mechanisms are related through local optimization, yet they are not interchangeable.
 
-## 8. Conclusion
+:::key The survey's answers
+**RQ1.** First-order methods progressively trade simple, memory-light updates for historical and coordinate-wise information. Their improvements depend on tuning, stochasticity and model class (chapters 7 to 9).
 
-The survey traced how unmodified gradient methods behave when the gradient-descent map is locally unstable. **A single multiplier, $1 - \eta\lambda$, organizes the story.**
+**RQ2.** Second-order, curvature-aware and matrix-aware methods can better reflect anisotropy or structure. They pay for it with matrix information, approximation errors, extra hyperparameters, or restrictions on which parameters they apply to (chapters 10 to 16).
 
-- **When $\lambda < 0$, GD leaves strict saddles.** It does so from almost every initialization (Lee et al. 2016, 2019), but possibly only after exponential time (Du et al. 2017), unless randomness places it away from the stable manifold. That randomness can be injected (Jin et al. 2017), or already present in SGD under suitable conditions (Daneshmand et al. 2018; Fang et al. 2019). From small initialization, the sequence of saddles GD visits is itself the mechanism of incremental learning (Saxe et al. 2014; Zhang et al. 2026).
-- **When $\lambda > 2/\eta$, GD cannot settle either** (Ahn et al. 2022). Instead it oscillates, and the third-order feedback of self-stabilization holds the sharpness at the edge of stability (Cohen et al. 2021; Damian et al. 2023). Central flows now describe this behavior with high accuracy for deterministic training (Cohen et al. 2025), and it has adaptive and stochastic counterparts (Cohen et al. 2022; Andreyev & Beneventano 2024).
-
-Across both halves, three patterns recur. Every guarantee is relative to a notion of success, and the links between notions hold only under assumptions that deep networks rarely satisfy exactly. The most predictive analyses are increasingly about **trajectories rather than landscapes**. And quantities that classical theory treats as obstacles turn out to be mechanisms that shape what a network learns: negative curvature, large step sizes, and gradient noise.
-
-:::key The take-away of the survey
-A theory of training that treats **instability as part of the algorithm**, rather than as a failure to be avoided, appears to be the most promising direction for explaining why simple gradient methods succeed on non-convex losses.
+**The central lesson is methodological.** Distinguish Hessians from gradient moments, theorems from observed speedups, and update counts from full training costs. These distinctions are the foundation for reading current optimizer research without treating the newest algorithm as automatically the best.
 :::
 
-:::plain Where to go from here
-- The [crash course](learn.html) builds every basic term used in this guide from scratch, in twelve stops.
-- The [paper library](library.html) keeps the per-paper visual pages built for our first, broader survey, including most of the papers this guide draws on.
-- Every number in the guide's new visuals is recomputed by `scripts/check-math/guide_*.py` in the repository.
+:::problem Where to go from here
+Read the survey itself (the PDF link at the top of every page), with this guide beside it. For the underlying basics (gradients, step sizes, curvature, momentum, noise, Adam), the crash course builds each from scratch. The paper library has a page per paper for the references the two surveys share, including Adam, AdaGrad, Shampoo, the heavy ball, cubic regularization and the edge of stability.
 :::

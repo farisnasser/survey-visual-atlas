@@ -1,83 +1,80 @@
-## 1. The puzzle
+## 1. The puzzle: one gradient, many decisions
 
-Training a neural network means choosing numbers. A network $f(x;\theta)$ has a long list of adjustable numbers, its weights and biases, stacked into one vector $\theta \in \mathbb{R}^d$: the [[parameters]]. $d$ is the number of parameters, from thousands to billions. A [[loss]] $L(\theta)$ measures how badly the network with parameters $\theta$ fits the training data: zero would be a perfect fit. Training means making $L(\theta)$ small.
+This chapter follows Section I of the survey. Training a network means minimizing a training loss $L(\theta)$ over a long parameter vector $\theta$. Every optimizer in the survey starts from the same object, the **[[gradient]]** $g = \nabla L(\theta)$: the vector of slopes, which points uphill. The textbook rule is to step against it, $\theta \leftarrow \theta - \eta g$. But that rule leaves the survey's five questions open:
 
-If $L$ were a single bowl, this would be easy: walk downhill and you reach the bottom. It is not a bowl. A neural-network loss is **non-convex**: its [[landscape]], the graph of $L$ over all possible $\theta$, has many valleys, ridges, plateaus and passes. Section 2 of the next chapter shows why this cannot be avoided.
+- **How accurate must the gradient be?** A full pass over the data, or a cheap minibatch estimate (Section III-A of the survey; chapter 5 here)?
+- **Should the step remember the past?** Momentum adds previous gradients (chapter 7).
+- **Is one step size enough?** Adam gives every coordinate its own (chapter 8).
+- **Can curvature tell a steep narrow valley from a gentle plateau?** Newton's method uses the Hessian (chapters 10 to 12).
+- **When a parameter is a matrix, should the update respect its rows and columns?** K-FAC, Shampoo and Muon do (chapters 13 to 16).
 
-Non-convexity is not a small inconvenience. Classical optimization theory treats it with caution, for good reasons:
+Each answer gives a different optimizer. They share an objective, but they differ in what information they collect, what notion of distance they use, and how much memory and arithmetic they cost.
 
-- Deciding whether a given point is even a local minimum of a general smooth function is [[np-hard|NP-hard]] (Murty & Kabadi 1987). "NP-hard" means that no known algorithm solves every instance in a time that grows only polynomially with the size of the problem.
-- Training a network with only three nodes, two hidden units and one output unit, is NP-complete in the worst case (Blum & Rivest 1992).
+## 2. The two research questions
 
-And yet, plain [[gd|gradient descent]] (GD) and its cheaper, noisy cousin [[sgd|stochastic gradient descent]] (SGD) routinely drive the training loss of modern networks close to zero. Both methods only ever look at the local slope. This is the puzzle our survey is about: **why do simple gradient methods succeed on losses that are hard in the worst case?**
+The survey organizes everything around two questions.
 
-The visual below is the simplest picture of the difficulty: a loss with one adjustable number $\theta$ and three valleys.
+:::key The survey's research questions
+**RQ1 (gradient transformation).** How do stochastic, momentum, adaptive, and memory-efficient first-order methods transform gradient information, and what limitations do these transformations address? Answered in Section III (chapters 7 to 9).
 
-:::viz valleys
+**RQ2 (curvature and geometry).** How do second-order, curvature-aware, and matrix-aware methods exploit information beyond scalar gradient scaling, and what convergence, memory, compute, and stability trade-offs follow? Answered in Sections IV and V (chapters 10 to 16).
+:::
+
+The survey deliberately does not ask "which optimizer is best?". A method can make more progress per step but cost more per step. A theorem can hold for convex losses while a reported speedup comes from a transformer. Chapter 17 makes this precise.
+
+## 3. A first look: the same problem, different updates
+
+Here is the whole issue in one picture. Below, three optimizers start from the same point on the same loss and see the same gradients. They behave differently only because they transform those gradients differently.
+
+:::viz race
 :::
 
 :::read How to read this visual
-**What is drawn.** The horizontal axis is the single parameter $\theta$. The vertical axis is the loss $\mathcal L(\theta) = 0.1\theta^2 + 0.5\sin 3\theta$ at that $\theta$. The blue curve is therefore the whole landscape of this one-parameter problem. The three dots on the curve are its local minima. The green one is the global minimum (the lowest point); the two white ones are local minima that are not global.
+**What is drawn.** A three-dimensional view of a quadratic valley $f = \tfrac12 x^\top H x$ whose two curvatures are $0.1$ and $10$. Its condition number is $100$: one direction is a hundred times more curved than the other. Height is drawn as $\sqrt f$ so that the floor of the valley is visible. The green dot is the minimum.
 
-**What moves.** The coral ball is gradient descent: at every step it moves $\theta$ a small amount downhill, against the slope. The faint coral dots are the path it has taken.
+**What moves.** Three balls start at $(-1.3, 1.2)$. Violet is gradient descent with its best fixed step; white is AdaGrad and coral is Adam (both give each coordinate its own step size, chapter 8). The chart below plots the loss of each on a log scale over 400 steps.
 
-**What to try.** Set the start $\theta_0$ with the slider and press *Roll downhill*. Start at $\theta_0 = 2.6$, then at $\theta_0 = -0.3$, then at $\theta_0 = -2.8$.
+**What to try.** Run it, then turn the valley by $45^\circ$ with the rotation control and run it again.
 
-**What to notice.** The ball always stops in the valley directly below its start, and only some starts lead to the global minimum. The readout says which minimum it reached and how many steps it took. In one dimension, a valley that is not the best one is a trap. The surprise of deep learning is that in very high dimension this kind of trap seems to matter much less than this picture suggests.
+**What to notice.** When the valley lines up with the axes, the per-coordinate methods race ahead: dividing each coordinate by its own gradient scale is exactly the right correction. Turned by $45^\circ$, the advantage disappears, because a per-coordinate scale cannot see a valley that runs diagonally. This one picture is the reason the survey separates *diagonal* methods (chapter 8) from *full-matrix* and *structured* methods (chapters 10 to 16). Chapter 4 explains it with the Hessian.
 :::
 
-## 2. A layered explanation
+## 4. The map of the survey
 
-The explanation that has emerged over the past decade is not a single theorem. It is a layered story, and our survey follows one thread through it.
+The survey's Fig. 1 lays out the progression. The first row is Section III: gradient descent and SGD, then momentum, then per-coordinate scaling. Below it, Sections IV and V split into four branches that look algebraically similar (each multiplies the gradient by some matrix) but estimate different things.
 
-1. **Are there bad valleys?** Early work found that for linear networks every local minimum is a global minimum (Baldi & Hornik 1989). Non-convex does not have to mean "full of traps".
-2. **Saddles, not valleys.** Dauphin et al. (2014) argued that in high dimension the dominant obstacle is the [[saddle|saddle point]]: a flat point that curves up in some directions and down in others, surrounded by long plateaus. A theory of *strict* saddles followed: if every saddle has a direction that curves strictly down, gradient methods avoid them from almost every starting point (Lee et al. 2016), and with a little randomness they escape them efficiently (Jin et al. 2017).
-3. **Width.** In parallel, the overparameterization literature showed that very wide networks can be trained to a global minimum without reasoning about saddles at all. This branch is outside our scope.
-4. **The dynamics that actually happen.** Most recently, attention turned to what training does in practice. Large step sizes push training to the edge of stability (Cohen et al. 2021), loss curves show sudden spikes called catapults (Lewkowycz et al. 2020), and networks pass through a sequence of saddles while learning progressively more complex functions (Zhang, Saxe & Latham 2026).
-
-## 3. The single thread: one multiplier
-
-Here is the observation that organizes the whole survey. Near a point where the slope is zero, a gradient-descent step with step size $\eta$ multiplies the distance to that point, measured along each "curvature direction", by the same number:
-
-$$1 - \eta\lambda,$$
-
-where $\lambda$ is the curvature in that direction. Chapter 5 derives this from scratch. For now, keep three facts in mind:
-
-- If $|1 - \eta\lambda| < 1$, the distance shrinks: gradient descent settles.
-- If $\lambda < 0$ (the loss curves *down* in that direction), then $1 - \eta\lambda > 1$, the distance grows, and gradient descent **leaves**. This is how it escapes saddles. Section III of the survey is about this case.
-- If $\lambda > 2/\eta$ (the loss curves up *too sharply* for the step size), then $1 - \eta\lambda < -1$, the distance grows while flipping sign, and gradient descent **bounces**. This is the starting point of catapults and the edge of stability. Section IV of the survey is about this case.
-
-The two cases have been studied by largely separate communities, with different questions and different tools. The saddle literature asks whether, and how fast, GD escapes. The large-step literature asks why training still converges when it is unstable. Both describe the same object: the instability of the gradient-descent map. Ahn, Zhang & Sra (2022) proved a single theorem that covers both (chapter 11). Our survey puts the two literatures side by side.
-
-## 4. Two research questions
-
-:::key The two research questions of the survey
-**RQ1 (Saddles).** When do unmodified GD and SGD avoid or escape saddle points, how long does escape take, and what roles do initialization and gradient noise play? (Survey Section III, chapters 7 to 9 here.)
-
-**RQ2 (Stability).** What happens when the step size exceeds the classical stability limit $2/\lambda_{\max}$, and why does training still make progress? (Survey Section IV, chapters 10 to 14 here.)
+:::survey Fig. 1 of the survey: organization of the survey. The branches separate Hessian curvature, information geometry, gradient-statistical preconditioning, and matrix orthogonalization.
+public/survey3/fig1.webp
 :::
 
-"Unmodified" is the key word of the scope. The survey studies the methods practitioners actually run: GD, SGD, momentum and adaptive methods such as Adam. It does not survey algorithms built specifically to escape saddles, such as cubic regularization, Hessian-free negative-curvature search or variance reduction. The one exception is perturbed gradient descent, the smallest change that makes escape provably fast. Overparameterization theory and the debate on whether flat minima generalize better are discussed only where they bear directly on optimization.
+:::read How to read this figure
+**What is drawn.** A flow chart. The top row (Section III, RQ1) runs from full-gradient GD and minibatch SGD to momentum and then to the per-coordinate methods AdaGrad, RMSProp, Adam, AMSGrad, AdamW, Adafactor and Lion. Each box names the survey equations that define its methods.
 
-## 5. How this guide is built
+**The four branches (Sections IV and V, RQ2).** Each box ends with an italic line saying what that branch actually estimates:
+- **Hessian curvature:** Newton, its safeguards, BFGS, Hessian-free methods, and the diagonal estimators. It estimates the Hessian $H$, its inverse, or its diagonal.
+- **Information geometry:** the Fisher matrix, natural gradient and K-FAC. It estimates the Fisher $F$, not $H$.
+- **Gradient-statistical preconditioning:** Shampoo and SOAP. They accumulate products of gradients, $GG^\top$ and $G^\top G$.
+- **Matrix orthogonalization:** Muon. It normalizes singular values and estimates no curvature at all.
 
-Each chapter follows one part of the survey, in order. The map on the home page shows which survey section each chapter belongs to.
+**What to notice.** The survey's main warning is visible in the branching. All four multiply the gradient by a matrix, so their formulas look alike, but "curvature" is not a synonym for every matrix-valued update. The rest of this guide follows the figure from top to bottom.
+:::
 
-| Survey section | What it does | Guide chapters |
-|---|---|---|
-| I. Introduction | the puzzle, existing surveys, the two RQs | 1 |
-| II. Preliminaries | loss, gradient, Hessian, flat points, assumptions, algorithms, the multiplier; dynamics, noise and curvature vocabulary | 2–6 |
-| III. Saddles (RQ1) | avoidance, escape time, noise, saddle-to-saddle learning | 7–9 |
-| IV. Stability (RQ2) | catapults, edge of stability, mechanisms, central flows, Adam and SGD | 10–14 |
-| V. Comparison | the two faces side by side; assumptions against practice | 15 |
-| VI–VII. Open problems, conclusion | where the evidence runs out | 16 |
+## 5. How this guide works
 
-Every visual in the guide is followed by a **How to read this visual** box. It says what the axes are, what the colors mean, what moves, what to try, and what to notice. Every surface is a real function, and every ball runs a real optimizer on it. Every number shown is recomputed by a script in the repository.
+Each chapter follows one part of the survey, in order, and keeps the survey's equation numbers. Words in dotted underline open a definition. Every live visual runs a real optimizer on a real function, and is followed by a box explaining what is drawn, what moves, and what to notice. The survey's own figures appear where the text discusses them. Its appendices are folded into the chapters they explain: the rotated valley of Appendices A and C in chapter 4, the SGD bound of Appendix C-B in chapter 5, Adam's bias correction of Appendix A-B in chapter 8, the saddle of Appendix D-A in chapter 10, the KL derivation of Appendix C-D in chapter 12, and the polar factor and Newton–Schulz iteration of Appendices A-C and C-C in chapter 16.
 
-:::plain Existing surveys, and why ours exists
-Several surveys cover parts of this field: Bottou, Curtis & Nocedal (2018) on stochastic methods; Jain & Kar (2017) on structured non-convex problems; Jin et al. (2021) on perturbed gradient methods; Sun (2020) and Sun et al. (2020) on practical optimization and the landscape of neural networks; Danilova et al. (2022) on complexity and adaptive methods. All of them were written before, or without a focus on, the large-learning-rate phenomena: catapults, the edge of stability, self-stabilization, and their adaptive and stochastic versions. None treats saddle escape and large-step instability as two faces of the same linear-stability question. That is the gap our survey fills.
+:::survey Fig. 10 of the survey: the analytic comparisons of Section VI-F. (a) GD, momentum, Adam and Newton on one objective; (b, c) four updates built from one matrix gradient.
+public/survey3/fig10.webp
+:::
+
+:::read How to read this figure
+**Panel (a).** Contour lines of the curved valley $L = (1-x)^2 + 10(y - x^2)^2$, whose minimum is at $(1, 1)$ (cross). All four methods start at the star $(-1.2, 1)$. Gradient descent (blue), heavy-ball momentum (orange) and Adam (green) follow the curved valley floor for 300 steps; exact Newton (vermillion) reaches the minimum in 8 large steps, using the Hessian. Chapter 11 runs this race live.
+
+**Panel (b).** One controlled $8\times8$ gradient matrix $G$ with singular values $4, 2, 1, \dots, 0.03$, and the singular values of the update each method builds from it, scaled so the largest is 1. SGD keeps the spectrum of $G$. Adam's first step divides each entry by its own size, which does not flatten the spectrum. One Shampoo step and Muon both give all singular values equal to one.
+
+**Panel (c).** The four update matrices as colour maps. Shampoo and Muon coincide here because Shampoo has no history yet; chapter 16 explains why. The picture is a toy: it shows what each update does to a matrix, not which one trains networks best.
 :::
 
 :::problem The next step
-Before any of this can be made precise, we need the objects themselves: what exactly is minimized, why it is non-convex, and how the slope and the curvature of the loss describe it near a point.
+Before any optimizer, the survey builds its tools: the Taylor models that every method is secretly minimizing. Chapter 2 starts there.
 :::
