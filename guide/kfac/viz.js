@@ -1,5 +1,5 @@
-// Chapter 13 (survey Sections V-A, V-B). New visual 'kron': the exact Fisher block of Eq. (58) against K-FAC's A ⊗ S
-// (Eq. 59) for jointly Gaussian a and delta, computed with Isserlis' theorem; numbers in scripts/check-math/guide3_numbers.py.
+// Chapter 13 (survey Sections V-A, V-B). New visual 'kron': the exact Fisher block (survey Section V-B) against K-FAC's A ⊗ S
+// (Eq. 36) for jointly Gaussian a and delta, computed with Isserlis' theorem; numbers in scripts/check-math/guide3_numbers.py.
 import { HEX } from '../../src/lib/atlas3d.js';
 
 const n = 3, m = 2;                                   // layer s = W a with a in R^3, s in R^2: the Fisher block is 6 x 6

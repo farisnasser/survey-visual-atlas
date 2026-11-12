@@ -57,16 +57,16 @@ At a stationary point, where $g = 0$, one negative eigenvalue rules out a local 
 
 The survey's Fig. 2 shows the four local shapes that the rest of the survey keeps returning to.
 
-:::survey Fig. 2 of the survey: loss geometry in two dimensions. Gradients indicate local slope; Hessian eigenvectors indicate directions of principal curvature.
+:::survey Fig. 2 of the survey: loss geometry in two dimensions. Gradients indicate local slope; Hessian eigenvectors indicate directions of principal curvature. The bowl and saddle are local models, not claims about global network landscapes.
 public/survey3/fig2.webp
 :::
 
 :::read How to read this figure
-**What is drawn.** Four quadratics $L = \tfrac12\theta^\top H\theta$, each as contour lines (curves of equal loss). (a) A round **bowl**, $H = 2I$: every direction curves equally. (b) A **narrow valley**, $H = \mathrm{diag}(16, 1)$. (c) The same valley **rotated** by $45^\circ$. (d) A **saddle**, $H = \mathrm{diag}(1, -1)$; dashed contours are negative losses.
+**Top row.** Four quadratics $L = \tfrac12\theta^\top H\theta$ drawn as 3D surfaces: (a) a round **bowl**, $H = 2I$; (b) a **narrow valley**, $H = \mathrm{diag}(16, 1)$; (c) the same valley **rotated** by $45^\circ$; (d) a **saddle**, $H = \mathrm{diag}(1, -1)$. From the white ball, the blue ball runs gradient descent with the exact gradient and the orange ball runs SGD with the same step and a noisy gradient. The dashed curves on each surface are the Hessian eigen-directions: purple where the surface curves up, red where it curves down.
 
-**The arrows.** Blue arrows are $-\nabla L$ at a grid of points, all drawn the same length so only their direction shows. The double-headed arrows through the centre are the Hessian eigenvectors, labelled with their eigenvalues: orange for the larger positive curvature, green for the smaller, vermillion for negative curvature.
+**What to notice in the top row.** In the bowl both balls roll straight to the bottom. In both valleys the first steps cross the valley toward the nearest wall and zig-zag, instead of running along the floor where the minimum lies; chapter 4 shows what that does to gradient descent. The rotated valley gives gradient descent exactly the same trouble, because gradient descent only feels the eigenvalues, which rotation does not change. In the saddle the balls slide off along the red, downward-curving direction.
 
-**What to notice.** In the bowl, $-\nabla L$ points straight at the minimum. In both valleys it points mostly across the valley, toward the nearest wall, not along the valley floor where the minimum lies; chapter 4 shows what that does to gradient descent. In the rotated valley the eigenvectors no longer line up with the axes, even though the eigenvalues are the same as in (b). In the saddle, the arrows point away from the centre along the vermillion eigenvector: negative curvature pushes gradient descent off the saddle. These are local models only, not claims about the global landscape of a network.
+**Bottom row.** The stationary points that Section II-E tells apart, each with a ball at the point: (e) a local minimum, $\nabla L = 0$ and $H \succ 0$, a second-order stationary point; (f) a strict saddle, $\nabla L = 0$ but $\lambda_{\min}(H) < 0$, first-order stationary but not second-order; (g) a monkey saddle, $\nabla L = 0$ and $H = 0$, where the Hessian test cannot decide; (h) a local maximum, $H \prec 0$; (i) an almost-flat shelf where $\|\nabla L\| \le \epsilon$ although there is no stationary point at all, an $\epsilon$-first-order stationary point. These are local models, not claims about the global landscape of a network. The zoo visual in chapter 4 lets you test each one.
 :::
 
 :::problem The next step

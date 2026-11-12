@@ -15,12 +15,12 @@ Each answer gives a different optimizer. They share an objective, but they diffe
 The survey organizes everything around two questions.
 
 :::key The survey's research questions
-**RQ1 (gradient transformation).** How do stochastic, momentum, adaptive, and memory-efficient first-order methods transform gradient information, and what limitations do these transformations address? Answered in Section III (chapters 7 to 9).
+**RQ1. How do first-order optimization methods improve upon standard gradient descent?** Plain gradient descent uses only the current gradient and one learning rate, which is inefficient when gradients are noisy or when the loss varies very differently across parameter directions. RQ1 asks how first-order methods change the way gradient information is used, and what extra computation and memory those changes cost. Answered in Section III (chapters 7 to 9).
 
-**RQ2 (curvature and geometry).** How do second-order, curvature-aware, and matrix-aware methods exploit information beyond scalar gradient scaling, and what convergence, memory, compute, and stability trade-offs follow? Answered in Sections IV and V (chapters 10 to 16).
+**RQ2. How do curvature-aware and matrix-aware methods extend gradient-based optimization?** Other methods build better updates from the curvature of the loss or from the structure of the parameters. RQ2 asks how they use that information and whether the improvement justifies the extra cost. Answered in Sections IV and V (chapters 10 to 16).
 :::
 
-The survey deliberately does not ask "which optimizer is best?". A method can make more progress per step but cost more per step. A theorem can hold for convex losses while a reported speedup comes from a transformer. Chapter 17 makes this precise.
+The survey deliberately does not try to name a single best optimizer. Its aim is to understand why each approach was developed and under what conditions its advantages become meaningful. A method can make more progress per step but cost more per step. A theorem can hold for convex losses while a reported speedup comes from a transformer. Chapter 17 makes this precise.
 
 ## 3. A first look: the same problem, different updates
 
@@ -43,7 +43,7 @@ Here is the whole issue in one picture. Below, three optimizers start from the s
 
 The survey's Fig. 1 lays out the progression. The first row is Section III: gradient descent and SGD, then momentum, then per-coordinate scaling. Below it, Sections IV and V split into four branches that look algebraically similar (each multiplies the gradient by some matrix) but estimate different things.
 
-:::survey Fig. 1 of the survey: organization of the survey. The branches separate Hessian curvature, information geometry, gradient-statistical preconditioning, and matrix orthogonalization.
+:::survey Fig. 1 of the survey: organization of the survey. The branches separate Hessian curvature, information geometry, gradient-statistical preconditioning, and matrix orthogonalization; their similar algebra does not make them the same approximation.
 public/survey3/fig1.webp
 :::
 
@@ -63,12 +63,12 @@ public/survey3/fig1.webp
 
 Each chapter follows one part of the survey, in order, and keeps the survey's equation numbers. Words in dotted underline open a definition. Every live visual runs a real optimizer on a real function, and is followed by a box explaining what is drawn, what moves, and what to notice. The survey's own figures appear where the text discusses them. Its appendices are folded into the chapters they explain: the rotated valley of Appendices A and C in chapter 4, the SGD bound of Appendix C-B in chapter 5, Adam's bias correction of Appendix A-B in chapter 8, the saddle of Appendix D-A in chapter 10, the KL derivation of Appendix C-D in chapter 12, and the polar factor and Newton–Schulz iteration of Appendices A-C and C-C in chapter 16.
 
-:::survey Fig. 10 of the survey: the analytic comparisons of Section VI-F. (a) GD, momentum, Adam and Newton on one objective; (b, c) four updates built from one matrix gradient.
+:::survey Fig. 10 of the survey: the analytic comparisons recommended in Section VI-F. (a) GD, heavy-ball momentum, Adam and exact Newton as balls rolling over one 3D landscape; (b, c) four updates built from one matrix gradient.
 public/survey3/fig10.webp
 :::
 
 :::read How to read this figure
-**Panel (a).** Contour lines of the curved valley $L = (1-x)^2 + 10(y - x^2)^2$, whose minimum is at $(1, 1)$ (cross). All four methods start at the star $(-1.2, 1)$. Gradient descent (blue), heavy-ball momentum (orange) and Adam (green) follow the curved valley floor for 300 steps; exact Newton (vermillion) reaches the minimum in 8 large steps, using the Hessian. Chapter 11 runs this race live.
+**Panel (a).** The curved valley $L = (1-x)^2 + 10(y - x^2)^2$ as a 3D surface (height $\log(1 + L)$), with its minimum $(1, 1)$ marked by the yellow star. All four methods start from the white ball at $(-1.2, 1)$. Gradient descent (blue, $\eta = 0.01$), heavy-ball momentum (orange) and Adam (green) follow the curved floor for 300 steps each; exact Newton (vermillion) reaches the minimum in 8 large steps, using the Hessian. Chapter 11 runs this race live.
 
 **Panel (b).** One controlled $8\times8$ gradient matrix $G$ with singular values $4, 2, 1, \dots, 0.03$, and the singular values of the update each method builds from it, scaled so the largest is 1. SGD keeps the spectrum of $G$. Adam's first step divides each entry by its own size, which does not flatten the spectrum. One Shampoo step and Muon both give all singular values equal to one.
 

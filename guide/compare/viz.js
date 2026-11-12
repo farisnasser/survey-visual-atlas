@@ -60,4 +60,45 @@ const dashboard = {
   },
 };
 
-export default { dashboard };
+// ---------- 'memory' (survey Section VI-B, Table II): persistent optimizer state for one m × n weight matrix ----------
+const fmtC = v => v >= 1e9 ? (v / 1e9).toPrecision(3) + 'G' : v >= 1e6 ? (v / 1e6).toPrecision(3) + 'M' : v >= 1e3 ? (v / 1e3).toPrecision(3) + 'k' : String(v);
+const MEM = [
+  ['SGD', HEX.muted, (m, n) => 0],
+  ['momentum', HEX.pos, (m, n) => m * n],
+  ['Lion', HEX.flat, (m, n) => m * n],
+  ['Muon', HEX.ball, (m, n) => m * n],
+  ['Adam', HEX.good, (m, n) => 2 * m * n],
+  ['Sophia', HEX.opt2, (m, n) => 2 * m * n],
+  ['Adafactor', '#b8c0dd', (m, n) => m + n],
+  ['K-FAC', '#7fd3c6', (m, n) => m * m + n * n],
+  ['Shampoo', HEX.opt3, (m, n) => m * m + n * n],
+  ['L-BFGS, k=10', '#d9a3ff', (m, n) => 20 * m * n],
+  ['full curvature', HEX.neg, (m, n) => (m * n) ** 2],
+];
+const memory = {
+  title: 'Count the actual tensors: optimizer state for one m × n weight matrix',
+  caption: 'Bars: how many numbers each optimizer keeps between steps for a single m × n weight matrix, following the survey\'s Table II (persistent state only; weights, gradients, activations and temporary buffers excluded). The log scale spans from a few thousand numbers to a full curvature matrix that no accelerator could hold. Change the shape: the structured methods (K-FAC, Shampoo) are always far below the full matrix, but never below Adam\'s two moment arrays, since m² + n² ≥ 2mn.',
+  note: 'Counts of scalars, not bytes. SGD keeps nothing (drawn as an empty slot). Momentum, Lion and Muon keep one momentum array; Adam and Sophia keep two arrays the size of the weights; Adafactor (lean version) keeps row and column sums; K-FAC and Shampoo keep an m × m and an n × n matrix; L-BFGS keeps k = 10 pairs (s, y) of length mn; full curvature is the (mn) × (mn) matrix of dense Newton on this layer.',
+  legend: [...MEM.map(r => [r[1], r[0]]), ['rgba(232,236,248,.6)', 'dashed line: mn, the weights themselves']],
+  mode: '2d',
+  plot: { xlabel: 'optimizers, in the order of the legend', ylabel: 'numbers kept between steps (log scale)', logy: true, ylim: [10, 1e17], legend: false, xfmt: () => '' },
+  controls: [
+    { id: 'lm', label: 'rows m', min: 4, max: 14, step: 1, value: 12, digits: 0, fmt: v => String(2 ** v) },
+    { id: 'ln', label: 'columns n', min: 4, max: 14, step: 1, value: 10, digits: 0, fmt: v => String(2 ** v) },
+  ],
+  build(ctx) { this.draw(ctx); },
+  onControl(ctx) { this.draw(ctx); },
+  draw(ctx) {
+    const m = 2 ** ctx.vals.lm, n = 2 ** ctx.vals.ln, P = ctx.plot.clear(), vals = MEM.map(r => r[2](m, n));
+    P.bars(MEM.map((r, i) => ({ y: Math.max(vals[i], 1e-9), color: r[1] })), { width: .72 });
+    MEM.forEach((r, i) => {
+      P.text(i, Math.max(vals[i], 10) * 1.9, vals[i] ? fmtC(vals[i]) : '0', { color: '#e8ecf8', align: 'center', base: 'bottom', font: '10px "JetBrains Mono", monospace' });
+    });
+    P.hline(m * n, { color: 'rgba(232,236,248,.45)', dash: [4, 4] });
+    P.draw();
+    const sh = (m * m + n * n) / (2 * m * n), af = (m + n) / (2 * m * n);
+    ctx.stat(`W is ${m} × ${n} (${(m * n).toLocaleString('en')} weights) · Adam ${(2 * m * n).toLocaleString('en')} · Adafactor ${(m + n).toLocaleString('en')} (${(af * 100).toPrecision(2)}% of Adam) · K-FAC / Shampoo ${(m * m + n * n).toLocaleString('en')} (${sh.toFixed(2)}× Adam${m === n ? ', equal only because m = n' : ''}) · full curvature ${(m * n) ** 2 > 1e15 ? ((m * n) ** 2).toExponential(2) : ((m * n) ** 2).toLocaleString('en')} numbers`);
+  },
+};
+
+export default { dashboard, memory };

@@ -1,4 +1,4 @@
-// Chapter 8 (survey Sections III-D to III-H, Appendix A-B). New visual 'adamw' (Eqs. 32-34; numbers in
+// Chapter 8 (survey Sections III-D to III-H, Appendix A-B). New visual 'adamw' (Eqs. 27-28; numbers in
 // scripts/check-math/guide3_numbers.py); reused: duchi2011adaptive 'sparse', crash-course 'bias' and 'adamfail' (course_adaptive.py).
 import { HEX } from '../../src/lib/atlas3d.js';
 import ad from '../../course/adaptive/viz.js';
@@ -6,10 +6,10 @@ import { paperTab } from '../lib.js';
 
 const EPS = 1e-8;
 const adamw = {
-  title: 'L2 inside Adam is not weight decay: Eq. (33) against Eq. (34)',
-  caption: 'Each coordinate has its own adaptive scale D = √v̂ + ε, set by the size of its gradients. Putting the penalty λθ inside the adaptive step (Eq. 33) divides the decay by D too, so a coordinate with large gradients is barely decayed and one with tiny gradients is decayed hard. AdamW (Eq. 34) shrinks every weight by the same factor 1 − ηλ.',
+  title: 'L2 inside Adam is not weight decay: the penalty inside the adaptive step against AdamW, Eq. (28)',
+  caption: 'Each coordinate has its own adaptive scale D = √v̂ + ε, set by the size of its gradients. Putting the penalty λθ inside the adaptive step (survey Section III-H) divides the decay by D too, so a coordinate with large gradients is barely decayed and one with tiny gradients is decayed hard. AdamW (Eq. 28) shrinks every weight by the same factor 1 − ηλ.',
   note: 'Schematic, as in the survey: D_t held fixed for one step, ε = 10⁻⁸. Vertical axis: the fraction of a weight removed by the decay term in one step, capped at 1 (a cap of 1 would mean the decay alone overshoots zero).',
-  legend: [[HEX.ball, 'L2 penalty inside Adam, ηλ/D (Eq. 33)'], [HEX.good, 'AdamW, ηλ (Eq. 34)']],
+  legend: [[HEX.ball, 'L2 penalty inside Adam, ηλ/D (survey Section III-H)'], [HEX.good, 'AdamW, ηλ (Eq. 28)']],
   mode: '2d',
   plot: { xlabel: 'gradient scale of the coordinate, √v̂ (log scale)', ylabel: 'fraction of the weight removed per step', logx: true, logy: true, xlim: [1e-6, 10], ylim: [1e-9, 2], legend: false },
   controls: [

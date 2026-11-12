@@ -1,6 +1,6 @@
 ## 1. Adafactor: factor the second moment
 
-This chapter follows Sections III-I, III-J and III-K of the survey. An $m \times n$ weight matrix has $mn$ parameters, and Adam stores $mn$ first-moment and $mn$ second-moment values on top of them. **Adafactor** cuts the dominant [[optimizer-state|optimizer state]] by storing only the row and column sums of the second-moment matrix. If $V$ is a nonnegative $m\times n$ second-moment matrix, its [[adafactor-factored|factored reconstruction]] is (survey Eq. 35)
+This chapter follows Sections III-I, III-J and III-K of the survey. An $m \times n$ weight matrix has $mn$ parameters, and Adam stores $mn$ first-moment and $mn$ second-moment values on top of them. **Adafactor** cuts the dominant [[optimizer-state|optimizer state]] by storing only the row and column sums of the second-moment matrix. If $V$ is a nonnegative $m\times n$ second-moment matrix, its [[adafactor-factored|factored reconstruction]] is (survey Section III-I)
 
 $$\widetilde V_{ij} = \frac{r_i c_j}{\sum_k r_k}, \qquad r_i = \sum_j V_{ij}, \qquad c_j = \sum_i V_{ij}.$$
 
@@ -21,7 +21,7 @@ Practical Adafactor adds more choices, such as update clipping and relative step
 
 ## 2. Lion: a sign update with one state
 
-**Lion** was not derived by approximating a Hessian; it was found by a symbolic search over programs. A simplified form of its update is (survey Eqs. 36 to 38)
+**Lion** was not derived by approximating a Hessian; it was found by a symbolic search over programs. A simplified form of its update is (survey Eqs. 29 to 31)
 
 $$c_t = \beta_1 m_{t-1} + (1 - \beta_1)\hat g_t, \qquad \theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta\,\mathrm{sign}(c_t), \qquad m_t = \beta_2 m_{t-1} + (1 - \beta_2)\hat g_t.$$
 
@@ -31,7 +31,7 @@ The two coefficients play different roles. $\beta_1$ blends the momentum with th
 :::
 
 :::read How to read this visual
-**What is drawn.** One coordinate over 120 steps. The white dots are noisy gradients whose true mean is $0.3$ (green dashed line) but whose noise is four times larger. Violet: the momentum $m_t$ of Eq. (38). Coral: the blend $c_t$ of Eq. (36), whose sign Lion uses. The bars are the steps actually taken, in units of $\eta$: green when the step goes the right way (against the mean gradient), red when it goes the wrong way. Every bar has height exactly one.
+**What is drawn.** One coordinate over 120 steps. The white dots are noisy gradients whose true mean is $0.3$ (green dashed line) but whose noise is four times larger. Violet: the momentum $m_t$ of Eq. (31). Coral: the blend $c_t$ of Eq. (29), whose sign Lion uses. The bars are the steps actually taken, in units of $\eta$: green when the step goes the right way (against the mean gradient), red when it goes the wrong way. Every bar has height exactly one.
 
 **What moves.** $\beta_1$ and $\beta_2$.
 

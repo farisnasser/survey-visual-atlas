@@ -30,6 +30,19 @@ The survey's Table II counts the persistent **[[optimizer-state|optimizer state]
 
 These are scalar counts, not bytes; bytes depend on precision, and mixed-precision training often keeps optimizer states in full precision. As chapter 14 showed, $m^2 + n^2$ is not always smaller than $mn$.
 
+:::viz memory
+:::
+
+:::read How to read this visual
+**What is drawn.** For one weight matrix with $m$ rows and $n$ columns, the number of values each optimizer keeps between steps, on a log scale, using the counts of the survey's Table II. The colours follow the legend from left to right; the number above each bar is its count. The dashed line is $mn$, the size of the weights themselves.
+
+**What moves.** The number of rows $m$ and columns $n$, each a power of two from $16$ to $16{,}384$.
+
+**What to try.** Start at $4096 \times 1024$, then make the matrix square, then very thin.
+
+**What to notice.** Momentum, Lion and Muon keep one copy of the weights' size; Adam and Sophia keep two; Adafactor keeps only $m + n$, a tiny fraction of Adam's. K-FAC and Shampoo keep $m^2 + n^2$. That is astronomically less than the full curvature matrix of $(mn)^2$ values, but it is never less than Adam's $2mn$, because $m^2 + n^2 - 2mn = (m - n)^2 \ge 0$. It equals Adam's count only for a square matrix, and for a thin one it is far larger. This is the survey's point in Section VI-B: structured does not mean smaller than diagonal, and these counts still leave out activations, precision and temporary buffers.
+:::
+
 ## 3. Arithmetic, communication and wall-clock time
 
 Per-step cost is not captured by memory. SGD and Adam do elementwise work after the gradient. Newton solves a system, quasi-Newton methods manipulate vector histories, K-FAC and Shampoo maintain and factor matrices, and Muon adds repeated matrix multiplications. Matrix operations can run efficiently on GPUs, while "cheap" elementwise operations can be limited by memory bandwidth, so relative speed depends on shapes, precision, implementation and hardware. Distributed training adds communication: curvature factors may need averaging across workers, and techniques such as ZeRO move optimizer state between devices.
@@ -45,7 +58,7 @@ The survey lines up four statements that are often juxtaposed:
 - $O(1/T)$ for the *best squared gradient norm* in smooth deterministic non-convex GD (chapter 7);
 - $O(1/\sqrt T)$ for some stochastic non-convex gradient-norm criteria (chapter 5).
 
-They measure different things. Reaching $\|g\| \le \epsilon$ takes $O(\epsilon^{-2})$ iterations by Eq. (18), and $O(\epsilon^{-4})$ by the stochastic bound. These are worst-case statements about different oracle models, not evidence that practical SGD needs quadratically more time than GD. Similarly, Newton's local quadratic convergence (chapter 10), Shampoo's convex regret bound (chapter 14) and Adam-type non-convex results under extra conditions (chapter 8) cannot be ranked by their exponent of $T$. The survey's added Table V lists each statement with its objective class, success criterion and oracle. In the survey's words, comparing theorem statements without checking their hypotheses is a category error.
+They measure different things. Reaching $\|g\| \le \epsilon$ takes $O(\epsilon^{-2})$ iterations by Eq. (15), and $O(\epsilon^{-4})$ by the stochastic bound. These are worst-case statements about different oracle models, not evidence that practical SGD needs quadratically more time than GD. Similarly, Newton's local quadratic convergence (chapter 10), Shampoo's convex regret bound (chapter 14) and Adam-type non-convex results under extra conditions (chapter 8) cannot be ranked by their exponent of $T$. The survey's added Table V lists each statement with its objective class, success criterion and oracle. In the survey's words, comparing theorem statements without checking their hypotheses is a category error.
 
 ## 5. Stability, noise and generalization are separate questions
 
@@ -63,7 +76,7 @@ Section VI-F proposes a controlled study:
 
 It asks for four plots: loss versus gradient evaluations, loss versus wall-clock time, peak memory versus model size, and performance versus learning rate. The survey's Fig. 9 is that dashboard, from real runs on this laptop.
 
-:::survey Fig. 9 of the survey: recommended evaluation dashboard. Matching compute, data, initialization and tuning effort is necessary before interpreting empirical optimizer comparisons.
+:::survey Fig. 9 of the survey: recommended evaluation dashboard. Matching compute, data, initialization, and tuning effort is necessary before interpreting empirical optimizer comparisons.
 public/survey3/fig9.webp
 :::
 

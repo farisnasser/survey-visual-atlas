@@ -77,24 +77,22 @@ These are related, but not interchangeable. Training-scale studies make the trad
 
 ## 7. Conclusion: the survey's answers
 
-All the methods interpret one object, the gradient of the training loss, in different ways:
-- **GD** follows it in Euclidean geometry, and **SGD** estimates it from a minibatch.
-- **Momentum** accumulates its history.
-- **Adam and Adafactor** use coordinate-dependent gradient statistics.
-- **Newton and quasi-Newton methods** add loss curvature.
-- **Natural gradient and K-FAC** use Fisher-information geometry.
-- **Shampoo and SOAP** use structured matrix statistics.
-- **Sophia** estimates diagonal Hessian curvature.
+This section follows Section VIII of the survey. Every method in it changes the way gradients are turned into parameter updates:
+- **GD** follows the gradient in Euclidean geometry, and **SGD** estimates it from a minibatch.
+- **Momentum** accumulates its history, and **Nesterov** evaluates it at a look-ahead point.
+- **AdaGrad, RMSProp, Adam and AdamW** scale each coordinate by its gradient history; **Adafactor and Lion** do it with less memory.
+- **Newton and quasi-Newton methods** add the curvature of the loss.
+- **Natural gradient and K-FAC** use the sensitivity of the model's predictions, the Fisher geometry.
+- **Shampoo and SOAP** use structured matrix statistics of the gradients.
+- **AdaHessian, Apollo and Sophia** estimate diagonal curvature.
 - **Muon** reshapes a momentum update along its singular directions.
 
-These mechanisms are related through local optimization, yet they are not interchangeable.
-
 :::key The survey's answers
-**RQ1.** First-order methods progressively trade simple, memory-light updates for historical and coordinate-wise information. Their improvements depend on tuning, stochasticity and model class (chapters 7 to 9).
+**RQ1.** First-order methods extend gradient descent without estimating curvature. Momentum makes better use of previous gradient directions, adaptive methods scale each parameter by its gradient history, and the newer designs cut memory and simplify the update (chapters 7 to 9).
 
-**RQ2.** Second-order, curvature-aware and matrix-aware methods can better reflect anisotropy or structure. They pay for it with matrix information, approximation errors, extra hyperparameters, or restrictions on which parameters they apply to (chapters 10 to 16).
+**RQ2.** Second-order methods use curvature to account for how the gradient changes; natural-gradient methods use the sensitivity of the predicted distribution; structured and matrix-aware methods exploit how the parameters are organized to make otherwise expensive updates affordable. These methods do not all estimate the same quantity, even when their update rules involve similar matrix operations (chapters 10 to 16).
 
-**The central lesson is methodological.** Distinguish Hessians from gradient moments, theorems from observed speedups, and update counts from full training costs. These distinctions are the foundation for reading current optimizer research without treating the newest algorithm as automatically the best.
+**The overall lesson.** More informative updates do not automatically mean more efficient training: the gain has to be weighed against compute and memory, and a convergence guarantee is only as relevant as its assumptions. Understanding an optimizer means asking what information it uses and how that information shapes the update. That gives a way to choose methods by the training problem and the resources available, rather than a ranking with a universal winner.
 :::
 
 :::problem Where to go from here

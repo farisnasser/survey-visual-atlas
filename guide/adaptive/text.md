@@ -1,6 +1,6 @@
 ## 1. AdaGrad: a learning rate for each coordinate
 
-This chapter follows Sections III-D to III-H of the survey and Appendix A-B. A single learning rate assumes every parameter wants the same scale. Sparse or heterogeneous features break that: a weight attached to a rare feature sees a gradient only now and then. **[[adagrad|AdaGrad]]** accumulates each coordinate's squared gradients (survey Eqs. 25 and 26):
+This chapter follows Sections III-D to III-H of the survey and Appendix A-B. A single learning rate assumes every parameter wants the same scale. Sparse or heterogeneous features break that: a weight attached to a rare feature sees a gradient only now and then. **[[adagrad|AdaGrad]]** accumulates each coordinate's squared gradients (survey Eqs. 20 and 21):
 
 $$s_{t,j} = s_{t-1,j} + \hat g_{t,j}^2, \qquad \theta_{t+1,j} = \theta_{t,j} - \frac{\eta}{\sqrt{s_{t,j}} + \varepsilon}\,\hat g_{t,j}.$$
 
@@ -15,11 +15,11 @@ A coordinate with frequent large gradients builds a large denominator and takes 
 **What to notice.** SGD's shared step has shrunk long before the rare weight $w_2$ has received many gradients, so $w_2$ barely moves. AdaGrad divides each coordinate by the root of *its own* accumulated squares: $w_2$, having seen few gradients, keeps a large step and heads to its optimum. This is the original case for per-coordinate learning rates.
 :::
 
-AdaGrad's weakness is visible in Eq. (25): $s_{t,j}$ never decreases. Over a long run every effective step shrinks, and the method cannot forget early gradients when the landscape changes.
+AdaGrad's weakness is visible in Eq. (20): $s_{t,j}$ never decreases. Over a long run every effective step shrinks, and the method cannot forget early gradients when the landscape changes.
 
 ## 2. RMSProp: forget the distant past
 
-RMSProp replaces the cumulative sum with an exponential moving average (survey Eq. 27):
+RMSProp replaces the cumulative sum with an exponential moving average (survey Eq. 22):
 
 $$s_t = \rho s_{t-1} + (1 - \rho)\,\hat g_t^{\odot2}, \qquad \theta_{t+1} = \theta_t - \eta\frac{\hat g_t}{\sqrt{s_t} + \varepsilon},$$
 
@@ -27,15 +27,15 @@ where the square $\odot2$, the root and the division act coordinate by coordinat
 
 ## 3. Adam: momentum plus adaptive scaling
 
-**[[adam|Adam]]** keeps two exponential averages of the stochastic gradient (survey Eqs. 28 and 29): a first moment $m_t$ and a second *raw* moment $v_t$,
+**[[adam|Adam]]** keeps two exponential averages of the stochastic gradient (survey Eqs. 23 and 24): a first moment $m_t$ and a second *raw* moment $v_t$,
 
 $$m_t = \beta_1 m_{t-1} + (1 - \beta_1)\hat g_t, \qquad v_t = \beta_2 v_{t-1} + (1 - \beta_2)\hat g_t^{\odot2}.$$
 
-Both start at zero, so early on they are too small. Appendix A-B makes this exact. With a constant gradient $g$ and $m_0 = 0$, the recursion gives a finite geometric series (survey Eq. 71):
+Both start at zero, so early on they are too small. Appendix A-B makes this exact. With a constant gradient $g$ and $m_0 = 0$, the recursion gives a finite geometric series (survey Eq. 42):
 
 $$m_t = (1 - \beta)\sum_{k=0}^{t-1}\beta^k g = (1 - \beta^t)\,g.$$
 
-Dividing by $1 - \beta^t$ returns $g$ exactly. Adam applies this **[[bias-correction|bias correction]]** to both averages and then takes the step (survey Eq. 30):
+Dividing by $1 - \beta^t$ returns $g$ exactly. Adam applies this **[[bias-correction|bias correction]]** to both averages and then takes the step (survey Eq. 25):
 
 $$\hat m_t = \frac{m_t}{1 - \beta_1^t}, \qquad \hat v_t = \frac{v_t}{1 - \beta_2^t}, \qquad \theta_{t+1} = \theta_t - \eta\frac{\hat m_t}{\sqrt{\hat v_t} + \varepsilon}.$$
 
@@ -43,7 +43,7 @@ $$\hat m_t = \frac{m_t}{1 - \beta_1^t}, \qquad \hat v_t = \frac{v_t}{1 - \beta_2
 :::
 
 :::read How to read this visual
-**What is drawn.** Feed Adam the same gradient at every step, with $\beta_1 = 0.9$, and plot the size of its step divided by $\alpha$, the learning rate (the survey's $\eta$), against the step number on a log axis. Coral: without bias correction, where the step is $(1 - \beta_1^t)/\sqrt{1 - \beta_2^t}$ times $\alpha$. Green: with the correction of Eq. (30).
+**What is drawn.** Feed Adam the same gradient at every step, with $\beta_1 = 0.9$, and plot the size of its step divided by $\alpha$, the learning rate (the survey's $\eta$), against the step number on a log axis. Coral: without bias correction, where the step is $(1 - \beta_1^t)/\sqrt{1 - \beta_2^t}$ times $\alpha$. Green: with the correction of Eq. (25).
 
 **What moves.** $\beta_2$: $0.99$, $0.999$ or $0.9999$.
 
@@ -54,7 +54,7 @@ Two remarks from the survey. First, $\hat v_t$ is $\mathbb{E}[g_j^2]$-like, not 
 
 ## 4. Adam's convergence caveat and AMSGrad
 
-Popularity is not a convergence theorem. Reddi, Kale and Kumar built a simple online convex problem on which Adam's exponential weighting fails to converge. Their fix, AMSGrad, keeps a running maximum of the second moment, coordinate by coordinate (survey Eq. 31):
+Popularity is not a convergence theorem. Reddi, Kale and Kumar built a simple online convex problem on which Adam's exponential weighting fails to converge. Their fix, AMSGrad, keeps a running maximum of the second moment, coordinate by coordinate (survey Eq. 26):
 
 $$\bar v_t = \max(\bar v_{t-1}, v_t), \qquad \Delta_t \propto -\frac{m_t}{\sqrt{\bar v_t} + \varepsilon}.$$
 
@@ -71,15 +71,15 @@ $$\bar v_t = \max(\bar v_{t-1}, v_t), \qquad \Delta_t \propto -\frac{m_t}{\sqrt{
 
 ## 5. AdamW: weight decay is not an L2 penalty
 
-With a quadratic penalty $(\lambda/2)\|\theta\|^2$, the penalized gradient is $g + \lambda\theta$. For plain SGD, adding the penalty and shrinking the weights are the same thing (survey Eq. 32):
+With a quadratic penalty $(\lambda/2)\|\theta\|^2$, the penalized gradient is $g + \lambda\theta$. For plain SGD, adding the penalty and shrinking the weights are the same thing (survey Eq. 27):
 
 $$\theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta g_t.$$
 
-Under an adaptive scaling $D_t^{-1}$ they are not. Putting $\lambda\theta$ inside the adaptive step gives (survey Eq. 33)
+Under an adaptive scaling $D_t^{-1}$ they are not. Putting $\lambda\theta$ inside the adaptive step gives (survey Section III-H)
 
 $$\theta_{t+1} = \theta_t - \eta D_t^{-1}(g_t + \lambda\theta_t),$$
 
-so the shrinkage of each weight is divided by that weight's own scale. This is no longer uniform weight decay. **AdamW** [[decoupled-decay|decouples]] the shrinkage from the adaptive step (survey Eq. 34):
+so the shrinkage of each weight is divided by that weight's own scale. This is no longer uniform weight decay. **AdamW** [[decoupled-decay|decouples]] the shrinkage from the adaptive step (survey Eq. 28):
 
 $$\theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta\frac{\hat m_t}{\sqrt{\hat v_t} + \varepsilon}.$$
 
@@ -87,7 +87,7 @@ $$\theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta\frac{\hat m_t}{\sqrt{\hat v_t}
 :::
 
 :::read How to read this visual
-**What is drawn.** For one step, the fraction of a weight that the decay term removes, against that coordinate's adaptive scale $\sqrt{\hat v}$; both axes are logarithmic. Coral: the L2 penalty inside Adam, which removes $\eta\lambda/(\sqrt{\hat v} + \varepsilon)$ (Eq. 33). Green: AdamW, which removes $\eta\lambda$ from every weight (Eq. 34). The dashed line at 1 means the decay alone would remove the whole weight. The coral dots mark three example scales, $10^{-4}$, $10^{-2}$ and $1$.
+**What is drawn.** For one step, the fraction of a weight that the decay term removes, against that coordinate's adaptive scale $\sqrt{\hat v}$; both axes are logarithmic. Coral: the L2 penalty inside Adam, which removes $\eta\lambda/(\sqrt{\hat v} + \varepsilon)$ (survey Section III-H). Green: AdamW, which removes $\eta\lambda$ from every weight (Eq. 28). The dashed line at 1 means the decay alone would remove the whole weight. The coral dots mark three example scales, $10^{-4}$, $10^{-2}$ and $1$.
 
 **What moves.** The learning rate $\eta$ and the decay coefficient $\lambda$.
 
@@ -101,7 +101,7 @@ public/survey3/fig5.webp
 :::
 
 :::read How to read this figure
-**Top.** The stochastic gradient $\hat g_t$ feeds two streams. The upper stream (orange) is the first moment $m_t$ of Eq. (28), a smoothed *direction*. The lower stream (green) is the second raw moment $v_t$ of Eq. (29), built from the elementwise square, a per-coordinate *scale*. Each stream is bias-corrected (Eq. 30). The update divides the corrected first moment by the root of the corrected second moment. The note under the update repeats the survey's warning: $\hat v_t$ is $\mathbb{E}[g_j^2]$-like, not a second derivative.
+**Top.** The stochastic gradient $\hat g_t$ feeds two streams. The upper stream (orange) is the first moment $m_t$ of Eq. (23), a smoothed *direction*. The lower stream (green) is the second raw moment $v_t$ of Eq. (24), built from the elementwise square, a per-coordinate *scale*. Each stream is bias-corrected (Eq. 25). The update divides the corrected first moment by the root of the corrected second moment. The note under the update repeats the survey's warning: $\hat v_t$ is $\mathbb{E}[g_j^2]$-like, not a second derivative.
 
 **Bottom.** Persistent optimizer state in scalars, from Table II, with parameters and gradients excluded: SGD none, momentum $d$, Lion $d$, Adam and AdamW $2d$ (the arrays $m$ and $v$). For one $m\times n$ matrix, Adafactor's factored second moment needs only $m + n$, against $2mn$ for Adam. That is the subject of chapter 9.
 :::

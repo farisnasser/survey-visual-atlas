@@ -1,5 +1,5 @@
 // Chapter 10 (survey Sections IV-A to IV-D, Appendix D-A). New visual 'newton1d' (the survey's L(x) = x^4 - x^2 of
-// Section IV-C, damped as in Eq. 44); numbers in scripts/check-math/guide3_numbers.py. Reused: crash-course 'newton'
+// Section IV-C, damped as in Eq. 33); numbers in scripts/check-math/guide3_numbers.py. Reused: crash-course 'newton'
 // (course_escape.py) and nesterov2006cubic 'model'.
 import { HEX } from '../../src/lib/atlas3d.js';
 import esc from '../../course/escape/viz.js';
@@ -16,7 +16,7 @@ const newton1d = {
   plot: { xlabel: 'x', ylabel: 'L(x)', xlim: [-1.5, 1.5], ylim: [-.6, 1.4], legend: false },
   controls: [
     { id: 'x0', label: 'starting point x₀', min: -1.4, max: 1.4, step: .01, value: .3 },
-    { id: 'lam', label: 'damping λ (Eq. 44)', min: 0, max: 4, step: .05, value: 0 },
+    { id: 'lam', label: 'damping λ (Eq. 33)', min: 0, max: 4, step: .05, value: 0 },
   ],
   build(ctx) { this.draw(ctx); },
   onControl(ctx) { this.draw(ctx); },

@@ -11,21 +11,21 @@ All three use tensor structure, but they do *not* estimate the same mathematical
 
 ## 2. The gradient of a layer is an outer product
 
-Take a fully connected layer $s = Wa$. The input activation is $a \in \mathbb{R}^n$, the pre-activation is $s \in \mathbb{R}^m$, and the back-propagated error is $\delta = \partial L/\partial s \in \mathbb{R}^m$. By the chain rule, $\partial L/\partial W_{kj} = \delta_k a_j$, so the gradient is an outer product (survey Eq. 57):
+Take a fully connected layer $s = Wa$. The input activation is $a \in \mathbb{R}^n$, the pre-activation is $s \in \mathbb{R}^m$, and the back-propagated error is $\delta = \partial L/\partial s \in \mathbb{R}^m$. By the chain rule, $\partial L/\partial W_{kj} = \delta_k a_j$, so the gradient is an outer product (survey Section V-B):
 
 $$\nabla_WL = \delta a^\top.$$
 
-Stacking its columns into one vector gives $\mathrm{vec}(\delta a^\top) = a \otimes \delta$, where $\otimes$ is the Kronecker product: the vector of all products $a_j\delta_k$. The Fisher block of the layer is the expected outer product of this gradient vector with itself. Using the identity $(a\otimes\delta)(a\otimes\delta)^\top = (aa^\top)\otimes(\delta\delta^\top)$, it is (survey Eq. 58)
+Stacking its columns into one vector gives $\mathrm{vec}(\delta a^\top) = a \otimes \delta$, where $\otimes$ is the Kronecker product: the vector of all products $a_j\delta_k$. The Fisher block of the layer is the expected outer product of this gradient vector with itself. Using the identity $(a\otimes\delta)(a\otimes\delta)^\top = (aa^\top)\otimes(\delta\delta^\top)$, it is (survey Section V-B)
 
 $$F_W = \mathbb{E}[(aa^\top)\otimes(\delta\delta^\top)].$$
 
 ## 3. K-FAC: separate the expectation
 
-**[[kfac|K-FAC]]** makes one approximation: it moves the expectation inside the product (survey Eq. 59),
+**[[kfac|K-FAC]]** makes one approximation: it moves the expectation inside the product (survey Eq. 36),
 
 $$F_W \approx A \otimes S, \qquad A = \mathbb{E}[aa^\top], \qquad S = \mathbb{E}[\delta\delta^\top].$$
 
-In general $\mathbb{E}[X\otimes Y] \ne \mathbb{E}[X]\otimes\mathbb{E}[Y]$, so this is an approximation, not an algebraic identity. It is exact when $a$ and $\delta$ are independent. The reward is that the inverse factorizes too (survey Eq. 60):
+In general $\mathbb{E}[X\otimes Y] \ne \mathbb{E}[X]\otimes\mathbb{E}[Y]$, so this is an approximation, not an algebraic identity. It is exact when $a$ and $\delta$ are independent. The reward is that the inverse factorizes too (survey Section V-B):
 
 $$(A\otimes S)^{-1} = A^{-1}\otimes S^{-1}.$$
 
@@ -44,14 +44,14 @@ The dense $mn\times mn$ block is replaced by an $n\times n$ and an $m\times m$ f
 **What to notice.** At $\rho = 0$, $a$ and $\delta$ are independent, $C = 0$, and the right map is blank: the factorization is exact. As $\rho$ grows, the cross terms appear and the relative error in the readout grows. The storage saving does not change: $(mn)^2 = 36$ numbers become $n^2 + m^2 = 13$, and for a $1000\times1000$ layer, $10^{12}$ become $2\cdot10^6$. In a real network $\delta$ depends on $a$ nonlinearly, so how good the approximation is must be measured, not assumed.
 :::
 
-:::survey Fig. 7 of the survey: how K-FAC obtains tractable layer-wise curvature from activation and back-propagated-error statistics. The Kronecker separation is a modeling approximation, not an exact identity.
+:::survey Fig. 7 of the survey: how K-FAC obtains tractable layer-wise curvature from activation and backpropagated-error statistics. The Kronecker separation is a modeling approximation, not an exact identity for arbitrary data.
 public/survey3/fig7.webp
 :::
 
 :::read How to read this figure
-**Top row.** A layer with input $a \in \mathbb{R}^n$ (blue circles) and pre-activation $s = Wa \in \mathbb{R}^m$ (orange circles); the error $\delta$ flows back. The gradient $\nabla_WL = \delta a^\top$ is an $m\times n$ grid, and its vectorized form gives the exact Fisher block of Eq. (58).
+**Top row.** A layer with input $a \in \mathbb{R}^n$ (blue circles) and pre-activation $s = Wa \in \mathbb{R}^m$ (orange circles); the error $\delta$ flows back. The gradient $\nabla_WL = \delta a^\top$ is an $m\times n$ grid, and its vectorized form gives the exact Fisher block written above.
 
-**Bottom row, drawn to scale for $m = 4$, $n = 3$.** The $mn\times mn$ Fisher block, with $(mn)^2 = 144$ entries, against K-FAC's two factors $A$ ($n\times n$) and $S$ ($m\times m$), with $n^2 + m^2 = 25$ entries. The text at the right repeats Eqs. (59) and (60) and the survey's caveat that $\mathbb{E}[X\otimes Y] \ne \mathbb{E}[X]\otimes\mathbb{E}[Y]$.
+**Bottom row, drawn to scale for $m = 4$, $n = 3$.** The $mn\times mn$ Fisher block, with $(mn)^2 = 144$ entries, against K-FAC's two factors $A$ ($n\times n$) and $S$ ($m\times m$), with $n^2 + m^2 = 25$ entries. The text at the right repeats Eq. (36), the inverse identity above, and the survey's caveat that $\mathbb{E}[X\otimes Y] \ne \mathbb{E}[X]\otimes\mathbb{E}[Y]$.
 :::
 
 ## 4. What decides whether K-FAC pays off

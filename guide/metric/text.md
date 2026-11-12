@@ -1,10 +1,10 @@
 ## 1. Every step minimizes a model plus a penalty
 
-This chapter follows Sections II-G and II-H of the survey. Chapter 2 showed that the gradient step lowers the linear model $g^\top\Delta$ fastest among steps of a fixed Euclidean length. "Length" was the choice. Measure it differently and the best step changes. The survey writes this as one subproblem: for a positive-definite matrix $M_t$, the **[[variable-metric]]** step is (survey Eq. 12)
+This chapter follows Sections II-G and II-H of the survey. Chapter 2 showed that the gradient step lowers the linear model $g^\top\Delta$ fastest among steps of a fixed Euclidean length. "Length" was the choice. Measure it differently and the best step changes. The survey writes this as one subproblem: for a positive-definite matrix $M_t$, the **[[variable-metric]]** step is (survey Section II-G)
 
 $$\Delta_t = \arg\min_\Delta\left[g_t^\top\Delta + \frac{1}{2\eta}\Delta^\top M_t\Delta\right].$$
 
-The first term is the linear model: it rewards moving downhill. The second is a penalty on the step's size, measured in the metric $M_t$: it is large for steps that $M_t$ considers long. Differentiate with respect to $\Delta$ and set the result to zero: $g_t + M_t\Delta/\eta = 0$, so (survey Eq. 13)
+The first term is the linear model: it rewards moving downhill. The second is a penalty on the step's size, measured in the metric $M_t$: it is large for steps that $M_t$ considers long. Differentiate with respect to $\Delta$ and set the result to zero: $g_t + M_t\Delta/\eta = 0$, so (survey Eq. 12)
 
 $$\boxed{\Delta_t = -\eta M_t^{-1}g_t.}$$
 
@@ -21,7 +21,7 @@ Another way to see the same step: among all steps on the ellipse $\Delta^\top M\
 :::
 
 :::read How to read this visual
-**What is drawn.** Level sets (grey) of a quadratic loss with curvatures $6$ and $0.6$ along axes turned by $30^\circ$; the green dot is the minimum. At the white point, the short white arrow is the direction $-g$. The coloured dashed ellipse is the set of steps of equal length in the chosen metric, $\Delta^\top M\Delta = r^2$. The thick coloured arrow is the step $\Delta = -\eta M^{-1}g$ of Eq. (13). The faint dashed line through its tip is a level line of the linear model $g^\top\Delta$.
+**What is drawn.** Level sets (grey) of a quadratic loss with curvatures $6$ and $0.6$ along axes turned by $30^\circ$; the green dot is the minimum. At the white point, the short white arrow is the direction $-g$. The coloured dashed ellipse is the set of steps of equal length in the chosen metric, $\Delta^\top M\Delta = r^2$. The thick coloured arrow is the step $\Delta = -\eta M^{-1}g$ of Eq. (12). The faint dashed line through its tip is a level line of the linear model $g^\top\Delta$.
 
 **What moves.** The metric $M$ ($I$, $\mathrm{diag}(H)$, $H$, or $\mathrm{diag}(|g|)$), the step size $\eta$, and the point.
 
@@ -39,7 +39,7 @@ The readout gives the angle between the step and $-g$, and the loss before and a
 
 ## 2. A lens, not an identity
 
-The survey insists that Eq. (13) is a *conceptual* relationship. Two warnings:
+The survey insists that Eq. (12) is a *conceptual* relationship. Two warnings:
 
 - **Adam's statistics are not a Hessian.** Writing Adam as $M = \mathrm{diag}(\sqrt{\hat v_t})$ does not mean that its gradient moments estimate curvature. They are averages of squared gradients (chapter 8).
 - **Muon is not described exactly.** Muon's geometry comes from the spectral norm of a matrix, which is generally not a quadratic metric $\Delta^\top M\Delta$ at all (chapter 16).

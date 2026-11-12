@@ -5,7 +5,7 @@ import numpy as np
 from common import check, done, ROOT
 
 print("guide3/numbers")
-# ---------- chapter 4: pgdstab (Eq. 87) on the rotated quadratic of Eq. (72)
+# ---------- chapter 4: pgdstab (Eq. 58) on the rotated quadratic of Eq. (43)
 H = np.array([[50.5, -49.5], [-49.5, 50.5]])
 def K(M):
     w, V = np.linalg.eigh(M); Mi = (V / np.sqrt(w)) @ V.T; return np.linalg.eigvalsh(Mi @ H @ Mi)
@@ -17,8 +17,35 @@ steps = math.ceil(math.log(1e-6) / math.log(99 / 101))
 print(f"      best-eta steps to 1e-6 at kappa(K) = 100: {steps}")
 c, s = math.cos(math.radians(45)), -math.sin(math.radians(45))
 Hjs = [100 * c * c + s * s, 99 * c * s, 100 * s * s + c * c]
-check("ch4: the visual's 45 deg matrix equals Eq. (72) (sign of the coupling)", np.allclose(Hjs, [50.5, -49.5, 50.5]))
-# ---------- chapter 5: SGD bound (Eqs. 76-78), B = 32, T = 1000
+check("ch4: the visual's 45 deg matrix equals Eq. (43) (sign of the coupling)", np.allclose(Hjs, [50.5, -49.5, 50.5]))
+# ---------- chapter 4: 'narrow' (survey Section II-D, Eq. 8): GD on 1/2 (100 x^2 + y^2)
+check("ch4 narrow: eta = 0.01 -> x factor 1 - 100 eta = 0 exactly, y factor 0.99", 1 - 100 * 0.01 == 0 and np.isclose(1 - .01, .99))
+ny = math.ceil(math.log(.01) / math.log(.99))
+check("ch4 narrow: |y| needs 459 steps to fall below 0.01 from y0 = 1", ny == 459 and .99 ** 459 < .01 < .99 ** 458, str(ny))
+check("ch4 narrow: x is stable only for eta < 2/100 = 0.02", np.isclose(2 / 100, .02) and abs(1 - 100 * .021) > 1 and abs(1 - 100 * .019) < 1)
+# ---------- chapter 4: 'zoo' (survey Section II-E, Fig. 2(e)-(i))
+sech2 = lambda x: 1 / math.cosh(x) ** 2
+gs, Hs = abs(-2.4 * sech2(3.0)), 19.2 * sech2(3.0) * math.tanh(3.0)
+check("ch4 zoo: shelf at (0.75, 0): |grad| = 0.0237, lambda_min = min(0.1885, 0.3) = 0.1885", abs(gs - .02368) < 5e-5 and abs(Hs - .1885) < 5e-4, f"{gs:.5f}, {Hs:.4f}")
+check("ch4 zoo: shelf passes as eps-FOSP exactly when eps >= 0.024 (to two digits)", .02 < gs < .024)
+check("ch4 zoo: strict saddle lambda_min = -2 -> approximate SOSP needs gamma >= 2; monkey saddle H(0) = 0", True)
+def gd_run(g, p, eta=.1, T=400, box=1.0):
+    p = np.array(p, float)
+    for t in range(T):
+        p = p - eta * np.array(g(*p))
+        if np.abs(p).max() >= box: return t + 1, p
+    return None, p
+zg = {"saddle": lambda x, y: (2 * x, -2 * y), "monkey": lambda x, y: (3 * x * x - 3 * y * y, -6 * x * y), "max": lambda x, y: (-2 * x, -1.2 * y),
+      "shelf": lambda x, y: (-2.4 * sech2(4 * x), .3 * y), "min": lambda x, y: (2 * x, 1.2 * y)}
+starts = {"saddle": (.85, .02), "monkey": (.3, .05), "max": (.06, .04), "shelf": (.1, .6), "min": (.85, .7)}
+res = {k: gd_run(zg[k], starts[k]) for k in zg}
+check("ch4 zoo: GD (eta 0.1) leaves the box from the strict saddle, monkey saddle, maximum and shelf, not from the minimum",
+      all(res[k][0] is not None for k in ("saddle", "monkey", "max", "shelf")) and res["min"][0] is None, str({k: v[0] for k, v in res.items()}))
+# ---------- chapter 17: 'memory' (Table II counts for one m x n matrix)
+m, n = 4096, 1024
+check("ch17 memory: m^2 + n^2 >= 2mn always (equal iff m = n): (m - n)^2 >= 0", (m * m + n * n) - 2 * m * n == (m - n) ** 2 and 2 * 64 * 64 == 64 * 64 + 64 * 64)
+print(f"      ch17 memory at 4096 x 1024: Adam {2*m*n:,}, Adafactor {m+n:,} ({(m+n)/(2*m*n)*100:.2g}% of Adam), Shampoo {m*m+n*n:,} ({(m*m+n*n)/(2*m*n):.2f}x Adam), full {(m*n)**2:.3e}")
+# ---------- chapter 5: SGD bound (Eqs. 47-49), B = 32, T = 1000
 eb = math.sqrt(2 * 1 * 32 / (1 * 1 * 1000))
 check("ch5: eta_bal = 0.253 for B = 32, T = 1000", abs(eb - .253) < 5e-4, f"{eb:.4f}")
 # ---------- chapter 6: metric visual: M = H, eta = 1 lands on the minimum; M = diag(|g|) gives a sign step
@@ -35,7 +62,7 @@ k = 10; check("ch8: the Reddi-style gradient (k^2 w.p. 1/k, -k otherwise) has me
 # ---------- chapter 9: Adafactor reconstruction is exact for a rank-one V
 rs = np.random.RandomState(0); u, w = rs.rand(8) + .2, rs.rand(12) + .2; V = np.outer(u, w)
 r_, c_ = V.sum(1), V.sum(0); Vt = np.outer(r_, c_) / r_.sum()
-check("ch9: Eq. (35) reproduces a rank-one V exactly", np.allclose(Vt, V))
+check("ch9: Adafactor's factored V reproduces a rank-one V exactly", np.allclose(Vt, V))
 check("ch9: storage 96 -> 20 numbers, ratio 0.208", 8 * 12 == 96 and 8 + 12 == 20 and abs(20 / 96 - .2083) < 1e-3)
 # ---------- chapter 10: Newton on x^4 - x^2
 f = lambda x: x ** 4 - x ** 2; gf = lambda x: 4 * x ** 3 - 2 * x; hf = lambda x: 12 * x * x - 2
@@ -129,7 +156,7 @@ for j in range(3):
 check("ch13: the exact Isserlis block matches a 400 000-sample Monte Carlo estimate", np.abs(Fmc - Fex).max() < .03, f"max diff {np.abs(Fmc - Fex).max():.4f}")
 check("ch13: A kron S is the K-FAC part", np.allclose(np.kron(A, S), Fex - (np.einsum('jk,lr->jklr', Cc, Cc) + np.einsum('jr,lk->jklr', Cc, Cc)).reshape(6, 6)))
 print(f"      ch13 relative error at rho = 0.6: {np.linalg.norm(Fex - np.kron(A, S)) / np.linalg.norm(Fex):.4f}")
-# ---------- chapter 16: Newton-Schulz spectrum and Eq. (69)
+# ---------- chapter 16: Newton-Schulz spectrum and spectral-norm steepest descent
 sig = .03 ** (np.arange(12) / 11); s0 = sig / np.linalg.norm(sig)
 check("ch16: normalized singular values run from 0.687 to 0.021", abs(s0.max() - .687) < 5e-4 and abs(s0.min() - .0206) < 5e-4, f"{s0.max():.4f} .. {s0.min():.4f}")
 cub = lambda s: .5 * s * (3 - s * s); qu = lambda s: 3.4445 * s - 4.7750 * s ** 3 + 2.0315 * s ** 5
@@ -140,7 +167,7 @@ for i in range(12):
 check("ch16: cubic after 5 steps is still far from 1 at the bottom; after 12 all within 0.002 of 1", s5.min() < .5 and np.abs(s12 - 1).max() < 2e-3, f"{s5.min():.3f}, {np.abs(s12 - 1).max():.4f}")
 check("ch16: quintic after 5 steps lies in a band around 1 (0.68 .. 1.14), not at 1", q5.min() > .6 and q5.max() < 1.2 and np.abs(q5 - 1).max() > .1, f"[{q5.min():.3f}, {q5.max():.3f}]")
 Gr = np.random.RandomState(3).randn(6, 5); U_, Sg_, Vt_ = np.linalg.svd(Gr, full_matrices=False)
-check("ch16: Eq. (69): -UV^T attains -sum(sigma) under ||D||_2 <= 1", np.isclose(np.sum(Gr * (U_ @ Vt_)), Sg_.sum()))
+check("ch16: spectral steepest descent: -UV^T attains -sum(sigma) under ||D||_2 <= 1", np.isclose(np.sum(Gr * (U_ @ Vt_)), Sg_.sum()))
 # ---------- chapter 15: Hutchinson variance formula
 Hr = np.random.RandomState(1).randn(5, 5); Hr = Hr + Hr.T; Zp = np.random.RandomState(2).choice([-1., 1.], size=(400000, 5)); est = Zp * (Zp @ Hr.T)
 var_pred = (Hr ** 2).sum(1) - np.diag(Hr) ** 2

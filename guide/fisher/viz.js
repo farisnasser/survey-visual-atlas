@@ -1,5 +1,5 @@
 // Chapter 12 (survey Sections IV-H to IV-J, Appendix C-D). New visual 'natgrad': maximum-likelihood fit of a Gaussian
-// N(mu, sigma^2), GD vs natural gradient (Eq. 56) in two parameterizations; numbers in scripts/check-math/guide3_numbers.py.
+// N(mu, sigma^2), GD vs natural gradient (Eq. 35) in two parameterizations; numbers in scripts/check-math/guide3_numbers.py.
 import { HEX } from '../../src/lib/atlas3d.js';
 import { rampCss } from '../../src/lib/charts.js';
 

@@ -1,10 +1,10 @@
 ## 1. Two accumulators, one per side of the matrix
 
-This chapter follows Section V-C of the survey. **[[shampoo|Shampoo]]** approaches matrix structure from a different direction than K-FAC. Instead of approximating a Fisher block, it builds matrix accumulators directly from the gradients. For a weight gradient $G_t \in \mathbb{R}^{m\times n}$, define (survey Eqs. 61 and 62)
+This chapter follows Section V-C of the survey. **[[shampoo|Shampoo]]** approaches matrix structure from a different direction than K-FAC. Instead of approximating a Fisher block, it builds matrix accumulators directly from the gradients. For a weight gradient $G_t \in \mathbb{R}^{m\times n}$, define (survey Section V-C)
 
 $$L_t = \epsilon I_m + \sum_{s=1}^t G_sG_s^\top, \qquad R_t = \epsilon I_n + \sum_{s=1}^t G_s^\top G_s.$$
 
-$L_t$ is $m\times m$ and summarizes how the gradient varies across *rows* (outputs); $R_t$ is $n\times n$ and summarizes the *columns* (inputs). The small $\epsilon I$ keeps both positive definite. The two-sided matrix Shampoo step uses inverse fourth roots (survey Eq. 63):
+$L_t$ is $m\times m$ and summarizes how the gradient varies across *rows* (outputs); $R_t$ is $n\times n$ and summarizes the *columns* (inputs). The small $\epsilon I$ keeps both positive definite. The two-sided matrix Shampoo step uses inverse fourth roots (survey Eq. 37):
 
 $$\Delta W_t = -\eta\,L_t^{-1/4}\,G_t\,R_t^{-1/4}.$$
 

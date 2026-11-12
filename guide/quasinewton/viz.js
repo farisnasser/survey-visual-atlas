@@ -1,4 +1,4 @@
-// Chapter 11 (survey Sections IV-E to IV-G). New visuals 'bfgs' (Eqs. 48-51 with a backtracking line search) and
+// Chapter 11 (survey Sections IV-E to IV-G). New visuals 'bfgs' (Eq. 34 and the inverse update of Section IV-F, with a backtracking line search) and
 // 'cg' (conjugate gradients, Algorithm 1's inner solver); numbers in scripts/check-math/guide3_numbers.py.
 // Reused: crash-course 'hvp' (course_curvature.py).
 import { def, C, HEX } from '../../src/lib/atlas3d.js';
@@ -19,12 +19,12 @@ const steps = {
     let a = 1; const f0 = F(...p), slope = g[0] * d[0] + g[1] * d[1];
     while (F(p[0] + a * d[0], p[1] + a * d[1]) > f0 + 1e-4 * a * slope && a > 1e-10) { a /= 2; bb.evals++; }   // Armijo backtracking
     bb.evals++;
-    const q = [p[0] + a * d[0], p[1] + a * d[1]], g1 = Gf(...q), s = [q[0] - p[0], q[1] - p[1]], y = [g1[0] - g[0], g1[1] - g[1]];   // Eq. (48)
+    const q = [p[0] + a * d[0], p[1] + a * d[1]], g1 = Gf(...q), s = [q[0] - p[0], q[1] - p[1]], y = [g1[0] - g[0], g1[1] - g[1]];   // Eq. (34)
     const ys = y[0] * s[0] + y[1] * s[1];
     if (ys > 1e-14) {                                                                  // curvature condition y^T s > 0
       const r = 1 / ys, A = [[1 - r * s[0] * y[0], -r * s[0] * y[1]], [-r * s[1] * y[0], 1 - r * s[1] * y[1]]];
       const AC = [[A[0][0] * Cm[0][0] + A[0][1] * Cm[1][0], A[0][0] * Cm[0][1] + A[0][1] * Cm[1][1]], [A[1][0] * Cm[0][0] + A[1][1] * Cm[1][0], A[1][0] * Cm[0][1] + A[1][1] * Cm[1][1]]];
-      bb.C = [0, 1].map(i => [0, 1].map(j => AC[i][0] * A[j][0] + AC[i][1] * A[j][1] + r * s[i] * s[j]));   // Eqs. (50)-(51)
+      bb.C = [0, 1].map(i => [0, 1].map(j => AC[i][0] * A[j][0] + AC[i][1] * A[j][1] + r * s[i] * s[j]));   // inverse BFGS update (survey Section IV-F, in words)
     }
     return q;
   },
@@ -33,7 +33,7 @@ const NAME = { gd: 'GD (η = 0.01)', bfgs: 'BFGS + line search', newton: 'exact 
 const COLS = { gd: [C.opt2, HEX.opt2], bfgs: [C.ball, HEX.ball], newton: [C.opt3, HEX.opt3] };
 const bfgs = {
   title: 'BFGS learns the curvature from gradient differences alone',
-  caption: 'The curved valley L = (1 − x)² + 10(y − x²)² of the survey\'s Fig. 10, from (−1.2, 1). Gradient descent (violet) needs a small step for the steep walls and crawls along the curved floor. BFGS (coral) never sees a second derivative: it updates an inverse-Hessian estimate C from each step s and gradient change y (Eqs. 48-51). Exact Newton (white) uses the true Hessian.',
+  caption: 'The curved valley L = (1 − x)² + 10(y − x²)² of the survey\'s Fig. 10, from (−1.2, 1). Gradient descent (violet) needs a small step for the steep walls and crawls along the curved floor. BFGS (coral) never sees a second derivative: it updates an inverse-Hessian estimate C from each step s and gradient change y (Eq. 34 and survey Section IV-F). Exact Newton (white) uses the true Hessian.',
   note: 'BFGS starts from C = I and uses a backtracking (Armijo) line search, as Section IV-F says practical BFGS does; the extra loss evaluations it costs are counted. Newton: exact Hessian, unit steps; it stays positive definite along this path. Heights log-scaled for display.',
   legend: [[HEX.opt2, 'gradient descent'], [HEX.ball, 'BFGS'], [HEX.opt3, 'Newton'], [HEX.good, 'minimum (1, 1)']],
   action: 'Restart', cam: [0, 4.3, 3.6], tgt: [0, .2, 0],

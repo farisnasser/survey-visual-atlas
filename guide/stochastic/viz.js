@@ -1,4 +1,4 @@
-// Chapter 5 (survey Section II-F, Appendix C-B). New visual 'bound' (Eqs. 76-78; numbers in
+// Chapter 5 (survey Section II-F, Appendix C-B). New visual 'bound' (Eqs. 47-49; numbers in
 // scripts/check-math/guide3_numbers.py); reused crash-course visuals 'cloud' and 'floor' (course_noise.py).
 import { HEX } from '../../src/lib/atlas3d.js';
 import nz from '../../course/noise/viz.js';
@@ -10,8 +10,8 @@ const etaUse = (B, T) => Math.min(1 / BETA, ebal(B, T));
 const bound = (B, T) => { const e = etaUse(B, T); return term1(e, T) + term2(e, B); };
 
 const boundViz = {
-  title: 'The SGD bound of Eq. (76): two terms pulling the step size apart',
-  caption: 'The average expected squared gradient over T steps is at most 2Δ₀/(ηT) + βησ²/B. A bigger step shrinks the first term (progress) and grows the second (noise). The balanced step η_bal of Eq. (78) sits where they cross, capped at 1/β.',
+  title: 'The SGD bound of Eq. (47): two terms pulling the step size apart',
+  caption: 'The average expected squared gradient over T steps is at most 2Δ₀/(ηT) + βησ²/B. A bigger step shrinks the first term (progress) and grows the second (noise). The balanced step η_bal of Eq. (49) sits where they cross, capped at 1/β.',
   note: 'Illustrative constants Δ₀ = L(θ₀) − L* = 1, β = 1, σ² = 1, as in the survey\'s added Fig. 12. These are worst-case upper bounds, not training curves.',
   legend: [[HEX.pos, '2Δ₀/(ηT): progress term'], [HEX.neg, 'βησ²/B: noise term'], ['#e8ecf8', 'their sum, the bound (76)'], [HEX.flat, 'η = min(1/β, η_bal)']],
   mode: '2d',

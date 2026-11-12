@@ -9,7 +9,7 @@ The two differ both in what they estimate (sampled Hessian information versus se
 
 ## 2. Hutchinson's estimator
 
-How can the diagonal of $H$ be estimated without forming $H$? Draw a random **Rademacher** vector $z \in \{-1, 1\}^d$, with independent entries that are $\pm1$ with equal probability, and form (survey Eq. 65)
+How can the diagonal of $H$ be estimated without forming $H$? Draw a random **Rademacher** vector $z \in \{-1, 1\}^d$, with independent entries that are $\pm1$ with equal probability, and form (survey Section V-E)
 
 $$\hat h = z \odot (Hz).$$
 
@@ -32,7 +32,7 @@ Each probe needs one [[hvp|Hessian–vector product]], never the matrix. Two cau
 
 ## 3. Sophia: curvature scaling with explicit control of step size
 
-**[[sophia|Sophia]]** targets efficient language-model pretraining. It keeps a momentum estimate $m_t$ and an occasional, lightweight diagonal Hessian estimate $h_t$, and takes an elementwise *clipped* preconditioned step. In the survey's simplified notation (survey Eq. 64):
+**[[sophia|Sophia]]** targets efficient language-model pretraining. It keeps a momentum estimate $m_t$ and an occasional, lightweight diagonal Hessian estimate $h_t$, and takes an elementwise *clipped* preconditioned step. In the survey's simplified notation (survey Section V-E):
 
 $$\Delta\theta_t = -\eta_t\,\mathrm{clip}\!\left(\frac{m_t}{\max\{h_t, \epsilon\}},\,-\rho,\,\rho\right),$$
 

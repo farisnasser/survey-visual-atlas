@@ -1,4 +1,4 @@
-// Chapter 9 (survey Sections III-I to III-K). New visuals 'factor' (Eq. 35) and 'lion' (Eqs. 36-38); numbers in
+// Chapter 9 (survey Sections III-I to III-K). New visuals 'factor' (survey Section III-I) and 'lion' (Eqs. 29-31); numbers in
 // scripts/check-math/guide3_numbers.py. Reused: crash-course 'lookahead' (course_memory.py), defazio2024road 'three'.
 import { HEX } from '../../src/lib/atlas3d.js';
 import { rampCss } from '../../src/lib/charts.js';
@@ -13,14 +13,14 @@ const Z = Array.from({ length: M }, () => Array.from({ length: N }, () => R0.nor
 function factorOf(s) {
   const V = U.map((u, i) => W.map((w, j) => u * w * Math.exp(s * Z[i][j])));
   const r = V.map(row => row.reduce((a, b) => a + b, 0)), c = W.map((_, j) => V.reduce((a, row) => a + row[j], 0)), S = r.reduce((a, b) => a + b, 0);
-  const Vt = r.map(ri => c.map(cj => ri * cj / S));                                  // Eq. (35)
+  const Vt = r.map(ri => c.map(cj => ri * cj / S));                                  // survey Section III-I (in words)
   let num = 0, den = 0, worst = 0;
   for (let i = 0; i < M; i++) for (let j = 0; j < N; j++) { num += (V[i][j] - Vt[i][j]) ** 2; den += V[i][j] ** 2; worst = Math.max(worst, Math.abs(Math.log(Vt[i][j] / V[i][j]))); }
   return { V, Vt, rel: Math.sqrt(num / den), worst: Math.exp(worst) };
 }
 const factor = {
   title: 'Adafactor keeps a row sum and a column sum instead of the whole matrix',
-  caption: 'Left: a nonnegative second-moment matrix V for an 8 × 12 weight (one cell per weight). Middle: Adafactor\'s reconstruction Ṽᵢⱼ = rᵢcⱼ / Σrₖ from only the 8 row sums and 12 column sums (Eq. 35). Right: the ratio Ṽ/V per cell. The slider adds structure that a rank-one product cannot capture.',
+  caption: 'Left: a nonnegative second-moment matrix V for an 8 × 12 weight (one cell per weight). Middle: Adafactor\'s reconstruction Ṽᵢⱼ = rᵢcⱼ / Σrₖ from only the 8 row sums and 12 column sums (survey Section III-I). Right: the ratio Ṽ/V per cell. The slider adds structure that a rank-one product cannot capture.',
   note: 'V = (u wᵀ) ⊙ exp(s·Z) with fixed positive u, w and a fixed Gaussian matrix Z. At s = 0, V is exactly rank one and the reconstruction is exact. Colour scales: V and Ṽ share one scale; the ratio is drawn on a log scale from ½ (dark) to 2 (bright).',
   legend: [],
   mode: '2d',
@@ -48,7 +48,7 @@ const R1 = rng(36), G = Array.from({ length: T }, () => MU + SIG * R1.normal());
 const lion = {
   title: 'Lion moves every coordinate by exactly η; the gradient only decides the sign',
   caption: 'One coordinate with noisy gradients: true mean 0.3, noise 1.2 (white dots). Lion\'s direction is the sign of c_t = β₁m_{t−1} + (1 − β₁)ĝ_t (coral), where the momentum m_t = β₂m_{t−1} + (1 − β₂)ĝ_t (violet) uses a second, slower coefficient. The bars show the step taken: always ±η, never larger or smaller.',
-  note: 'Eqs. (36)-(38) without weight decay; one fixed seeded gradient sequence. SGD would step by −ηĝ_t, proportional to the gradient\'s size. "Right direction" means the step opposes the true mean gradient 0.3.',
+  note: 'Eqs. (29)-(31) without weight decay; one fixed seeded gradient sequence. SGD would step by −ηĝ_t, proportional to the gradient\'s size. "Right direction" means the step opposes the true mean gradient 0.3.',
   legend: [['#e8ecf8', 'gradient ĝ_t'], [HEX.opt2, 'momentum m_t (β₂)'], [HEX.ball, 'c_t (β₁ blend)'], [HEX.good, 'step −η·sign(c_t), in units of η']],
   mode: '2d',
   plot: { xlabel: 'step t', ylabel: 'value', xlim: [0, T], ylim: [-4, 4], legend: false },
@@ -63,8 +63,8 @@ const lion = {
     let m = 0; const cs = [], ms = [], steps = [];
     let right = 0, rightSgd = 0;
     for (let t = 0; t < T; t++) {
-      const c = b1 * m + (1 - b1) * G[t]; const st = -Math.sign(c);             // Eq. (36), (37)
-      m = b2 * m + (1 - b2) * G[t];                                               // Eq. (38)
+      const c = b1 * m + (1 - b1) * G[t]; const st = -Math.sign(c);             // Eq. (29), (30)
+      m = b2 * m + (1 - b2) * G[t];                                               // Eq. (31)
       cs.push([t, c]); ms.push([t, m]); steps.push([t, st]);
       if (st < 0) right++; if (G[t] > 0) rightSgd++;
     }

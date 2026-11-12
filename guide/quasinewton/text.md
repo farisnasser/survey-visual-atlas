@@ -1,10 +1,10 @@
 ## 1. BFGS: curvature from differences of gradients
 
-This chapter follows Sections IV-E, IV-F and IV-G of the survey. Newton uses $H_t$ directly, which needs Hessian access and a linear solve at every step. Quasi-Newton methods build an approximation from what gradient descent already sees: the change in parameters and the change in gradients (survey Eq. 48),
+This chapter follows Sections IV-E, IV-F and IV-G of the survey. Newton uses $H_t$ directly, which needs Hessian access and a linear solve at every step. Quasi-Newton methods build an approximation from what gradient descent already sees: the change in parameters and the change in gradients (survey Eq. 34),
 
 $$s_t = \theta_{t+1} - \theta_t, \qquad y_t = g_{t+1} - g_t.$$
 
-By the mean-value theorem, $y_t \approx Hs_t$ for small steps. So each pair $(s_t, y_t)$ carries information about the Hessian *without explicitly computing it*. If $B_t$ approximates $H_t$, ask the new approximation to reproduce the observed change exactly: the **[[secant]] condition** $B_{t+1}s_t = y_t$. Broyden, Fletcher, Goldfarb and Shanno (1970) found the classical solution, **[[bfgs|BFGS]]**. For $y_t^\top s_t > 0$ (survey Eq. 49):
+By the mean-value theorem, $y_t \approx Hs_t$ for small steps. So each pair $(s_t, y_t)$ carries information about the Hessian *without explicitly computing it*. If $B_t$ approximates $H_t$, ask the new approximation to reproduce the observed change exactly: the **[[secant]] condition** $B_{t+1}s_t = y_t$. Broyden, Fletcher, Goldfarb and Shanno (1970) found the classical solution, **[[bfgs|BFGS]]**. For $y_t^\top s_t > 0$ (survey Section IV-E):
 
 $$B_{t+1} = B_t - \frac{B_ts_ts_t^\top B_t}{s_t^\top B_ts_t} + \frac{y_ty_t^\top}{y_t^\top s_t}.$$
 
@@ -12,7 +12,7 @@ Why this rank-two correction? Multiply the right side by $s_t$. The middle term 
 
 ## 2. Inverse BFGS and limited memory
 
-Solving with $B_t$ each step is avoidable: many implementations update an inverse approximation $C_t \approx H_t^{-1}$ instead. With $\rho_t = (y_t^\top s_t)^{-1}$ (survey Eqs. 50 and 51):
+Solving with $B_t$ each step is avoidable: many implementations update an inverse approximation $C_t \approx H_t^{-1}$ instead. With $\rho_t = (y_t^\top s_t)^{-1}$ (survey Section IV-F):
 
 $$C_{t+1} = (I - \rho_ts_ty_t^\top)\,C_t\,(I - \rho_ty_ts_t^\top) + \rho_ts_ts_t^\top,$$
 
@@ -22,7 +22,7 @@ and then $\Delta_t = -C_tg_t$: a matrix-vector product, no solve.
 :::
 
 :::read How to read this visual
-**What is drawn.** The curved valley $L = (1 - x)^2 + 10(y - x^2)^2$ of the survey's Fig. 10 in 3D (heights log-scaled), with the minimum at $(1, 1)$ in green. Three balls start at $(-1.2, 1)$. Violet: gradient descent with $\eta = 0.01$, about as large as the steep walls allow. Coral: BFGS with the inverse update of Eqs. (50) and (51), starting from $C = I$, with a backtracking line search. White: exact Newton. The chart plots each loss on a log scale.
+**What is drawn.** The curved valley $L = (1 - x)^2 + 10(y - x^2)^2$ of the survey's Fig. 10 in 3D (heights log-scaled), with the minimum at $(1, 1)$ in green. Three balls start at $(-1.2, 1)$. Violet: gradient descent with $\eta = 0.01$, about as large as the steep walls allow. Coral: BFGS with the inverse update above, starting from $C = I$, with a backtracking line search. White: exact Newton. The chart plots each loss on a log scale.
 
 **What to notice.** Gradient descent creeps along the curved floor: after 400 steps it is still far from the minimum. BFGS starts out like a gradient method, because $C = I$ is just GD. After a few steps its estimate $C$ has learned the valley's curvature from the pairs $(s_t, y_t)$, and it converges as fast as Newton does near the end: locally superlinear convergence. It never computes a second derivative. The readout also counts the extra loss evaluations its line search used, a real cost the survey warns about ("even the meaning of one step differs"). Newton, with the true Hessian, needs the fewest steps but the most information per step.
 :::
@@ -33,7 +33,7 @@ The survey adds a precise caution. A method can save Hessian storage and still n
 
 ## 3. Hessian-vector products
 
-Second derivatives do not require storing the Hessian. For any vector $v$, a **[[hvp|Hessian–vector product]]** is a directional derivative of the gradient (survey Eq. 52):
+Second derivatives do not require storing the Hessian. For any vector $v$, a **[[hvp|Hessian–vector product]]** is a directional derivative of the gradient (survey Section IV-G):
 
 $$Hv = \frac{d}{d\alpha}\nabla L(\theta + \alpha v)\Big|_{\alpha=0}.$$
 

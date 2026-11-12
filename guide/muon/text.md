@@ -1,6 +1,6 @@
 ## 1. SOAP: Adam in a rotated matrix basis
 
-This chapter follows Sections V-F, V-G and V-H of the survey, with Appendices A-C and C-C. **[[soap|SOAP]]** builds on a connection between Shampoo's eigenbases and familiar adaptive updates. Suppose Shampoo's left and right factors (chapter 14) have eigendecompositions $L = U\Lambda U^\top$ and $R = V\Gamma V^\top$. The gradient expressed in their rotated coordinates is (survey Eq. 66)
+This chapter follows Sections V-F, V-G and V-H of the survey, with Appendices A-C and C-C. **[[soap|SOAP]]** builds on a connection between Shampoo's eigenbases and familiar adaptive updates. Suppose Shampoo's left and right factors (chapter 14) have eigendecompositions $L = U\Lambda U^\top$ and $R = V\Gamma V^\top$. The gradient expressed in their rotated coordinates is (survey Eq. 38)
 
 $$\widetilde G = U^\top GV.$$
 
@@ -10,7 +10,7 @@ In the cited language-model experiments (360M and 660M parameters, large batch),
 
 ## 2. Muon: orthogonalize the update
 
-**Muon** is the survey's most instructive modern case: it uses a matrix-valued transformation, yet it is not a Hessian approximation. It applies momentum to a hidden layer's weight gradients, then approximately orthogonalizes the resulting update matrix. Write the momentum matrix's singular value decomposition (survey Eq. 67), $M = U\Sigma V^\top$. The semi-orthogonal **[[polar-factor|polar factor]]** is (survey Eq. 68)
+**Muon** is the survey's most instructive modern case: it uses a matrix-valued transformation, yet it is not a Hessian approximation. It applies momentum to a hidden layer's weight gradients, then approximately orthogonalizes the resulting update matrix. Write the momentum matrix's singular value decomposition (survey Eq. 39), $M = U\Sigma V^\top$. The semi-orthogonal **[[polar-factor|polar factor]]** is (survey Eq. 40)
 
 $$\mathrm{msign}(M) = UV^\top.$$
 
@@ -18,7 +18,7 @@ Where $M$ has nonzero singular values, this replaces all of them by one while ke
 
 ## 3. Why the polar factor? Steepest descent in the spectral norm
 
-The linearized change of the loss under a matrix step $\Delta$ is $\langle G, \Delta\rangle_F = \mathrm{tr}(G^\top\Delta)$. Now limit the step by its **[[spectral-norm|spectral norm]]** $\|\Delta\|_2$, its largest singular value. Von Neumann's trace inequality gives (survey Eq. 69)
+The linearized change of the loss under a matrix step $\Delta$ is $\langle G, \Delta\rangle_F = \mathrm{tr}(G^\top\Delta)$. Now limit the step by its **[[spectral-norm|spectral norm]]** $\|\Delta\|_2$, its largest singular value. Von Neumann's trace inequality gives (survey Section V-G)
 
 $$\min_{\|\Delta\|_2 \le \eta}\langle G, \Delta\rangle_F = -\eta\sum_i\sigma_i(G),$$
 
@@ -33,20 +33,20 @@ attained by $\Delta = -\eta UV^\top$ when $G = U\Sigma V^\top$. Appendix A-C sta
 - Amber: the elementwise sign, $-\mathrm{sign}(G)/\|\mathrm{sign}(G)\|_2$, the kind of step Lion or Adam's first step takes.
 - Coral: the polar factor $-UV^\top$.
 
-The dashed line is the bound $\sum_i\sigma_i(G)$ of Eq. (69).
+The dashed line is the bound $\sum_i\sigma_i(G)$ above.
 
 **What moves.** The spectrum decay $p$.
 
-**What to notice.** The coral bar always reaches the dashed line, and no other update does: Eq. (69) checked numerically. When the singular values are very unequal (large $p$), the scaled gradient wastes most of its budget on the top direction, and its bar falls far below. When they are all equal ($p = 0$), $G$ is already a multiple of $UV^\top$, so the first and third bars agree. The elementwise sign respects the coordinates, not the singular directions, so it is never the steepest step in this geometry. The note gives the Frobenius-norm counterpart: there $-G/\|G\|_F$ would win. Which step is "steepest" depends on how step size is measured.
+**What to notice.** The coral bar always reaches the dashed line, and no other update does: the bound above, checked numerically. When the singular values are very unequal (large $p$), the scaled gradient wastes most of its budget on the top direction, and its bar falls far below. When they are all equal ($p = 0$), $G$ is already a multiple of $UV^\top$, so the first and third bars agree. The elementwise sign respects the coordinates, not the singular directions, so it is never the steepest step in this geometry. The note gives the Frobenius-norm counterpart: there $-G/\|G\|_F$ would win. Which step is "steepest" depends on how step size is measured.
 :::
 
 ## 4. Newton–Schulz: orthogonalizing with matrix products only
 
-An exact SVD at every step would be expensive. Muon approximates the polar factor with Newton–Schulz iterations, which use only matrix multiplications. Appendix C-C explains the basic version. Normalize the matrix, $X_0 = M/\|M\|_F$, so that every singular value lies in $(0, 1]$, and iterate (survey Eq. 79)
+An exact SVD at every step would be expensive. Muon approximates the polar factor with Newton–Schulz iterations, which use only matrix multiplications. Appendix C-C explains the basic version. Normalize the matrix, $X_0 = M/\|M\|_F$, so that every singular value lies in $(0, 1]$, and iterate (survey Eq. 50)
 
 $$X_{k+1} = \tfrac12X_k(3I - X_k^\top X_k).$$
 
-If $X_k = U\,\mathrm{diag}(s_i)\,V^\top$, then $X_k^\top X_k = V\,\mathrm{diag}(s_i^2)\,V^\top$, and the iteration keeps $U$ and $V$ and changes each singular value by a scalar map (survey Eq. 80):
+If $X_k = U\,\mathrm{diag}(s_i)\,V^\top$, then $X_k^\top X_k = V\,\mathrm{diag}(s_i^2)\,V^\top$, and the iteration keeps $U$ and $V$ and changes each singular value by a scalar map (survey Eq. 51):
 
 $$s_{i,k+1} = \tfrac12s_{i,k}(3 - s_{i,k}^2).$$
 
@@ -56,18 +56,18 @@ The fixed point $s = 1$ is attractive: the map's derivative, $\tfrac32(1 - s^2)$
 :::
 
 :::read How to read this visual
-**What is drawn.** The 12 singular values of a $16\times12$ momentum matrix, after dividing by its Frobenius norm (grey bars, from $0.687$ down to $0.021$), and the singular values after $k$ Newton–Schulz steps (coloured bars). Because Eq. (80) acts on each singular value separately, the coloured bars are computed exactly by iterating the scalar map on the spectrum. The dashed line at $1$ is the exact polar factor $UV^\top$.
+**What is drawn.** The 12 singular values of a $16\times12$ momentum matrix, after dividing by its Frobenius norm (grey bars, from $0.687$ down to $0.021$), and the singular values after $k$ Newton–Schulz steps (coloured bars). Because Eq. (51) acts on each singular value separately, the coloured bars are computed exactly by iterating the scalar map on the spectrum. The dashed line at $1$ is the exact polar factor $UV^\top$.
 
-**What moves.** The number of steps $k$, and the iteration: the cubic of Eq. (79), or the quintic polynomial with the coefficients used by the Muon implementation.
+**What moves.** The number of steps $k$, and the iteration: the cubic of Eq. (50), or the quintic polynomial with the coefficients used by the Muon implementation.
 
 **What to notice.**
 - **The cubic.** Large singular values reach $1$ within a few steps. Small ones grow by only about $\times1.5$ per step while they are small, so they lag: after 5 steps the smallest is still well below $1$. After about a dozen steps all are essentially $1$; the readout's distance to $UV^\top$ goes to zero. Each step costs two matrix multiplications.
 - **The quintic.** It is tuned to lift small singular values much faster. After 5 steps all of them are already in a band around $1$, but it does not converge to exactly $1$. Muon accepts an approximate orthogonalization in exchange for fewer steps.
 
-The survey stresses that Eq. (79) is a didactic example, not Muon's production code. Muon uses its own coefficients, scaling, iteration counts and safeguards.
+The survey stresses that Eq. (50) is a didactic example, not Muon's production code. Muon uses its own coefficients, scaling, iteration counts and safeguards.
 :::
 
-:::survey Fig. 8 of the survey: matrix geometry in Muon. Orthogonalization changes the singular spectrum of the proposed weight update without estimating the model's Hessian.
+:::survey Fig. 8 of the survey: matrix geometry in Muon. Orthogonalization changes the singular spectrum of the proposed weight update without estimating the model's Hessian; Newton–Schulz iterations are a numerical device for the matrix operation.
 public/survey3/fig8.webp
 :::
 
@@ -77,7 +77,7 @@ public/survey3/fig8.webp
 **Bottom.** The static version of the visual above, for the same $16\times12$ matrix. Grey: the normalized singular values of $M$. Blue: the cubic iteration after 5 steps. Light blue: after 12 steps. Pink: the quintic after 5 steps. The dashed line is the exact polar factor. As in the visual, the cubic lags on small singular values after 5 steps and is essentially exact after 12, and the quintic spreads them in a band around $1$.
 :::
 
-:::survey Fig. 13 of the survey: the scalar Newton–Schulz map of Eq. (80). (a) Cobweb iterations from 0.2 and 1.62, both drawn to the fixed point 1. (b) Distance to one: slow while small, then very fast.
+:::survey Fig. 13 of the survey: the scalar Newton–Schulz map of Eq. (51). (a) Cobweb iterations from 0.2 and 1.62, both drawn to the fixed point 1. (b) Distance to one: slow while small, then very fast.
 public/survey3/fig13.webp
 :::
 

@@ -1,18 +1,18 @@
 ## 1. Gradient descent and SGD
 
-This chapter follows Sections III-A, III-B and III-C of the survey. **[[gd|Gradient descent]]** uses the full gradient (survey Eq. 14):
+This chapter follows Sections III-A, III-B and III-C of the survey. **[[gd|Gradient descent]]** uses the full gradient (survey Eq. 13):
 
 $$\theta_{t+1} = \theta_t - \eta_t\nabla L(\theta_t).$$
 
-The step has two parts. The direction $-\nabla L$ comes from the linear model of chapter 2; the positive scalar $\eta_t$ says how far the update trusts that model. The sign is ordinary subtraction. If a derivative is $g = 8$ and $\eta = 0.1$, the parameter decreases by $0.8$. If $g = -3$, the same rule *increases* it by $0.3$. SGD replaces the full gradient with the minibatch estimate of chapter 5 (survey Eq. 15), $\theta_{t+1} = \theta_t - \eta_t\hat g_t$. It comes from the stochastic-approximation method of Robbins and Monro (1951).
+The step has two parts. The direction $-\nabla L$ comes from the linear model of chapter 2; the positive scalar $\eta_t$ says how far the update trusts that model. The sign is ordinary subtraction. If a derivative is $g = 8$ and $\eta = 0.1$, the parameter decreases by $0.8$. If $g = -3$, the same rule *increases* it by $0.3$. SGD replaces the full gradient with the minibatch estimate of chapter 5 (survey Eq. 14), $\theta_{t+1} = \theta_t - \eta_t\hat g_t$. It comes from the stochastic-approximation method of Robbins and Monro (1951).
 
 ## 2. What GD guarantees on a non-convex loss
 
-A basic guarantee needs nothing beyond chapter 3. Suppose $L$ is $\beta$-smooth and bounded below by $L_*$, and take $\eta \le 1/\beta$. Each step lowers the loss by at least $\tfrac{\eta}{2}\|g_t\|^2$ (Eq. 7 of chapter 3). Add these inequalities for $t = 0, \dots, T-1$; the losses telescope (survey Eqs. 16 and 17):
+A basic guarantee needs nothing beyond chapter 3. Suppose $L$ is $\beta$-smooth and bounded below by $L_*$, and take $\eta \le 1/\beta$. Each step lowers the loss by at least $\tfrac{\eta}{2}\|g_t\|^2$ (Eq. 7 of chapter 3). Add these inequalities for $t = 0, \dots, T-1$; the losses telescope (survey Section III-A):
 
 $$\frac{\eta}{2}\sum_{t=0}^{T-1}\|g_t\|^2 \le L(\theta_0) - L(\theta_T) \le L(\theta_0) - L_*.$$
 
-The smallest of $T$ numbers is at most their average, so (survey Eq. 18)
+The smallest of $T$ numbers is at most their average, so (survey Eq. 15)
 
 $$\boxed{\min_{0 \le t < T}\|g_t\|^2 \le \frac{2[L(\theta_0) - L_*]}{\eta T}.}$$
 
@@ -22,18 +22,18 @@ To make the gradient norm at most $\epsilon$, it is enough that the right side i
 :::
 
 :::read How to read this visual
-**What is drawn.** For gradient descent with $\eta = 1/L$ on a one-dimensional non-convex function (this visual calls the smoothness constant $L$), two curves against the number of steps $T$, both axes logarithmic. Coral: the smallest gradient size actually seen in the first $T$ steps. Violet: the guarantee $\sqrt{2L(f(x_0) - f^*)/T}$, the square root of Eq. (18).
+**What is drawn.** For gradient descent with $\eta = 1/L$ on a one-dimensional non-convex function (this visual calls the smoothness constant $L$), two curves against the number of steps $T$, both axes logarithmic. Coral: the smallest gradient size actually seen in the first $T$ steps. Violet: the guarantee $\sqrt{2L(f(x_0) - f^*)/T}$, the square root of Eq. (15).
 
 **What moves.** The starting point $x_0$.
 
 **What to try.** Start near $x_0 = 0$, a local maximum where the gradient is tiny.
 
-**What to notice.** The real run is always below the guarantee, as Eq. (18) promises, and often far below. The bound is a worst case over all smooth functions, so on any particular function it is loose. The readout compares the step at which the bound promises a gradient below $10^{-3}$ with the step at which GD actually got there.
+**What to notice.** The real run is always below the guarantee, as Eq. (15) promises, and often far below. The bound is a worst case over all smooth functions, so on any particular function it is loose. The readout compares the step at which the bound promises a gradient below $10^{-3}$ with the step at which GD actually got there.
 :::
 
 ## 3. Momentum: why store past directions?
 
-On a narrow valley, the trouble with plain GD is not only that steps are small. Gradients across the steep direction alternate in sign, so the iterates zig-zag from wall to wall, while the shallow direction creeps forward. Polyak's **[[heavy-ball|heavy-ball method]]** keeps a velocity (survey Eqs. 19 and 20):
+On a narrow valley, the trouble with plain GD is not only that steps are small. Gradients across the steep direction alternate in sign, so the iterates zig-zag from wall to wall, while the shallow direction creeps forward. Polyak's **[[heavy-ball|heavy-ball method]]** keeps a velocity (survey Eqs. 16 and 17):
 
 $$v_t = \mu v_{t-1} + g_t, \qquad \theta_{t+1} = \theta_t - \eta v_t, \qquad 0 \le \mu < 1.$$
 
@@ -52,11 +52,11 @@ Unrolling the recurrence (with $v_{-1} = 0$) gives $v_t = g_t + \mu g_{t-1} + \m
 
 ## 4. Momentum can overshoot
 
-Momentum also adds a dynamical state, and states can oscillate. Take the one-dimensional quadratic $L(\theta) = \lambda\theta^2/2$ with full gradients $g_t = \lambda\theta_t$. Eliminating the velocity with $\theta_t - \theta_{t-1} = -\eta v_{t-1}$ gives a two-step recurrence (survey Eq. 21):
+Momentum also adds a dynamical state, and states can oscillate. Take the one-dimensional quadratic $L(\theta) = \lambda\theta^2/2$ with full gradients $g_t = \lambda\theta_t$. Eliminating the velocity with $\theta_t - \theta_{t-1} = -\eta v_{t-1}$ gives a two-step recurrence (survey Section III-B):
 
 $$\theta_{t+1} = (1 + \mu - \eta\lambda)\,\theta_t - \mu\,\theta_{t-1}.$$
 
-Try solutions of the form $\theta_t = r^t$. Substituting gives the characteristic polynomial (survey Eq. 22)
+Try solutions of the form $\theta_t = r^t$. Substituting gives the characteristic polynomial (survey Section III-B)
 
 $$r^2 - (1 + \mu - \eta\lambda)\,r + \mu = 0.$$
 
@@ -86,7 +86,7 @@ Its two roots decide everything: if both have $|r| < 1$ the iterates contract; c
 
 ## 5. Nesterov: the gradient at a look-ahead point
 
-Nesterov acceleration changes *where* the gradient is evaluated. One common deep-learning form is (survey Eqs. 23 and 24)
+Nesterov acceleration changes *where* the gradient is evaluated. One common deep-learning form is (survey Eqs. 18 and 19)
 
 $$y_t = \theta_t + \mu(\theta_t - \theta_{t-1}), \qquad \theta_{t+1} = y_t - \eta\nabla L(y_t).$$
 
@@ -97,11 +97,11 @@ public/survey3/fig4.webp
 :::
 
 :::read How to read this figure
-**(a)** Contour lines of $L = \tfrac12(25x^2 + y^2)$, with 40 steps of SGD (blue) and heavy ball with $\mu = 0.8$ (orange), both with $\eta = 0.07$ and the same Gaussian gradient noise, from the star. SGD zig-zags across the steep direction and creeps along the shallow one. The heavy ball travels along the valley much faster, but swings past the minimum.
+**(a)** The valley $L = \tfrac12(25x^2 + y^2)$ as a 3D surface (height $\sqrt{L}$), with 40 steps of SGD (blue) and heavy ball with $\mu = 0.8$ (orange), both with $\eta = 0.07$ and the same Gaussian gradient noise, from the white ball. SGD zig-zags across the steep walls and creeps along the floor. The heavy ball travels along the valley much faster, but swings past the bottom.
 
-**(b)** The one-dimensional recurrence of Eq. (21) with $\eta\lambda = 0.3$, for $\mu = 0, 0.6, 0.9, 0.97$. Without momentum, $\theta_t$ decays smoothly. With more momentum, it oscillates, and at $\mu = 0.97$ the oscillation lasts for the whole window.
+**(b)** The one-dimensional recurrence above with $\eta\lambda = 0.3$, for $\mu = 0, 0.6, 0.9, 0.97$. Without momentum, $\theta_t$ decays smoothly. With more momentum, it oscillates, and at $\mu = 0.97$ the oscillation lasts for the whole window.
 
-**(c)** The largest root size $\max|r|$ of Eq. (22) over the plane of $\eta\lambda$ and $\mu$: blue where it is below one (contracts), red where it is above (grows). The black contour $|r| = 1$ coincides with the dashed line $\eta\lambda = 2(1 + \mu)$, the survey's stability condition.
+**(c)** Where it settles: over the plane of $\eta\lambda$ and $\mu$, green where every root of the characteristic polynomial above has size below one, so $\theta_t$ settles, and red where one is larger, so $\theta_t$ blows up. The black line $\eta\lambda = 2(1 + \mu)$ is the boundary, the survey's stability condition.
 :::
 
 :::problem The next step

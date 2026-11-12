@@ -1,4 +1,4 @@
-// Chapter 6 (survey Sections II-G, II-H). New visual 'metric': Eq. (12)-(13) drawn literally. Numbers in
+// Chapter 6 (survey Sections II-G, II-H). New visual 'metric': Eq. (12) and its argmin form drawn literally. Numbers in
 // scripts/check-math/guide3_numbers.py.
 import { HEX } from '../../src/lib/atlas3d.js';
 
@@ -28,7 +28,7 @@ const COL = { I: HEX.opt2, D: HEX.ball, H: HEX.opt3, S: HEX.flat };
 
 const metric = {
   title: 'One formula, four optimizers: the step that minimizes g·Δ + ΔᵀMΔ/(2η)',
-  caption: 'At the white point, every method sees the same gradient g. Each choice of metric M draws a different ellipse ΔᵀMΔ = r² of "equally long" steps, and the step Δ = −ηM⁻¹g of Eq. (13) is the point of that ellipse where the linear model g·Δ is lowest. The dashed line through the tip is the level line of the linear model: it just touches the ellipse there.',
+  caption: 'At the white point, every method sees the same gradient g. Each choice of metric M draws a different ellipse ΔᵀMΔ = r² of "equally long" steps, and the step Δ = −ηM⁻¹g of Eq. (12) is the point of that ellipse where the linear model g·Δ is lowest. The dashed line through the tip is the level line of the linear model: it just touches the ellipse there.',
   note: 'L = ½θᵀHθ with curvatures 6 and 0.6 along axes turned by 30°; grey curves are its level sets, green is the minimum. r is set to η√(gᵀM⁻¹g), so the ellipse passes through the step.',
   legend: [[HEX.opt2, 'M = I'], [HEX.ball, 'M = diag(H)'], [HEX.opt3, 'M = H'], [HEX.flat, 'M = diag(|g|)'], [HEX.good, 'minimum']],
   mode: '2d',

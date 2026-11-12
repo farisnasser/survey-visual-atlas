@@ -40,15 +40,15 @@ The first two terms are the deterministic decrease of chapter 3. The last term i
 
 ## 3. An explicit step-size choice (Appendix C-B)
 
-Appendix C-B turns Eq. (11) into a complete bound. Let $\Delta_0 = L(\theta_0) - L_*$ be the initial gap to the lowest possible loss, use a constant step $\eta \le 1/\beta$ and batch size $B$. Then $1 - \beta\eta/2 \ge 1/2$, and Eq. (11) simplifies to (survey Eq. 75)
+Appendix C-B turns Eq. (11) into a complete bound. Let $\Delta_0 = L(\theta_0) - L_*$ be the initial gap to the lowest possible loss, use a constant step $\eta \le 1/\beta$ and batch size $B$. Then $1 - \beta\eta/2 \ge 1/2$, and Eq. (11) simplifies to (survey Eq. 46)
 
 $$\mathbb{E}_t[L_{t+1}] \le L_t - \frac{\eta}{2}\|g_t\|^2 + \frac{\beta\eta^2\sigma^2}{2B}.$$
 
-Take full expectations, add the inequalities for $t = 0, \dots, T-1$ (the losses telescope), use $L_T \ge L_*$, and divide by $\eta T/2$ (survey Eq. 76):
+Take full expectations, add the inequalities for $t = 0, \dots, T-1$ (the losses telescope), use $L_T \ge L_*$, and divide by $\eta T/2$ (survey Eq. 47):
 
 $$\frac{1}{T}\sum_{t=0}^{T-1}\mathbb{E}\|g_t\|^2 \le \frac{2\Delta_0}{\eta T} + \frac{\beta\eta\sigma^2}{B}.$$
 
-The first term shrinks as the step grows; the second grows. Setting the derivative in $\eta$ to zero (survey Eq. 77) balances them at (survey Eq. 78)
+The first term shrinks as the step grows; the second grows. Setting the derivative in $\eta$ to zero (survey Eq. 48) balances them at (survey Eq. 49)
 
 $$\eta_{\mathrm{bal}} = \sqrt{\frac{2\Delta_0 B}{\beta\sigma^2 T}}, \qquad \eta = \min\left\{\frac1\beta, \eta_{\mathrm{bal}}\right\}.$$
 
@@ -58,7 +58,7 @@ With this step, both terms are of order $T^{-1/2}$. So, through this particular 
 :::
 
 :::read How to read this visual
-**What is drawn.** The right-hand side of Eq. (76) as a function of $\eta$, on log-log axes, with the illustrative constants $\Delta_0 = \beta = \sigma^2 = 1$. Blue dashed: the progress term $2\Delta_0/(\eta T)$. Red dashed: the noise term $\beta\eta\sigma^2/B$. White: their sum, the bound. The amber line and dot mark the chosen step $\min\{1/\beta, \eta_{\mathrm{bal}}\}$; the faint line marks $1/\beta$.
+**What is drawn.** The right-hand side of Eq. (47) as a function of $\eta$, on log-log axes, with the illustrative constants $\Delta_0 = \beta = \sigma^2 = 1$. Blue dashed: the progress term $2\Delta_0/(\eta T)$. Red dashed: the noise term $\beta\eta\sigma^2/B$. White: their sum, the bound. The amber line and dot mark the chosen step $\min\{1/\beta, \eta_{\mathrm{bal}}\}$; the faint line marks $1/\beta$.
 
 **The side chart.** The value of the bound at the chosen step as $T$ grows (white), against the noiseless bound $2\Delta_0\beta/T$ of deterministic GD with $\eta = 1/\beta$ (blue).
 
@@ -67,7 +67,7 @@ With this step, both terms are of order $T^{-1/2}$. So, through this particular 
 **What to notice.** The bound is lowest where the two dashed lines cross, which is $\eta_{\mathrm{bal}}$. As $T$ grows, the crossing moves to smaller steps: more iterations call for a smaller step. A larger batch moves the crossing to the right. In the side chart, the white line falls with slope $-\tfrac12$ (order $T^{-1/2}$) once $\eta_{\mathrm{bal}} < 1/\beta$, while the noiseless line falls with slope $-1$. That difference in slopes is the $O(\epsilon^{-4})$ versus $O(\epsilon^{-2})$ gap.
 :::
 
-:::survey Fig. 12 of the survey: the bound of Eq. (76) with illustrative constants. (a) Its two terms against η; (b) the resulting bound against T.
+:::survey Fig. 12 of the survey: the bound of Eq. (47) with illustrative constants. (a) Its two terms against η; (b) the resulting bound against T.
 public/survey3/fig12.webp
 :::
 

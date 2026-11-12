@@ -1,4 +1,4 @@
-// Chapter 15 (survey Sections V-D, V-E). New visual 'hutch' (Eq. 65); numbers in scripts/check-math/guide3_numbers.py.
+// Chapter 15 (survey Sections V-D, V-E). New visual 'hutch' (survey Section V-E); numbers in scripts/check-math/guide3_numbers.py.
 // Reused: crash-course 'clip' (course_adaptive.py).
 import { HEX } from '../../src/lib/atlas3d.js';
 import { rng } from '../../src/lib/math.js';
@@ -16,7 +16,7 @@ const relErr = k => Math.hypot(...RUN[k - 1].map((v, i) => v - DIAG[i])) / NRM;
 
 const hutch = {
   title: 'Hutchinson\'s estimator: the Hessian diagonal from random ±1 probes',
-  caption: 'For a random vector z with independent ±1 entries, z ⊙ (Hz) is an unbiased estimate of diag(H) (Eq. 65); each probe costs one Hessian-vector product. Bars: the true diagonal (white outline) and the average of the first k probes (coral, or red where the estimate is negative). The chart shows the relative error as k grows.',
+  caption: 'For a random vector z with independent ±1 entries, z ⊙ (Hz) is an unbiased estimate of diag(H) (survey Section V-E); each probe costs one Hessian-vector product. Bars: the true diagonal (white outline) and the average of the first k probes (coral, or red where the estimate is negative). The chart shows the relative error as k grows.',
   note: 'A fixed, seeded 12 × 12 symmetric H with some negative diagonal entries; one fixed probe sequence. Dashed: the exact expected error √(Σ_{i≠j} H²ᵢⱼ / k)/‖diag H‖, since one probe\'s error in entry i has variance Σ_{j≠i} H²ᵢⱼ.',
   legend: [['#e8ecf8', 'true diag(H)'], [HEX.ball, 'estimate, positive'], [HEX.neg, 'estimate, negative']],
   mode: '2d',
