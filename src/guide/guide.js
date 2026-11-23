@@ -8,7 +8,7 @@ import { Widget } from '../learn/widget.js';
 // Two guides: survey v3 (default, guide/) and the earlier survey v2 (guide.html?v=2, guide-v2/).
 const V2 = new URLSearchParams(location.search).get('v') === '2';
 const BASE = V2 ? 'guide-v2' : 'guide';
-const PDF = V2 ? 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf' : 'public/survey3/Optimization_Methods_Survey_with_Figures.pdf';
+const PDF = V2 ? 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf' : 'public/survey3/Optimization_Methods_Survey.pdf';
 const MAP = V2 ? 'guide.html?v=2' : './';
 const OTHER = V2 ? { href: './', label: 'Current survey guide' } : { href: 'guide.html?v=2', label: 'Previous survey (v2) guide' };
 

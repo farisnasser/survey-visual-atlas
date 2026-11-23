@@ -1,10 +1,18 @@
-## 1. Adafactor: factor the second moment
+## 1. Adafactor: Adam's memory problem for large matrices
 
-This chapter follows Sections III-I, III-J and III-K of the survey. An $m \times n$ weight matrix has $mn$ parameters, and Adam stores $mn$ first-moment and $mn$ second-moment values on top of them. **Adafactor** cuts the dominant [[optimizer-state|optimizer state]] by storing only the row and column sums of the second-moment matrix. If $V$ is a nonnegative $m\times n$ second-moment matrix, its [[adafactor-factored|factored reconstruction]] is (survey Section III-I)
+This chapter follows Sections III-I, III-J and III-K of the survey. Take a layer with weight matrix $W \in \mathbb{R}^{m\times n}$. Adam keeps a second-moment value for every weight, $mn$ numbers for that statistic alone: a $1000\times1000$ matrix needs a million. **[[adafactor-factored|Adafactor]]** asks whether that matrix of squared-gradient scales can be approximated by two small vectors, one along the rows and one along the columns.
 
-$$\widetilde V_{ij} = \frac{r_i c_j}{\sum_k r_k}, \qquad r_i = \sum_j V_{ij}, \qquad c_j = \sum_i V_{ij}.$$
+**A toy example.** Take the squared-gradient matrix
 
-Why this formula? If $V$ were exactly a product $V_{ij} = u_i w_j$, then $r_i = u_i\sum_j w_j$, $c_j = w_j\sum_i u_i$ and $\sum_k r_k = \sum_i u_i\sum_j w_j$. Substituting gives $\widetilde V_{ij} = u_i w_j = V_{ij}$: the reconstruction is exact. For any other $V$ it is the best guess of that rank-one form. It is a reconstruction of the *second-moment scale*, not a factorization of the weight matrix or of the Hessian. Storing $r \in \mathbb{R}^m$ and $c \in \mathbb{R}^n$ takes $m + n$ numbers instead of $mn$.
+$$Q = \begin{bmatrix}4 & 8 & 12\\ 2 & 4 & 6\end{bmatrix}.$$
+
+Its row sums are $r = (24, 12)^\top$, its column sums $c = (6, 12, 18)^\top$, and its total is $36$. A simple rank-one reconstruction is
+
+$$\tilde Q = \frac{r\,c^\top}{\sum_i r_i} = \frac{1}{36}\begin{bmatrix}24\\12\end{bmatrix}\begin{bmatrix}6 & 12 & 18\end{bmatrix} = \begin{bmatrix}4 & 8 & 12\\ 2 & 4 & 6\end{bmatrix}.$$
+
+It rebuilds this matrix exactly, because its rows follow a rank-one pattern. Real squared-gradient matrices are not rank one, so in practice this is an approximation, with its own normalization and stabilization details.
+
+**What was saved?** Instead of $mn$ statistics, about $m + n$: for a $1000\times1000$ matrix, roughly $2000$ numbers instead of a million for that statistic. Practical versions add update clipping and scale-aware learning rates, and may drop the first moment to save even more, so the real saving depends on the configuration and the shapes of the tensors.
 
 :::viz factor
 :::
@@ -17,15 +25,19 @@ Why this formula? If $V$ were exactly a product $V_{ij} = u_i w_j$, then $r_i = 
 **What to notice.** At $s = 0$, $V$ is exactly rank one; the two maps are identical and the ratio map is uniform (the readout's error is zero). As $s$ grows, $V$ gets cell-by-cell detail that no row-times-column product can reproduce, and the reconstruction keeps only the overall pattern. The storage drops from 96 numbers to 20 at every $s$. How faithful the reconstruction is depends on the matrix's structure, which is the survey's caveat.
 :::
 
-Practical Adafactor adds more choices, such as update clipping and relative step sizes, and drops momentum in its lean configuration. The saving depends on shape: the ratio $(m+n)/(mn) = 1/m + 1/n$ is small for large matrices, but vectors cannot be factored two-sidedly at all. "Sublinear memory" describes the second-moment storage for large matrices, not zero extra memory overall.
+:::key Remember III-I
+Adafactor is Adam-like adaptive scaling with a memory-efficient row and column approximation to the squared-gradient statistics. It is not a Hessian estimate, and it trades precision of the scale for memory.
+:::
 
-## 2. Lion: a sign update with one state
+## 2. Lion: sign-based momentum with one main state
 
-**Lion** was not derived by approximating a Hessian; it was found by a symbolic search over programs. A simplified form of its update is (survey Eqs. 29 to 31)
+Adam carries two moment states. **[[lion|Lion]]** goes the other way and simplifies the update itself: it keeps momentum-like history and uses only the *sign* of a blended direction (survey Eqs. 29 to 31):
 
-$$c_t = \beta_1 m_{t-1} + (1 - \beta_1)\hat g_t, \qquad \theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta\,\mathrm{sign}(c_t), \qquad m_t = \beta_2 m_{t-1} + (1 - \beta_2)\hat g_t.$$
+$$c_t = \beta_1 m_{t-1} + (1 - \beta_1)\hat g_t, \qquad \theta_{t+1} = (1 - \eta\lambda)\theta_t - \eta\,\operatorname{sign}(c_t), \qquad m_t = \beta_2 m_{t-1} + (1 - \beta_2)\hat g_t.$$
 
-The two coefficients play different roles. $\beta_1$ blends the momentum with the fresh gradient to decide the **sign** of the step. $\beta_2$ updates the momentum itself. Except at zero, every coordinate moves by exactly $\eta$ (before weight decay). The gradient's magnitude influences the sign through the momentum, but it never scales the step. Lion keeps one momentum array instead of Adam's two.
+The two coefficients play different roles: $\beta_1$ blends for the current step, $\beta_2$ updates the stored state.
+
+**What taking the sign does.** Suppose $c_t = (8, -0.2, 3)^\top$. Then $\operatorname{sign}(c_t) = (1, -1, 1)^\top$, and with $\eta = 0.01$ (ignoring decay) the step is $(-0.01, +0.01, -0.01)^\top$. Every nonzero coordinate moves by exactly $\eta$; only the direction differs. Gradient magnitudes still shape the accumulated direction, but not the size of the final step. This is neither ordinary gradient normalization nor Hessian preconditioning: it deliberately discards magnitude information.
 
 :::viz lion
 :::
@@ -38,15 +50,15 @@ The two coefficients play different roles. $\beta_1$ blends the momentum with th
 **What to notice.** The bars never change height, whatever the gradient's size: Lion's update magnitude is fixed. The momentum averages away much of the noise, so the sign of $c_t$ is right far more often than the sign of the raw gradient. The readout counts both. Set $\beta_1 = 0$: the blend becomes the raw gradient and the count drops to the sign-SGD count. Set $\beta_2$ small: the momentum forgets quickly and becomes noisy too. Because the step size is $\eta$ in every coordinate, Lion's learning rate and weight decay must be tuned for that magnitude, not copied from AdamW.
 :::
 
-The Lion authors report gains on particular vision, multimodal and diffusion settings, and tasks where gains were small or inconclusive. So, the survey concludes, it would be misleading to call Lion categorically better than AdamW. Its memory saving is an accounting identity; its runtime and success depend on the model, hardware and tuning.
+Lion was found by symbolic program search, and its original study reported gains in several settings. A compact state is not automatically better, though: the fixed step size changes how the learning rate and the weight decay must be tuned, and results depend on the task.
 
-## 3. Other first-order designs
+:::key Remember III-J
+Lion uses momentum to decide the sign of each move instead of keeping Adam's separate per-coordinate scale. One state vector, but magnitudes are thrown away.
+:::
 
-Optimizer development is not one monotone sequence. The survey names three more designs, each changing something other than the scaling:
+## 3. Other modern designs and a synthesis
 
-- **D-adaptation** sets the learning rate automatically, with guarantees in specific convex analyses.
-- **Schedule-free training** combines interpolation and averaging, so no stopping-time-dependent schedule is needed.
-- **Lookahead** separates fast inner steps from a slower averaged state.
+First-order design did not stop there. D-Adaptation aims to reduce manual learning-rate selection in specific theoretical settings; schedule-free optimization reduces reliance on predefined learning-rate schedules; Lookahead combines fast weights with a slowly moving copy. Variants such as RAdam, AdaBelief and AdaBound change how gradient history is used for stability or scaling. None of these needs to be treated as a separate mathematical framework: they change what is remembered, forgotten, or scaled.
 
 :::viz lookahead
 :::
@@ -70,22 +82,30 @@ Optimizer development is not one monotone sequence. The survey names three more 
 **What to notice.** No learning-rate schedule and no stopping time are set in advance, yet the averaged $x$ keeps getting closer to the minimum while $z$ stays noisy. $\beta = 0$ is classical Polyak–Ruppert averaging.
 :::
 
-None of these designs reduces to "newer methods converge faster". An optimizer is also only one part of the training system: throughput depends on batch size, communication, precision and where parameters live.
+**The complete first-order roadmap.**
 
-## 4. A synthesis of the first-order families
+| method | what it remembers | why it exists | key limitation |
+|---|---|---|---|
+| GD | nothing | follow the full gradient | full-gradient cost; conditioning |
+| SGD | nothing | cheaper minibatch updates | sampling noise |
+| momentum | a running direction | use persistent movement | overshoot; one state vector |
+| Nesterov | the previous movement | look-ahead gradient | tuning; guarantees need assumptions |
+| AdaGrad | cumulative squares | per-coordinate scales | old history never fades |
+| RMSProp | moving squares | scales follow recent history | noise and tuning |
+| Adam | first and second moments | direction plus scaling | two states; convergence caveats |
+| AMSGrad | running maximum of $v$ | control one scaling instability | not a universal guarantee |
+| AdamW | Adam states, decoupled decay | separate weight shrinkage | still adaptive-scaling dependent |
+| Adafactor | factored second moment | less optimizer memory | approximation and tuning |
+| Lion | one momentum state | simple sign update | magnitudes discarded |
 
-Section III-K summarizes RQ1 by what each design stores:
+:::idea In plain English
+Section III is the story of making better use of gradients without ever computing the loss's Hessian. Each optimizer decides what to remember, what to forget, what to scale, and how much memory to spend doing it.
+:::
 
-| method | stored history | how the gradient is transformed |
-|---|---|---|
-| SGD | nothing beyond the iterate | scaled by one step size |
-| momentum | one vector | discounted sum of past gradients |
-| Adam | two vectors | momentum divided by a per-coordinate scale |
-| Adafactor | row and column sums per matrix | divided by a factored scale |
-| Lion | one vector | sign of a momentum blend |
-
-All of them use only gradients, but their geometry and memory differ. Their success raises the question of RQ2: what more can be gained from true curvature, or from interactions between coordinates?
+:::key What this section prepares us for
+Every method so far uses gradients and their history. None describes how the gradient *changes* across directions, which is exactly the information that matters in narrow or rotated valleys. That is curvature, and Section IV turns to it.
+:::
 
 :::problem The next step
-Section IV of the survey takes the second derivative seriously, starting with Newton's method.
+Chapter 10 begins Section IV with Newton's method: what the Hessian adds, and what it costs.
 :::

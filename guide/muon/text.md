@@ -1,28 +1,64 @@
-## 1. SOAP: Adam in a rotated matrix basis
+## 1. SOAP: Adam-style adaptation in a rotated basis
 
-This chapter follows Sections V-F, V-G and V-H of the survey, with Appendices A-C and C-C. **[[soap|SOAP]]** builds on a connection between Shampoo's eigenbases and familiar adaptive updates. Suppose Shampoo's left and right factors (chapter 14) have eigendecompositions $L = U\Lambda U^\top$ and $R = V\Gamma V^\top$. The gradient expressed in their rotated coordinates is (survey Eq. 38)
+This chapter follows Sections V-F, V-G and V-H of the survey. **[[soap|SOAP]]** combines two familiar ideas: Adam adapts coordinates from gradient history, and Shampoo finds informative matrix directions. Its question: what if Adam's per-coordinate adaptation were done in a better coordinate system?
 
-$$\widetilde G = U^\top GV.$$
+In chapter 4's rotated valley the important directions are diagonal combinations of the weights, while Adam's second moments live on the original axes. A change of basis does not change the gradient information, only the numbers that describe it, like describing the same walk in east/north coordinates or along a diagonal road.
 
-SOAP accumulates Adam-style moments of $\widetilde G$ in this evolving coordinate system, takes an adaptive step there, and rotates the step back to the original weight matrix. It is not merely "Adam plus an SVD": the update depends on the preconditioner's eigenbasis and on how that basis is tracked across steps. Its motivation is visible in chapter 4. A diagonal method fails on a rotated valley; in a basis aligned with the valley, a diagonal method is exactly right. SOAP lets Shampoo choose the basis and Adam do the per-coordinate scaling in it.
+**Where the basis comes from.** Shampoo's factors are symmetric, so $L = U\Lambda U^\top$ and $R = V\Gamma V^\top$, with eigenvectors $U$ (row side) and $V$ (column side). SOAP expresses the gradient in that basis (survey Eq. 38),
 
-In the cited language-model experiments (360M and 660M parameters, large batch), SOAP's authors report over 40% fewer iterations and over 35% lower wall-clock time than AdamW. The two percentages differ, and the survey reads that as a lesson: faster per-step progress does not translate one-for-one into elapsed time. The basis is updated only periodically, and that frequency becomes another hyperparameter.
+$$\widetilde G_t = U^\top G_t V,$$
 
-## 2. Muon: orthogonalize the update
+runs Adam-style moment updates on $\widetilde G_t$, and rotates the resulting update $\widetilde D$ back: $D = U\widetilde DV^\top$ and $W \leftarrow W - \eta D$. Gradient, rotate, adapt, rotate back, update.
 
-**Muon** is the survey's most instructive modern case: it uses a matrix-valued transformation, yet it is not a Hessian approximation. It applies momentum to a hidden layer's weight gradients, then approximately orthogonalizes the resulting update matrix. Write the momentum matrix's singular value decomposition (survey Eq. 39), $M = U\Sigma V^\top$. The semi-orthogonal **[[polar-factor|polar factor]]** is (survey Eq. 40)
+**A change of basis in numbers.** Let $G = \begin{bmatrix}3 & 1\\ 1 & 3\end{bmatrix}$ and $U = V = \tfrac{1}{\sqrt2}\begin{bmatrix}1 & 1\\ 1 & -1\end{bmatrix}$ (orthogonal, and here $U^\top = U$). Then
 
-$$\mathrm{msign}(M) = UV^\top.$$
+$$\widetilde G = U^\top G V = \begin{bmatrix}4 & 0\\ 0 & 2\end{bmatrix}:$$
 
-Where $M$ has nonzero singular values, this replaces all of them by one while keeping the left and right singular directions. So Muon keeps *which directions* the update acts in, and throws away *how strongly* it acts in each. That is different from elementwise normalization, and different from Adam's coordinate scaling.
+a gradient with off-diagonal entries became diagonal in the new basis. (SOAP's basis comes from accumulated statistics, so it does not diagonalize every gradient.) If the adaptation there produces, say, $\widetilde D = \mathrm{diag}(1, 2)$, rotating back gives
 
-## 3. Why the polar factor? Steepest descent in the spectral norm
+$$D = U\widetilde DV^\top = \begin{bmatrix}1.5 & -0.5\\ -0.5 & 1.5\end{bmatrix},$$
 
-The linearized change of the loss under a matrix step $\Delta$ is $\langle G, \Delta\rangle_F = \mathrm{tr}(G^\top\Delta)$. Now limit the step by its **[[spectral-norm|spectral norm]]** $\|\Delta\|_2$, its largest singular value. Von Neumann's trace inequality gives (survey Section V-G)
+an update that mixes the original weights even though it was diagonal in the rotated basis.
 
-$$\min_{\|\Delta\|_2 \le \eta}\langle G, \Delta\rangle_F = -\eta\sum_i\sigma_i(G),$$
+**Not simply Shampoo.** Shampoo applies the inverse roots directly, $L^{-1/4}GR^{-1/4}$; SOAP uses the eigenbasis of similar statistics and applies Adam's moments there. Updating the basis has a cost, and the stored moments must be handled consistently when it changes. In the original study, SOAP reported more than 40% fewer iterations and over 35% less wall-clock time than AdamW in large-batch language-model settings, results tied to that setup.
 
-attained by $\Delta = -\eta UV^\top$ when $G = U\Sigma V^\top$. Appendix A-C states the same fact through trace duality: $|\langle G, \Delta\rangle_F| \le \|G\|_*\|\Delta\|_2$, where $\|G\|_* = \sum_i\sigma_i(G)$ is the nuclear norm. In words, the polar factor is steepest descent for the linearized loss *when step size is measured by the spectral norm*. This is a different geometry from Euclidean steepest descent ($-G$), and a different mechanism from multiplying by $H^{-1}$. It is a fact about one linearized step, not a convergence theorem for networks.
+:::key Remember V-F
+SOAP changes *where* coordinate-wise adaptation happens: in a basis defined by Shampoo-like statistics, at the cost of tracking that basis.
+:::
+
+## 2. Muon: what an update matrix's singular values are
+
+**[[muon|Muon]]** does not approximate the Hessian or the Fisher matrix. It changes the singular-value structure of the proposed update. Start with $G = \mathrm{diag}(4, 1)$: GD with $\eta = 0.1$ takes $-0.1G = \mathrm{diag}(-0.4, -0.1)$, four times more along the first direction. Muon's question is different from Newton's: should the singular values of the update decide how strongly each matrix direction is used?
+
+**Orthogonality.** A square orthogonal matrix has $Q^\top Q = I$ and preserves lengths: $Q = \begin{bmatrix}0 & -1\\ 1 & 0\end{bmatrix}$ turns $(3, 4)$ into $(-4, 3)$, both of length $5$.
+
+**The singular value decomposition.** Every real matrix can be written (survey Eq. 39)
+
+$$M = U\Sigma V^\top.$$
+
+Picture the matrix turning a circle into an ellipse: $V$ gives the special input directions, $\Sigma$ the nonnegative stretches along them, $U$ the output directions. For $M = \mathrm{diag}(4, 1)$ the singular values are $4$ and $1$. Muon's idealized step replaces every nonzero singular value by one (survey Eq. 40):
+
+$$\operatorname{msign}(M) = UV^\top,$$
+
+the **[[polar-factor|polar factor]]**; here $U = V = I$, so it is $I$. Applied to $G$ above, the step becomes $-\eta I = \mathrm{diag}(-0.1, -0.1)$ instead of $\mathrm{diag}(-0.4, -0.1)$: not a smaller learning rate, but a change in the *relative* sizes of the singular directions. Real Muon orthogonalizes a momentum matrix, $M_t = \beta M_{t-1} + (1 - \beta)G_t$, and steps by $-\eta\operatorname{msign}(M_t)$, with extra choices such as Nesterov momentum, scaling and weight decay.
+
+:::survey Fig. 8 of the survey: matrix geometry in Muon. Orthogonalization changes the singular spectrum of the proposed weight update without estimating the model's Hessian; Newton–Schulz iterations are a numerical device for the matrix operation.
+public/survey3/fig8.webp
+:::
+
+:::read How to read this figure
+**Top.** Muon's pipeline: the gradient $G_t$ feeds a momentum $M_t = \beta M_{t-1} + G_t$, which is orthogonalized (by SVD or Newton–Schulz) into the update $\Delta W = -\eta UV^\top$.
+
+**Bottom.** The static version of the visual above, for the same $16\times12$ matrix. Grey: the normalized singular values of $M$. Blue: the cubic iteration after 5 steps. Light blue: after 12 steps. Pink: the quintic after 5 steps. The dashed line is the exact polar factor. As in the visual, the cubic lags on small singular values after 5 steps and is essentially exact after 12, and the quintic spreads them in a band around $1$.
+:::
+
+## 3. Why equalizing singular values can be useful
+
+For a matrix update the linear model is $L(W + \Delta W) \approx L(W) + \langle G, \Delta W\rangle_F$, where $\langle\cdot,\cdot\rangle_F$ multiplies matching entries and adds them. With $G = \mathrm{diag}(4, 1)$ that is $4\Delta w_{11} + \Delta w_{22}$. Now limit the **[[spectral-norm|spectral norm]]**, the largest singular value, to $\|\Delta W\|_2 \le 0.1$. Both $\Delta W_A = \mathrm{diag}(-0.1, 0)$ and $\Delta W_B = \mathrm{diag}(-0.1, -0.1)$ fit the budget, but they predict changes of $-0.4$ and $-0.5$: the second uses both directions for a larger decrease without exceeding the largest-singular-value limit. In general, for $G = U\Sigma V^\top$,
+
+$$\min_{\|\Delta W\|_2 \le \eta}\langle G, \Delta W\rangle_F = -\eta\sum_i\sigma_i(G), \qquad \text{attained by } \Delta W = -\eta\,UV^\top.$$
+
+That is the spectral-norm reading of Muon's step. It is exact for the current gradient's SVD in one linearized step; practical Muon orthogonalizes momentum, so it is not a guarantee for every real step.
 
 :::viz spectral
 :::
@@ -42,72 +78,53 @@ The dashed line is the bound $\sum_i\sigma_i(G)$ above.
 
 ## 4. Newton–Schulz: orthogonalizing with matrix products only
 
-An exact SVD at every step would be expensive. Muon approximates the polar factor with Newton–Schulz iterations, which use only matrix multiplications. Appendix C-C explains the basic version. Normalize the matrix, $X_0 = M/\|M\|_F$, so that every singular value lies in $(0, 1]$, and iterate (survey Eq. 50)
+A full SVD at every step would be expensive. Muon instead approximates the polar factor with polynomial matrix iterations of the **[[newton-schulz|Newton–Schulz]]** type, using only matrix multiplications. A classical cubic version, after suitable scaling, is
 
-$$X_{k+1} = \tfrac12X_k(3I - X_k^\top X_k).$$
+$$X_{k+1} = \tfrac12X_k\big(3I - X_k^\top X_k\big),$$
 
-If $X_k = U\,\mathrm{diag}(s_i)\,V^\top$, then $X_k^\top X_k = V\,\mathrm{diag}(s_i^2)\,V^\top$, and the iteration keeps $U$ and $V$ and changes each singular value by a scalar map (survey Eq. 51):
-
-$$s_{i,k+1} = \tfrac12s_{i,k}(3 - s_{i,k}^2).$$
-
-The fixed point $s = 1$ is attractive: the map's derivative, $\tfrac32(1 - s^2)$, vanishes at $s = 1$. So errors near one shrink very fast, quadratically. This is why matrix-multiplication iterations can approximate polar factors without an SVD.
+which acts on each singular value separately as $\sigma_{k+1} = \tfrac12\sigma_k(3 - \sigma_k^2)$: $0.5$ becomes $0.6875$ and $0.9$ becomes $0.9855$, both moving toward $1$. Practical Muon uses different polynomial coefficients tuned for fast, approximate orthogonalization. Despite the name, this is not Newton's optimization method: Newton models the loss with a Hessian, while this iteration is only a numerical device for transforming the update matrix. Muon is meant for suitable matrix weights, such as hidden layers; other parameters are often trained with AdamW.
 
 :::viz ns
 :::
 
 :::read How to read this visual
-**What is drawn.** The 12 singular values of a $16\times12$ momentum matrix, after dividing by its Frobenius norm (grey bars, from $0.687$ down to $0.021$), and the singular values after $k$ Newton–Schulz steps (coloured bars). Because Eq. (51) acts on each singular value separately, the coloured bars are computed exactly by iterating the scalar map on the spectrum. The dashed line at $1$ is the exact polar factor $UV^\top$.
+**What is drawn.** The 12 singular values of a $16\times12$ momentum matrix, after dividing by its Frobenius norm (grey bars, from $0.687$ down to $0.021$), and the same values after $k$ Newton–Schulz steps (coral). The dashed line at $1$ is the polar factor's target.
 
-**What moves.** The number of steps $k$, and the iteration: the cubic of Eq. (50), or the quintic polynomial with the coefficients used by the Muon implementation.
+**What moves.** The number of steps $k$, and the iteration: the classical cubic above, or the quintic polynomial with Muon's coefficients.
 
-**What to notice.**
-- **The cubic.** Large singular values reach $1$ within a few steps. Small ones grow by only about $\times1.5$ per step while they are small, so they lag: after 5 steps the smallest is still well below $1$. After about a dozen steps all are essentially $1$; the readout's distance to $UV^\top$ goes to zero. Each step costs two matrix multiplications.
-- **The quintic.** It is tuned to lift small singular values much faster. After 5 steps all of them are already in a band around $1$, but it does not converge to exactly $1$. Muon accepts an approximate orthogonalization in exchange for fewer steps.
-
-The survey stresses that Eq. (50) is a didactic example, not Muon's production code. Muon uses its own coefficients, scaling, iteration counts and safeguards.
+**What to notice.** The cubic pulls the large singular values to $1$ quickly but the small ones slowly: after $5$ steps the smallest is still far from $1$, and after $12$ all lie within $0.002$ of it. Muon's quintic moves every value into a band around $1$ (about $0.68$ to $1.14$) in $5$ steps, without converging exactly. That is the trade the survey points to: approximate orthogonalization with a handful of matrix products.
 :::
 
-:::survey Fig. 8 of the survey: matrix geometry in Muon. Orthogonalization changes the singular spectrum of the proposed weight update without estimating the model's Hessian; Newton–Schulz iterations are a numerical device for the matrix operation.
-public/survey3/fig8.webp
+:::key Remember V-G
+Muon changes the shape of the update matrix, not a curvature estimate: it keeps the singular directions and sets the singular values toward one. Newton–Schulz is matrix arithmetic, not Newton's method.
 :::
 
-:::read How to read this figure
-**Top.** Muon's pipeline: the gradient $G_t$ feeds a momentum $M_t = \beta M_{t-1} + G_t$, which is orthogonalized (by SVD or Newton–Schulz) into the update $\Delta W = -\eta UV^\top$.
+## 5. What is being inverted, estimated, or normalized?
 
-**Bottom.** The static version of the visual above, for the same $16\times12$ matrix. Grey: the normalized singular values of $M$. Blue: the cubic iteration after 5 steps. Light blue: after 12 steps. Pink: the quintic after 5 steps. The dashed line is the exact polar factor. As in the visual, the cubic lags on small singular values after 5 steps and is essentially exact after 12, and the quintic spreads them in a band around $1$.
-:::
+Every method still produces $\theta_{t+1} = \theta_t + \Delta_t$, but the transformations do not mean the same thing:
 
-:::survey Fig. 13 of the survey: the scalar Newton–Schulz map of Eq. (51). (a) Cobweb iterations from 0.2 and 1.62, both drawn to the fixed point 1. (b) Distance to one: slow while small, then very fast.
-public/survey3/fig13.webp
-:::
+- **Curvature estimation.** Newton solves with the true Hessian; on $\tfrac12(100x^2 + y^2)$ its inverse scales the directions by $0.01$ and $1$. AdaHessian and Sophia seek cheaper diagonal Hessian information; BFGS and Apollo learn it from changes in weights and gradients. K-FAC also uses inverse-like scaling, but of a Fisher block, which is why not every inverse-matrix update is "Newton's method".
+- **Historical gradient statistics.** Shampoo's $L_t$ and $R_t$ are second moments of observed gradients, not second derivatives of the loss; SOAP adapts with Adam's moments in their eigenbasis.
+- **Matrix normalization.** Muon sends $M = U\Sigma V^\top$ toward $UV^\top$. Ordinary vector normalization sends $(3, 4)$ to $(0.6, 0.8)$, keeping the direction and fixing the length; Muon's polar step does the matrix version, acting on the singular values.
 
-:::read How to read this figure
-**(a)** The map $s \mapsto \tfrac12s(3 - s^2)$ (black) and the diagonal $s_{k+1} = s_k$ (grey). A cobweb diagram traces the iteration: go up to the curve, across to the diagonal, repeat. From $s_0 = 0.2$ (blue) the staircase climbs to the fixed point $1$; from $s_0 = 1.62$ (vermillion) the first step drops low, then climbs too. Starting values must stay below $\sqrt3$, where the map turns negative.
+A *preconditioner* rescales, and can rotate or mix, gradient directions through an operator built from information; a *normalization* imposes a prescribed scale or spectrum. Both change the update, with different mathematics.
 
-**(b)** $|s_k - 1|$ on a log scale for five starting values. Each curve is flat at first (slow growth, about $\times1.5$ per step while $s$ is small) and then plunges once $s_k$ is near $1$: the quadratic convergence that the zero slope at $s = 1$ predicts.
-:::
-
-## 5. What Muon is not
-
-The name "Newton–Schulz" evokes Newton's method, but it does not turn Muon into Newton optimization with the network's Hessian. The orthogonalization is applied to the *momentum matrix*, an operation on the update, not to the loss's curvature. Two practical cautions follow:
-
-- **Rank deficiency.** For a matrix whose rank is lower than its smaller dimension, the polar factor is not unique outside the supported subspace, and the iteration needs care near zero singular values.
-- **Parameter groups.** Implementations apply Muon to suitable hidden weight matrices and keep AdamW for embeddings, biases, gains and output heads. Not every parameter is eligible for a matrix operation.
-
-## 6. Inverted, estimated, or normalized?
-
-Section V-H closes the structured methods with a warning against one box labelled "advanced second-order optimization". Each method does something different:
-
-| method | what it uses | operation |
+| optimizer | information source | main transformation |
 |---|---|---|
-| K-FAC | Fisher blocks, as Kronecker factors | inverts factors |
-| Shampoo | accumulated gradient products | applies inverse fourth roots |
-| SOAP | Adam moments in Shampoo's eigenbasis | adaptive step in a rotated basis |
-| Sophia | diagonal Hessian estimates | clipped division |
-| Muon | the momentum matrix | normalizes singular values |
+| Newton | exact loss Hessian | solve a curvature system |
+| BFGS / L-BFGS | weight and gradient differences | quasi-Newton inverse curvature |
+| K-FAC | approximate Fisher factors | two-sided Fisher-style preconditioning |
+| Shampoo | accumulated gradient products | two-sided inverse-root preconditioning |
+| SOAP | factor eigenspaces plus adaptive moments | rotate, adapt, rotate back |
+| AdaHessian / Sophia | approximate Hessian diagonal | per-coordinate curvature scaling; Sophia clips |
+| Muon | momentum matrix | polar-factor normalization |
 
-Some keep an $O(d)$ diagonal, some $O(m^2 + n^2)$ factors, and some keep no inverse-root matrices but spend matrix multiplications at every step. There is also a distinction between *preconditioning*, which multiplies the gradient by a matrix meant to rescale directions, and *normalization*, which replaces magnitudes by a prescribed norm or sign. Both change the update, but they optimize different local models and need different convergence analyses.
+Costs belong in the comparison: a dense curvature matrix has $O(d^2)$ entries, diagonal estimates $O(d)$, two layer factors $O(m^2 + n^2)$ plus inverse roots and decompositions, and Muon adds repeated matrix products. Fewer iterations do not automatically mean less wall-clock time.
+
+:::key The lesson of Section V
+The defining question is not whether an optimizer uses a matrix. It is what that matrix represents, why transforming the gradient with it should help, and whether the benefit justifies the cost.
+:::
 
 :::problem The next step
-With every family in place, Section VI of the survey compares them by memory, cost, guarantees and measured runs. Chapter 17.
+Section VI compares all these families on equal terms: memory, cost, guarantees, stability, and a reproducible protocol. Chapter 17.
 :::

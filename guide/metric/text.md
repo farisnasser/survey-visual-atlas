@@ -1,21 +1,38 @@
-## 1. Every step minimizes a model plus a penalty
+## 1. Start with ordinary gradient descent, in numbers
 
-This chapter follows Sections II-G and II-H of the survey. Chapter 2 showed that the gradient step lowers the linear model $g^\top\Delta$ fastest among steps of a fixed Euclidean length. "Length" was the choice. Measure it differently and the best step changes. The survey writes this as one subproblem: for a positive-definite matrix $M_t$, the **[[variable-metric]]** step is (survey Section II-G)
+This chapter follows Section II-G of the survey. Even when the gradient is known exactly, an optimizer still has to decide how to turn it into a step. Ordinary gradient descent takes $\Delta = -\eta g$. With $g = (4, 2)^\top$ and $\eta = 0.1$,
 
-$$\Delta_t = \arg\min_\Delta\left[g_t^\top\Delta + \frac{1}{2\eta}\Delta^\top M_t\Delta\right].$$
+$$\Delta = -0.1\begin{bmatrix}4\\2\end{bmatrix} = \begin{bmatrix}-0.4\\-0.2\end{bmatrix}.$$
 
-The first term is the linear model: it rewards moving downhill. The second is a penalty on the step's size, measured in the metric $M_t$: it is large for steps that $M_t$ considers long. Differentiate with respect to $\Delta$ and set the result to zero: $g_t + M_t\Delta/\eta = 0$, so (survey Eq. 12)
+This treats a move of a given size as equally "expensive" in every direction. The survey's question is: what if moving in some directions should cost more than in others?
 
-$$\boxed{\Delta_t = -\eta M_t^{-1}g_t.}$$
+## 2. A matrix that prices movement
 
-This single formula covers much of the survey, depending only on the choice of $M_t$:
+The **[[variable-metric]]** idea uses a symmetric positive-definite matrix $M_t$ to say how strongly the optimizer may move in each direction. For example,
 
-- $M_t = I$: Euclidean gradient descent.
-- $M_t$ diagonal and built from past gradients: per-coordinate adaptation, as in AdaGrad and Adam (chapter 8).
-- $M_t = H$, a positive-definite Hessian: a Newton-like step (chapter 10).
-- $M_t = F$, the Fisher matrix: natural gradient (chapter 12).
+$$M = \begin{bmatrix}2 & 0\\ 0 & 1\end{bmatrix}$$
 
-Another way to see the same step: among all steps on the ellipse $\Delta^\top M\Delta = r^2$, the one that lowers the linear model most is $\Delta \propto -M^{-1}g$. The metric decides what "equally long" means, and the step is the steepest one under that definition.
+says that a step of a given length along the first coordinate is penalized twice as much as the same step along the second. The curves of equal penalty, $\Delta^\top M\Delta = \text{const}$, are circles when $M = I$ and ellipses otherwise. They are not the contours of the loss; they describe what the optimizer counts as a "small" step.
+
+**Where the formula comes from.** Choose the step that makes the predicted change as negative as possible while paying for its size:
+
+$$\Delta_t = \arg\min_\Delta\Big[\,g_t^\top\Delta + \frac{1}{2\eta}\Delta^\top M_t\Delta\,\Big].$$
+
+The first term is the Taylor-predicted change in loss, which we want negative. The second penalizes large or "expensive" moves. Without it, we could make a negative-gradient step longer forever and the linear model would keep promising more, which is useless when Taylor is only local.
+
+**One parameter first.** Set $g = 4$, $\eta = 0.1$ and $M = 2$. The problem becomes $\min_\Delta\,(4\Delta + 10\Delta^2)$. Differentiate, $4 + 20\Delta$, and set it to zero: $\Delta = -0.2$. Ordinary GD would have given $-0.4$. The movement price $M = 2$ halves the step.
+
+**Now with matrices.** For symmetric $M$, the gradient of the bracket with respect to $\Delta$ is $g + \tfrac{1}{\eta}M\Delta$. Set it to zero, multiply by $\eta$, then by $M^{-1}$:
+
+$$g + \tfrac{1}{\eta}M\Delta = 0 \;\Rightarrow\; M\Delta = -\eta g \;\Rightarrow\; \Delta_t = -\eta M_t^{-1}g_t, \qquad \theta_{t+1} = \theta_t + \Delta_t.$$
+
+That is the survey's Eq. (12). Positive definiteness ($v^\top Mv > 0$ for every $v \ne 0$) makes the bracket strictly convex and $M$ invertible, so the step is unique.
+
+**What $M^{-1}$ does in numbers.** Keep $g = (4, 2)^\top$ and $\eta = 0.1$, with $M = \mathrm{diag}(2, 1)$ and $M^{-1} = \mathrm{diag}(0.5, 1)$:
+
+$$\Delta = -0.1\begin{bmatrix}0.5 & 0\\ 0 & 1\end{bmatrix}\begin{bmatrix}4\\2\end{bmatrix} = -0.1\begin{bmatrix}2\\2\end{bmatrix} = \begin{bmatrix}-0.2\\-0.2\end{bmatrix}.$$
+
+The first gradient component was halved; the second was left alone. Transforming the gradient by $M^{-1}$ before stepping is what the survey calls **[[preconditioning]]**.
 
 :::viz metric
 :::
@@ -37,14 +54,20 @@ Another way to see the same step: among all steps on the ellipse $\Delta^\top M\
 The readout gives the angle between the step and $-g$, and the loss before and after.
 :::
 
-## 2. A lens, not an identity
+## 3. One formula, many optimizers
 
-The survey insists that Eq. (12) is a *conceptual* relationship. Two warnings:
+The framework connects several families through their choice of $M_t$:
 
-- **Adam's statistics are not a Hessian.** Writing Adam as $M = \mathrm{diag}(\sqrt{\hat v_t})$ does not mean that its gradient moments estimate curvature. They are averages of squared gradients (chapter 8).
-- **Muon is not described exactly.** Muon's geometry comes from the spectral norm of a matrix, which is generally not a quadratic metric $\Delta^\top M\Delta$ at all (chapter 16).
+| method | interpretation of $M$ |
+|---|---|
+| gradient descent | $M = I$: every Euclidean direction is priced the same |
+| diagonal adaptation (AdaGrad, Adam) | a diagonal, history-dependent $M$: one price per coordinate |
+| Newton | $M = H$ when the Hessian is positive definite: the true local curvature |
+| natural gradient | $M = F$ when the Fisher matrix is invertible: the geometry of the predictions |
 
-These distinctions are why the survey's Table I lists *what is constructed* and *what geometry it gives*, rather than calling every matrix "curvature":
+These are conceptual connections, not identical algorithms in every implementation, and the survey is careful about the limits. The matrices carry different information: Adam's squared-gradient statistics are not estimates of the Hessian, and Muon's orthogonalization (Section V-G) changes the geometry of a matrix update without being a quadratic penalty of this kind at all.
+
+The survey's Table I summarizes what each family constructs and what geometry it imposes, rather than calling every matrix "curvature":
 
 | family | constructed quantity | geometric interpretation |
 |---|---|---|
@@ -55,23 +78,14 @@ These distinctions are why the survey's Table I lists *what is constructed* and 
 | Shampoo / SOAP | structured gradient statistics | tensor-coordinate preconditioning |
 | Muon | orthogonalized momentum matrix | spectral-norm steepest direction |
 
-## 3. What counts as cost
+:::idea In plain English
+Every optimizer in the survey answers the same question, "how expensive is it to move in this direction?", in its own way. Gradient descent says all directions cost the same. Adam prices each coordinate separately. Newton prices directions by curvature, and natural gradient by how much the predictions would change.
+:::
 
-The survey separates the *information* an optimizer uses from what it *costs*. Storage first, for $d$ parameters:
-
-- The parameter vector needs $O(d)$ numbers; a full Hessian needs $d^2$.
-- For one $m \times n$ weight matrix, a full metric over its $mn$ entries needs $m^2n^2$ numbers.
-- Separate row and column factors need $m^2 + n^2$ (K-FAC, Shampoo; chapters 13 and 14).
-- A factored second moment needs about $m + n$ (Adafactor, chapter 9).
-
-These are storage *orders*, not end-to-end byte counts. Copies of parameters, gradients, momentum, sharding across devices and mixed precision all change the real peak memory. Chapter 17 counts the actual bytes in a real run.
-
-What is counted as an "oracle" call (one gradient, one Hessian–vector product, one linear solve) matters as much as the number of iterations.
-
-## 4. What counts as convergence
-
-Iteration counts are just as easy to misread. A rate of $O(1/T)$ for *function error* on a convex problem cannot be ranked against $O(1/\sqrt{T})$ for the *expected squared gradient norm* on a non-convex stochastic one. They measure different quantities, under different noise models and accuracy criteria. The survey compares theorems only after naming three things for each: its target quantity, its assumptions, and its oracle. Chapter 17 lines up every theorem in the survey this way.
+:::key What you should remember
+The unifying step is $\Delta = -\eta M^{-1}g$, but the meaning of $M$ matters as much as the algebra. The value of the framework is not that all optimizers are equivalent; it is a common starting point for asking what each one changes about the gradient, and why.
+:::
 
 :::problem The next step
-The preliminaries are complete. Section III of the survey begins with the simplest choices of $M$: none, then a memory of past gradients.
+With these foundations in place, Section III begins with gradient descent itself and examines how first-order methods improve it. Chapter 7 starts there.
 :::

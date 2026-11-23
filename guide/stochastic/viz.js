@@ -1,5 +1,5 @@
-// Chapter 5 (survey Section II-F, Appendix C-B). New visual 'bound' (Eqs. 47-49; numbers in
-// scripts/check-math/guide3_numbers.py); reused crash-course visuals 'cloud' and 'floor' (course_noise.py).
+// Chapter 5 (survey Section II-F). Visuals 'bound' (the T-step sum of Eq. 11; numbers in scripts/check-math/guide3_numbers.py)
+// and 'batchvar' (guide3_notes.py); reused crash-course visuals 'cloud' and 'floor' (course_noise.py).
 import { HEX } from '../../src/lib/atlas3d.js';
 import nz from '../../course/noise/viz.js';
 
@@ -10,9 +10,9 @@ const etaUse = (B, T) => Math.min(1 / BETA, ebal(B, T));
 const bound = (B, T) => { const e = etaUse(B, T); return term1(e, T) + term2(e, B); };
 
 const boundViz = {
-  title: 'The SGD bound of Eq. (47): two terms pulling the step size apart',
-  caption: 'The average expected squared gradient over T steps is at most 2Δ₀/(ηT) + βησ²/B. A bigger step shrinks the first term (progress) and grows the second (noise). The balanced step η_bal of Eq. (49) sits where they cross, capped at 1/β.',
-  note: 'Illustrative constants Δ₀ = L(θ₀) − L* = 1, β = 1, σ² = 1, as in the survey\'s added Fig. 12. These are worst-case upper bounds, not training curves.',
+  title: 'The T-step SGD bound: two terms pulling the step size apart',
+  caption: 'The average expected squared gradient over T steps is at most 2Δ₀/(ηT) + βησ²/B. A bigger step shrinks the first term (progress) and grows the second (noise). The balanced step η_bal sits where they cross, capped at 1/β.',
+  note: 'Illustrative constants Δ₀ = L(θ₀) − L* = 1, β = 1, σ² = 1. These are worst-case upper bounds, not training curves.',
   legend: [[HEX.pos, '2Δ₀/(ηT): progress term'], [HEX.neg, 'βησ²/B: noise term'], ['#e8ecf8', 'their sum, the bound (76)'], [HEX.flat, 'η = min(1/β, η_bal)']],
   mode: '2d',
   plot: { xlabel: 'step size η (log scale)', ylabel: 'bound on the average E‖g_t‖²', logx: true, logy: true, xlim: [1e-4, 1], ylim: [1e-5, 100], legend: false },
@@ -44,4 +44,39 @@ const boundViz = {
   },
 };
 
-export default { cloud: nz.cloud, floor: nz.floor, bound: boundViz };
+// ---------- 'batchvar': the exact distribution of a size-B minibatch mean of 2, 4, 6, 8, 10 (with replacement) ----------
+const SAMPLES = [2, 4, 6, 8, 10], MEAN = 6, POPVAR = 8;
+function batchMeans(B) {   // all 5^B equally likely batches -> {mean: count}
+  const counts = new Map(); const idx = new Array(B).fill(0);
+  for (;;) {
+    const m = idx.reduce((s, i) => s + SAMPLES[i], 0) / B, k = m.toFixed(6);
+    counts.set(k, (counts.get(k) || 0) + 1);
+    let j = 0; while (j < B && ++idx[j] === SAMPLES.length) { idx[j] = 0; j++; }
+    if (j === B) break;
+  }
+  return [...counts.entries()].map(([k, c]) => [+k, c / SAMPLES.length ** B]).sort((a, b) => a[0] - b[0]);
+}
+const batchvar = {
+  title: 'Averaging more examples: the minibatch estimate stays centred and narrows like σ²/B',
+  caption: 'Five per-example gradients 2, 4, 6, 8, 10 (true gradient 6, variance σ² = 8). The bars are the exact probabilities of every possible minibatch average of size B, drawing examples with replacement. The estimate is unbiased at every B, and its variance is exactly σ²/B.',
+  note: 'Exact enumeration of all 5^B batches, no sampling. Drawing without replacement from a finite set would shrink the variance a little more.',
+  legend: [[HEX.ball, 'probability of each minibatch average'], [HEX.good, 'true gradient 6']],
+  mode: '2d',
+  plot: { xlabel: 'minibatch gradient estimate ĝ', ylabel: 'probability', xlim: [1, 11], ylim: [0, .45], legend: false },
+  controls: [{ id: 'B', label: 'batch size B', min: 1, max: 5, step: 1, value: 1, digits: 0 }],
+  build(ctx) { this.draw(ctx); },
+  onControl(ctx) { this.draw(ctx); },
+  draw(ctx) {
+    const B = ctx.vals.B, dist = batchMeans(B), P = ctx.plot.clear(), w = .9 / B;
+    P.custom((g, plot) => {
+      g.fillStyle = HEX.ball;
+      for (const [m, p] of dist) { const x0 = plot.sx(m - w / 2), x1 = plot.sx(m + w / 2), y0 = plot.sy(0), y1 = plot.sy(p); g.fillRect(x0, y1, Math.max(1, x1 - x0), y0 - y1); }
+    });
+    P.vline(MEAN, { color: HEX.good, width: 1.6, text: 'true gradient 6' });
+    P.draw();
+    const mean = dist.reduce((s, [m, p]) => s + m * p, 0), v = dist.reduce((s, [m, p]) => s + p * (m - mean) ** 2, 0);
+    ctx.stat(`B = ${B} · ${dist.length} possible averages from ${(5 ** B).toLocaleString('en')} equally likely batches · mean of the estimate = ${mean.toFixed(4)} (unbiased) · variance = ${v.toFixed(4)} = σ²/B = 8/${B} · standard deviation = ${Math.sqrt(v).toFixed(3)}`);
+  },
+};
+
+export default { cloud: nz.cloud, floor: nz.floor, batchvar, bound: boundViz };

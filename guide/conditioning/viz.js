@@ -1,11 +1,11 @@
-// Chapter 4 (survey Sections II-D, II-E; Appendices A-A, C-A, D-B). New visuals 'narrow', 'zoo' and 'pgdstab' (numbers in
-// scripts/check-math/guide3_numbers.py); reused crash-course visuals 'precond' (course_adaptive.py) and 'kappa' (course_curvature.py).
+// Chapter 4 (survey Sections II-D, II-E). Visuals 'narrow', 'zoo', 'pgdstab' (numbers in scripts/check-math/guide3_numbers.py)
+// and 'cases' (guide3_notes.py); reused crash-course visuals 'precond' (course_adaptive.py) and 'kappa' (course_curvature.py).
 import { HEX, C, def, opt } from '../../src/lib/atlas3d.js';
 import ad from '../../course/adaptive/viz.js';
 import curv from '../../course/curvature/viz.js';
 
 /** H = R(phi) diag(L, 1) R(phi)^T as [a, b, c] = [[a, b], [b, c]] */
-// the sign of s is chosen so that 45° gives the survey's Q^T diag(100, 1) Q of Eq. (41), coupling -49.5
+// the sign of s is chosen so that 45° gives the survey's Q^T diag(100, 1) Q of Section II-D, coupling -49.5
 const Hrot = (deg, L) => { const t = deg * Math.PI / 180, c = Math.cos(t), s = -Math.sin(t); return [L * c * c + s * s, (L - 1) * c * s, L * s * s + c * c]; };
 const eig2 = ([a, b, c]) => { const m = (a + c) / 2, d = Math.hypot((a - c) / 2, b); return [m - d, m + d]; };
 /** eigenvalues of K = M^{-1/2} H M^{-1/2} for M = I, diag(H), H */
@@ -18,9 +18,9 @@ const KINDS = [['I', 'GD, M = I', HEX.opt2], ['D', 'diagonal, M = diag(H)', HEX.
 const rho = (lams, eta) => Math.max(...lams.map(l => Math.abs(1 - eta * l)));
 
 const pgdstab = {
-  title: 'When is a preconditioned step stable? Eq. (58) for three choices of M',
+  title: 'When is a preconditioned step stable? The 2/λ rule for three choices of M',
   caption: 'The valley ½θᵀHθ has curvatures κ and 1 along axes rotated by the angle. For each preconditioner M, the step θ ← (I − ηM⁻¹H)θ multiplies the error along each eigen-direction of K = M^{-1/2}HM^{-1/2} by 1 − ηλ(K). The curves show the worst factor max|1 − ηλ| against η; below the dashed line at 1 the step contracts.',
-  note: 'Exact eigenvalues of the 2 × 2 matrix K; no simulation. At 45° and κ = 100 this is the matrix of the survey\'s Eq. (43): diag(H) = 50.5 I.',
+  note: 'Exact eigenvalues of the 2 × 2 matrix K; no simulation. At 45° and κ = 100 this is the rotated matrix of the survey\'s Section II-D: diag(H) = 50.5 I.',
   legend: KINDS.map(k => [k[2], k[1]]),
   mode: '2d',
   plot: { xlabel: 'step size η (log scale)', ylabel: 'worst factor max |1 − ηλ(K)|', logx: true, xlim: [1e-3, 10], ylim: [0, 2], legend: false },
@@ -150,4 +150,36 @@ const zoo = {
   },
 };
 
-export default { narrow, zoo, pgdstab, precond: ad.precond, kappa: curv.kappa };
+// ---------- 'cases' (survey Section II-E): e_t = (1 - eta*lambda)^t e_0, the three regimes of the multiplier ----------
+const PRE = { A: [5, .1], B: [-5, .1], C: [5, .5] };
+const cases = {
+  title: 'The multiplier m = 1 − ηλ: settle, escape, or overshoot',
+  caption: 'Near a stationary point, each eigen-direction of the error is multiplied by m = 1 − ηλ at every step. The case is set by the curvature λ and the learning rate η, not chosen: 0 < ηλ < 2 settles, λ < 0 escapes, ηλ > 2 overshoots.',
+  note: 'Exact powers m^t with e₀ = 1; this is the linearized model of Eq. (9), not a simulation of a network. Values beyond ±6 are drawn at the edge.',
+  legend: [[HEX.ball, 'error e_t'], ['rgba(232,236,248,.5)', '|e| = 1']],
+  mode: '2d',
+  plot: { xlabel: 'step t', ylabel: 'error e_t along one eigen-direction', xlim: [-.3, 12.3], ylim: [-6, 6], legend: false },
+  controls: [
+    { id: 'lam', label: 'curvature λ', min: -6, max: 12, step: .5, value: 5, digits: 1 },
+    { id: 'eta', label: 'learning rate η', min: .01, max: .6, step: .01, value: .1 },
+  ],
+  actions: Object.keys(PRE).map(k => ({ label: `Example ${k}`, fn: ctx => { ctx.set('lam', PRE[k][0]); ctx.set('eta', PRE[k][1]); cases.draw(ctx); } })),
+  build(ctx) { this.draw(ctx); },
+  onControl(ctx) { this.draw(ctx); },
+  draw(ctx) {
+    const { lam, eta } = ctx.vals, m = 1 - eta * lam, P = ctx.plot.clear();
+    P.band(-.3, 12.3, { color: 'rgba(0,0,0,0)' });
+    for (const y of [1, -1]) P.hline(y, { color: 'rgba(232,236,248,.45)', dash: [4, 4] });
+    P.hline(0, { color: 'rgba(232,236,248,.2)' });
+    const pts = Array.from({ length: 13 }, (_, t) => [t, Math.max(-6, Math.min(6, m ** t))]);
+    P.line(pts, { color: 'rgba(255,122,89,.45)', width: 1.2 });
+    P.scatter(pts, { color: HEX.ball, r: 4.5 });
+    P.draw();
+    const el = eta * lam, kind = lam < 0 ? 'λ < 0: ESCAPE (grows without changing sign)' : el === 0 ? 'λ = 0: no change' :
+      el < 1 ? '0 < ηλ < 1: settles smoothly' : el === 1 ? 'ηλ = 1: lands on the point in one step' : el < 2 ? '1 < ηλ < 2: settles while alternating sign' :
+      el === 2 ? 'ηλ = 2: bounces with constant size' : 'ηλ > 2: OVERSHOOT (grows and flips sign)';
+    ctx.stat(`λ = ${lam}, η = ${eta.toFixed(2)} · ηλ = ${el.toFixed(2)} · m = 1 − ηλ = ${m.toFixed(3)} · ${kind} · e₁…e₄ = ${[1, 2, 3, 4].map(t => (m ** t).toPrecision(3)).join(', ')}`);
+  },
+};
+
+export default { narrow, cases, zoo, pgdstab, precond: ad.precond, kappa: curv.kappa };

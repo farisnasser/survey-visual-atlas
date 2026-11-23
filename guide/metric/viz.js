@@ -1,4 +1,4 @@
-// Chapter 6 (survey Sections II-G, II-H). New visual 'metric': Eq. (12) and its argmin form drawn literally. Numbers in
+// Chapter 6 (survey Section II-G). New visual 'metric': Eq. (12) and its argmin form drawn literally. Numbers in
 // scripts/check-math/guide3_numbers.py.
 import { HEX } from '../../src/lib/atlas3d.js';
 

@@ -4,7 +4,7 @@
 import { def, C, HEX } from '../../src/lib/atlas3d.js';
 import curv from '../../course/curvature/viz.js';
 
-// ---------- BFGS on the survey's added Fig. 10 objective
+// ---------- BFGS on the curved (Rosenbrock-type) valley
 const F = (x, y) => (1 - x) ** 2 + 10 * (y - x * x) ** 2;
 const Gf = (x, y) => [-2 * (1 - x) - 40 * x * (y - x * x), 20 * (y - x * x)];
 const Hf = (x, y) => [[2 - 40 * (y - x * x) + 80 * x * x, -40 * x], [-40 * x, 20]];
@@ -33,7 +33,7 @@ const NAME = { gd: 'GD (η = 0.01)', bfgs: 'BFGS + line search', newton: 'exact 
 const COLS = { gd: [C.opt2, HEX.opt2], bfgs: [C.ball, HEX.ball], newton: [C.opt3, HEX.opt3] };
 const bfgs = {
   title: 'BFGS learns the curvature from gradient differences alone',
-  caption: 'The curved valley L = (1 − x)² + 10(y − x²)² of the survey\'s Fig. 10, from (−1.2, 1). Gradient descent (violet) needs a small step for the steep walls and crawls along the curved floor. BFGS (coral) never sees a second derivative: it updates an inverse-Hessian estimate C from each step s and gradient change y (Eq. 34 and survey Section IV-F). Exact Newton (white) uses the true Hessian.',
+  caption: 'The curved valley L = (1 − x)² + 10(y − x²)² (a Rosenbrock-type test function), from (−1.2, 1). Gradient descent (violet) needs a small step for the steep walls and crawls along the curved floor. BFGS (coral) never sees a second derivative: it updates an inverse-Hessian estimate C from each step s and gradient change y (Eq. 34 and survey Section IV-F). Exact Newton (white) uses the true Hessian.',
   note: 'BFGS starts from C = I and uses a backtracking (Armijo) line search, as Section IV-F says practical BFGS does; the extra loss evaluations it costs are counted. Newton: exact Hessian, unit steps; it stays positive definite along this path. Heights log-scaled for display.',
   legend: [[HEX.opt2, 'gradient descent'], [HEX.ball, 'BFGS'], [HEX.opt3, 'Newton'], [HEX.good, 'minimum (1, 1)']],
   action: 'Restart', cam: [0, 4.3, 3.6], tgt: [0, .2, 0],

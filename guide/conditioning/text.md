@@ -1,10 +1,16 @@
-## 1. A narrow valley
+## 1. Start with the survey's narrow valley
 
-This chapter follows Sections II-D and II-E of the survey, with the worked examples of Appendices A-A, C-A and D-B. Take the quadratic (survey Eq. 8)
+This chapter follows Sections II-D and II-E of the survey. Take the quadratic of the survey's Eq. (8), where $x$ and $y$ are two trainable weights, not data points:
 
-$$L(x, y) = \tfrac12(100x^2 + y^2), \qquad H = \begin{bmatrix}100 & 0\\ 0 & 1\end{bmatrix}.$$
+$$L(x, y) = \tfrac12(100x^2 + y^2), \qquad g = \begin{bmatrix}100x\\ y\end{bmatrix}, \qquad H = \begin{bmatrix}100 & 0\\ 0 & 1\end{bmatrix}.$$
 
-Its level sets are long thin ellipses: moving in $x$ is a hundred times more curved than moving in $y$. On a quadratic, gradient descent treats each eigen-direction separately (chapter 3): with step $\eta$ it multiplies $x$ by $1 - 100\eta$ and $y$ by $1 - \eta$. The survey's example takes $\eta = 0.01$. Then $x$ is multiplied by $1 - 100 \times 0.01 = 0$, so it is solved in one step, while $y$ is multiplied by $0.99$ per step and crawls.
+The eigenvalues are $100$ and $1$: the loss curves a hundred times more strongly along $x$ than along $y$. Picture a long, narrow valley. Moving across it is very sensitive; moving along it is gentle.
+
+**What does gradient descent do here?** Write the update $\theta_{t+1} = \theta_t - \eta g_t$ coordinate by coordinate:
+
+$$x_{t+1} = (1 - 100\eta)\,x_t, \qquad y_{t+1} = (1 - \eta)\,y_t.$$
+
+The survey sets $\eta = 0.01$. Then $x_{t+1} = 0$ and $y_{t+1} = 0.99\,y_t$. Starting from $(1, 1)$, the first step gives $(0, 0.99)$; after ten steps $y \approx 0.904$, and after a hundred $y \approx 0.366$. The steep direction is solved at once in this specially chosen example, while the flat direction crawls. One learning rate has to serve two very different curvatures.
 
 :::viz narrow
 :::
@@ -19,7 +25,13 @@ Its level sets are long thin ellipses: moving in $x$ is a hundred times more cur
 **What to notice.** At $\eta = 0.01$ the ball falls straight onto the valley floor in a single step: the factor $1 - 100\eta$ is exactly $0$. After that it crawls along the floor, keeping $99\%$ of $y$ each step, and needs $459$ steps to bring $|y|$ below $0.01$. A smaller $\eta$ makes the crawl even slower. A larger one zig-zags across the valley ($1 - 100\eta < 0$) and, past $\eta = 0.02$, blows up. The flat direction can never get a large step, because the steep direction sets the limit. That mismatch is the condition number $\kappa = 100$.
 :::
 
-There is no way out by choosing $\eta$ better. Stability in $x$ needs $\eta < 2/100$, and any such step is tiny for $y$. The ratio of the largest to the smallest curvature, the **[[condition-number|condition number]]** $\kappa = \lambda_{\max}/\lambda_{\min} = 100$, measures this mismatch. For strongly convex quadratics, even the best fixed step converges at a rate governed by $\kappa$: the number of steps grows in proportion to $\kappa$.
+## 2. The condition number
+
+For a positive-definite Hessian, the **[[condition-number|condition number]]** is
+
+$$\kappa = \frac{\lambda_{\max}}{\lambda_{\min}},$$
+
+here $100/1 = 100$. If $\kappa = 1$, every direction has the same curvature and the level sets are circles. A large $\kappa$ means curvature varies dramatically across directions, and the survey calls such problems *ill-conditioned*. For strongly convex quadratics it limits how fast any fixed step can go: stability in the steepest direction caps $\eta$ at $2/\lambda_{\max}$, and that step is tiny for the flattest one.
 
 :::viz kappa
 :::
@@ -32,15 +44,27 @@ There is no way out by choosing $\eta$ better. Stability in $x$ needs $\eta < 2/
 **What to notice.** The measured counts sit on straight lines of slope one on the log-log axes: steps grow in proportion to $\kappa$. Ten times narrower means ten times slower, even with the best possible fixed step. The readout gives the per-step factors, $1 - 1/\kappa$ and $(\kappa - 1)/(\kappa + 1)$, that cause it.
 :::
 
-## 2. Rotate the valley
+## 3. What does it mean to rotate the valley?
 
-Now rotate the coordinates. Replace $H$ by $Q^\top\mathrm{diag}(100, 1)Q$ with an orthogonal matrix $Q$. The eigenvalues are unchanged, so the condition number and gradient descent's behaviour are unchanged too: GD does not care how the axes are drawn. But the principal axes no longer line up with the stored parameter coordinates. Appendix A-A of the survey works out the $45^\circ$ case (survey Eq. 41):
+Imagine turning the long ellipse by $45^\circ$ without changing its shape. Before the turn, the steep and the shallow directions lie along the axes. Afterwards, both are diagonal combinations of $x$ and $y$. Mathematically, take the rotation
 
-$$Q = \frac{1}{\sqrt2}\begin{bmatrix}1 & -1\\ 1 & 1\end{bmatrix}, \qquad H = Q^\top\begin{bmatrix}100 & 0\\ 0 & 1\end{bmatrix}Q = \begin{bmatrix}50.5 & -49.5\\ -49.5 & 50.5\end{bmatrix}.$$
+$$Q = \frac{1}{\sqrt2}\begin{bmatrix}1 & -1\\ 1 & 1\end{bmatrix}, \qquad Q^\top Q = I.$$
 
-The diagonal entries are now equal, $50.5$ each. The diagonal of $H$ contains no information about the coupling $-49.5$ that makes the valley narrow. This is the key fact behind every diagonal method in the survey (AdaGrad, RMSProp, Adam, AdaHessian, Sophia).
+If the valley's own coordinates are $z = Q\theta$, the loss becomes $\tfrac12(Q\theta)^\top H(Q\theta) = \tfrac12\theta^\top(Q^\top HQ)\theta$, which is the survey's rotated Hessian $Q^\top HQ$. Multiplying out,
 
-A **diagonal [[preconditioning|preconditioner]]** divides each coordinate of the gradient by its own scale $D_{jj}$: $\theta \leftarrow \theta - \eta D^{-1}g$. It can rescale how far we move along each coordinate. It cannot undo a coupling between coordinates.
+$$H_{\text{rot}} = Q^\top\begin{bmatrix}100 & 0\\ 0 & 1\end{bmatrix}Q = \begin{bmatrix}50.5 & -49.5\\ -49.5 & 50.5\end{bmatrix}.$$
+
+Its eigenvalues are still $100$ and $1$: rotation changes the eigen-directions, not the curvature strengths, so $\kappa$ is unchanged.
+
+**Why the off-diagonal entries matter.** Before the turn, $g_x = 100x$ depends only on $x$. Afterwards,
+
+$$g_x = 50.5x - 49.5y, \qquad g_y = -49.5x + 50.5y.$$
+
+Even with $x$ fixed, changing $y$ changes the $x$-slope: the two weights are coupled. A diagonal method scales each coordinate on its own, $\Delta = -\eta D^{-1}g$ with $D = \mathrm{diag}(d_1, d_2)$, so it cannot mix $g_x$ with $g_y$. A full-matrix step can. Here
+
+$$H_{\text{rot}}^{-1} = \begin{bmatrix}0.505 & 0.495\\ 0.495 & 0.505\end{bmatrix},$$
+
+and its off-diagonal entries let the first update coordinate depend on both gradient components.
 
 :::viz precond
 :::
@@ -53,78 +77,105 @@ A **diagonal [[preconditioning|preconditioner]]** divides each coordinate of the
 **What to notice.** At $0^\circ$ the diagonal preconditioner makes the valley perfectly round, and it matches Newton. As the angle grows it helps less and less, and at $45^\circ$ not at all: the readout's "condition number after the diagonal rescaling" climbs back to $\kappa$. Gradient descent zig-zags at every angle; Newton lands on the minimum in one step at every angle. The step counts in the readout make the same point in numbers.
 :::
 
-The survey's Fig. 3 shows the same comparison with the exact $100:1$ matrices of Eqs. (8) and (41).
+The survey's Fig. 3 shows the same comparison with the exact $100:1$ matrices.
 
 :::survey Fig. 3 of the survey: why conditioning and coordinate choice matter. The Hessian eigenvalues are unchanged by rotation, but diagonal rescaling is tied to the chosen coordinates; full-matrix transformations can follow rotated principal axes.
 public/survey3/fig3.webp
 :::
 
 :::read How to read this figure
-**What is drawn.** The $100:1$ valley as a 3D surface in two coordinate systems (height $\sqrt{L}$, flat above $L = 28$). (a) Axis-aligned, $H = \mathrm{diag}(100, 1)$. (b) Rotated by $45^\circ$, the matrix of Eq. (41). Each method takes 30 steps from the white ball, and the two white balls are the same point in the valley's own axes, so both panels show the same problem. Blue: GD with $\eta = 0.018$. Green: the exact diagonal preconditioner $D = \mathrm{diag}(H)$ with $\eta = 1$. Vermillion: one Newton step.
+**What is drawn.** The $100:1$ valley as a 3D surface in two coordinate systems (height $\sqrt{L}$, flat above $L = 28$). (a) Axis-aligned, $H = \mathrm{diag}(100, 1)$. (b) Rotated by $45^\circ$, the matrix $H_{\text{rot}}$ above. Each method takes 30 steps from the white ball, and the two white balls are the same point in the valley's own axes, so both panels show the same problem. Blue: GD with $\eta = 0.018$. Green: the exact diagonal preconditioner $D = \mathrm{diag}(H)$ with $\eta = 1$. Vermillion: one Newton step.
 
 **What to notice.** GD's path is identical up to rotation in both panels: it zig-zags across the valley and creeps along it. Newton goes straight to the minimum in both. Only the diagonal method changes. In (a) its step equals Newton's step (when $H$ is diagonal, $D = H$), so its path is hidden under Newton's. In (b) it bounces from wall to wall, because dividing by $50.5$ in both coordinates is just gradient descent with a step of $1/50.5$. That is close to the stability limit for the steep direction, as section 4 shows.
 :::
 
-## 3. One gradient, three steps
-
-Appendix C-A of the survey makes the contrast exact with one step from $\theta_0 = (1, 0)$ on the rotated matrix (survey Eq. 43). All three methods see the same gradient, $g_0 = H\theta_0 = (50.5, -49.5)^\top$, at loss $L(\theta_0) = 25.25$:
+**One gradient, three steps.** Start the rotated valley at $\theta_0 = (1, 0)$, where $L = 25.25$. Every method sees the same gradient, $g_0 = H_{\text{rot}}\theta_0 = (50.5, -49.5)^\top$:
 
 | method | step | new point $\theta_1$ | new loss |
 |---|---|---|---|
 | GD, $\eta = 0.01$ | $-0.01\,g_0$ | $(0.495, 0.495)$ | $0.245025$ |
-| exact diagonal, $D = 50.5I$, $\eta = 1$ | $-D^{-1}g_0$ | $(0,\ 0.9802)$ | about $24.26$ |
-| Newton | $-H^{-1}g_0$ | $(0, 0)$ | $0$ |
+| exact diagonal, $D = 50.5I$ | $-D^{-1}g_0$ | $(0,\ 0.9802)$ | about $24.26$ |
+| full matrix (Newton) | $-H_{\text{rot}}^{-1}g_0$ | $(0, 0)$ | $0$ |
 
-GD happens to do well here, because $\eta = 0.01$ exactly cancels the steep eigen-direction (its multiplier is $1 - 0.01 \times 100 = 0$). The exact diagonal of the Hessian barely helps, because it discards the coupling. Newton solves the quadratic. As the survey stresses, no one-step ranking is meaningful without a fair choice of step for each method. The numbers show *what each optimizer adds* to the same gradient.
+The exact diagonal of $H_{\text{rot}}$ is $50.5$ in both coordinates, so the diagonal step is just gradient descent with a step of $1/50.5$, which jumps across the valley to almost the same height. The full matrix uses the coupling and lands on the minimum.
 
-:::survey Fig. 11 of the survey: the construction proposed in Appendix C-A, drawn from the 2 × 2 matrix of Eq. (43). Solid lines are the first steps, dotted lines the next 11.
-public/survey3/fig11.webp
+:::idea In plain English
+A straight valley has an easy-to-name narrow direction: just $x$. A rotated valley is narrow along a combination such as $x - y$. A method that only rescales $x$ and $y$ separately cannot generally separate that combination from the shallow one, $x + y$. A full-matrix method can.
 :::
 
-:::read How to read this figure
-**What is drawn.** The rotated quadratic of Eq. (43) as a 3D surface (height $\sqrt{L}$, flat above $L = 27$). From the white ball $\theta_0 = (1, 0)$, where $L = 25.25$, the solid lines are the first steps of the three methods: GD with $\eta = 0.01$ (blue) to $(0.495, 0.495)$ with $L = 0.245$; the exact diagonal step $D = 50.5I$ (green) to $(0, 0.9802)$ with $L \approx 24.26$; Newton (vermillion) to $(0, 0)$ with $L = 0$. The dotted lines are the next 11 steps of GD and of the diagonal method.
-
-**What to notice.** The diagonal method's first step jumps across the valley to $(0, 0.9802)$, almost the same level as the start, and its later steps keep bouncing between the two walls. GD's first step lands near the valley floor, and later steps creep toward the minimum along it. Newton reaches the minimum in one step.
+:::key What you should remember
+Rotation does not make the quadratic intrinsically worse conditioned. It exposes a limitation of update rules tied to the stored coordinate axes, which is what motivates structured and full-matrix preconditioning in Sections IV and V.
 :::
 
-## 4. Local stability: the multiplier $1 - \eta\lambda$
+## 4. Local stability: where the multiplier $1 - \eta\lambda$ comes from
 
-Near any stationary point $\theta^\star$, where $g(\theta^\star) = 0$, the gradient is approximately linear, $g(\theta^\star + e) \approx H^\star e$. So the error $e_t = \theta_t - \theta^\star$ of gradient descent evolves as (survey Eq. 9)
+Now ask a different question. Suppose $\theta^*$ is a stationary point, $\nabla L(\theta^*) = 0$. If gradient descent starts close to it, will it move toward it or away? Let $e_t = \theta_t - \theta^*$, the displacement from that point (an "error" vector, not a prediction error).
 
-$$e_{t+1} \approx (I - \eta H^\star)\,e_t.$$
+**Deriving the survey's Eq. (9), one line at a time.** Taylor's approximation of the gradient near $\theta^*$ gives $g(\theta^* + e_t) \approx g(\theta^*) + H^*e_t = H^*e_t$, because $g(\theta^*) = 0$. Substitute into gradient descent and subtract $\theta^*$:
 
-Along each Hessian eigenvector, the error is multiplied by the **[[multiplier]]** $1 - \eta\lambda$ at every step:
+$$e_{t+1} = \theta_{t+1} - \theta^* \approx e_t - \eta H^*e_t = (I - \eta H^*)\,e_t.$$
 
-- $0 < \eta\lambda < 2$: it contracts;
-- $\lambda < 0$: it expands without changing sign, which is how GD leaves a saddle;
-- $\eta\lambda > 2$: it expands while flipping sign, so the iterates bounce outward.
+Now let the error lie along an eigenvector, $e_t = a_t v_j$ with $H^*v_j = \lambda_j v_j$:
 
-The famous threshold $\eta < 2/\lambda_{\max}$ comes from this local quadratic analysis. It is not a universal rule for networks: Section VI-E of the survey returns to the "edge of stability", where training continues above it (chapter 18).
+$$e_{t+1} \approx a_t v_j - \eta a_t\lambda_j v_j = (1 - \eta\lambda_j)\,a_t v_j.$$
 
-The same algebra covers preconditioned steps (Appendix D-B). With a fixed positive-definite $M$, the step $\theta_{t+1} = (I - \eta M^{-1}H)\theta_t$ (survey Eq. 56) behaves like gradient descent on the symmetric matrix $K = M^{-1/2}HM^{-1/2}$ (survey Eq. 57). It contracts in every eigen-direction if and only if (survey Eq. 58)
+So each eigen-component is multiplied by $m = 1 - \eta\lambda$ at every step: $e_1 = m\,e_0$, $e_2 = m^2e_0$, and so on, as long as the local approximation holds.
 
-$$0 < \eta < \frac{2}{\lambda_{\max}(K)}.$$
+**Three cases.**
 
-For $M = I$, $K = H$ and this is the textbook threshold. For $M = H$ (Newton), $K = I$: a unit step sends every component to zero.
+- **$0 < \eta\lambda < 2$: settle.** Then $-1 < m < 1$. With $m = 0.8$: $1 \to 0.8 \to 0.64 \to 0.512$. A ball moving toward the bottom of a bowl; if $m$ is negative it crosses the bottom back and forth, but the swings shrink.
+- **$\lambda < 0$: escape.** For any $\eta > 0$, $m > 1$. With $m = 1.2$: $1 \to 1.2 \to 1.44 \to 1.728$. A ball just off the top of a hill rolls away. Here growth is useful: it is how gradient descent leaves a saddle along negative curvature. (At a point with exactly zero gradient, unperturbed GD does not move at all.)
+- **$\eta\lambda > 2$: overshoot.** Then $m < -1$. With $m = -2$: $1 \to -2 \to 4 \to -8 \to 16$. The ball jumps across the bowl farther each time: the steps are too large.
+
+We do not choose the case; the curvature and the learning rate do:
+
+| example | $\lambda$ | $\eta$ | $m = 1 - \eta\lambda$ | behaviour |
+|---|---|---|---|---|
+| A | $5$ | $0.1$ | $0.5$ | contracts |
+| B | $-5$ | $0.1$ | $1.5$ | escapes |
+| C | $5$ | $0.5$ | $-1.5$ | oscillates and grows |
+
+A real Hessian can have positive and negative eigenvalues at once, so one stationary point can attract gradient descent along some directions and repel it along others. That is exactly a saddle.
+
+:::viz cases
+:::
+
+:::read How to read this visual
+**What is drawn.** The local error $e_t = m^t e_0$ along one eigen-direction, for $t = 0, \dots, 12$, with $m = 1 - \eta\lambda$ and $e_0 = 1$. The shaded band is $|e| \le 1$; the dashed lines mark $\pm1$.
+
+**What moves.** The curvature $\lambda$ (negative for a hill or saddle direction) and the learning rate $\eta$. The buttons load the three examples of the table.
+
+**What to notice.** Inside $0 < \eta\lambda < 2$ the dots shrink toward zero, smoothly if $m > 0$ and alternating in sign if $m < 0$. With $\lambda < 0$ they grow without changing sign: escape. With $\eta\lambda > 2$ they grow and flip sign: the overshoot. The readout names the case from $m$ alone.
+:::
+
+**Deriving the $2/\lambda_{\max}$ rule.** For a positive eigenvalue, the error shrinks when $|1 - \eta\lambda| < 1$. Expand the absolute value, $-1 < 1 - \eta\lambda < 1$; subtract 1, $-2 < -\eta\lambda < 0$; multiply by $-1$ and flip the signs, $0 < \eta\lambda < 2$. So $\eta < 2/\lambda$, and to make every positive-curvature direction stable at once, the most restrictive one wins:
+
+$$\eta < \frac{2}{\lambda_{\max}}.$$
+
+This is a local, quadratic threshold, not a universal rule for networks; Section VI-E of the survey returns to the "edge of stability", where training keeps working beyond it.
 
 :::viz pgdstab
 :::
 
 :::read How to read this visual
-**What is drawn.** For the rotated valley with curvatures $\kappa$ and $1$, the worst per-step factor $\max_i|1 - \eta\lambda_i(K)|$ as a function of the step size $\eta$, on a log axis, for three preconditioners. Violet: GD, $M = I$. Coral: the exact diagonal, $M = \mathrm{diag}(H)$. White: Newton, $M = H$. Below the dashed line at $1$ the step contracts the error; above it the error grows. The dotted vertical lines mark each method's stability limit $2/\lambda_{\max}(K)$; the dots mark the current $\eta$ (amber line).
+**What is drawn.** The same stability rule for a preconditioned step $\theta \leftarrow \theta - \eta M^{-1}H\theta$ on the rotated valley with curvatures $\kappa$ and $1$. Such a step behaves like gradient descent on $K = M^{-1/2}HM^{-1/2}$, so each eigen-direction of $K$ is multiplied by $1 - \eta\lambda(K)$. The curves show the worst factor $\max|1 - \eta\lambda(K)|$ against $\eta$ for three choices: $M = I$ (plain GD, violet), $M = \mathrm{diag}(H)$ (coral) and $M = H$ (Newton, white). Below the dashed line at $1$ the step contracts; the dotted verticals mark each $2/\lambda_{\max}(K)$.
 
-**What moves.** The valley angle, $\kappa$, and $\eta$.
+**What moves.** The valley's angle, $\kappa$, and the step size $\eta$.
 
-**What to try.** At $45^\circ$ and $\kappa = 100$, set $\eta = 1$. Then turn the angle to $0^\circ$.
-
-**What to notice.** At $45^\circ$ the readout gives exactly the numbers behind the table above. $K$ has eigenvalues $1$ and $100$ for GD, so GD is stable only for $\eta < 0.02$. For the diagonal method they are $0.0198$ and $1.98$, so it is stable for $\eta < 1.01$; at $\eta = 1$ its factors are $\pm0.98$, which is the bouncing of Fig. 11. Newton's $K = I$ gives a factor of $0$ at $\eta = 1$. The coral and violet curves have the same shape, shifted along the $\eta$ axis: at $45^\circ$ the diagonal method is just rescaled GD. At $0^\circ$, the coral curve drops onto the white one: an aligned valley is exactly what diagonal scaling can fix. The readout also gives each method's step count at its own best $\eta$, which repeats the condition-number lesson of section 1.
+**What to notice.** With $M = H$, $K = I$: every direction has the same curvature and any $\eta < 2$ is stable. The diagonal choice equals Newton at $0^\circ$ but, at $45^\circ$ and $\kappa = 100$, its $K$ has eigenvalues $0.0198$ and $1.98$, just as badly conditioned as plain GD. The readout gives each method's stable range and its step count at the best $\eta$.
 :::
 
 ## 5. What gradient-based guarantees actually promise
 
-For non-convex losses the survey uses weaker targets than "find the minimum". A point is an $\epsilon$-[[eps-stationary|first-order stationary point]] if $\|g(\theta)\| \le \epsilon$. It is approximately second-order stationary if, in addition, $\lambda_{\min}(H(\theta)) \ge -\gamma$: no direction curves down by more than $\gamma$. Gradient-based guarantees usually promise only the first: a small gradient, not global optimality. Escaping saddles requires separate assumptions, and sometimes random perturbations (Section II-E; the earlier survey of this course covered them in depth).
+These results clarify what convergence means for non-convex losses. The survey distinguishes two targets. A point is an approximate **[[eps-stationary|first-order stationary point]]** if
 
-The survey's Fig. 2(e)–(i) shows why these targets are needed: a zero gradient can belong to very different shapes. Test them here.
+$$\|\nabla L(\theta)\|_2 \le \epsilon,$$
+
+with $\epsilon$ a small tolerance. It is approximately **second-order stationary** if, in addition,
+
+$$\lambda_{\min}\big(H(\theta)\big) \ge -\gamma,$$
+
+where $\gamma$ limits how strongly any direction may curve downward. A small gradient alone cannot tell a saddle from a minimum, and even both conditions together do not promise a global minimum. Gradient-based analyses usually guarantee only the first; escaping saddles needs extra assumptions or mechanisms such as random perturbations. The survey's Fig. 2(e)–(h) shows why a zero gradient can belong to very different shapes. Test them here.
 
 :::viz zoo
 :::
@@ -137,6 +188,10 @@ The survey's Fig. 2(e)–(i) shows why these targets are needed: a zero gradient
 **What to try.** With the default $\epsilon = 0.05$, step through the shapes and read the three verdicts. On the shelf, lower $\epsilon$ below $0.024$. On the strict saddle, raise $\gamma$ above $2$.
 
 **What to notice.** The minimum, the strict saddle, the monkey saddle and the maximum all have exactly zero gradient: every one of them is a first-order stationary point. Only the second-order test separates them, and on the monkey saddle even that is fooled, because the Hessian is zero there. The shelf has no stationary point at all, yet its gradient there is only $0.0237$, so it passes as an $\epsilon$-stationary point for any $\epsilon \ge 0.024$. The balls show what the tests miss: gradient descent rolls off the strict saddle, the monkey saddle and the maximum, and on the shelf it keeps sliding with an ever smaller gradient. A small gradient certifies a flat spot, not a minimum.
+:::
+
+:::key What you should remember
+The multiplier $1 - \eta\lambda$ is the centre of Section II-E. A growing distance is good when it means leaving negative curvature, and bad when it comes from steps that are too aggressive for positive curvature. Convergence statements for networks are about small gradients, not global optimality.
 :::
 
 :::problem The next step

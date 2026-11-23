@@ -1,25 +1,16 @@
 ## 1. When does better geometry repay its cost?
 
-This chapter follows Sections VII and VIII of the survey. The main practical question is whether expensive geometric information saves enough expensive training operations to pay for itself. The trade-off differs by method:
+This chapter follows Sections VII and VIII of the survey. Section VII names open questions rather than declaring any family the winner. The first is economic. Suppose Shampoo makes each step more effective but takes longer to compute. When does the benefit outweigh the overhead? K-FAC and Shampoo face a refresh trade-off: recomputing their matrix statistics more often keeps them representative of the current loss landscape but adds overhead; refreshing less often is cheaper but staler. Hessian-free methods pay with inner iterations per step. Muon's orthogonalization runs well on accelerators, but its cost depends on the shapes of the weight matrices, and it usually shares the model with another optimizer for the remaining parameters.
 
-- **K-FAC and Shampoo:** factor quality, refresh frequency, matrix roots and distributed synchronization all interact.
-- **Hessian-free optimization:** the inner CG solve may dominate.
-- **Muon:** matrix products may be efficient on accelerators, but eligible matrices and auxiliary AdamW groups complicate the memory comparison.
-
-The survey asks research to report both the idealized optimizer arithmetic and the complete training-system cost. The dashboard of chapter 17 is a small example of the second.
+So the value of extra geometric information cannot be read from the update rule alone. It depends on the architecture, the matrix shapes, the hardware, the phase of training and how much training remains. The open problem is not only better mathematics; it is deciding when more mathematical information is economically worth it, especially as models and hardware change.
 
 ## 2. Curvature under noise and non-convexity
 
-A stochastic Hessian estimate can be indefinite or noisy (chapter 15). An empirical Fisher can differ substantially from the true Fisher (chapter 12). A structured gradient covariance may reflect loss curvature only indirectly (chapter 14). Open questions:
-- which approximations are accurate enough along real training paths;
-- how much damping or clipping they need;
-- whether apparent acceleration survives when gradients and curvature factors are estimated from minibatches of different sizes.
+Curvature changes as the network trains, so a curvature estimate can go stale. Estimated from minibatches, it is also noisy: BFGS infers curvature from gradient differences that sampling can corrupt, and a noisy or indefinite Hessian estimate can make an update unstable. The Fisher matrix and gradient statistics do not, in general, carry the same information as the Hessian. Damping and clipping control the damage, but they are extra choices, and stronger regularization can cancel the benefit of the curvature itself.
 
-The right benchmark includes noisy, poorly conditioned and rotated problems, not only nearly quadratic convex ones.
+The open question: how accurate must a curvature estimate be to improve training at all, under different levels of gradient noise and different landscapes, and how does its quality change as optimization progresses?
 
-## 3. Stability beyond the quadratic picture
-
-Chapter 4 derived the threshold $\eta < 2/\lambda_{\max}$ from a fixed quadratic. Section VI-E of the survey warns that it is not a universal prohibition for networks. On a fixed quadratic it is exact:
+Chapter 4 derived the threshold $\eta < 2/\lambda_{\max}$ from a fixed quadratic. On a fixed quadratic it is exact; on a real network, the curvature itself moves.
 
 :::viz quad
 :::
@@ -32,8 +23,6 @@ Chapter 4 derived the threshold $\eta < 2/\lambda_{\max}$ from a fixed quadratic
 **What to notice.** Along the sharp axis, every step multiplies the error by $1 - 20\eta$. Below $\eta = 0.1$ it shrinks; above $0.1$ it flips sign and grows, and GD diverges, even though the flat axis would still converge. On a quadratic the Hessian never changes, so nothing can rescue the run.
 :::
 
-But a network's Hessian changes as it trains. Cohen et al. observed that full-batch GD drives the sharpness up to $2/\eta$ and then keeps training there, at the **[[edge-of-stability|edge of stability]]**.
-
 :::viz mlp
 :::
 
@@ -43,13 +32,13 @@ But a network's Hessian changes as it trains. Cohen et al. observed that full-ba
 **What to notice.** At the smallest step size, sharpness rises and settles below $2/\eta$. At the three larger ones, it rises until it reaches $2/\eta$, overshoots once, and then hovers right at the line, while the loss keeps falling. Locally the iterates are unstable, yet training continues. The quadratic threshold describes a fixed local model, not the global nonlinear path. This is why the survey treats stability, noise and generalization as separate questions.
 :::
 
-## 4. Matrix-aware methods need their own theory
+## 3. Matrix-aware methods need their own theory
 
-Muon shows that useful optimizer geometry need not be an estimated inverse Hessian (chapter 16). The spectral-norm view explains one aspect of its update, the steepest linearized step. It leaves open the effects of momentum, nonlinearity, approximate orthogonalization, stochastic gradients and changing layer shapes. A theoretical comparison with Shampoo and SOAP should treat their actual operators, rather than relabel every matrix transform as "second order". It also remains to understand *which* parameter blocks benefit from matrix-aware updates, since implementations keep AdamW for embeddings and non-matrix parameters.
+Muon changes singular values without estimating the Hessian; Shampoo and SOAP use gradient-statistical matrices; K-FAC approximates Fisher information. A convergence theorem proved for one of these constructions does not transfer to the others, and it is misleading to treat them all as "second-order". For Muon in particular, the spectral-norm picture of chapter 16 explains a single linearized step, but real updates are shaped by momentum, stochastic gradients and an approximate orthogonalization. There is room for theory that matches the actual update operation in stochastic non-convex training, and for understanding which parameters benefit from matrix-aware updates (Muon is usually applied to hidden-layer matrices, with AdamW for the rest), which could guide better hybrid designs.
 
-## 5. Invariance and parameterization
+## 4. Invariance and parameterization
 
-An optimizer's path can change when the same model is written in different coordinates. Euclidean and diagonal methods use the stored coordinates directly. Natural gradient attempts a geometrically meaningful transformation of predictive distributions (chapter 12). Structured and matrix-aware methods introduce their own invariances or biases. These properties matter for networks with normalization, scale symmetries, and layers of very different widths. One consequence: sharpness itself is not invariant.
+The same network function can be written with different parameter values. Rescaling the weights of some layers can leave the output unchanged while changing the gradients, so gradient descent and coordinate-wise adaptive methods can follow different paths on what is really the same model. An optimizer is **invariant** to a reparameterization if it behaves the same either way. Natural gradient is designed around this, because it measures steps by their effect on the predicted distribution (chapter 12); matrix-aware methods have their own, different structural properties. Greater invariance does not guarantee faster training or better generalization, and normalization layers and parameter scaling change the picture again. Testing optimizers under equivalent parameterizations of the same network would help separate an optimizer's real principles from artifacts of one representation.
 
 :::viz rescale
 :::
@@ -62,39 +51,22 @@ An optimizer's path can change when the same model is written in different coord
 **What to notice.** The curvature across the valley, $2(a^2 + 1/a^2)$, grows without bound as $a$ moves away from $1$, although the function never changes. "Sharp" and "flat" describe the parameterization, not the function (Dinh et al.). So a lower sharpness, or a lower training loss, does not by itself establish better generalization. The survey places generalization in the evaluation protocol, not among the guaranteed outputs of an optimizer.
 :::
 
-## 6. Toward fair, system-aware benchmarks
+## 5. Conclusion: the whole survey in one argument
 
-Optimizer studies should state exactly what they count:
-- number of updates;
-- examples or tokens processed;
-- gradient evaluations;
-- GPU-hours;
-- peak memory;
-- communication volume;
-- final held-out performance.
-
-These are related, but not interchangeable. Training-scale studies make the trade-offs central. Public comparisons are more informative when they release the optimizer implementations, hyperparameter searches, mixed-precision settings, parameter-group exclusions and hardware assumptions with the results.
-
-## 7. Conclusion: the survey's answers
-
-This section follows Section VIII of the survey. Every method in it changes the way gradients are turned into parameter updates:
-- **GD** follows the gradient in Euclidean geometry, and **SGD** estimates it from a minibatch.
-- **Momentum** accumulates its history, and **Nesterov** evaluates it at a look-ahead point.
-- **AdaGrad, RMSProp, Adam and AdamW** scale each coordinate by its gradient history; **Adafactor and Lion** do it with less memory.
-- **Newton and quasi-Newton methods** add the curvature of the loss.
-- **Natural gradient and K-FAC** use the sensitivity of the model's predictions, the Fisher geometry.
-- **Shampoo and SOAP** use structured matrix statistics of the gradients.
-- **AdaHessian, Apollo and Sophia** estimate diagonal curvature.
-- **Muon** reshapes a momentum update along its singular directions.
+This section follows Section VIII. The survey begins with one decision: *given a gradient, how should an optimizer turn it into a parameter update?* Gradient descent uses a scalar learning rate. SGD makes the gradient cheaper but noisier. Momentum and Adam make better use of gradient history. Newton adds the Hessian to account for local curvature, but full curvature is expensive and can mislead in non-convex regions. BFGS, L-BFGS and Hessian-free methods address different parts of that cost. K-FAC, Shampoo, SOAP, Sophia and Muon show the much wider range of informed, matrix-structured updates.
 
 :::key The survey's answers
-**RQ1.** First-order methods extend gradient descent without estimating curvature. Momentum makes better use of previous gradient directions, adaptive methods scale each parameter by its gradient history, and the newer designs cut memory and simplify the update (chapters 7 to 9).
+**RQ1.** First-order methods extend gradient descent without estimating curvature. Momentum makes better use of previous gradient directions, adaptive methods scale each parameter by its gradient history, and newer designs cut memory and simplify the update (chapters 7 to 9).
 
-**RQ2.** Second-order methods use curvature to account for how the gradient changes; natural-gradient methods use the sensitivity of the predicted distribution; structured and matrix-aware methods exploit how the parameters are organized to make otherwise expensive updates affordable. These methods do not all estimate the same quantity, even when their update rules involve similar matrix operations (chapters 10 to 16).
+**RQ2.** Second-order methods use curvature to account for how the gradient changes; natural-gradient methods use the sensitivity of the predicted distribution; structured and matrix-aware methods exploit how the parameters are organized to make otherwise expensive updates affordable. They do not all estimate the same quantity, even when their update rules look alike (chapters 10 to 16).
 
-**The overall lesson.** More informative updates do not automatically mean more efficient training: the gain has to be weighed against compute and memory, and a convergence guarantee is only as relevant as its assumptions. Understanding an optimizer means asking what information it uses and how that information shapes the update. That gives a way to choose methods by the training problem and the resources available, rather than a ranking with a universal winner.
+**The overall lesson.** More informative updates do not automatically mean more efficient training. The gain must be weighed against memory and compute, and a convergence guarantee is only as relevant as its assumptions. Understanding an optimizer means asking what information it uses and how that information shapes the update; that gives a way to choose methods for the problem and the resources at hand, rather than a ranking with a universal winner.
+:::
+
+:::idea One sentence to finish
+The best optimization method is not decided by mathematical sophistication alone, but by the usefulness of its information, the geometry of its update, and its end-to-end cost for the problem being solved.
 :::
 
 :::problem Where to go from here
-Read the survey itself (the PDF link at the top of every page), with this guide beside it. For the underlying basics (gradients, step sizes, curvature, momentum, noise, Adam), the crash course builds each from scratch. The paper library has a page per paper for the references the two surveys share, including Adam, AdaGrad, Shampoo, the heavy ball, cubic regularization and the edge of stability.
+Read the survey itself (the PDF link at the top of every page) with this guide beside it. For the basics (gradients, step sizes, curvature, momentum, noise, Adam), the crash course builds each from scratch, and the paper library has a page per paper for many of the survey's references.
 :::

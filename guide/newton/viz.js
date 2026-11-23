@@ -1,4 +1,4 @@
-// Chapter 10 (survey Sections IV-A to IV-D, Appendix D-A). New visual 'newton1d' (the survey's L(x) = x^4 - x^2 of
+// Chapter 10 (survey Sections IV-A to IV-D). New visual 'newton1d' (the survey's L(x) = x^4 - x^2 of
 // Section IV-C, damped as in Eq. 33); numbers in scripts/check-math/guide3_numbers.py. Reused: crash-course 'newton'
 // (course_escape.py) and nesterov2006cubic 'model'.
 import { HEX } from '../../src/lib/atlas3d.js';

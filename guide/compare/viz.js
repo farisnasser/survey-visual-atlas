@@ -1,4 +1,4 @@
-// Chapter 17 (survey Section VI). New visual 'dashboard': the measured runs behind the survey's Fig. 9
+// Chapter 17 (survey Section VI). New visual 'dashboard': the measured runs behind the survey's Fig. 10
 // (survey-v3/experiments/run_dashboard.py -> results.json -> scripts/check-math/guide3_numbers.py -> guide/compare/data.json).
 import { HEX } from '../../src/lib/atlas3d.js';
 
@@ -13,9 +13,9 @@ const PLOTS = {
   lr: { xlabel: 'learning rate ÷ that optimizer\'s best learning rate', ylabel: 'final training loss (median of 5 seeds)', logx: true, logy: true, xlim: [5e-5, 2e4], ylim: [1e-7, 20] },
 };
 const dashboard = {
-  title: 'The survey\'s Fig. 9, live: seven optimizers on one task, every run measured',
+  title: 'The survey\'s Fig. 10, live: seven optimizers on one task, every run measured',
   caption: 'One MLP (64-128-128-10) trained on the scikit-learn digits for 600 updates, 5 seeds, by seven optimizers, each given the same 9-point learning-rate grid. Choose a panel: loss against gradient evaluations (move the learning rate away from each optimizer\'s best), loss against measured wall-clock, measured optimizer memory against model size, or final loss against the learning rate.',
-  note: 'Real runs (survey-v3/experiments/run_dashboard.py; full record in the survey\'s Table VIII): fp32, CPU (Intel Core Ultra 9 285H), PyTorch 2.11, batch 64, no schedule, no weight decay. Losses below 10⁻⁷ are drawn at the floor. In the LR panel, an x at the top marks a setting that diverged or made no progress.',
+  note: 'Real runs (survey-v3/experiments/run_dashboard.py): fp32, CPU (Intel Core Ultra 9 285H), PyTorch 2.11, batch 64, no schedule, no weight decay. Losses below 10⁻⁷ are drawn at the floor. In the LR panel, an x at the top marks a setting that diverged or made no progress.',
   legend: NAMES.map(n => [COL[n], n]),
   mode: '2d',
   plot: PLOTS.steps,
@@ -101,4 +101,32 @@ const memory = {
   },
 };
 
-export default { dashboard, memory };
+// ---------- 'budget' (survey Section VI-C): total time = updates x seconds per update ----------
+const budget = {
+  title: 'Fewer iterations is not less time: total time = updates × seconds per update',
+  caption: 'Two optimizers reach the same target loss. A needs fewer updates, B cheaper ones. The bars are total time; each is split into its two factors in the readout.',
+  note: 'Pure arithmetic with hypothetical costs (the defaults are the worked example of Section VI-C); no measured runs.',
+  legend: [[HEX.ball, 'optimizer A'], [HEX.opt2, 'optimizer B']],
+  mode: '2d',
+  plot: { xlabel: '', ylabel: 'total time to the target (seconds)', legend: false, xfmt: () => '' },
+  controls: [
+    { id: 'na', label: 'A: updates to target', min: 10, max: 400, step: 10, value: 100, digits: 0 },
+    { id: 'ca', label: 'A: seconds per update', min: .05, max: 2, step: .05, value: .5 },
+    { id: 'nb', label: 'B: updates to target', min: 10, max: 400, step: 10, value: 250, digits: 0 },
+    { id: 'cb', label: 'B: seconds per update', min: .05, max: 2, step: .05, value: .1 },
+  ],
+  build(ctx) { this.draw(ctx); },
+  onControl(ctx) { this.draw(ctx); },
+  draw(ctx) {
+    const { na, ca, nb, cb } = ctx.vals, ta = na * ca, tb = nb * cb, P = ctx.plot.clear();
+    P.bars([{ y: ta, color: HEX.ball }, { y: tb, color: HEX.opt2 }], { width: .5 });
+    P.text(0, ta, `A: ${na} × ${ca.toFixed(2)} s = ${ta.toFixed(1)} s`, { color: '#e8ecf8', align: 'center', base: 'bottom', dy: -4 });
+    P.text(1, tb, `B: ${nb} × ${cb.toFixed(2)} s = ${tb.toFixed(1)} s`, { color: '#e8ecf8', align: 'center', base: 'bottom', dy: -4 });
+    P.set({ ylim: [0, Math.max(ta, tb) * 1.25] });
+    P.draw();
+    const win = ta < tb ? 'A' : tb < ta ? 'B' : 'neither (a tie)', fewer = na < nb ? 'A' : nb < na ? 'B' : 'neither';
+    ctx.stat(`A takes ${ta.toFixed(1)} s, B takes ${tb.toFixed(1)} s · fewer updates: ${fewer} · finishes first: ${win} · break-even: A ties B at ${(tb / na).toFixed(3)} s per update`);
+  },
+};
+
+export default { dashboard, memory, budget };

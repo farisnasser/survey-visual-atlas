@@ -3,9 +3,9 @@ the PDF itself. Each figure = the drawings above its 'Fig. N:' caption in the ca
 import fitz, os, re, shutil, io
 from PIL import Image
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-SRC = os.path.join(ROOT, "..", "survey-v3", "Optimization_Methods_Survey_with_Figures.pdf")
+SRC = os.path.join(ROOT, "..", "survey-v3", "Optimization_Methods_Survey_no_Appendix.pdf")
 OUT = os.path.join(ROOT, "public", "survey3"); os.makedirs(OUT, exist_ok=True)
-shutil.copy(SRC, os.path.join(OUT, "Optimization_Methods_Survey_with_Figures.pdf"))
+shutil.copy(SRC, os.path.join(OUT, "Optimization_Methods_Survey.pdf"))
 d = fitz.open(SRC)
 done = set()
 for p in d:

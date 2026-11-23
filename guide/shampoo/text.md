@@ -1,22 +1,34 @@
-## 1. Two accumulators, one per side of the matrix
+## 1. Adaptive scaling for whole rows and columns
 
-This chapter follows Section V-C of the survey. **[[shampoo|Shampoo]]** approaches matrix structure from a different direction than K-FAC. Instead of approximating a Fisher block, it builds matrix accumulators directly from the gradients. For a weight gradient $G_t \in \mathbb{R}^{m\times n}$, define (survey Section V-C)
+This chapter follows Section V-C of the survey. **[[shampoo|Shampoo]]** looks like K-FAC because it also transforms a matrix gradient from the left and the right, but its matrices come from accumulated *gradients*, not from a Fisher factorization. It can be understood with AdaGrad and a little linear algebra.
 
-$$L_t = \epsilon I_m + \sum_{s=1}^t G_sG_s^\top, \qquad R_t = \epsilon I_n + \sum_{s=1}^t G_s^\top G_s.$$
+Suppose a layer's gradient is $G = \mathrm{diag}(2, 4)$. GD steps $-\eta G$, twice as far along the second direction. If one direction keeps producing large gradients, we may want to shrink its effective scale, as AdaGrad and Adam do per coordinate. Shampoo extends that idea from single weights to the row and column dimensions of the matrix.
 
-$L_t$ is $m\times m$ and summarizes how the gradient varies across *rows* (outputs); $R_t$ is $n\times n$ and summarizes the *columns* (inputs). The small $\epsilon I$ keeps both positive definite. The two-sided matrix Shampoo step uses inverse fourth roots (survey Eq. 37):
+**First matrix, $GG^\top$.** Take $G = \begin{bmatrix}1 & 2\\ 2 & 4\end{bmatrix}$. Then
+
+$$GG^\top = \begin{bmatrix}1 & 2\\ 2 & 4\end{bmatrix}\begin{bmatrix}1 & 2\\ 2 & 4\end{bmatrix} = \begin{bmatrix}5 & 10\\ 10 & 20\end{bmatrix}.$$
+
+The off-diagonal entries are nonzero because the rows are related (the second is twice the first): $GG^\top$ captures how gradient *rows* relate, not just four isolated magnitudes. Likewise $G^\top G$ captures relationships among *columns*. For an $m\times n$ gradient, $GG^\top$ is $m\times m$ and $G^\top G$ is $n\times n$, and Shampoo accumulates them over steps:
+
+$$L_t = \epsilon I_m + \sum_{s=1}^{t} G_sG_s^\top, \qquad R_t = \epsilon I_n + \sum_{s=1}^{t} G_s^\top G_s.$$
+
+These are running summaries of the row-side and column-side gradient statistics; the small $\epsilon$ keeps them positive definite. One minibatch can be noisy, but accumulating over time reveals persistent directions.
+
+## 2. The inverse fourth roots
+
+Shampoo's representative step is (survey Eq. 37)
 
 $$\Delta W_t = -\eta\,L_t^{-1/4}\,G_t\,R_t^{-1/4}.$$
 
-## 2. What a matrix power means
+**What is an inverse fourth root?** For a number, $16^{1/4} = 2$ and $16^{-1/4} = \tfrac12$: a larger number gets a smaller scale. For a diagonal matrix, $L = \mathrm{diag}(16, 81)$ gives $L^{-1/4} = \mathrm{diag}(\tfrac12, \tfrac13)$. For a general positive-definite matrix, use its eigendecomposition, $L = U\Lambda U^\top$ and $L^{-1/4} = U\Lambda^{-1/4}U^\top$: express a direction in the eigenvector basis, rescale each eigen-direction, transform back. That is why Shampoo can do more than scale each original weight.
 
-The powers are spectral functions. If $L = U\,\mathrm{diag}(\lambda_i)\,U^\top$ is the eigendecomposition of the positive-definite $L$, then
+**Why a fourth root and not a square root?** With a single weight, both accumulators are the same number $v$, and the step becomes $-\eta\,v^{-1/4}g\,v^{-1/4} = -\eta g/\sqrt{v}$: AdaGrad's inverse square root, split evenly between the two sides. For a real matrix the two factors act along different dimensions and cannot be collapsed into one denominator.
 
-$$L^{-1/4} = U\,\mathrm{diag}(\lambda_i^{-1/4})\,U^\top.$$
+**A complete update.** Let $G = \mathrm{diag}(2, 4)$ and, for one step, drop $\epsilon$. Then $L = GG^\top = \mathrm{diag}(4, 16)$ and $R = G^\top G = \mathrm{diag}(4, 16)$, with $L^{-1/4} = R^{-1/4} = \mathrm{diag}(1/\sqrt2, 1/2)$. Now $L^{-1/4}G = \mathrm{diag}(\sqrt2, 2)$ and
 
-That is: rotate into $L$'s eigenbasis, divide each direction by the fourth root of its accumulated gradient energy, rotate back. Directions in which the gradient has been large get smaller steps, exactly like AdaGrad, except that the "directions" are eigenvectors of a matrix, not individual coordinates. The two factors together rescale the gradient along statistically important row *and* column directions.
+$$L^{-1/4}\,G\,R^{-1/4} = \begin{bmatrix}1 & 0\\ 0 & 1\end{bmatrix}.$$
 
-Why the fourth root? For a vector parameter, full-matrix AdaGrad would use the inverse square root $(\sum gg^\top)^{-1/2}$. Shampoo applies a root on each of two sides, and the two quarter-powers together play the role of that one square root. The exponent $-1/4$ is for the matrix case; for higher-order tensors Shampoo uses other exponents.
+So this one-step Shampoo update is $-\eta I$, where GD would take $-\eta\,\mathrm{diag}(2, 4)$: the large direction was reduced more. Real Shampoo does not turn every gradient into the identity; history and regularization change the result.
 
 :::viz rotate
 :::
@@ -29,12 +41,6 @@ Why the fourth root? For a vector parameter, full-matrix AdaGrad would use the i
 **What to notice.** Diagonal AdaGrad is fast when the valley is aligned with the axes and slows down as it tilts: its per-coordinate scale cannot see a rotated valley (chapter 4 again). Shampoo's and full-matrix AdaGrad's runs are the same at every angle, because their accumulators rotate with the problem. For a $1\times2$ matrix, Shampoo *is* a full-matrix method, with power $-1/4$ instead of $-1/2$. Its memory advantage only appears for real matrices, which is the next visual.
 :::
 
-## 3. Memory and cost
-
-Shampoo avoids a full $(mn)^2$ preconditioner, but it stores $m^2 + n^2$ numbers per matrix before any blocking. Every inverse root needs an eigendecomposition or an iterative method, which can be expensive.
-
-The survey warns against a common misreading: it is incorrect to assume that $m^2 + n^2$ is always smaller than $mn$. For a square $n\times n$ matrix it is $2n^2$ versus $n^2$: twice one of Adam's moment arrays, and as much as both of them together. Structured methods are economical relative to a full $(mn)^2$ layer curvature matrix, not necessarily relative to Adam's diagonal state.
-
 :::viz matrix
 :::
 
@@ -44,12 +50,14 @@ The survey warns against a common misreading: it is incorrect to assume that $m^
 **What to notice.** Shampoo's two $8\times8$ statistics, $8^2 + 8^2 = 128$ numbers, capture the row and column structure, and it converges far faster than GD or diagonal AdaGrad. Full-matrix AdaGrad also does well, but its preconditioner has $64\times64 = 4096$ numbers. This toy illustrates the structure only. The paper's guarantee is an online convex regret bound, not a statement about networks.
 :::
 
-## 4. What Shampoo guarantees
+## 3. What it costs, and what it promises
 
-The original Shampoo analysis proves convergence in a stochastic *convex* setting, as a regret bound. That theorem cannot be quoted as a non-convex deep-network guarantee. Scalable implementations (Anil et al., 2020) amortize and distribute the matrix operations: the roots are recomputed only every so often, and large matrices are split into blocks. The key trade-off, in the survey's words, is that a mathematically richer direction may need fewer optimizer steps while costing more arithmetic or memory per step.
+When the factors have off-diagonal entries, their eigenvectors are tilted relative to the axes, so Shampoo scales *combinations* of weights, which helps when the geometry is coupled. The price: for an $m\times n$ weight the two factors hold about $m^2 + n^2$ numbers, and inverse roots cost far more than elementwise arithmetic. As the survey warns, $m^2 + n^2$ is not always smaller than Adam's storage: for a square $n\times n$ matrix it is $2n^2$, exactly Adam's two moment arrays, and for a thin matrix it is more. Practical implementations reduce how often the roots are recomputed. Shampoo's original analysis gives convergence guarantees for stochastic *convex* problems, which do not automatically extend to non-convex network training.
 
-Section V-F's SOAP, which runs Adam inside Shampoo's eigenbasis, is covered with Muon in chapter 16.
+:::key Remember V-C
+Shampoo accumulates gradient outer products along each matrix dimension and rescales the gradient from both sides with inverse matrix roots, capturing relationships among rows and columns. Unlike K-FAC, its factors are gradient statistics, not a Fisher approximation: adaptive scaling extended from coordinates to matrix directions.
+:::
 
 :::problem The next step
-Shampoo keeps matrices. Section V-D of the survey goes the other way: estimate only the diagonal of the Hessian, but estimate the real thing. Chapter 15.
+Matrix factors are costly. Chapter 15 goes back to diagonal scaling, but with curvature: AdaHessian, Apollo and Sophia.
 :::

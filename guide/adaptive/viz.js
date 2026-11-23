@@ -1,4 +1,4 @@
-// Chapter 8 (survey Sections III-D to III-H, Appendix A-B). New visual 'adamw' (Eqs. 27-28; numbers in
+// Chapter 8 (survey Sections III-D to III-H). New visual 'adamw' (Eqs. 27-28; numbers in
 // scripts/check-math/guide3_numbers.py); reused: duchi2011adaptive 'sparse', crash-course 'bias' and 'adamfail' (course_adaptive.py).
 import { HEX } from '../../src/lib/atlas3d.js';
 import ad from '../../course/adaptive/viz.js';

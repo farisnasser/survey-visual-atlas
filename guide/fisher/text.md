@@ -1,47 +1,47 @@
-## 1. Three different matrices
+## 1. Three matrices that answer three different questions
 
-This chapter follows Sections IV-H, IV-I and IV-J of the survey and Appendix C-D. Deep-learning papers use "second order" loosely. The survey separates three matrices.
+This chapter follows Sections IV-H, IV-I and IV-J of the survey. Papers often call any matrix that multiplies a gradient "second order". The survey separates three of them, each answering its own question:
 
-**The Hessian.** $H = \nabla^2L$ is the second derivative of the chosen scalar objective. For a composite loss $L(\theta) = \ell(f_\theta)$, where the network $f_\theta$ produces outputs $f_k$ and the loss $\ell$ scores them, the chain rule splits it in two (survey Section IV-H):
+- **Hessian:** how does the gradient of *this loss* change when the parameters move?
+- **Generalized Gauss–Newton:** what curvature arises when parameter changes move the model's *outputs*, which then pass through the loss?
+- **Fisher information:** how sensitively does the model's *predicted probability distribution* change when the parameters move?
 
-$$H = J^\top H_\ell J + \sum_k \frac{\partial\ell}{\partial f_k}\nabla_\theta^2 f_k.$$
+**The Hessian**, $H = \nabla^2L(\theta)$, is the curvature of the training objective itself. For $L(x) = x^2$, $H = 2$, a bowl; for $L(x) = -x^2$, $H = -2$, a hill. It can be positive in some directions and negative in others, which is exactly what made undamped Newton unsafe in chapter 10.
 
-Here $J$ is the Jacobian of the outputs with respect to the parameters and $H_\ell$ is the Hessian of the loss with respect to the outputs.
+**The [[ggn|generalized Gauss–Newton]] matrix.** A network's loss is a composition: parameters $\theta$ produce outputs $f_\theta(x)$, and a loss $\ell$ scores them. The full Hessian contains both the loss's curvature in the outputs and the network's own second derivatives. The GGN keeps only the first, structured part, $G = J^\top H_\ell J$, where $J$ is the Jacobian of the outputs with respect to the parameters and $H_\ell$ the loss's curvature in the outputs. When the loss is convex in its outputs, as squared error and cross-entropy are, $G$ is positive semidefinite: it cannot produce the downward directions of a general Hessian. That makes solving with it better behaved, at the price of omitting some information.
 
-**The Gauss–Newton matrix.** The first term, $G = J^\top H_\ell J$, is the **[[ggn|generalized Gauss–Newton]]** matrix. When $H_\ell \succeq 0$, as for squared error or cross-entropy, $G \succeq 0$ even if the full Hessian is indefinite. Dropping the second term is an approximation, not an identity. Its usefulness is that $G$ never has negative curvature, so Hessian-free solvers (chapter 11) get well-posed linear systems.
+**The [[fisher|Fisher information]]** belongs to probabilistic models. Picture a binary classifier predicting $P(y = 1) = 0.51$. One small parameter change moves that to $0.52$; another moves it to $0.95$. The second changes the predicted distribution far more. The Fisher matrix encodes this local sensitivity:
 
-**The Fisher matrix.** For a probabilistic model $p_\theta(y \mid x)$, the **[[fisher|Fisher information]]** is (survey Section IV-H)
+$$F(\theta) = \mathbb{E}_{x,\;y\sim p_\theta(\cdot\mid x)}\Big[\nabla_\theta\log p_\theta(y\mid x)\,\nabla_\theta\log p_\theta(y\mid x)^\top\Big],$$
 
-$$F(\theta) = \mathbb{E}_{x,\,y \sim p_\theta}\left[\nabla_\theta\log p_\theta(y\mid x)\,\nabla_\theta\log p_\theta(y\mid x)^\top\right].$$
+an average of outer products of score gradients, with the labels drawn *from the model*. What distribution the average uses matters.
 
-The expectation is over labels drawn *from the model itself*. Replacing them with the observed labels gives the **[[empirical-fisher|empirical Fisher]]**, a gradient outer-product estimate. It does not generally equal $F$, $G$ or $H$. In well-specified likelihood problems some identities between them hold in expectation, but they must not be applied to arbitrary non-convex losses.
+**Why the empirical Fisher needs care.** Averaging the same outer products with the *observed* labels gives the **[[empirical-fisher|empirical Fisher]]**, a common shortcut. It is not, in general, the Fisher, the GGN, or the Hessian. Special identities hold under particular assumptions, but a squared-gradient statistic should not simply be renamed "curvature".
 
-| matrix | definition | always positive semidefinite? | relation to the Hessian |
+| matrix | built from | always $\succeq 0$? | relation to $H$ |
 |---|---|---|---|
-| Hessian $H$ | $\nabla^2L$ | no | itself |
-| Gauss–Newton $G$ | $J^\top H_\ell J$ | yes, when $H_\ell \succeq 0$ | $H$ without the second term of the split above |
-| Fisher $F$ | $\mathbb{E}_{p_\theta}[\nabla\log p\,\nabla\log p^\top]$ | yes | related only through identities in well-specified cases |
-| empirical Fisher | outer products of observed-label gradients | yes | does not generally equal $F$, $G$ or $H$ |
+| Hessian $H$ | $\nabla^2 L$ | no | itself |
+| Gauss–Newton $G$ | $J^\top H_\ell J$ | yes, when $H_\ell \succeq 0$ | $H$ without the network's own second derivatives |
+| Fisher $F$ | score outer products, labels from the model | yes | related only through identities in special cases |
+| empirical Fisher | gradient outer products, observed labels | yes | not $F$, $G$ or $H$ in general |
 
-The survey's added Table VI extends this list to Adam's second moment, Sophia's diagonal estimate, the K-FAC factors and Shampoo's factors (chapters 13 to 16).
+:::key Remember IV-H
+Hessian = curvature of the loss. GGN = a structured output-loss curvature term. Fisher = geometry of the predicted distributions. Matrices of the same shape do not automatically encode the same information.
+:::
 
-## 2. Natural gradient: geometry of predictions
+## 2. Natural gradient: measure steps by how much the predictions change
 
-Change the parameter coordinates by a smooth invertible map, say from $\sigma$ to $\log\sigma$. The model and its predictions are the same, but Euclidean distance in the new coordinates is different, so ordinary gradient descent follows a different path. **[[natural-gradient|Natural gradient]]** asks for a step that is small in terms of the *predictions* instead. Under regularity conditions, the Kullback–Leibler divergence between the model's predictions at nearby parameters is (survey Section IV-I)
+Ordinary gradient descent measures a step with Euclidean distance in parameter space: $0.1$ in one weight counts like $0.1$ in another. But a predictor cares about how much its outputs change. A change of $0.01$ in one weight may swing a predicted probability a lot, while $0.1$ in another barely moves anything. Equal-length steps can have very unequal effects.
 
-$$\mathrm{KL}(p_\theta\,\|\,p_{\theta+\Delta}) \approx \tfrac12\Delta^\top F(\theta)\Delta.$$
+**[[natural-gradient|Natural gradient]]** fixes this with the Fisher matrix as the metric of chapter 6's variable-metric step (survey Eq. 35):
 
-So the Fisher matrix is exactly the metric that measures how much a step changes the predictions. Use it as $M$ in the variable-metric model of chapter 6 and the step is (survey Eq. 35)
+$$\Delta_t = -\eta F(\theta_t)^{-1}g_t.$$
 
-$$\Delta_{\mathrm{NG}} = -\eta F^{-1}g,$$
+Here $g_t$ is the gradient of the loss and $F$ says which parameter movements are large or small *in predictive terms*. The inverse is notation: if $F$ is singular or badly conditioned, real methods damp it, use a pseudoinverse, or solve approximately.
 
-with damping or a pseudo-inverse if $F$ is singular.
+**A numerical picture.** Purely for illustration, take $g = (2, 2)^\top$, $F = \mathrm{diag}(100, 1)$ and $\eta = 0.1$. Ordinary GD gives $\Delta = (-0.2, -0.2)^\top$. Natural gradient computes $F^{-1}g = (0.02, 2)^\top$, so $\Delta = (-0.002, -0.2)^\top$. The first weight moves a hundred times less, because this $F$ says the predictions are very sensitive in that direction.
 
-**A derivation from a KL budget (Appendix C-D).** Ordinary GD asks which *Euclidean* step decreases the linear model most. Natural gradient instead limits how much the predictions may change (survey Eq. 52):
-
-$$\min_\Delta\, g^\top\Delta \quad\text{subject to}\quad \tfrac12\Delta^\top F\Delta \le r^2/2.$$
-
-With $F \succ 0$ and the constraint active, the Lagrangian is $\mathcal{L}(\Delta, \lambda) = g^\top\Delta + \tfrac\lambda2(\Delta^\top F\Delta - r^2)$. Stationarity gives $g + \lambda F\Delta = 0$, so $\Delta = -\lambda^{-1}F^{-1}g$. The radius $r$ fixes the scalar $\lambda$; the *direction* is $-F^{-1}g$. Its goal is a small change in the predictions, which is distinct from minimizing a Hessian quadratic model. That is why natural gradient is sometimes called second order but is not simply an inverse-Hessian step.
+**Not Newton with another name.** Both transform the gradient with a matrix, but Newton uses the curvature of the chosen loss, while natural gradient uses the geometry of the model's distributions. Its main theoretical appeal is that a smooth change of coordinates for the same model, for example from $\sigma$ to $\log\sigma$, does not change the ideal direction in distribution space, to first order. Finite steps, damping and approximations weaken this property.
 
 :::viz natgrad
 :::
@@ -60,16 +60,40 @@ All paths are drawn in the same $(\mu, \sigma)$ plane.
 **What to notice.** The two GD paths are different curves, although they optimize the same model: renaming a parameter changed the algorithm. The two natural-gradient paths nearly lie on top of each other; the readout measures the largest distance between each pair of paths over the first 40 steps. With finite steps the invariance is only approximate; it is exact in the limit of small steps. One part is exact at any step size: natural gradient's mean update is $\mu \leftarrow \mu - \eta(\mu - 1)$ in both parameterizations, so the mean moves the same fraction $\eta$ of the way to the data mean at every step, whatever $\sigma$ is. Speed is not the point here. At the default step size, the two GD runs happen to reach the optimum in fewer steps than natural gradient; the readout counts them. The point is that natural gradient's path depends on the predictions, not on how the model is written down. Raise $\eta$ and GD in $(\mu, \sigma)$ can overshoot to $\sigma \le 0$, where the model breaks; it is then stopped.
 :::
 
-## 3. What the second-order theory really guarantees
+For a layer with millions of weights, the full Fisher matrix is far too large to store or invert. That is what K-FAC addresses in chapter 13.
 
-Section IV-J of the survey summarizes the guarantees:
-- **Full Newton**, on a sufficiently smooth, locally strongly convex problem: local quadratic convergence (chapter 10).
-- **BFGS**, under appropriate line-search and regularity assumptions: local superlinear behaviour (chapter 11).
-- **The basic non-convex GD bound** of chapter 7: it controls only the best gradient norm.
-- **Trust-region and cubic-regularization methods**: stronger global complexity results for certain stationarity criteria, but at the cost of solving model subproblems.
+:::key Remember IV-I
+Natural gradient asks "how much would this step change the model's predictions?", not just "how far does the parameter vector move?".
+:::
 
-None of these results says that a large network trains faster in wall-clock time, or generalizes better. A guarantee must be read together with its oracle assumptions, its local or global scope, and its objective class. The survey's added Table V lists all of them side by side (chapter 17).
+## 3. What the theory really guarantees
+
+Three claims sound alike but are not:
+
+- **"Newton converges quadratically."** A *local* result near a suitable minimum, under smoothness and nonsingularity assumptions; not a claim about arbitrary network initializations.
+- **"BFGS can converge superlinearly."** Under appropriate conditions and line searches, its progress accelerates near the solution; noisy minibatch implementations do not automatically inherit this.
+- **"Trust-region and cubic methods have non-convex guarantees."** These theorems reach a kind of *stationarity*, under smoothness assumptions and access to derivatives or approximate subproblem solutions; they do not promise the global optimum.
+
+**Fewer iterations, not necessarily less time.** If method A needs $20$ updates at $3$ seconds each and method B needs $100$ updates at $0.1$ seconds each, then $T_A = 20\times3 = 60$ s and $T_B = 100\times0.1 = 10$ s. A takes five times fewer steps and six times longer.
+
+Theorems also answer different questions: one bounds the loss gap of a convex function, another the gradient norm of a non-convex one, a third only applies once close to a minimum. Comparing their rates without this context is misleading, and a lower training loss does not by itself mean better test accuracy.
+
+| stage | question | main idea | remaining limitation |
+|---|---|---|---|
+| Newton | can curvature choose a better step? | minimize a local quadratic model | Hessian may be unreliable or expensive |
+| local convergence | when is Newton exceptionally fast? | quadratic error reduction near a minimum | only local, under assumptions |
+| damping | what if curvature is negative? | shift the Hessian to a safer model | damping must be chosen |
+| trust region, cubic | how far to trust the model? | restrict or penalize large steps | costlier subproblems |
+| BFGS | curvature without second derivatives? | learn from $(s, y)$ pairs | large approximation; noise |
+| L-BFGS | less storage? | keep only recent pairs | approximation quality, line searches |
+| Hessian-free | curvature without a stored matrix? | Hessian–vector products and CG | repeated inner iterations |
+| GGN, Fisher | which matrix is really used? | separate loss curvature from prediction geometry | different meanings and assumptions |
+| natural gradient | distance as change in predictions? | precondition with the Fisher | full Fisher too expensive |
+
+:::key Remember IV-J
+Read a convergence theorem together with its objective class, its starting assumptions, the quantity it bounds, and the cost of each step. Theory says what is possible; fair experiments establish the practical trade-offs.
+:::
 
 :::problem The next step
-For a network layer, $F$ has $(mn)^2$ entries. Section V of the survey begins with the first structured answer: K-FAC.
+Full curvature matrices are too large for real layers. Section V asks how the matrix shape of a layer can make these ideas affordable, starting with K-FAC in chapter 13.
 :::
