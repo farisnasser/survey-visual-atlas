@@ -31,7 +31,8 @@ export function inline(s) {
     .replace(/(^|[^*])\*([^*\s][^*]*?)\*/g, '$1<i>$2</i>')
     .replace(/\[\[([\w-]+)(?:\|([^\]]+))?\]\]/g, (_, id, t) => `<a class="term" href="learn.html?ch=glossary#t-${id}" data-term="${id}">${t || id}</a>`)
     .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-    .replace(/\[([^\]]+)\]\(((?:paper|learn|guide|library)\.html[^)\s]*)\)/g, '<a href="$2">$1</a>');
+    .replace(/\[([^\]]+)\]\(((?:paper|learn|guide|library)\.html[^)\s]*)\)/g, '<a href="$2">$1</a>')
+    .replace(/\[([^\]]+)\]\((public\/[\w\/.-]+\.pdf(?:#page=\d+)?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
   return s.replace(/\u0000(\d+)\u0000/g, (_, i) => tex(math[+i], false));
 }
 

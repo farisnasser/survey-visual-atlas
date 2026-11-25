@@ -52,6 +52,8 @@ public/survey3/fig1.webp
 
 Each chapter follows one part of the survey, in order, and quotes the survey's own equation, figure and table numbers. The explanations follow one pattern: start with a small example in actual numbers, define every symbol, derive one algebraic step at a time, say what it means, and connect it to optimization. Boxes marked *In plain English* give the intuition, and *Remember* boxes collect what to keep. Words in dotted underline open a definition. Every live visual runs a real optimizer on a real function and is followed by a box explaining what is drawn, what moves, and what to notice. The survey's own figures appear where the text discusses them.
 
+The chapters are written from our [study notes for Sections II–VIII (PDF, 79 pages)](public/survey3/Study_Notes.pdf), which work through the same examples at greater length. Every chapter links to the page of the notes where its topic starts, under its title and in the top bar.
+
 The worked numbers are teaching illustrations, chosen small enough to check by hand; they are not experiments. The only measured results are the survey's dashboard runs in chapter 17.
 
 :::problem The next step

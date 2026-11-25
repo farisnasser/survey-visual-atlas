@@ -10,6 +10,9 @@ const V2 = new URLSearchParams(location.search).get('v') === '2';
 const BASE = V2 ? 'guide-v2' : 'guide';
 const PDF = V2 ? 'public/survey/NonConvex_Survey_v2_Saddles_to_EoS.pdf' : 'public/survey3/Optimization_Methods_Survey.pdf';
 const MAP = V2 ? 'guide.html?v=2' : './';
+// Faris's study notes for survey Sections II-VIII (79 pages); each chapter's "notes" field is the page where its topic starts.
+const NOTES = V2 ? '' : 'public/survey3/Study_Notes.pdf';
+const notesUrl = page => `${NOTES}${page ? `#page=${page}` : ''}`;
 const OTHER = V2 ? { href: './', label: 'Current survey guide' } : { href: 'guide.html?v=2', label: 'Previous survey (v2) guide' };
 
 const $ = s => document.querySelector(s);
@@ -57,14 +60,14 @@ async function renderMap(guide, gloss, where) {
   document.title = 'Survey Visual Atlas · a visual guide to our survey';
   await katexReady();
   const chs = guide.chapters;
-  $('#pn').innerHTML = `<a href="${PDF}" target="_blank" rel="noopener">Survey PDF</a><a href="learn.html">Crash course</a><a href="library.html">Paper library</a><a href="${OTHER.href}">${OTHER.label}</a>`;
+  $('#pn').innerHTML = `<a href="${PDF}" target="_blank" rel="noopener">Survey PDF</a>${NOTES ? `<a href="${NOTES}" target="_blank" rel="noopener">Study notes</a>` : ''}<a href="learn.html">Crash course</a><a href="library.html">Paper library</a><a href="${OTHER.href}">${OTHER.label}</a>`;
   const parts = guide.parts.map(p => ({ ...p, chs: chs.filter(c => c.sec === p.sec) })).filter(p => p.chs.length);
   $('#main').innerHTML = `
     <header class="lc-head lc-hero">
       <div class="kicker mono">${esc(guide.kicker)}</div>
       <h1>${esc(guide.title)}</h1>
       <p class="lede">${inline(guide.lede)}</p>
-      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="${PDF}" target="_blank" rel="noopener">Read the survey (PDF)</a><a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a><a class="btnlink" href="${OTHER.href}">${OTHER.label}</a></div>
+      <div class="row">${chs[0].ready ? `<a class="act" href="${chapUrl(chs[0].id)}">Start the journey →</a>` : ''}<a class="btnlink" href="${PDF}" target="_blank" rel="noopener">Read the survey (PDF)</a>${NOTES ? `<a class="btnlink" href="${NOTES}" target="_blank" rel="noopener">Study notes (PDF)</a>` : ''}<a class="btnlink" href="learn.html">Crash course (basics)</a><a class="btnlink" href="library.html">Paper library</a><a class="btnlink" href="${OTHER.href}">${OTHER.label}</a></div>
     </header>
     <div class="gd-parts">${parts.map(p => `
       <section class="gd-part">
@@ -88,7 +91,7 @@ async function renderChapter(guide, i, gloss, where) {
   const chs = guide.chapters, c = chs[i], prev = chs[i - 1], next = chs[i + 1];
   const part = guide.parts.find(p => p.sec === c.sec);
   document.title = `${c.n}. ${c.title} · Survey guide`;
-  $('#pn').innerHTML = `<a href="${MAP}">Map</a><a href="${PDF}" target="_blank" rel="noopener"><span class="pn-t">Survey </span>PDF</a>${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}<span class="pn-t">. ${esc(prev.title)}</span></a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}<span class="pn-t">. ${esc(next.title)}</span> →</a>` : ''}`;
+  $('#pn').innerHTML = `<a href="${MAP}">Map</a><a href="${PDF}" target="_blank" rel="noopener"><span class="pn-t">Survey </span>PDF</a>${NOTES ? `<a href="${notesUrl(c.notes)}" target="_blank" rel="noopener" title="Study notes, page ${c.notes || 1}">Notes<span class="pn-t"> p. ${c.notes || 1}</span></a>` : ''}${prev ? `<a href="${chapUrl(prev.id)}" title="${esc(prev.title)}">← ${prev.n}<span class="pn-t">. ${esc(prev.title)}</span></a>` : ''}${next?.ready ? `<a href="${chapUrl(next.id)}" title="${esc(next.title)}">${next.n}<span class="pn-t">. ${esc(next.title)}</span> →</a>` : ''}`;
   const [md, mod] = await Promise.all([
     fetch(`${BASE}/${c.id}/text.md`).then(r => { if (!r.ok) throw new Error(`text.md ${r.status}`); return r.text(); }),
     import(`../../${BASE}/${c.id}/viz.js`).catch(err => { console.error(err); return { default: {} }; }),
@@ -99,6 +102,7 @@ async function renderChapter(guide, i, gloss, where) {
       <div class="kicker mono">Survey section ${esc(c.sec)}${part ? ` · ${esc(part.title)}` : ''} · chapter ${c.n} of ${chs.length}</div>
       <h1>${esc(c.title)}</h1>
       <p class="lede">${inline(c.question)}</p>
+      ${NOTES && c.notes ? `<div class="row"><a class="btnlink" href="${notesUrl(c.notes)}" target="_blank" rel="noopener">Study notes for this chapter (PDF, from p. ${c.notes})</a></div>` : ''}
       <div class="lc-progress" aria-hidden="true">${chs.map(x => `<i class="${x.n < c.n ? 'past' : x.n === c.n ? 'now' : ''}"></i>`).join('')}</div>
     </header>
     <section class="notes as-page dense lc-text" id="course">${article}</section>
